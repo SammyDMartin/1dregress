@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Threshold — Ascent Universe</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow-y: auto; }
+
+/* Scene backgrounds */
+.scene-bg-chase { background: radial-gradient(ellipse at 30% 60%, rgba(0,80,120,0.15) 0%, transparent 70%); }
+.scene-bg-speech { background: radial-gradient(ellipse at 50% 50%, rgba(120,20,20,0.12) 0%, transparent 60%); }
+.scene-bg-failure { background: linear-gradient(180deg, rgba(255,50,50,0.05) 0%, transparent 40%); }
+.scene-bg-emergence { background: radial-gradient(circle at 50% 40%, rgba(0,229,255,0.08) 0%, transparent 50%); }
+.scene-bg-combat { background: radial-gradient(ellipse at 50% 50%, rgba(255,107,53,0.08) 0%, transparent 60%); }
+.scene-bg-duster { background: linear-gradient(135deg, rgba(255,0,0,0.04) 0%, transparent 50%); }
+.scene-bg-swarm { background: radial-gradient(circle at 60% 40%, rgba(255,107,53,0.1) 0%, rgba(255,50,50,0.05) 40%, transparent 70%); }
+.scene-bg-stand {
+  background: radial-gradient(circle at 50% 50%, rgba(50,100,255,0.12) 0%, transparent 50%);
+}
+.scene-bg-aftermath { background: linear-gradient(180deg, rgba(0,229,255,0.03) 0%, transparent 30%); }
+.scene-bg-meeting { background: radial-gradient(ellipse at 50% 70%, rgba(0,20,40,0.3) 0%, transparent 60%); }
+
+/* Animated effects */
+@keyframes pulse { 0%,100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+@keyframes flicker { 0%,95% { opacity: 1; } 96% { opacity: 0.4; } 97% { opacity: 1; } 98% { opacity: 0.6; } 100% { opacity: 1; } }
+@keyframes drift { 0% { transform: translateY(0); } 100% { transform: translateY(-20px); } }
+
+.scene-effect {
+  position: fixed; top: 48px; left: 0; right: 0; height: 4px; z-index: 50;
+  pointer-events: none; transition: opacity 0.5s;
+}
+.effect-chase { background: linear-gradient(90deg, transparent 0%, rgba(0,229,255,0.4) 80%, rgba(0,229,255,0.8) 100%); animation: pulse 2s infinite; }
+.effect-alert { background: linear-gradient(90deg, rgba(255,50,50,0.6) 0%, transparent 30%, transparent 70%, rgba(255,50,50,0.6) 100%); animation: pulse 1s infinite; }
+.effect-combat { background: linear-gradient(90deg, rgba(255,107,53,0.5) 0%, rgba(255,50,50,0.3) 50%, rgba(255,107,53,0.5) 100%); animation: flicker 0.5s infinite; }
+.effect-stand { background: linear-gradient(90deg, transparent 0%, rgba(50,100,255,0.8) 50%, transparent 100%); animation: pulse 1.5s infinite; }
+.effect-quiet { background: linear-gradient(90deg, rgba(0,229,255,0.1) 0%, rgba(0,229,255,0.05) 100%); }
+
+.story-header {
+  text-align: center; padding: 30px 20px 20px; max-width: 720px; margin: 0 auto;
+}
+.story-main-title { font-size: 20px; letter-spacing: 6px; color: var(--accent); font-weight: 700; }
+.story-main-sub { font-size: 10px; letter-spacing: 4px; color: var(--text-dim); margin-top: 4px; }
+.story-main-time { font-size: 9px; letter-spacing: 3px; color: var(--accent2); margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="page-body">
+
+<div class="scene-effect" id="scene-effect"></div>
+
+<div class="story-header">
+  <div class="story-main-title">THRESHOLD</div>
+  <div class="story-main-sub">ASCENT UNIVERSE</div>
+  <div class="story-main-time">41 – 51 MINUTES</div>
+</div>
+
+<div class="story-container" id="story-container">
+  <!-- Scenes injected by JS -->
+</div>
+
+</div>
+<script src="nav.js"></script>
+<script>
+// ═══════════════════════════════════════════════════════════════════════════════
+// THRESHOLD — Full Story Text, split into scenes
+// ═══════════════════════════════════════════════════════════════════════════════
+
+const SCENES = [
+{
+  title: "THE CHASE",
+  header: "SCENE 01 — USC ISIDORE",
+  bg: "scene-bg-chase",
+  effect: "effect-chase",
+  text: `<p>The USC Isidore was already on an intercept course with the unresponsive Kosmohansa vessel when the freighter's drive plume reignited, burning hard for the interstice, its rate of acceleration gradually climbing.</p>
+
+<p>From his vantage point within the darkened CIC of the Isidore, bound by a G-rig within a gimballed acceleration couch, Ensign Hansun watched as the displays arrayed before him updated, the orange icon indicating the rogue freighter switching to an angry red. It was visible in the camera feeds even without the benefit of the tactical overlay – a tiny white pinprick, still distant but already brighter than any star.</p>
+
+<p>The revised trajectory estimates indicated that they could likely still intercept the craft before it reached the interstice, but they'd be uncomfortably close. Deceleration would be hard.</p>
+
+<p><span class="dialogue">'Match thrust, fire a warning shot,'</span> came the voice of Captain Ngoni. The ship bucked as Hansun complied, launching a single round towards the distant freighter – a gesture, nothing more.</p>
+
+<p>He felt their own thrust increase in step, hearing the chatter from Interstice Traffic Control take on a new urgency.</p>
+
+<p><span class="dialogue">'Kosmohansa vessel Atbarah cut thrust immediately and await intercept, you are within a no-burn volume. Atbarah do you copy? Kosmohansa vessel Atbarah I repeat, cut thrust immediately, or we will be forced to fire –'</span></p>
+
+<p>Hansun glanced at the Atbarah's drive specs. Over the timescales they were looking at it didn't matter how long the ship could sustain a high-G burn, or what its maximum thrust capacity was. If it accelerated at more than a couple of Gs they would no longer be able to safely intercept. Still, the weapons platforms guarding the wormhole mouth could surely deal with a lone freighter. Interstice security was no joke. Unless the crew had a death wish, they'd turn and burn any minute now.</p>
+
+<p>The Atbarah continued to accelerate, in defiance of ITC's instructions. Two point four G, then two point five.</p>
+
+<p><span class="thought">What are they playing at?</span></p>`
+},
+{
+  title: "THE MANIFESTO",
+  header: "SCENE 02 — BROADCAST FROM THE ATBARAH",
+  bg: "scene-bg-speech",
+  effect: "effect-alert",
+  text: `<p>It was then that the Isidore received a broadcast from the Atbarah. A virtual screen opened in Hansun's peripheral vision, pre-recorded footage of a speech, addressed to anyone in range. A manifesto. A statement of intent.</p>
+
+<p>The speaker was a fanatic. Hansun recognised the type – the evidence was there for all to see. It was there in the cold certainty of his voice and the rigid way he held his spindly spaceborn frame. It was there in the way his unblinking eyes bored into the camera and the barely constrained rage that burned within. It was there in the pockmarks and bloodstains on the bulkhead behind him.</p>
+
+<p><span class="dialogue">'…never wanted to begin with an expression of regret for the innocent human lives that we, necessarily, had to end,'</span> he said, his speech thickly accented but fluent. <span class="dialogue">'But we may take consolation in the fact that all innocents, all that die with purity of spirit, will be remembered as martyrs no less revered than my comrades and I.'</span></p>
+
+<p>He passed his hands over one another, almost unconsciously, as though washing them. In the background, down the axial conduit, Hansun saw movement. It was out of focus, but it looked like someone dragging something human shaped.</p>
+
+<p>Intelligence were already scrutinizing every detail of the transmission, trying to identify those within it and discern their motives, their aims, adding their commentary to a growing cloud of tags. A crudely stencilled insignia, sprayed onto the bloodied bulkhead behind the speaker, was flagged up. A stark white disk composed of tenets written in a stylised script Hansun didn't recognise against a black background.</p>
+
+<p><span class="emphasis">Human Purity Front. Emphasis on an accelerationist interpretation of Anthropist doctrine, seeking to provoke a final conflict between humanity and 'the Machine' through acts of political violence in order to bring about societal collapse and the establishment of 'the Moral Republic'.</span></p>
+
+<p><span class="dialogue">'Strivers,'</span> someone cursed.</p>
+
+<p>Hansun felt a pit open up in his stomach. His first combat experience had been on a patrol mission ambushed by one of their raiders. They'd fought like rabid dogs.</p>
+
+<p>The Strivers' ideological ancestry predated Union's founding and their exodus from Sol. They went by many names, but they'd always been there, ever since humanity began to master the workings of its own mind. Strivers placed raw, unaltered and above all mortal human identity above any other allegiance, a twisted mirror of the ideals upon which Union itself was built. They were not simply political, nor purely religious, but instead some shifting chimera of the two, adopting one mask or another at the demands of convenience.</p>
+
+<p><span class="dialogue">'…they can be stopped. We only need the will to fight. You will no doubt have noticed the Atbarah is already on an irreversible course for the interstice. There is no denying our martyrdom now.'</span></p>`
+},
+{
+  title: "THE BREACH",
+  header: "SCENE 03 — DEFENCE GRID FAILURE",
+  bg: "scene-bg-failure",
+  effect: "effect-alert",
+  text: `<p><span class="dialogue">'We're out of intercept range,'</span> an officer noted. Hansun had had the same realisation.</p>
+
+<p>The Atbarah continued to accelerate towards the interstice. What were they hoping to do? Ram it? Sever Union's final connection with their estranged kin? Nobody had ever been insane enough to try to destroy the ancient relic, and it would not be easy for the Atbarah.</p>
+
+<p><span class="dialogue">'Notify Interstice Command, they may neutralise the Atbarah when ready,'</span> instructed Captain Ngoni.</p>
+
+<p>Crucial seconds trickled by. The swarm of green icons of the interstice defence grid remained stubbornly passive.</p>
+
+<p><span class="dialogue">'Something's not right here. Hard burn for the interstice,'</span> came Ngoni's orders. <span class="dialogue">'I want a lock on the Atbarah.'</span></p>
+
+<p>As if on cue the icons of the defence grid switched to grey.</p>
+
+<p><span class="dialogue">'What's happening?'</span> demanded the Captain.</p>
+
+<p><span class="dialogue">'Interstice Command reports the defence grid is not responding, attempts to override have thus far been unsuccessful. They suspect some kind of cyberattack –'</span></p>
+
+<p>Without warning, a cascade of detonations tore through the stations surrounding the interstice. Hansun watched the feed helplessly. There were hundreds, maybe thousands of people on those stations.</p>
+
+<p>Shocked silence descended over the crew. The Captain inhaled sharply. Hansun clenched his fists, fingernails digging into his skin. <span class="thought">Anger, he had long since determined, was preferable to fear or despair.</span></p>
+
+<p><span class="dialogue">'– necessary to force your hand to do what is right… you will come to see in time –'</span></p>
+
+<p><span class="dialogue">'– In toil, absolution. In strife, salvation. In death, release.'</span></p>
+
+<p>The fanatic slumped back in his seat, unconscious, a look of beatific peace settling briefly over his features, before they were contorted by the rising G load. The message continued silently for another couple of seconds. It ended abruptly as the Atbarah hurtled into the interstice, still accelerating at that crushing rate.</p>
+
+<p><span class="dialogue">'Decelerate and disengage,'</span> came Ngoni's command, as she swiftly regained her composure. <span class="dialogue">'This is a rescue mission now. And get me a line with Admiral Aumonier.'</span></p>`
+},
+{
+  title: "THE BLOCKADE",
+  header: "SCENE 04 — FIRST FLEET CORDON",
+  bg: "scene-bg-emergence",
+  effect: "effect-quiet",
+  text: `<p>Admiral Aumonier's orders were brief and matter-of-fact. They were to establish a blockade around the interstice with all possible speed.</p>
+
+<p><span class="dialogue">'As a result of the recent attack we find ourselves in a tenuous position, to put it mildly. We cannot assume that everything will be in place in time. Depending on the distribution of their forces, we may have only a few hours to respond.'</span></p>
+
+<p>Hansun studied the plans. The tactical map displayed the immediate environment surrounding their side of the interstice, centered on the trailing Lagrange point of the gas giant Deliverance. It took in the wreckage of the defensive platforms and stations nearest the interstice, now evacuated, and beyond that the initial ragged cordon established by the USV Isidore, along with her escorts and the nine other battle groups that composed the First Fleet. There were a hundred in total, spread over a hundred thousand kilometres of space – ten destroyers like the Isidore, boxy, almost trilaterally symmetric towers, bristling with torpedo tubes and gun turrets, each supported by nine unmanned corvettes.</p>
+
+<p>Beyond them were civilian vessels heading in the opposite direction, fleeing the volume in the direction of Deliverance. Further out still were the other fleets, green trails converging on the interstice. Most of the force was several days away, if not weeks. They were exposed.</p>
+
+<p><span class="dialogue">'Assuming the suicide attack succeeded, our counterparts on the other side may interpret it as a first strike. Our failure to stop the Atbarah will likely be treated as suspicious, if not intentional. We must hold fire unless fired upon. Securing the interstice is the only objective more important than deescalation.'</span></p>
+
+<p>It was rumoured there had been arguments among the general staff. Some, to Hansun's astonishment, had actually wanted to follow through, sweeping through the interstice to strike 'the enemy' preemptively. But to Hansun's great relief Aumonier had won out.</p>`
+},
+{
+  title: "THE EMERGENCE",
+  header: "SCENE 05 — CONTACT",
+  bg: "scene-bg-emergence",
+  effect: "effect-chase",
+  text: `<p><span class="dialogue">'Something's coming through,'</span> the First Lieutenant announced.</p>
+
+<p>So it was only hours after all.</p>
+
+<p>Hansun watched as the scopes magnified the shimmering cage of the interstice and the warped sphere of space contained within, partially occluded by the spreading cloud of wreckage from the crippled defence grid.</p>
+
+<p>Something emerged, there in one frame, gone the next, yet still barely moving by combat standards – a scant few kilometres per second. A second blur shot out, coasting with drive stilled. A third, then a fourth, larger and slower than the other three.</p>
+
+<p><span class="dialogue">'Mean looking bastards,'</span> the sensor officer commented, throwing the magnified profile onto the main display. The spacecraft had a look of deadly elegance to them, elongated pyramids with sweeping lines like darts, ridged with projectors and weapons hardpoints. Each had a gaping central tube running along its main axis – a spinally mounted weapon of some kind.</p>
+
+<p>The initial three were somewhat smaller than the boxy forms of the Union craft, but Hansun knew that they were no less deadly – and so few. Either they weren't anticipating a fight, or they were supremely confident.</p>
+
+<p>Hansun braced himself as the CIC began to rapidly flood with oxygen-rich breathable liquid, pouring from grates in the deck. No matter how many high-G drills they did, he could never imagine becoming entirely comfortable with this transition. As the liquid submerged him, Hansun fought every instinct he had to hold his breath and inhaled as deeply as he could, inviting it in.</p>
+
+<p><span class="dialogue">'Everyone comfy?'</span> came the medical officer's voice over the comms, synthesised from the subvocal articulations picked up by her mic.</p>`
+},
+{
+  title: "THE FIRST SHOTS",
+  header: "SCENE 06 — ENGAGEMENT",
+  bg: "scene-bg-combat",
+  effect: "effect-combat",
+  text: `<p>Hansun studied the data on the intruder's spacecraft more closely. Their magnetic field dynamic was… odd, fields extending hundreds of meters to the aft of each ship, with traces of pion decay and high-energy gamma radiation that indicated a very clean antimatter annihilation. Strakes glowed luminous white along each ship's leading edges – radiators made of some unknown, extraordinarily heat-tolerant substance.</p>
+
+<p><span class="dialogue">'Is anyone getting through to them?'</span> asked the Captain.</p>
+
+<p><span class="dialogue">'No sir, still handshaking. Seems to be some software trouble on our end.'</span></p>
+
+<p>The display flashed amber. Bright icons appeared, first one, then four, then twelve.</p>
+
+<p><span class="dialogue">'We've just opened fire,'</span> announced the first officer dully.</p>
+
+<p><span class="dialogue">'What?'</span></p>
+
+<p><span class="dialogue">'Fucking Strivers. Fucking Strivers must have worms in our network too. They couldn't leave their precious war to fate.'</span></p>
+
+<p>There was a harsh hiss of white noise over the comm.</p>
+
+<p><span class="dialogue">'Jamming. They're jamming us.'</span></p>
+
+<p>The intruding ships opened fire. One by one, so quickly that Hansun could scarcely believe what was happening, the torpedoes began to wink out. X-ray beams, the sensors said – powerful beyond belief, striking across tens of thousands of kilometres.</p>
+
+<p><span class="thought">It was like watching snow melt as it reaches the ground.</span></p>
+
+<p>The torpedoes blinked out of existence, killed by perfectly aimed beams of hard radiation. The fleet kept firing nevertheless, spitting streams of torpedoes that vanished from sensor views, uselessly.</p>`
+},
+{
+  title: "THE INVISIBLE WALL",
+  header: "SCENE 07 — DUSTER REVELATION",
+  bg: "scene-bg-duster",
+  effect: "effect-combat",
+  text: `<p>Hansun magnified the image of the intruder, watching as disturbingly organic, eyelid-like structures opened and closed along the ship's flanks, each one an emitter throwing out multiple independent beams of hard radiation.</p>
+
+<p>Then the first of Union's destroyers exploded. Hansun felt a pang of fear and expanded the data stream, examining the ship's final relayed sensor logs – multiple hull breaches had registered milliseconds apart, as if the Jayapal had hit an invisible wall.</p>
+
+<p>A ripple of destruction spread through the fleet, four, then six ships blowing apart into clouds of energised shrapnel with no apparent cause.</p>
+
+<p><span class="thought">Don't panic. React.</span></p>
+
+<p>In desperation Hansun pulled up the entire sensor log of the Jayapal, including non-tactical data, frantically searching for anything unusual.</p>
+
+<p>Something caught his eye.</p>
+
+<p><span class="dialogue">'They're using dusters,'</span> he sent, along with an attached file, the secondary anti-collision sensors on the Jayapal registering a stream of incoming dust particles a tenth of a second before it died. <span class="dialogue">'Attackers' spinal mounts are hypervelocity micron-particle accelerators. They've been firing on us this entire time, but we didn't detect the projectiles – too small for radar.'</span></p>
+
+<p>He saw the Captain acknowledge the message, passing it on to the rest of the fleet. Then the sensor view reformatted as the radar switched to submillimeter waves, and suddenly the view ahead was filled with red streamers of approaching annihilation.</p>
+
+<p>Collision alarms screamed and the Isidore performed a violent lateral jounce.</p>
+
+<p>Hansun blacked out despite all the measures taken, coming to moments later. He'd always taken his high-G training seriously, earning a higher endurance score than anyone else aboard Isidore. He returned his gaze to the terminal, blinking to clear the spots in his vision, and drew in a ragged breath of the liquid air.</p>
+
+<p>They'd avoided the dust cloud. Just. The detonations had ceased, but with more than twenty vessels disabled or destroyed.</p>`
+},
+{
+  title: "THE SWARM",
+  header: "SCENE 08 — EXODRONE BARRAGE",
+  bg: "scene-bg-swarm",
+  effect: "effect-combat",
+  text: `<p><span class="dialogue">'Open fire with the main guns, keep them dodging,'</span> the captain ordered.</p>
+
+<p>The guns fired, causing the lights in the CIC to dip briefly. The ship dodged, and dodged again, boxed in as the rounds hurtled by.</p>
+
+<p>In response, the attackers' lasers turned on the Isidore, scoring gashes in their armour. They spun in a tight corkscrew, dissipating the laser energy across as much surface area as possible. Thermal alarms blared, but the hull held.</p>
+
+<p>The display began to fill with new icons. Whatever they were, the projectiles were approaching at more than two hundred Gs. Then they accelerated still further.</p>
+
+<p><span class="thought">Laser propelled missiles,</span> Hansun thought, as the PDCs whirred, muzzles turning towards the rapidly approaching hostiles, trying to produce a viable flak cloud.</p>
+
+<p>The sensor view flickered, the CIC lighting shuddering as huge EMP effects washed over the fleet. The drones were working exactly as intended, releasing bright fingers of gamma radiation as their antimatter warheads detonated, killing the Union ships from far beyond PDC range.</p>
+
+<p>There were suddenly hundreds of fast-moving contacts approaching, half of them releasing their deadly payloads from far beyond point-defence range, mercilessly slicing through the screening corvettes.</p>
+
+<p>The system threw up errors trying to catalogue the number of different weapon types; particle beams, electronic warfare, kinetic and explosive shots, fusion and antimatter…</p>
+
+<p>The sensor view began to break apart as x-ray beams, particle streams and the overwhelming bursts of antimatter warheads overloaded their instruments. Despite the chaos, fusion torpedoes finally began to find their targets, but their nuclear explosions barely registered amid the energetic maelstrom.</p>
+
+<p>Hansun didn't know how many ships were left, they were practically fighting blind.</p>`
+},
+{
+  title: "ISIDORE'S STAND",
+  header: "SCENE 09 — THE FINAL ATTACK",
+  bg: "scene-bg-stand",
+  effect: "effect-stand",
+  text: `<p>Captain Ngoni's orders came through, and she'd concluded the same.</p>
+
+<p>The Isidore cut thrust as it flew through a cloud of energised plasma made by another dying Union ship. Wreckage thudded off the hull. Hansun felt his weight ebb to nothing.</p>
+
+<p>Soon, the enemy would pass within ten thousand kilometres, spitting distance in combat terms. With any luck, their sensor coverage would be weaker on their aft side.</p>
+
+<p>If fate favoured them, the attacker would think Isidore had been holed by a particle stream and fly past without sparing them a second glance.</p>
+
+<p>The ship approached, detectable through a haze of static, and Hansun saw the vector the Captain had plotted. They were to whip around, chasing the enemy from behind at an insane rate of acceleration, closing to railgun range on autopilot, and launching torpedoes from behind. But to neutralize such an enormous velocity differential… Hansun saw the thrust estimates, redlining the drive and burning in low-impulse mode, melting the entire reaction chamber and nozzle in less than a minute. The Isidore might just survive, even if she'd never fly again, but there was no way the crew would make it.</p>
+
+<p><span class="dialogue">'This is it,'</span> Ngoni said simply. Somehow, at this last moment, Hansun felt nothing but calm.</p>
+
+<p><span class="dialogue">'It's been a privilege, sir.'</span></p>
+
+<p>Then there was no more time to think, just the enemy ship's icon passing theirs, a lateral shove as the Isidore's main drive spun them round and then what felt like a mountain fell on him as they accelerated towards the attacker at thirty Gs and opened fire with every remaining torpedo.</p>`
+},
+{
+  title: "THE SURVIVOR",
+  header: "SCENE 10 — AFTERMATH",
+  bg: "scene-bg-aftermath",
+  effect: "effect-quiet",
+  text: `<p>Hansun woke, his vision blurred by a red haze. He felt like he had been pushed through a meat grinder. Limb by limb, he carefully tested his body. He couldn't feel his right arm, or move it, and judging from how painful breathing was he had several broken ribs. Internal bleeding seemed likely.</p>
+
+<p>He drew a ragged breath, coughing up a mixture of blood and the dregs of the acceleration mix.</p>
+
+<p>The CIC, now drained, was eerily quiet, with debris floating everywhere, where displays and equipment had been ripped from their mountings. Even the alarms had stopped, and dim emergency lights were the only illumination besides the sporadic sparking of severed cables.</p>
+
+<p><span class="dialogue">'Hello?'</span> Nobody answered.</p>
+
+<p>Hansun pulled himself across the room, single-handed, clumsily dodging drifting hunks of machinery and bulkhead cladding.</p>
+
+<p><span class="dialogue">'Captain…'</span></p>
+
+<p>He looked around at the other crew in the CIC, seeing them for the first time. It wasn't a sight he was ever likely to forget.</p>
+
+<p>They lay, still enmeshed in their couches, heads tilted at impossible angles, eyes bloodshot. None were breathing. Captain Ngoni, her face surrounded by drifting droplets of blood, was among them.</p>
+
+<p>Her skin was cold, and he couldn't feel a pulse. Her bloodshot eyes stared blindly back at him. Hansun looked away, fighting the urge to weep.</p>
+
+<p>The Union fleet had scattered, the survivors running in disarray for the system's inhabited worlds or their fleet bases. More than two thirds were destroyed, and the invaders… three ships were returning, not four.</p>`
+},
+{
+  title: "THE MEETING",
+  header: "SCENE 11 — FIRST CONTACT",
+  bg: "scene-bg-meeting",
+  effect: "effect-quiet",
+  text: `<p>Except for some badly healed nerves that largely manifested as a slight tremor in his right hand and the occasional brutal migraine, Hansun had made a good recovery, and earned a promotion, as well as a commendation for bravery.</p>
+
+<p>Hansun stood in the shuttle bay of the First Fleet anchorage, standing in his medical exoskeleton beside the imposing Admiral Aumonier as the shuttle approached; a simple, silver teardrop of memory-metal.</p>
+
+<p><span class="dialogue">'They knew exactly what they were doing,'</span> the Admiral murmured quietly. <span class="dialogue">'I heard about what you did – spotting the duster guns. Smart move. Surely you also noticed that they jammed my comm request after the torpedo launch?'</span></p>
+
+<p><span class="dialogue">'I resent those conspiracy whacks as much as the next man, but they're onto something with this one. A single freighter on a suicide run, then a fleet waiting silently on the other side, somehow the Atbarah gets through, they jam us and start shooting – come on!'</span></p>
+
+<p><span class="dialogue">'Tell you what does though. The one thing that's perfectly crystal-clear. Someone from our side killed a quarter million of their citizens. They don't care who did it. They don't care why they did it. What they care about is how it looks. It makes them look mortal. And because of that we needed to be taught a lesson, to have a few of our toys taken away, so that's exactly what they did.'</span></p>
+
+<p>There was something wrong with the representative. The figure was tall and hunched, its lithe forelimbs and powerful hindlimbs were broken looking, ending in manipulators that divided then divided again. It had a trilaterally symmetrical head with widely-spaced eyes of a pitiless, empty black. The lower half of the alien's face was obscured behind a sleek black electronic module.</p>
+
+<p><span class="dialogue">'She is an officer. I have heard of such, but they are rare. It was a deliberate gesture, sending their alien servant to meet us,'</span> said Aumonier.</p>
+
+<p>The representative walked up to them and bowed, its head almost coming level with Hansun's.</p>
+
+<p><span class="dialogue">'I am Honed Aspect, commander of the battle sub-constellation which – regretfully – inflicted such heavy losses on your defence fleet. On behalf of Arco, I extend my condolences.'</span></p>`
+}
+];
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// STORY ENGINE
+// ═══════════════════════════════════════════════════════════════════════════════
+
+let currentScene = 0;
+const container = document.getElementById('story-container');
+const effectBar = document.getElementById('scene-effect');
+
+function buildScenes() {
+  SCENES.forEach((s, i) => {
+    const div = document.createElement('div');
+    div.className = 'scene' + (i === 0 ? ' active' : '');
+    div.id = 'scene-' + i;
+    div.innerHTML = `
+      <div class="scene-bg ${s.bg}"></div>
+      <div class="scene-header">${s.header}</div>
+      <div class="scene-title">${s.title}</div>
+      <div class="scene-text">${s.text}</div>
+      <div class="story-nav">
+        <button onclick="goScene(${i-1})" ${i === 0 ? 'disabled' : ''}>← PREV</button>
+        <select class="scene-select" onchange="goScene(parseInt(this.value))">
+          ${SCENES.map((sc, j) => `<option value="${j}" ${j===i?'selected':''}>${j+1}. ${sc.title}</option>`).join('')}
+        </select>
+        <span class="scene-counter">${i+1} / ${SCENES.length}</span>
+        <button onclick="goScene(${i+1})" ${i === SCENES.length-1 ? 'disabled' : ''}>NEXT →</button>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function goScene(i) {
+  if (i < 0 || i >= SCENES.length) return;
+  document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+  document.getElementById('scene-' + i).classList.add('active');
+  currentScene = i;
+
+  // Update effect bar
+  effectBar.className = 'scene-effect ' + (SCENES[i].effect || '');
+
+  // Scroll to top of story
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Update all selects
+  document.querySelectorAll('.scene-select').forEach(sel => sel.value = i);
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goScene(currentScene + 1);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goScene(currentScene - 1);
+});
+
+// Touch swipe
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 60) {
+    if (dx < 0) goScene(currentScene + 1);
+    else goScene(currentScene - 1);
+  }
+});
+
+buildScenes();
+</script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ascent Universe — Annihilator-Class Archive</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow-y: auto; }
+.hub-hero {
+  min-height: calc(100vh - 64px);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 40px 20px; position: relative;
+}
+.hub-title-block { text-align: center; margin-bottom: 40px; }
+.hub-title {
+  font-size: 22px; letter-spacing: 8px; color: var(--accent); font-weight: 700;
+  margin-bottom: 4px;
+}
+.hub-subtitle {
+  font-size: 10px; letter-spacing: 5px; color: var(--text-dim);
+}
+.hub-line {
+  width: 120px; height: 1px; background: var(--border); margin: 16px auto;
+}
+.hub-class {
+  font-size: 11px; letter-spacing: 3px; color: var(--accent2);
+}
+.starfield { position: fixed; inset: 0; z-index: -1; }
+.starfield canvas { width: 100%; height: 100%; }
+@media (max-width: 600px) {
+  .hub-title { font-size: 16px; letter-spacing: 5px; }
+  .hub-subtitle { font-size: 8px; letter-spacing: 3px; }
+  .card-grid { gap: 10px; }
+}
+</style>
+</head>
+<body>
+<div class="page-body">
+  <div class="starfield"><canvas id="stars"></canvas></div>
+  <div class="hub-hero">
+    <div class="hub-title-block">
+      <div class="hub-title">ASCENT UNIVERSE</div>
+      <div class="hub-subtitle">INTERSTELLAR CONFLICT ARCHIVE</div>
+      <div class="hub-line"></div>
+      <div class="hub-class">ANNIHILATOR-CLASS IP ASSAULT VEHICLE</div>
+    </div>
+    <div class="card-grid">
+      <a href="msd.html" class="nav-card">
+        <span class="card-icon" style="color:var(--accent)">◇</span>
+        <div class="card-title">MASTER SYSTEMS DISPLAY</div>
+        <div class="card-desc">Interactive 3D model with full technical specifications. Power, propulsion, armament, sensors and defensive systems.</div>
+        <span class="card-arrow">→</span>
+      </a>
+      <a href="battle.html" class="nav-card">
+        <span class="card-icon" style="color:var(--accent2)">◆</span>
+        <div class="card-title">BATTLE RECONSTRUCTION</div>
+        <div class="card-desc">Phase-by-phase tactical reconstruction of the Battle of the Interstice. 4 ships vs 100. Animated simulation.</div>
+        <span class="card-arrow">→</span>
+      </a>
+      <a href="story.html" class="nav-card">
+        <span class="card-icon" style="color:rgba(200,220,230,0.7)">▣</span>
+        <div class="card-title">THRESHOLD</div>
+        <div class="card-desc">Read the full story. A Union ensign witnesses first contact through the barrel of a gun. Interactive visual novel format.</div>
+        <span class="card-arrow">→</span>
+      </a>
+      <a href="science.html" class="nav-card">
+        <span class="card-icon" style="color:var(--green)">⬡</span>
+        <div class="card-title">SCIENCE COMPENDIUM</div>
+        <div class="card-desc">Detailed scientific explanations of every technology. ABC drives, Diamond Dusters, hyperdiamond armour and more.</div>
+        <span class="card-arrow">→</span>
+      </a>
+    </div>
+  </div>
+</div>
+<script src="nav.js"></script>
+<script>
+const c = document.getElementById('stars');
+const ctx = c.getContext('2d');
+function resize() { c.width = window.innerWidth; c.height = window.innerHeight; }
+resize(); window.addEventListener('resize', resize);
+const stars = Array.from({ length: 200 }, () => ({
+  x: Math.random(), y: Math.random(), s: Math.random() * 1.5 + 0.3,
+  b: Math.random(), sp: Math.random() * 0.5 + 0.2,
+}));
+let t = 0;
+(function draw() {
+  requestAnimationFrame(draw); t += 0.01;
+  ctx.clearRect(0, 0, c.width, c.height);
+  stars.forEach(s => {
+    ctx.fillStyle = `rgba(180,220,255,${0.3 + Math.sin(t * s.sp + s.b * 6.28) * 0.2})`;
+    ctx.beginPath(); ctx.arc(s.x * c.width, s.y * c.height, s.s, 0, Math.PI * 2); ctx.fill();
+  });
+})();
+</script>
+</body>
+</html>

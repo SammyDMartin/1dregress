@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Science Compendium — Ascent Universe</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow-y: auto; }
+.science-header {
+  text-align: center; padding: 30px 20px 10px; max-width: 800px; margin: 0 auto;
+}
+.science-title { font-size: 18px; letter-spacing: 6px; color: var(--accent); font-weight: 700; }
+.science-sub { font-size: 9px; letter-spacing: 4px; color: var(--text-dim); margin-top: 4px; }
+.science-intro {
+  max-width: 800px; margin: 10px auto 20px; padding: 0 20px;
+  font-size: 11px; color: var(--text-dim); line-height: 1.7; text-align: center;
+}
+</style>
+</head>
+<body>
+<div class="page-body">
+
+<div class="science-header">
+  <div class="science-title">SCIENCE COMPENDIUM</div>
+  <div class="science-sub">TECHNOLOGY OF THE ASCENT UNIVERSE</div>
+</div>
+<div class="science-intro">
+  Scientific explanations for the technologies depicted in the Annihilator-class specifications and the events of <em>Threshold</em>. Each entry describes the in-universe function and the real physics it draws upon.
+</div>
+
+<div class="science-container" id="science"></div>
+
+</div>
+<script src="nav.js"></script>
+<script>
+const TECH = [
+{
+  category: "PROPULSION",
+  entries: [
+  {
+    name: "Antimatter Beamed-Core (ABC) Drive",
+    badge: "PRIMARY DRIVE",
+    universe: `The ABC drive is the standard high-performance propulsion system for Arco warships. In the "beamed-core" configuration, antiprotons are annihilated against a matter target and the resulting charged pion/muon spray is directed by magnetic nozzles rather than being thermalised — yielding exhaust velocities approaching a significant fraction of lightspeed. The "external-matrix doped-beam" variant uses a magnetic confinement matrix external to the ship to shape the annihilation products, allowing thrust vectoring without physical nozzle structures. The "high-doping" and "low-doping" variants (used in exodrones and torpedoes) refer to the antimatter injection rate and thus the trade-off between thrust and fuel economy.
+
+In the story, Hansun observes "traces of pion decay and high-energy gamma radiation that indicated a very clean antimatter annihilation" and "fields extending hundreds of meters to the aft" — the magnetic nozzle.`,
+    science: `Beamed-core antimatter propulsion is a well-studied concept in aerospace engineering. When protons and antiprotons annihilate, they produce charged pions (π±) with about 94% of the rest-mass energy appearing as kinetic energy of these pions. In a beamed-core design, a magnetic nozzle deflects these pions to produce thrust, achieving theoretical exhaust velocities of ~0.33c.
+
+The key engineering challenges are antimatter production (currently ~10 nanograms/year at CERN, versus the tonnes implied here), storage (Penning traps for charged antimatter, with loss rates), and the magnetic nozzle design (superconducting magnets handling enormous heat loads from gamma radiation). The Annihilator's cruise Ve of 10,000 km/s (~3.3% c) is physically consistent with a partially-thermalised beamed-core design. The peak Ve of 500 km/s with higher thrust suggests a mode where more annihilation energy is thermalised into propellant for higher mass flow at lower specific impulse — a realistic trade-off.
+
+References: R.L. Forward, "Antiproton Annihilation Propulsion" (1985); Frisbee, "Advanced Propulsion Concepts" (2003).`,
+    ref: "Spec table: Primary drive. Story: Hansun's sensor observations of Arco drive signatures."
+  },
+  {
+    name: "Monopole-Implosion Vacuum (MIV) Drive",
+    badge: "UPGRADE DRIVE",
+    universe: `The MIV drive represents a generation beyond antimatter propulsion. It uses magnetic monopoles — hypothetical particles carrying isolated north or south magnetic charge — to catalyse the implosion of a small region of false vacuum. In quantum field theory, our universe's vacuum state may not be the lowest energy state; a "true vacuum" transition releases energy densities far exceeding nuclear or even antimatter reactions. The MIV drive triggers controlled, microscopic false vacuum decay events, extracting energy from the phase transition itself.
+
+This is the Annihilator-class upgrade drive, suggesting it is newer and more advanced technology than the ABC system.`,
+    science: `Magnetic monopoles are predicted by most Grand Unified Theories (GUTs) and would have been produced in the early universe. 't Hooft-Polyakov monopoles are topological defects with masses around 10<sup>16</sup> GeV — enormously heavy. If captured, their exotic field configurations could theoretically catalyse baryon decay (Rubakov-Callan effect) or, more speculatively, nucleate vacuum phase transitions.
+
+False vacuum decay is a real concept in quantum field theory. Sidney Coleman showed (1977) that the vacuum could tunnel to a lower energy state via bubble nucleation. The energy released would be the difference in vacuum energy density — potentially ~10<sup>73</sup> J/m³ in extreme scenarios. The engineering fantasy here is controlled, contained micro-transitions rather than the universe-destroying runaway process physicists actually worry about.
+
+References: 't Hooft (1974); Coleman, "Fate of the false vacuum" (1977); Preskill, "Magnetic monopoles" (1984).`,
+    ref: "Spec table: Upgrade drive. The most advanced propulsion technology mentioned."
+  },
+  {
+    name: "Electrothermal Plasma Rockets & RCS",
+    badge: "MANOEUVRE",
+    universe: `The Annihilator carries 4 gimballed electrothermal plasma rockets for manoeuvring and 64 electrothermal RCS nozzles arranged in 16 clusters of 4 for attitude control. These use electrical energy to heat propellant to plasma temperatures and expel it — simpler and lower-performance than the main drive, but offering precise thrust vectoring for combat manoeuvres. In the story, the Arco ships "bounced and jerked from side-to-side with sudden lateral bursts of blue-white thruster fire."`,
+    science: `Electrothermal thrusters (arcjets, resistojets) are mature technology, already flown on satellites. They electrically heat propellant (typically hydrazine or hydrogen) and expel it through a nozzle. Arcjets achieve Isp of 500-600s; more advanced designs using higher-temperature plasmas could reach much higher values. The "blue-white" colour of the thruster plumes suggests extremely high plasma temperatures (>10,000K), consistent with multi-megawatt power levels heating hydrogen or helium propellant. With the Annihilator's enormous power budget (1000+ GW), these thrusters could be extraordinarily powerful.
+
+References: Jahn, "Physics of Electric Propulsion" (1968).`,
+    ref: "Spec table: Manoeuvre systems. Story: Arco combat manoeuvres."
+  }
+  ]
+},
+{
+  category: "POWER SYSTEMS",
+  entries: [
+  {
+    name: "Aneutronic Spheromak Fusion Reactor",
+    badge: "SECONDARY POWER",
+    universe: `The Annihilator's two 500 GW reactors use aneutronic fusion — reactions producing charged particles rather than neutrons, eliminating neutron radiation damage and allowing direct energy conversion. The "spheromak" refers to the plasma confinement geometry: a compact, self-organised toroidal plasma structure maintained by its own internal currents, without external toroidal field coils. This makes the reactor far more compact than a tokamak of equivalent power.`,
+    science: `Spheromaks are a real class of compact fusion device, studied since the 1980s. The plasma forms a force-free toroidal configuration maintained by internal helicity — essentially, the plasma's own magnetic field confines it. Real spheromak experiments (SSPX at LLNL, others) demonstrated the configuration but fell short of fusion conditions.
+
+Aneutronic fusion typically means proton-boron (p-¹¹B) or helium-3 fusion (D-³He). p-¹¹B produces three alpha particles and no neutrons, allowing direct energy conversion via decelerating charged particles through an electrostatic field (Venetian blind collector) or inductive pickup. The challenge: p-¹¹B requires ~300 keV plasma temperatures (vs ~15 keV for D-T), and radiation losses (bremsstrahlung) are severe. At 500 GW per reactor, these are extraordinary devices.
+
+References: Jarboe, "Review of spheromak research" (1994); Rider, "Fundamental limitations on plasma fusion systems not in thermodynamic equilibrium" (1997).`,
+    ref: "Spec table: 2× 500 GW reactors."
+  },
+  {
+    name: "Drive-Linked MHD Column",
+    badge: "PRIMARY POWER",
+    universe: `The 1000 GW MHD (magnetohydrodynamic) column is mechanically linked to the main drive, converting a portion of the drive's energy output directly into electrical power. An MHD generator passes a conducting fluid (ionised drive exhaust or a dedicated working fluid) through a magnetic field; the Lorentz force on the moving charges generates current without any moving mechanical parts. Being "drive-linked" means it parasitically taps the enormous energy flow of the ABC drive.`,
+    science: `MHD power generation is well-established physics, tested in numerous experiments since the 1960s. The principle is Faraday's law applied to a conducting fluid rather than a solid wire: ionised gas moving through a magnetic field generates an EMF perpendicular to both the flow and the field. Real MHD generators achieved thermal efficiencies of 60%+ in test facilities. The concept of coupling an MHD generator to a high-energy exhaust stream is standard in advanced propulsion studies. At 1000 GW, it would be the most powerful single generator ever conceived — but the physics is straightforward extrapolation.
+
+References: Rosa, "Magnetohydrodynamic Energy Conversion" (1987).`,
+    ref: "Spec table: Primary power source."
+  },
+  {
+    name: "ECell Array",
+    badge: "ENERGY STORAGE",
+    universe: `100,000 individual 1 kg cells providing 4 TJ of total stored energy — 40 MJ per kilogram. The ECells serve dual purposes: burst power for weapons (lasers, the proton beam effector) and as a thermal recovery reservoir, absorbing waste heat that can later be radiated away. This dual thermal-electrical function is a clever mass-saving measure.`,
+    science: `40 MJ/kg is about 100× better than lithium-ion batteries (~0.4 MJ/kg) but far below nuclear energy densities. This is consistent with advanced flywheel or superconducting magnetic energy storage (SMES) systems at extreme performance levels. The thermal recovery function suggests phase-change materials or magnetocaloric storage — absorbing heat during combat (when radiators may be retracted for stealth/protection) and releasing it later.
+
+For context: 4 TJ is roughly the energy of a 1 kiloton nuclear weapon. Being able to store and discharge this electrically in controlled bursts is what enables the ship's energy weapons.`,
+    ref: "Spec table: 100,000× 1kg cells, 4 TJ. Also linked to thermal control system."
+  }
+  ]
+},
+{
+  category: "WEAPONS",
+  entries: [
+  {
+    name: "Diamond Duster Hypervelocity Mass Projector",
+    badge: "PRIMARY KINETIC",
+    universe: `The Diamond Duster is a 500mm spinal-mounted weapon that accelerates streams of micron-scale particles to extreme velocities. At engagement ranges of tens of thousands of kilometres, these particles are too small for conventional radar to detect, arriving as an invisible wall of kinetic destruction. Multiple hull breaches register milliseconds apart as the particle stream sweeps across the target.
+
+In the story, Hansun identifies the weapon only by checking "non-tactical" anti-collision sensors that registered incoming dust a tenth of a second before the Jayapal was destroyed. The fleet must switch to submillimeter-wave radar to even see the incoming streams.`,
+    science: `Dust-based kinetic weapons are a genuinely novel concept. A micron-scale diamond particle (density ~3500 kg/m³) at, say, 1000 km/s carries kinetic energy of ~1.8×10⁻⁶ J — trivial individually. But a continuous stream of billions of particles per second, each punching through hull material, would be devastating. The particles are too small for conventional radar (wavelength must be comparable to particle size for effective detection — micron particles need infrared or shorter wavelengths), explaining why they're invisible to standard sensors.
+
+The "diamond" material choice is logical: diamond has the highest specific strength of any bulk material, surviving the extreme accelerations required for launch without fragmenting. Electromagnetic acceleration of diamond dust would require charge injection or magnetisation — both feasible at laboratory scales.
+
+The name "Diamond Duster" and the tactic of using radar-invisible kinetic particles is consistent with real military principles of exploiting sensor gaps.`,
+    ref: "Spec table: 500mm spinal mount. Story: key plot point — Hansun's identification of the weapon."
+  },
+  {
+    name: "X-Ray Lasers",
+    badge: "ENERGY WEAPON",
+    universe: `Four 100 GW burst X-ray laser emitters for long-range engagement. These are the Annihilator's primary long-range weapon, capable of destroying torpedoes across "tens of thousands of kilometres" with pinpoint accuracy. X-ray wavelengths (0.01–10 nm) allow extremely tight beam focusing over vast distances, with each shot delivering enormous energy to a tiny spot.`,
+    science: `X-ray lasers are extremely difficult to build. In real physics, X-ray lasing has been achieved via: (1) nuclear-pumped systems (the Excalibur concept from SDI — a nuclear bomb pumps X-ray lasing rods), (2) free-electron lasers (FELs) using relativistic electron beams, and (3) plasma-based X-ray lasers using highly ionised atoms. Only FELs currently produce controllable, repeatable X-ray pulses.
+
+At 100 GW per burst, these would be extraordinarily powerful. The tight beam divergence of X-ray wavelengths means the beam stays concentrated over enormous distances — at λ=1nm with a 1m aperture, the diffraction-limited spot size at 10,000 km would be only ~10 meters. This is why they're so effective at torpedo interception: a 100 GW beam focused to 10m² delivers 10 GW/m², enough to vaporise any material almost instantly.
+
+The "eyelid-like structures" described in the story are likely adaptive optic elements for the laser emitters.
+
+References: Chapline & Wood, "X-ray lasers" (1975); Emma et al., "First lasing of the LCLS" (2010).`,
+    ref: "Spec table: 4× 100 GW. Story: torpedo interception, long-range defence."
+  },
+  {
+    name: "UV Laser Emitters",
+    badge: "ENERGY WEAPON",
+    universe: `32 continuous ultraviolet laser emitters at 5 GW each, distributed across the hull. These serve triple duty: close-range combat weapons, point defence (more precise than kinetic PDCs), and electronic warfare systems (the spec notes "laser weapons can be repurposed as EW systems"). In the story, the Arco ships use them to "score gashes" in Union armour and to intercept incoming ordnance.`,
+    science: `UV lasers (100-400 nm wavelength) represent a good compromise between atmospheric transmission (irrelevant in space), beam divergence, and mirror technology. Diode-pumped solid-state lasers and fibre lasers can operate at UV wavelengths. 5 GW continuous would require enormous power supplies (the Annihilator has them) and sophisticated thermal management for the gain medium. Real military laser programs (US Navy's 300 kW systems) are a factor of ~10⁷ below this level.
+
+The EW repurposing is physically sound: a sufficiently powerful laser can blind or damage optical sensors, overwhelm photodetectors, and even disrupt electronic systems through thermal or electromagnetic effects.`,
+    ref: "Spec table: 32× 5 GW. Story: described as 'beams of hard radiation' from eyelid-like emitters."
+  },
+  {
+    name: "Proton Beam Effector",
+    badge: "ENERGY WEAPON",
+    universe: `A single neutralizer burst proton beam weapon delivering 1 terajoule per shot. "Neutralizer" likely refers to the beam being neutralised (charge-neutralised by co-propagating electrons) after acceleration, preventing beam divergence from space-charge effects. This is the Annihilator's heaviest single-shot weapon.`,
+    science: `Neutral particle beams were studied extensively during the SDI era. The concept: accelerate negative hydrogen ions (H⁻) to high energy in a linear accelerator, then strip the electrons as the beam exits, producing a neutral hydrogen beam that doesn't diverge from self-repulsion. 1 TJ is equivalent to about 240 tonnes of TNT — an enormous amount of energy in a directed beam. The primary engineering challenge is the accelerator length and power supply, both of which the Annihilator has in abundance (200m ship length, 1000+ GW power).
+
+References: "Neutral Particle Beam Technology" — various SDI-era studies.`,
+    ref: "Spec table: 1× 1 TJ/shot. Alternate loadout with X-ray lasers."
+  },
+  {
+    name: "Exodrone Platforms (ACH 2705)",
+    badge: "GUIDED WEAPON",
+    universe: `The exodrones are semi-autonomous missile platforms with their own ABC drives. They carry 2-4 modular payloads from a menu of 8 types: ECell-laser, focused antimatter, ECell-beam, flechette, electronic warfare, oneshot coil gun, pure-fusion/casaba-fusion, and augmented-penetration antimatter. Critically, the Annihilator's lasers can propel exodrones after launch, pushing them to accelerations exceeding 200G — far beyond what their onboard drives alone achieve.
+
+In the story, the exodrone swarm is the decisive weapon, overwhelming Union point defences with hundreds of independently-targeting, maneuvering warheads.`,
+    science: `Laser-propelled missiles are a real concept (laser ablation propulsion, or photon pressure on a reflective surface). At the power levels available to the Annihilator (160+ GW of laser output), laser propulsion of small platforms to extreme accelerations is physically feasible. The modular payload concept mirrors real missile design philosophy (common bus, variable warhead).
+
+The "Casaba-Fusion" warhead refers to the Casaba-Howitzer concept from Project Orion (1960s): a nuclear device shaped to direct its energy into a narrow jet of superheated plasma. Real Casaba studies suggested ~80% of a nuclear weapon's energy could be focused into a ~10° cone. At nuclear yields, this produces a devastating directed-energy lance.
+
+"F-AM" (Focused Antimatter) is the antimatter equivalent: a shaped antimatter annihilation charge directing its gamma-ray and pion output.`,
+    ref: "Spec table: ACH 2705 platform. Story: the missile swarm that destroys the Union fleet."
+  },
+  {
+    name: "Long-Range Torpedoes (ACH 2703)",
+    badge: "GUIDED WEAPON",
+    universe: `Heavy standoff weapons with their own ABC drives and warhead options ranging from 15 Kt plasma to 30 Gt focused antimatter. The "low-doping" ABC drive gives longer range but lower acceleration than exodrones. At 30 Gt (gigatonnes), the F-AM warhead is in the range of the Chicxulub asteroid impact (~100 Gt) — a strategic rather than tactical weapon.`,
+    science: `The warhead yield range spans eight orders of magnitude (15 Kt to 30 Gt), suggesting a highly modular weapons architecture. 30 Gt from antimatter annihilation would require about 650 kg of antimatter (and 650 kg of matter), which is consistent with a torpedo-sized vehicle given the extraordinary energy density of antimatter (9×10¹⁶ J/kg).`,
+    ref: "Spec table: ACH 2703 torpedo. Various warhead options."
+  }
+  ]
+},
+{
+  category: "DEFENCE",
+  entries: [
+  {
+    name: "Hyperdiamond Whipple Shield",
+    badge: "FORE ARMOUR",
+    universe: `750mm of hyperdiamond in a Whipple shield configuration protects the Annihilator's bow — the direction most likely to face incoming fire during an approach. "Hyperdiamond" implies engineered diamond with properties beyond natural or CVD diamond, possibly isotopically pure or nano-structured for maximum hardness and thermal conductivity.`,
+    science: `The Whipple shield is a real and widely-used concept in spacecraft protection, invented by Fred Whipple in the 1940s. Instead of a single thick plate, a Whipple shield uses multiple spaced layers. When a hypervelocity projectile hits the first (bumper) layer, it and the bumper fragment into a cloud of smaller debris and vapour, spreading the impact energy over a much larger area of the rear wall. The ISS uses Whipple shields today.
+
+Diamond is the hardest known natural material (Vickers hardness ~100 GPa) with extraordinary thermal conductivity (~2200 W/m·K) and compressive strength. A 750mm multi-layer diamond Whipple shield would be extraordinarily effective against kinetic threats, especially micron-scale dust particles — exactly what the Diamond Duster fires. This creates an interesting rock-paper-scissors dynamic.
+
+"Hyperdiamond" at these scales could be aggregated diamond nanorods (ADNR, demonstrated in labs), which are harder than single-crystal diamond.`,
+    ref: "Spec table: Fore 750mm. The primary protection against head-on engagement."
+  },
+  {
+    name: "Dispersive Armour Layer",
+    badge: "FLANK ARMOUR",
+    universe: `The 200mm flank armour includes a "dispersive layer" in addition to hyperdiamond. This likely scatters and attenuates incoming laser energy across a wider area rather than absorbing it at a point — similar to how ablative armour works but for directed-energy weapons. In the story, the Isidore survives laser hits by "spinning in a tight corkscrew, dissipating the laser energy across as much surface area as possible." The dispersive layer is the Arco version of this principle, built into the hull.`,
+    science: `Laser-dispersive armour concepts include: (1) Highly reflective surfaces (but these degrade under sustained fire), (2) Ablative coatings that vaporise and form a plasma that absorbs/scatters incoming light, (3) Metamaterial or photonic crystal structures that scatter specific wavelengths, (4) Phase-change materials that absorb enormous energy during state transitions.
+
+The combination of diamond (excellent thermal conductor, spreads heat quickly) with a dispersive layer (scatters beam energy spatially) is a sensible layered defence against both kinetic and directed-energy threats.`,
+    ref: "Spec table: Flanks 200mm. Complements the heavier fore shield."
+  }
+  ]
+},
+{
+  category: "SENSORS",
+  entries: [
+  {
+    name: "Single-Photon Hull Skein",
+    badge: "PASSIVE SENSOR",
+    universe: `A network of single-photon detectors distributed across the entire hull surface, forming a "skein" (a loosely-coiled network). This gives the ship all-aspect passive detection capability — any photon hitting any part of the hull is registered, providing a complete spherical sensor picture. By correlating detection times across the hull, the system can determine the direction and spectrum of incoming radiation.`,
+    science: `Single-photon detectors (SPDs) are mature technology: superconducting nanowire SPDs (SNSPDs) achieve >95% detection efficiency across UV to near-IR wavelengths with timing jitter under 50 picoseconds. Distributing these across a hull surface to create a "photon-counting skin" is a straightforward engineering extrapolation. The angular resolution would be determined by the hull geometry and detector spacing — on a 200m ship, this could achieve arc-second resolution through aperture synthesis, equivalent to a 200m-diameter telescope.`,
+    ref: "Spec table: Primary passive sensor."
+  },
+  {
+    name: "Neutrino Camera & Gravitational Wave Detector",
+    badge: "REFIT SENSOR",
+    universe: `The "monomatrix fleck neutrino camera" and gravitational wave detector are refit sensors — later additions to the Annihilator platform. Neutrino imaging would see through any physical shielding (neutrinos interact almost not at all with matter), potentially revealing the internal structure of enemy ships or detecting fusion/fission reactions. A gravitational wave detector at ship scale would detect mass changes and accelerations at extreme sensitivity.`,
+    science: `Neutrino detection currently requires enormous detectors (Super-Kamiokande uses 50,000 tonnes of water) because of the tiny interaction cross-section. A practical "neutrino camera" would require revolutionary advances in detection technology — possibly using coherent elastic neutrino-nucleus scattering (CEνNS), first detected in 2017, which has a much larger cross-section. "Monomatrix fleck" may refer to a metamaterial detector substrate.
+
+Ship-scale gravitational wave detection would require extraordinary sensitivity improvements over LIGO (which uses 4km arms to detect strains of ~10⁻²¹). However, atom interferometry GW detectors could theoretically be much more compact, and detecting the gravitational effects of nearby accelerating warships (rather than distant astrophysical events) is a less demanding task.`,
+    ref: "Spec table: Refit sensors."
+  }
+  ]
+},
+{
+  category: "THERMAL MANAGEMENT",
+  entries: [
+  {
+    name: "Carbon Nanofluid & Graphene Radiators",
+    badge: "THERMAL CONTROL",
+    universe: `The Annihilator's thermal management is one of its most critical systems. With 1000+ GW of continuous power generation and burst weapons drawing terajoules, waste heat is an existential threat. The carbon nanofluid system circulates a fluid containing suspended carbon nanotubes through the hull, collecting waste heat from all sources and delivering it to four 1 km² extensible graphene strake radiators. The radiators are retractable — the story mentions ships "stowing radiators" before combat to reduce their target profile.`,
+    science: `Thermal management is the single biggest engineering challenge for high-power spacecraft — often called the "waste heat problem." In vacuum, the only way to reject heat is radiation, governed by the Stefan-Boltzmann law: P = εσAT⁴. For a 1 km² radiator at 1000K (dull red), the maximum radiated power is ~57 GW. Four such radiators give ~228 GW of rejection capacity — enough for cruise operations but requiring careful management during combat power levels.
+
+Carbon nanofluid (a base fluid with suspended carbon nanotubes) is real and shows enhanced thermal conductivity of 20-150% over base fluids. Graphene has the highest thermal conductivity of any known material (~5000 W/m·K) and extraordinary tensile strength, making it ideal for deployable radiator structures.
+
+The story note about "strakes glowed luminous white" confirms these radiators operate at extreme temperatures (white hot = ~6000K), at which a 1 km² surface could radiate up to ~3.7 TW — vastly more than at 1000K. This implies the Arco radiators use materials with service temperatures far beyond current technology.
+
+References: Stefan-Boltzmann law; various NASA thermal management studies for high-power spacecraft.`,
+    ref: "Spec table: Full thermal system. Story: 'strakes glowed luminous white.'"
+  }
+  ]
+},
+{
+  category: "OTHER TECHNOLOGY",
+  entries: [
+  {
+    name: "Interstice (Wormhole)",
+    badge: "INFRASTRUCTURE",
+    universe: `The interstice is an ancient alien artefact — a traversable wormhole connecting two star systems, encircled by "vast, dark rings of exotic materials." It is not human-made. Transit through it is essentially instantaneous (ships emerge "barely moving" on the other side). It is the sole connection between Union space and Arco space, making it of supreme strategic importance.`,
+    science: `Traversable wormholes were first described mathematically by Morris, Thorne & Yurtsever (1988). They require "exotic matter" with negative energy density to hold the throat open — a condition that violates classical energy conditions but is permitted in quantum field theory (the Casimir effect demonstrates negative energy density between conducting plates).
+
+The "rings of exotic materials" supporting the interstice are consistent with Thorne's description: a wormhole throat would need to be threaded with exotic matter, and a practical structure would likely involve a toroidal or ring-shaped support. The fact that it's described as ancient and alien sidesteps the question of how to create one — the physics of maintaining an existing wormhole is rather easier than creating one from scratch.
+
+References: Morris & Thorne, "Wormholes in spacetime" (1988); Visser, "Lorentzian Wormholes" (1995).`,
+    ref: "Story: central plot element. The strategic chokepoint."
+  },
+  {
+    name: "Acceleration Countermeasures",
+    badge: "CREW SYSTEMS",
+    universe: `Union crews use liquid breathing (flooding the CIC with oxygenated liquid), gimballed acceleration couches with G-rigs, and intravenous drug cocktails to survive high-G manoeuvres. Even with these measures, 10G is the practical combat limit, and 30G killed the entire crew of the Isidore except Hansun. The Arco ships, notably, manoeuvre at rates "that would surely kill any human onboard" — implying they are either unmanned, crewed by heavily augmented beings, or crewed by non-humans (confirmed by the Dyn officer at the story's end).`,
+    science: `Liquid breathing (perfluorocarbon ventilation) is real: liquid perfluorocarbons can dissolve enough oxygen and CO₂ for gas exchange, and the liquid filling the lungs eliminates the air-tissue density mismatch that causes pulmonary injury under acceleration. Tested in animals and limited human trials (partial liquid ventilation for premature infants).
+
+The human G-tolerance limit with liquid immersion is debated but likely around 15-20G sustained (vs ~9G in air with G-suits). At 30G, even with liquid breathing, the hydrostatic pressure gradient across the body would cause catastrophic circulatory failure — consistent with the story's outcome.
+
+The pharmacological aids (anti-G-LOC drugs) likely include vasoconstrictors, agents to increase blood viscosity at the brain, and possibly neuroprotective compounds.
+
+References: Kylstra et al., "Liquid breathing" (1966); various aerospace medicine literature on G-tolerance.`,
+    ref: "Story: detailed description of CIC flooding, G-rigs, IV lines."
+  },
+  {
+    name: "Memory Metal",
+    badge: "MATERIALS",
+    universe: `The Arco diplomatic shuttle is described as "a simple, silver teardrop of memory-metal" with a ramp that "flowed open." This implies programmable matter that can change shape on command, transitioning smoothly between configurations rather than using mechanical hinges or actuators.`,
+    science: `Shape-memory alloys (SMAs) like Nitinol (nickel-titanium) are real materials that return to a pre-programmed shape when heated above a transition temperature. The "memory-metal" described here goes much further — it implies a material that can adopt arbitrary shapes on command, more like programmable matter. Research in claytronics (programmable matter using modular robots) and 4D printing (3D-printed structures that change shape over time) points in this direction, but a seamless metallic material that "flows" into new configurations would require nano-scale actuation throughout the material — perhaps using piezoelectric or magnetostrictive domains at the grain level.`,
+    ref: "Story: Arco shuttle description."
+  },
+  {
+    name: "The Dyn",
+    badge: "XENOBIOLOGY",
+    universe: `The Dyn are a non-human species serving Arco. Honed Aspect, the battle sub-constellation commander, is described as having trilateral symmetry, widely-spaced black eyes, divided manipulators, and a "broken-looking" limb configuration with distinct forelimbs and hindlimbs. She wears a black electronic module over the lower face (possibly a translator or communication device) and moves "a little differently, more human-like" than expected — suggesting the Dyn vary in their adaptation to human environments. Aumonier describes sending a Dyn officer as "a deliberate gesture, sending their alien servant."`,
+    science: `Trilateral (three-fold) symmetry is rare in Earth biology but not unknown — some echinoderms display it in larval stages, and many flowers have three-fold symmetry. For a bilaterally-mobile organism to have a trilateral head is unusual and suggests a very different evolutionary history. The "divided then divided again" manipulators suggest a fractal or bifurcating digit structure — each finger splits into sub-fingers, giving extraordinary dexterity. This is biologically plausible if the organism evolved in an environment requiring fine manipulation (tool use, arboreal life, or grooming in a social species).
+
+The term "alien servant" and the political dynamics around the Dyn raise questions about their status within Arco — are they a client species, symbiotes, or something more complex?`,
+    ref: "Story: the diplomatic meeting."
+  }
+  ]
+}
+];
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// BUILD UI
+// ═══════════════════════════════════════════════════════════════════════════════
+
+const container = document.getElementById('science');
+
+TECH.forEach(cat => {
+  const section = document.createElement('div');
+  section.className = 'tech-category';
+  section.innerHTML = `<div class="tech-category-header">${cat.category}</div>`;
+
+  cat.entries.forEach(entry => {
+    const el = document.createElement('div');
+    el.className = 'tech-entry';
+    el.innerHTML = `
+      <div class="tech-entry-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="tech-name">${entry.name}</span>
+        <span class="tech-badge">${entry.badge}</span>
+        <span class="expand-icon">▸</span>
+      </div>
+      <div class="tech-entry-body">
+        <div class="tech-section">
+          <div class="tech-section-label">In-Universe</div>
+          <div class="tech-section-text">${entry.universe.split('\n\n').map(p => '<p style="margin-bottom:8px">' + p + '</p>').join('')}</div>
+        </div>
+        <div class="tech-section">
+          <div class="tech-section-label">Real Science</div>
+          <div class="tech-section-text">${entry.science.split('\n\n').map(p => '<p style="margin-bottom:8px">' + p + '</p>').join('')}</div>
+        </div>
+        <div class="tech-ref">${entry.ref}</div>
+      </div>
+    `;
+    section.appendChild(el);
+  });
+
+  container.appendChild(section);
+});
+
+// Expand first entry by default
+document.querySelector('.tech-entry')?.classList.add('open');
+</script>
+</body>
+</html>
