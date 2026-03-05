@@ -10,6 +10,7 @@
     { href: 'science.html', label: 'SCIENCE' },
     { href: 'timeline.html', label: 'TIMELINE' },
     { href: 'codex.html', label: 'CODEX' },
+    { href: 'worlds.html', label: 'WORLDS' },
   ];
 
   const current = location.pathname.split('/').pop() || 'index.html';

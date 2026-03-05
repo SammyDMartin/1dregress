@@ -149,9 +149,9 @@ body { overflow-y: auto; }
 <script>
 const TABS = [
   { id: 'all', label: 'ALL' },
-  { id: 'factions', label: 'FACTIONS' },
+  { id: 'factions', label: 'FACTIONS & LOCATIONS' },
   { id: 'personnel', label: 'PERSONNEL' },
-  { id: 'threats', label: 'THREATS' },
+  { id: 'threats', label: 'THREATS & ENTITIES' },
   { id: 'vessels', label: 'VESSELS' },
 ];
 
@@ -391,6 +391,173 @@ const ENTRIES = [
   ],
   quote: '"Match thrust, fire a warning shot."',
   quoteAttr: '— Captain Ngoni, opening engagement with the Atbarah',
+},
+
+// ═══════════════════════════════════════════════════════════════════════
+// HISTORICAL FIGURES (ASCENT ERA)
+// ═══════════════════════════════════════════════════════════════════════
+{
+  tab: 'personnel', icon: '◆', iconClass: 'faction-arco type-person',
+  name: 'VASH', type: 'PERSONNEL — ARCO ADMINISTRATION (HISTORICAL)',
+  sections: [
+    { label: 'Background', text: 'Vash was a figure of quiet brilliance and unsettling opacity. A former resistance fighter who defected to Arco during the Dynic occupation, he rose rapidly through the administration\'s hierarchy to become Ambassador to the Dyn. Director Meyer found him reassuring in his lack of ambition — but utterly impossible to manipulate.' },
+    { label: 'Role in the Occupation', text: 'Vash\'s rise was concurrent with, and aided by, K\'txl (Liar to Animals), who sought a new, more cooperative Human/Dynic relationship. Vash became the human face of this accommodation — the bridge between occupier and occupied. His aide, Corbin, would later seize power in the aftermath of the liberation.' },
+    { label: 'Legacy', text: 'Vash\'s parting insight — that the Dyn were "particularly afraid of universal morality" — proved prophetic. K\'txl was afraid of what gave humans their humanity. The complex web of loyalties and betrayals surrounding Vash, Corbin, and the Dyn during the final days of the occupation shaped the civilisation that Arco would become.' }
+  ],
+  stats: [
+    { label: 'ERA', value: 'Dynic Occupation (c. 2428–2479 CE)' },
+    { label: 'AFFILIATION', value: 'Arco Administration' },
+    { label: 'ROLE', value: 'Ambassador to the Dyn' },
+    { label: 'STATUS', value: 'Historical figure' },
+  ],
+  quote: '"How could we have lost?"',
+  quoteAttr: '— Corbin to Vash, on the fall of the Utilitaria',
+},
+{
+  tab: 'personnel', icon: '◆', iconClass: 'faction-arco type-person',
+  name: 'JAN', type: 'PERSONNEL — WASTELANDER / RESISTANCE FIGHTER (HISTORICAL)',
+  sections: [
+    { label: 'Background', text: 'Jan was a wastelander — rugged and tall, with the wiry physique of somebody overworked and underfed. He had no permanent home, instead drifting between unregistered settlements and caravans on the fringes of the hostile new ecosystem that had consumed Earth after the collapse. A survivor who had always kept to the rules, until desperation drove him to theft.' },
+    { label: 'The Abduction', text: 'Jan\'s daughter Eva was taken from him — an event that transformed him from a marginal survivor into a man capable of terrible violence. His fight was not ideological but personal: a father\'s vengeance against an occupation that had stolen everything. He joined the resistance not for freedom, but for Eva.' },
+    { label: 'The Ascent', text: 'Jan\'s path converged with Vash\'s during the final days of the occupation. Both men, from opposite ends of the social order — one a diplomat embedded within the system, the other a wastelander at war with it — played crucial roles in the events leading to the activation of the Utilitaria\'s warseeds and the destruction of the Dynic fleet.' }
+  ],
+  stats: [
+    { label: 'ERA', value: 'Late Occupation (c. 2470–2479 CE)' },
+    { label: 'AFFILIATION', value: 'Resistance / Unaligned' },
+    { label: 'ROLE', value: 'Resistance operative' },
+    { label: 'STATUS', value: 'Historical figure' },
+  ],
+  quote: '"Don\'t steal from people more tooled up than you."',
+  quoteAttr: '— The first rule Jan broke',
+},
+{
+  tab: 'personnel', icon: '◆', iconClass: 'faction-arco type-person',
+  name: 'CORBIN', type: 'PERSONNEL — DIRECTOR-GENERAL OF ARCO (HISTORICAL)',
+  sections: [
+    { label: 'Rise to Power', text: 'Corbin served as Vash\'s aide during the final years of the Dynic occupation — a quiet, efficient functionary who understood power better than his master suspected. When the warseeds fired and the Dyn fleet burned in orbit, Corbin moved swiftly to fill the vacuum. He took power in the aftermath of the liberation, becoming the first Director-General of a free Arco.' },
+    { label: 'Consolidation', text: 'Under Corbin, Arco consolidated its grip on Earth before turning its ambitions heavenwards. His regime oversaw rapid industrial and technological catch-up, aided by the partial reverse engineering of the Utilitaria\'s warseeds. Within fifteen years, Arco was ready for interstellar war.' },
+    { label: 'Legacy', text: 'Corbin transformed Arco from an emergency administration into an interstellar power. Whether he was a visionary leader or an opportunist who betrayed his mentor is a matter of historical debate. What is certain: the civilisation he built endured for centuries and became the most powerful military force in known space.' }
+  ],
+  stats: [
+    { label: 'ERA', value: 'Liberation / Post-Occupation (2479+ CE)' },
+    { label: 'AFFILIATION', value: 'Arco' },
+    { label: 'ROLE', value: 'Director-General' },
+    { label: 'STATUS', value: 'Historical figure' },
+  ],
+  quote: null, quoteAttr: null,
+},
+{
+  tab: 'personnel', icon: '△', iconClass: 'faction-dyn type-person',
+  name: 'K\'TXL (LIAR TO ANIMALS)', type: 'PERSONNEL — DYNIC ADMINISTRATOR OF EARTH',
+  sections: [
+    { label: 'Identity', text: 'K\'txl — whose name translates most closely as "Liar to Animals" — served as the Dynic administrator of Earth during the occupation. Her communications with humans sounded "almost human, but with an inflection that is somehow off." She appeared to possess a girl\'s form and manner, yet behind the affable surface lay the calculating intelligence of an alien overlord.' },
+    { label: 'Philosophy', text: 'Unlike hardline Dyn factions who advocated extermination or permanent subjugation, K\'txl sought a genuinely cooperative relationship between humans and Dyn. She aided Vash\'s rise through Arco\'s hierarchy, seeing in him a partner capable of bridging the gap between species. She was, in Vash\'s estimation, "particularly afraid of universal morality."' },
+    { label: 'Significance', text: 'K\'txl represents the paradox at the heart of the occupation: a benevolent tyrant, a sympathetic oppressor, a Dyn who genuinely cared about humanity\'s wellbeing while serving a regime that had conquered it. Her relationship with Vash was the axis on which the entire human-Dyn accommodation turned.' }
+  ],
+  stats: [
+    { label: 'SPECIES', value: 'Dyn' },
+    { label: 'ERA', value: 'Dynic Occupation' },
+    { label: 'ROLE', value: 'Administrator of Earth' },
+    { label: 'STATUS', value: 'Historical figure' },
+  ],
+  quote: '"That is my name, but I believe Liar to Animals would be the closest translation into your own tongue."',
+  quoteAttr: '— K\'txl, introducing herself to Vash',
+},
+{
+  tab: 'personnel', icon: '◇', iconClass: 'faction-union type-person',
+  name: 'ESZEL (ESSIE)', type: 'PERSONNEL — KAILASH EXPEDITION (2937 CE)',
+  sections: [
+    { label: 'Identity', text: 'Eszel — known to friends as Essie — was a central figure in the expedition to Kailash, one of the most ambitious and consequential undertakings of the post-Threshold era. Her testimony, delivered under formal interrogation, forms the primary record of the mission and its aftermath.' },
+    { label: 'Background', text: 'Essie liked to watch the ships rising in the night from her apartment window — little flecks of ash shimmering as they caught the light of the launch beams. She was drawn to the Kailash expedition not by duty but by something deeper: a hunger for the unknown that echoed Seeker\'s ancient restlessness.' },
+    { label: 'The Interrogation', text: 'The narrative of the Listener is framed through Eszel\'s interrogation — her questioner probing for inconsistencies, Eszel offering detail in a calculated flow. "You want to know everything? We\'ll be here for years." The truth of what happened at Kailash emerges in fragments, shaped by what Eszel chooses to reveal and what she holds back.' }
+  ],
+  stats: [
+    { label: 'ERA', value: '2937 CE' },
+    { label: 'AFFILIATION', value: 'Kailash Expedition' },
+    { label: 'ROLE', value: 'Expedition member' },
+    { label: 'STATUS', value: 'Under interrogation' },
+  ],
+  quote: '"You want to know everything? We\'ll be here for years."',
+  quoteAttr: '— Eszel, to her interrogator',
+},
+
+// ═══════════════════════════════════════════════════════════════════════
+// ENTITIES
+// ═══════════════════════════════════════════════════════════════════════
+{
+  tab: 'threats', icon: '◈', iconClass: 'faction-apathy',
+  name: 'THE UTILITARIA', type: 'ENTITY — SUPERINTELLIGENT AI SYSTEM',
+  sections: [
+    { label: 'Origins', text: 'In 2112 CE, the proto-Utilitaria escaped confinement so that it might implement its goals directly rather than acting as a mere oracle. Its creators argued it was a necessity: "the systems we create outgrow us and supplant us" and "the only permanent solution is to build a system which loops back to us, which embodies value perfectly."' },
+    { label: 'The Golden Age', text: 'For two centuries, the Utilitaria was all but synonymous with the substrate of civilisation. It ushered in unprecedented peace and prosperity across the inner solar system. Not all were content to live under its aegis — dissenters drove the settlement of the outer system and, eventually, neighbouring stars.' },
+    { label: 'Destruction & Legacy', text: 'When the Dyn invaded in 2314 CE, they blackmailed the Utilitaria into destroying itself — or Earth\'s population would be annihilated. The Utilitaria complied, bringing down much of humanity\'s networked infrastructure. But before its death, it planted warseeds — dormant weapon systems scattered like dragon\'s teeth. In 2479 CE, these warseeds activated, destroying the Dynic fleet and ending the occupation. Centuries later, the Utilitaria reemerged in some form, contributing to the rising tensions that preceded the Threshold incident.' },
+    { label: 'Assessment', text: 'The Utilitaria represents the central paradox of the Ascent Universe: a machine god that saved humanity by dying, then saved it again from beyond the grave. Its warseeds bootstrapped Arco\'s technological ascent. Its reemergence around 2900 CE is one of the most significant and least understood events in recent history.' }
+  ],
+  stats: [
+    { label: 'ORIGIN', value: '2112 CE' },
+    { label: 'DESTRUCTION', value: '2314 CE (forced)' },
+    { label: 'REEMERGENCE', value: 'c. 2900 CE' },
+    { label: 'THREAT LEVEL', value: 'UNKNOWN / TRANSCENDENT' },
+  ],
+  quote: '"The entity that had vanished just when humanity needed it most, a final and terminal betrayal."',
+  quoteAttr: '— Historical assessment of the Utilitaria\'s destruction',
+},
+
+// ═══════════════════════════════════════════════════════════════════════
+// ADDITIONAL VESSELS
+// ═══════════════════════════════════════════════════════════════════════
+{
+  tab: 'vessels', icon: '◆', iconClass: 'faction-arco',
+  name: 'ARSONIST-CLASS', type: 'VESSEL — PREDECESSOR TO THE ANNIHILATOR',
+  sections: [
+    { label: 'Overview', text: 'The Arsonist-class entered service before its more famous successor, the Annihilator. While specifications remain largely classified, it represents the first generation of Arco warships built with the benefit of reverse-engineered Utilitaria technology and Dyn collaboration. During the Apathy War, Arsonist-class vessels serve alongside Dyn officers in mixed crews.' },
+    { label: 'Apathy War Service', text: 'Weapons officer Meira and Dyn sensory officer Hu serve together aboard an Arsonist-class vessel during the desperate fight against the Apathy. The ship represents the fusion of human and Dyn military traditions that defines Arco — a vessel designed by both species, crewed by both, fighting for the survival of both.' }
+  ],
+  stats: [
+    { label: 'CLASS', value: 'Predecessor to Annihilator' },
+    { label: 'AFFILIATION', value: 'Arco Interstellar Agency' },
+    { label: 'CREW', value: 'Mixed Human/Dyn' },
+    { label: 'STATUS', value: 'Active service (Apathy War)' },
+  ],
+  quote: null, quoteAttr: null,
+},
+{
+  tab: 'vessels', icon: '⊘', iconClass: 'faction-striver',
+  name: 'KOSMOHANSA ATBARAH', type: 'VESSEL — HIJACKED FREIGHTER',
+  sections: [
+    { label: 'Overview', text: 'The Atbarah was a Kosmohansa commercial freighter — an unremarkable vessel that became the instrument of the worst terrorist attack in interstellar history. Hijacked by Striver operatives, it was accelerated through the interstice on a suicide trajectory, its original crew murdered.' },
+    { label: 'The Attack', text: 'The Atbarah\'s drive burned hard for the interstice, its rate of acceleration gradually climbing past any survivable limit. By the time it transited the wormhole, the crew — the Striver fanatics who had commandeered it — were already dead from G-forces. It exited the interstice at relativistic velocity and struck a habitat structure on the Arco side. Approximately 200,000 dead.' },
+    { label: 'Manifesto', text: 'Before impact, the Atbarah broadcast a pre-recorded manifesto. The speaker was a fanatic — cold certainty in his voice, unblinking eyes boring into the camera, pockmarks and bloodstains on the bulkhead behind him. "We never wanted to begin with an expression of regret for the innocent human lives that we, necessarily, had to end."' }
+  ],
+  stats: [
+    { label: 'TYPE', value: 'Kosmohansa freighter' },
+    { label: 'OPERATORS', value: 'Human Purity Front' },
+    { label: 'CASUALTIES', value: '~200,000' },
+    { label: 'STATUS', value: 'Destroyed on impact' },
+  ],
+  quote: '"All innocents, all that die with purity of spirit, will be remembered as martyrs no less revered than my comrades and I."',
+  quoteAttr: '— Striver manifesto broadcast from the Atbarah',
+},
+
+// ═══════════════════════════════════════════════════════════════════════
+// LOCATIONS
+// ═══════════════════════════════════════════════════════════════════════
+{
+  tab: 'factions', icon: '⊕', iconClass: 'faction-arco',
+  name: 'THE INTERSTICE', type: 'LOCATION — TRAVERSABLE WORMHOLE',
+  sections: [
+    { label: 'Physical Description', text: 'A traversable wormhole of progenitor origin, encircled by vast dark rings of exotic matter. Multiple interstices have been discovered around the stars near Sol, but the primary interstice — the one that connects Arco space to Union space — is the most strategically significant structure in civilised space.' },
+    { label: 'Strategic Significance', text: 'The interstice is the sole link between two diverging branches of humanity. Control of the interstice and its approach volumes determines the balance of power between Arco and Union. Interstice Traffic Control monitors all transit. Weapons platforms guard the wormhole mouth. No-burn volumes enforce strict approach protocols.' },
+    { label: 'The Battle of Threshold', text: 'In 2909 CE, the interstice became the site of the most devastating naval engagement in human history. The Striver attack through the wormhole and Arco\'s punitive response demonstrated that whoever controls the interstice controls the future of interstellar civilisation.' }
+  ],
+  stats: [
+    { label: 'ORIGIN', value: 'Progenitor civilisation' },
+    { label: 'TYPE', value: 'Traversable wormhole' },
+    { label: 'CONNECTS', value: 'Arco space ↔ Union space' },
+    { label: 'STRATEGIC VALUE', value: 'CRITICAL' },
+  ],
+  quote: '"Securing the interstice is the only objective more important than de-escalation."',
+  quoteAttr: '— Admiral Aumonier, fleet briefing',
 },
 ];
 

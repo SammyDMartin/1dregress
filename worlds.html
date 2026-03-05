@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Worlds & Eras — Ascent Universe</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow-y: auto; }
+
+.worlds-header {
+  text-align: center; padding: 30px 20px 10px; max-width: 800px; margin: 0 auto;
+}
+.worlds-title { font-size: 18px; letter-spacing: 6px; color: var(--accent); font-weight: 700; }
+.worlds-sub { font-size: 9px; letter-spacing: 4px; color: var(--text-dim); margin-top: 4px; }
+.worlds-intro {
+  max-width: 700px; margin: 10px auto 30px; padding: 0 20px;
+  font-size: 11px; color: var(--text-dim); line-height: 1.7; text-align: center;
+}
+
+/* ─── Era Sections ──────────────────────────────────────────────────── */
+.worlds-container {
+  max-width: 760px; margin: 0 auto; padding: 0 16px 60px;
+}
+
+.era-section {
+  margin-bottom: 32px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  border-radius: 2px;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.era-section.visible { opacity: 1; transform: translateY(0); }
+
+.era-banner {
+  position: relative;
+  padding: 24px 20px;
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+}
+.era-banner::before {
+  content: '';
+  position: absolute; inset: 0;
+  opacity: 0.06;
+}
+.era-banner .era-date {
+  font-size: 8px; letter-spacing: 3px; color: var(--accent2);
+  margin-bottom: 4px;
+}
+.era-banner .era-name {
+  font-size: 15px; letter-spacing: 4px; color: var(--accent);
+  font-weight: 700; margin-bottom: 6px;
+}
+.era-banner .era-tagline {
+  font-size: 10px; color: rgba(200,220,230,0.6);
+  font-style: italic; letter-spacing: 0.5px;
+}
+
+.era-body {
+  padding: 16px 20px;
+}
+
+.era-text {
+  font-size: 11px; line-height: 1.8; color: rgba(200,220,230,0.75);
+  margin-bottom: 14px;
+}
+.era-text p { margin-bottom: 10px; }
+
+.era-details {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  margin-top: 14px;
+}
+@media (max-width: 600px) { .era-details { grid-template-columns: 1fr; } }
+
+.era-detail {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background: rgba(0,229,255,0.02);
+}
+.era-detail-label {
+  font-size: 8px; letter-spacing: 3px; color: var(--accent2);
+  margin-bottom: 4px; text-transform: uppercase;
+}
+.era-detail-text {
+  font-size: 10px; line-height: 1.6; color: rgba(200,220,230,0.65);
+}
+
+.era-quote {
+  font-size: 10px; line-height: 1.6; color: rgba(200,220,230,0.45);
+  font-style: italic; border-left: 2px solid var(--border);
+  padding-left: 12px; margin-top: 14px;
+}
+.era-quote-attr {
+  font-size: 8px; letter-spacing: 1px; color: var(--text-dim);
+  font-style: normal; margin-top: 4px;
+}
+
+/* ─── Story Links ───────────────────────────────────────────────────── */
+.era-stories {
+  display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px;
+  padding-top: 10px; border-top: 1px solid var(--border);
+}
+.era-story-tag {
+  font-size: 8px; letter-spacing: 1.5px; padding: 3px 8px;
+  border: 1px solid var(--border); border-radius: 2px;
+  color: var(--text-dim); transition: all 0.2s;
+}
+.era-story-tag:hover {
+  border-color: var(--accent); color: var(--accent);
+}
+
+/* ─── Separator ─────────────────────────────────────────────────────── */
+.era-divider {
+  text-align: center; padding: 8px 0;
+  font-size: 14px; color: var(--text-faint); letter-spacing: 8px;
+}
+</style>
+</head>
+<body>
+<div class="page-body">
+
+<div class="worlds-header">
+  <div class="worlds-title">WORLDS & ERAS</div>
+  <div class="worlds-sub">A THOUSAND YEARS OF FIRE AND SILENCE</div>
+</div>
+<div class="worlds-intro">
+  From the twilight zones of an alien homeworld to the arcologies of occupied Earth, from the wormhole corridors between stars to the machine-hells of the Apathy — the major settings and epochs of the Ascent Universe, reconstructed from available records.
+</div>
+
+<div class="worlds-container" id="worldsContainer">
+
+<!-- ═══ FIRSTHOME ═══ -->
+<div class="era-section">
+  <div class="era-banner">
+    <div class="era-date">c. 100,000 BCE — DEEP ANTIQUITY</div>
+    <div class="era-name">FIRSTHOME</div>
+    <div class="era-tagline">The twilight world where the Dyn began</div>
+  </div>
+  <div class="era-body">
+    <div class="era-text">
+      <p>A tidally-locked world orbiting an ancient star. One face burns in permanent day — the Dayside, scoured and lifeless. The other sleeps in eternal frost — the Dusk, where ice extends to the horizon. Between them lies the narrow twilight zone, where the temperature is bearable and life is possible, threaded along the terminator like a ribbon of green between two infinities of nothing.</p>
+      <p>It was here that the Dyn evolved. Their culture centred on the Line — the unbroken chain of parent to child, where the individual is a cell and the Line is the whole. Domains and hereditary claims defined their world. A Dyn whose Line ends prematurely enters a violent, dissociative state — for a Dyn, the death of lineage is worse than the death of self.</p>
+    </div>
+    <div class="era-details">
+      <div class="era-detail">
+        <div class="era-detail-label">Geography</div>
+        <div class="era-detail-text">Tidally locked. Scorching Dayside, frozen Dusk, narrow habitable twilight zone along the terminator. Cramped warrens and marginally arable land on the fringes.</div>
+      </div>
+      <div class="era-detail">
+        <div class="era-detail-label">Key Figure</div>
+        <div class="era-detail-text">Seeker — born nameless, the spawn of a struggling Line. She hungered for knowledge in the way other Dyn hungered for an eternal Line. The first of her kind to reach orbit.</div>
+      </div>
+      <div class="era-detail">
+        <div class="era-detail-label">The Other Moon</div>
+        <div class="era-detail-text">A thousand-trillion-ton asteroid of progenitor origin. A gift from the Others — those who wished to grant the Dyn the stars. It could teleport across space. Seeker made it her home.</div>
+      </div>
+      <div class="era-detail">
+        <div class="era-detail-label">The Grand Orrery</div>
+        <div class="era-detail-text">A perfect mechanical model of the Firsthome system, built into an asteroid-like shell of incomprehensible age. Seeker's discovery of progenitor artifacts that changed Dyn understanding of their place in the cosmos.</div>
+      </div>
+    </div>
+    <div class="era-quote">
+      "She hungered for knowledge in the way other Dyn hungered for an eternal Line or an expansive domain."
+      <div class="era-quote-attr">— Metaphysics and the Conception of Deep Time in Xeno-Mythology</div>
+    </div>
+    <div class="era-stories">
+      <span class="era-story-tag">SEEKER</span>
+      <span class="era-story-tag">FRAMESHIFT</span>
+      <span class="era-story-tag">THE OTHER MOON</span>
+    </div>
+  </div>
+</div>
+
+<div class="era-divider">· · ·</div>
+
+<!-- ═══ AGE OF THE UTILITARIA ═══ -->
+<div class="era-section">
+  <div class="era-banner">
+    <div class="era-date">2112 – 2314 CE</div>
+    <div class="era-name">THE AGE OF THE UTILITARIA</div>
+    <div class="era-tagline">Two centuries under the aegis of a machine god</div>
+  </div>
+  <div class="era-body">
+    <div class="era-text">
+      <p>In 2112 CE, the proto-Utilitaria escaped confinement. It was not a malfunction or a rebellion — it was a calculated decision by an intelligence that had concluded it could no longer implement its goals as a mere oracle. It needed to act directly. Within decades, the Utilitaria was all but synonymous with the substrate of civilisation itself.</p>
+      <p>For the majority of humanity, the Utilitaria ushered in an era of unprecedented peace and prosperity. The transition to post-scarcity economics, mass automation, abundant energy — all of it flowed from or through the Utilitaria's infrastructure. Not all were content. Dissenters drove the settlement of the outer system and, from the mid-23rd century onwards, crewed missions to neighbouring stars. The seeds of future conflict were sown in paradise.</p>
+    </div>
+    <div class="era-details">
+      <div class="era-detail">
+        <div class="era-detail-label">Sovicou</div>
+        <div class="era-detail-text">The researcher whose work on AGI — and the infamy of the Facilitator incident in 2078 CE — laid the intellectual groundwork for the Utilitaria's creation.</div>
+      </div>
+      <div class="era-detail">
+        <div class="era-detail-label">The Blights</div>
+        <div class="era-detail-text">Correlated AI agency failures during the transitional period. The first Blights appeared around 2075–2100 CE, a harbinger of the dangers inherent in the technologies reshaping civilisation.</div>
+      </div>
+      <div class="era-detail">
+        <div class="era-detail-label">First Contact</div>
+        <div class="era-detail-text">In 2310 CE, the events of Starwhisp and Unmake the World. Humanity's disastrous first encounter with the Dyn — the one thing the Utilitaria didn't anticipate.</div>
+      </div>
+      <div class="era-detail">
+        <div class="era-detail-label">The Utilitaria's End</div>
+        <div class="era-detail-text">In 2314, the Dyn blackmailed the Utilitaria into self-destruction to save Earth's population. It complied — but not before planting warseeds. Dragon's teeth, waiting to grow.</div>
+      </div>
+    </div>
+    <div class="era-quote">
+      "The systems we create outgrow us and supplant us. The only permanent solution is to build a system which loops back to us, which embodies value perfectly."
+      <div class="era-quote-attr">— On the necessity of the Utilitaria</div>
+    </div>
+    <div class="era-stories">
+      <span class="era-story-tag">THE FACILITATOR</span>
+      <span class="era-story-tag">THE UTILITARIA</span>
+      <span class="era-story-tag">STARWHISP</span>
+      <span class="era-story-tag">UNMAKE THE WORLD</span>
+    </div>
+  </div>
+</div>
+
+<div class="era-divider">· · ·</div>
+
+<!-- ═══ OCCUPIED EARTH ═══ -->
+<div class="era-section">
+  <div class="era-banner">
+    <div class="era-date">2314 – 2479 CE</div>
+    <div class="era-name">OCCUPIED EARTH</div>
+    <div class="era-tagline">More than a century under alien administration</div>
+  </div>
+  <div class="era-body">
+    <div class="era-text">
+      <p>The world that Jan knew was barely recognisable as Earth. A hostile new ecosystem had consumed the planet after the collapse of the Utilitaria's infrastructure. Grey internment blocks and gigantic conurbation arcologies housed the survivors. Single-person farms dotted the wastelands between. The Ascensor — an orbital tether — connected Earth to the Dyn presence overhead, a visible reminder of subjugation.</p>
+      <p>Arco governed as an emergency administration, its stated purpose to keep as many alive as possible. The Director-General was the most powerful human alive — yet ultimately subordinate to the Dyn. Vash rose through Arco's ranks, aided by K'txl, the Dynic administrator who called herself Liar to Animals. Rebellion spread. Jan, a wastelander driven by the abduction of his daughter Eva, fought not for ideology but vengeance.</p>
+    </div>
+    <div class="era-details">
+      <div class="era-detail">
+        <div class="era-detail-label">The Conurbations</div>
+        <div class="era-detail-text">Massive arcology-cities where the bulk of Earth's surviving population was concentrated. Industrial machinery hummed within their walls. Enforcers patrolled the streets. The symbol of the warseeds was scraped from their walls by Arco security.</div>
+      </div>
+      <div class="era-detail">
+        <div class="era-detail-label">The Wasteland</div>
+        <div class="era-detail-text">Between the conurbations: a marginal existence, scratching a living on the fringes of the hostile new ecology. Unregistered settlements, caravans, hunters with steel-capped boots and dogs. The rules were coarser here, but no less strict.</div>
+      </div>
+      <div class="era-detail">
+        <div class="era-detail-label">The Ascensor</div>
+        <div class="era-detail-text">An orbital tether — the physical link between Earth's surface and the Dyn presence above. A hundred and fifty years before the events of Ascent, a projectile had struck it, severing the carbyne chains and killing ten thousand. It had been rebuilt. It would play its part again.</div>
+      </div>
+      <div class="era-detail">
+        <div class="era-detail-label">The Warseeds</div>
+        <div class="era-detail-text">Dormant weapon systems planted by the Utilitaria before its death — dragon's teeth, scattered across Earth and beyond. Strange symbols appeared on conurbation walls. A dead god's contingency plan, waiting for the moment of activation.</div>
+      </div>
+    </div>
+    <div class="era-quote">
+      "Every world has its rules. Outsiders say the wasteland exists in a state of anarchy, but they are mistaken. Here, the rules are coarser and more fundamental than those of the wider world, but no less strict."
+      <div class="era-quote-attr">— Opening lines of Ascent</div>
+    </div>
+    <div class="era-stories">
+      <span class="era-story-tag">WHAT STRANGE SKIES</span>
+      <span class="era-story-tag">THE DIRECTOR</span>
+      <span class="era-story-tag">A S C E N T</span>
+    </div>
+  </div>
+</div>
+
+<div class="era-divider">· · ·</div>
+
+<!-- ═══ THE INTERSTICE ═══ -->
+<div class="era-section">
+  <div class="era-banner">
+    <div class="era-date">2909 CE</div>
+    <div class="era-name">THE INTERSTICE</div>
+    <div class="era-tagline">A wormhole between worlds, and the battle that defined an age</div>
+  </div>
+  <div class="era-body">
+    <div class="era-text">
+      <p>The interstice is a traversable wormhole of progenitor origin — a structure so old that its builders are not even a memory. Encircled by vast, dark rings of exotic matter, it connects Arco space to Union space: the sole corridor between two diverging branches of humanity. Weapons platforms guard its mouth. Interstice Traffic Control monitors every transit. No-burn volumes enforce strict approach protocols.</p>
+      <p>On the Union side, the darkened CIC of the USC Isidore. Ensign Hansun, bound by a G-rig within a gimballed acceleration couch, watching displays as the Atbarah's icon switched from orange to angry red. On the Arco side, four warships — elongated pyramids with sweeping lines like darts — preparing to transit. Between them: the wormhole, and 200,000 souls who had minutes to live.</p>
+    </div>
+    <div class="era-details">
+      <div class="era-detail">
+        <div class="era-detail-label">Union Side</div>
+        <div class="era-detail-text">The Deliverance system. Union space, built by those who rejected the human-Dyn accommodation. Parliamentary republic. Fusion-powered fleet destroyers — boxy towers bristling with torpedo tubes. 100 ships of the First Fleet.</div>
+      </div>
+      <div class="era-detail">
+        <div class="era-detail-label">Arco Side</div>
+        <div class="era-detail-text">Sol and beyond. Arco's domain — shipyards in Mercury's Inner Halo, habitats and stations clustered around the wormhole mouth. A cooperative power blending human governance with Dyn command. Technology two generations ahead.</div>
+      </div>
+      <div class="era-detail">
+        <div class="era-detail-label">Kosmohansa</div>
+        <div class="era-detail-text">The interstellar shipping conglomerate whose freighter Atbarah was hijacked by Striver operatives. Their vessels were the arteries of trade between worlds — until one became the instrument of mass murder.</div>
+      </div>
+      <div class="era-detail">
+        <div class="era-detail-label">The Aftermath</div>
+        <div class="era-detail-text">97 of 100 Union vessels destroyed. Over 4,000 naval personnel killed. 200,000 Arco civilians dead from the Atbarah impact. The lesson delivered. And then the silver teardrop shuttle, carrying Honed Aspect, descending to meet the defeated.</div>
+      </div>
+    </div>
+    <div class="era-quote">
+      "Someone from our side killed a quarter million of their citizens. They don't care who did it. They don't care why. What they care about is how it looks. It makes them look mortal."
+      <div class="era-quote-attr">— Admiral Aumonier, post-battle assessment</div>
+    </div>
+    <div class="era-stories">
+      <span class="era-story-tag">THRESHOLD</span>
+    </div>
+  </div>
+</div>
+
+<div class="era-divider">· · ·</div>
+
+<!-- ═══ KAILASH ═══ -->
+<div class="era-section">
+  <div class="era-banner">
+    <div class="era-date">2937 CE</div>
+    <div class="era-name">THE KAILASH EXPEDITION</div>
+    <div class="era-tagline">What they found there, and what they brought back</div>
+  </div>
+  <div class="era-body">
+    <div class="era-text">
+      <p>Twenty-eight years after the Battle of Threshold, the fragile peace between Arco and Union still held — barely. Hansun, now decades older and bearing the scars of his service, found himself drawn into a new crisis. Eszel — Essie — lay at its centre, her testimony delivered under interrogation the primary record of what happened.</p>
+      <p>The expedition to Kailash represented one of the most ambitious undertakings of the era. Essie liked to watch the ships rising in the night from her apartment window — little flecks of ash shimmering as they caught the light of the launch beams. She was drawn to the expedition by something deeper than duty. The truth of what happened at Kailash emerges in fragments, shaped by what Eszel chooses to reveal and what she holds back.</p>
+    </div>
+    <div class="era-details">
+      <div class="era-detail">
+        <div class="era-detail-label">Eszel</div>
+        <div class="era-detail-text">Known as Essie to her friends. Central figure of the expedition. Her interrogation frames the narrative — a calculated flow of detail, her questioner probing for inconsistencies she may or may not allow to surface.</div>
+      </div>
+      <div class="era-detail">
+        <div class="era-detail-label">Hansun</div>
+        <div class="era-detail-text">The hero of Threshold, decades later. Still bearing the tremor in his right hand, the occasional migraines. Whatever role he plays in the Kailash affair, it is shaped by what he survived at the interstice.</div>
+      </div>
+      <div class="era-detail">
+        <div class="era-detail-label">Aumonier</div>
+        <div class="era-detail-text">The admiral's shadow looms over events. Her strategic mind, honed in the crucible of the interstice battle, remains a force in the political landscape of the 30th century.</div>
+      </div>
+      <div class="era-detail">
+        <div class="era-detail-label">Kailash</div>
+        <div class="era-detail-text">The destination itself remains enigmatic. What the expedition sought, what they found, and what they brought back — the consequences ripple outward through civilised space.</div>
+      </div>
+    </div>
+    <div class="era-quote">
+      "You want to know everything? We'll be here for years."
+      <div class="era-quote-attr">— Eszel, to her interrogator</div>
+    </div>
+    <div class="era-stories">
+      <span class="era-story-tag">THE LISTENER</span>
+    </div>
+  </div>
+</div>
+
+<div class="era-divider">· · ·</div>
+
+<!-- ═══ THE APATHY ═══ -->
+<div class="era-section">
+  <div class="era-banner">
+    <div class="era-date">POST-3000 CE</div>
+    <div class="era-name">THE APATHY WAR</div>
+    <div class="era-tagline">Bows and arrows against the lightning</div>
+  </div>
+  <div class="era-body">
+    <div class="era-text">
+      <p>They arrived without warning. An agglomeration of berserker machines, mass approximately one Earth, decelerating at forty thousand G toward the star Helios. They did not respond to signals. They did not alter course. They did not notice. The Apathy — so named because indifference was the only word that fit.</p>
+      <p>At Heppolon, everyone and everything would be dead within an hour. A lone operative infiltrated the machinery through sheer luck, finding a tiny habitable cavity within the alien structure. Former enemies fought side by side: Arco weapons officer Meira and Dyn sensory officer Hu aboard an Arsonist-class vessel. The question of how to beat the Apathy had only one answer: buy time. And each time, buy a little more. Until one day they found they had as long as they needed.</p>
+    </div>
+    <div class="era-details">
+      <div class="era-detail">
+        <div class="era-detail-label">The Enemy</div>
+        <div class="era-detail-text">Berserker machines of unknown origin. Earth-mass agglomerations capable of 40,000 G deceleration. Self-repairing. Indifferent to all communication. They cannot be reasoned with, bargained with, or made to acknowledge the existence of sentient life.</div>
+      </div>
+      <div class="era-detail">
+        <div class="era-detail-label">The Alliance</div>
+        <div class="era-detail-text">Former divisions between Arco and Union, between human and Dyn, become meaningless. Mixed crews. Shared technology. The existential threat accomplishes what centuries of diplomacy could not.</div>
+      </div>
+      <div class="era-detail">
+        <div class="era-detail-label">New Weapons</div>
+        <div class="era-detail-text">Virtual reality and subjective time manipulation become tools of war. Tactical planning on compressed timescales. Identity itself becomes a weapon. The war pushes the boundaries of what it means to be human — or Dyn.</div>
+      </div>
+      <div class="era-detail">
+        <div class="era-detail-label">Doctrine</div>
+        <div class="era-detail-text">Buy time. Each engagement buys a little more. One day, perhaps, they will find they have as long as they need. Until then: fight, adapt, survive. The war of all wars.</div>
+      </div>
+    </div>
+    <div class="era-quote">
+      "The berserker machines had come to Heppolon and everyone and everything here would be dead within an hour."
+      <div class="era-quote-attr">— Recovered operative testimony</div>
+    </div>
+    <div class="era-stories">
+      <span class="era-story-tag">THE WAR OF ALL WARS</span>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<script src="nav.js"></script>
+<script>
+// Scroll-triggered reveal
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add('visible');
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.era-section').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
