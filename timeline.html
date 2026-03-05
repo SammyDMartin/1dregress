@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timeline — Ascent Universe</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow-y: auto; }
+
+.tl-header {
+  text-align: center; padding: 30px 20px 10px; max-width: 800px; margin: 0 auto;
+}
+.tl-title { font-size: 18px; letter-spacing: 6px; color: var(--accent); font-weight: 700; }
+.tl-sub { font-size: 9px; letter-spacing: 4px; color: var(--text-dim); margin-top: 4px; }
+.tl-intro {
+  max-width: 700px; margin: 10px auto 30px; padding: 0 20px;
+  font-size: 11px; color: var(--text-dim); line-height: 1.7; text-align: center;
+}
+
+/* ─── Era Filter ──────────────────────────────────────────────────────── */
+.era-filters {
+  display: flex; gap: 6px; justify-content: center; flex-wrap: wrap;
+  margin-bottom: 30px; padding: 0 16px;
+}
+.era-btn {
+  background: var(--panel); border: 1px solid var(--border);
+  color: var(--text-dim); font-size: 8px; letter-spacing: 2px;
+  padding: 5px 12px; cursor: pointer; border-radius: 2px;
+  transition: all 0.2s; font-family: var(--mono);
+}
+.era-btn:hover { border-color: var(--accent); color: var(--accent); }
+.era-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(0,229,255,0.06); }
+
+/* ─── Timeline ────────────────────────────────────────────────────────── */
+.timeline {
+  position: relative; max-width: 700px; margin: 0 auto;
+  padding: 0 20px 60px;
+}
+.timeline::before {
+  content: ''; position: absolute; left: 50%; top: 0; bottom: 0;
+  width: 1px; background: var(--border);
+  transform: translateX(-50%);
+}
+
+.tl-era-label {
+  position: relative; text-align: center; padding: 20px 0 16px;
+  font-size: 9px; letter-spacing: 4px; color: var(--accent2); font-weight: 700;
+  clear: both;
+}
+.tl-era-label::before {
+  content: ''; position: absolute; left: 50%; top: 50%;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--accent2); transform: translate(-50%, -50%);
+  box-shadow: 0 0 12px rgba(255,107,53,0.4);
+  z-index: 2;
+}
+.tl-era-label span {
+  position: relative; z-index: 3;
+  background: var(--bg); padding: 0 12px;
+}
+
+.tl-event {
+  position: relative; width: 45%; margin-bottom: 20px;
+  opacity: 0; transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.tl-event.visible { opacity: 1; transform: translateY(0); }
+.tl-event.left { float: left; text-align: right; padding-right: 24px; }
+.tl-event.right { float: right; text-align: left; padding-left: 24px; }
+
+.tl-event::after {
+  content: ''; position: absolute; top: 8px;
+  width: 7px; height: 7px; border-radius: 50%;
+  border: 1.5px solid var(--accent); background: var(--bg);
+  z-index: 2;
+}
+.tl-event.left::after { right: -4px; }
+.tl-event.right::after { left: -4px; }
+
+.tl-event.highlight::after {
+  border-color: var(--accent2);
+  background: var(--accent2);
+  box-shadow: 0 0 8px rgba(255,107,53,0.5);
+}
+
+.tl-date {
+  font-size: 9px; letter-spacing: 2px; color: var(--accent);
+  margin-bottom: 3px;
+}
+.tl-event-title {
+  font-size: 10px; letter-spacing: 1px; color: rgba(200,220,230,0.9);
+  font-weight: 700; margin-bottom: 4px;
+}
+.tl-event-text {
+  font-size: 9px; line-height: 1.6; color: var(--text-dim);
+}
+.tl-event-tag {
+  display: inline-block; font-size: 7px; letter-spacing: 1.5px;
+  padding: 1px 6px; margin-top: 4px; border-radius: 2px;
+}
+.tag-arco { color: var(--accent2); border: 1px solid rgba(255,107,53,0.3); }
+.tag-union { color: var(--accent); border: 1px solid rgba(0,229,255,0.3); }
+.tag-dyn { color: var(--green); border: 1px solid rgba(0,255,136,0.3); }
+.tag-striver { color: var(--red); border: 1px solid rgba(255,51,85,0.3); }
+.tag-apathy { color: #aa88ff; border: 1px solid rgba(170,136,255,0.3); }
+.tag-all { color: var(--text-dim); border: 1px solid var(--border); }
+
+.clearfix::after { content: ''; display: table; clear: both; }
+
+/* ─── Mobile ──────────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .timeline::before { left: 16px; }
+  .tl-era-label::before { left: 16px; }
+  .tl-era-label { text-align: left; padding-left: 34px; }
+  .tl-era-label span { padding: 0 8px 0 0; }
+  .tl-event { width: auto; float: none !important; text-align: left !important;
+    padding-left: 34px !important; padding-right: 0 !important; margin-left: 0; }
+  .tl-event::after { left: 12px !important; right: auto !important; }
+}
+</style>
+</head>
+<body>
+<div class="page-body">
+
+<div class="tl-header">
+  <div class="tl-title">HISTORICAL TIMELINE</div>
+  <div class="tl-sub">ASCENT UNIVERSE — RECONSTRUCTED CHRONOLOGY</div>
+</div>
+<div class="tl-intro">
+  A reconstructed timeline of the major events spanning the Ascent Universe, from the deep history of the Dyn to humanity's interstellar conflicts and the existential threat of the Apathy. Compiled from intelligence archives, diplomatic records, and recovered sensor logs.
+</div>
+
+<div class="era-filters" id="eraFilters"></div>
+
+<div class="timeline" id="timeline"></div>
+
+</div>
+<script src="nav.js"></script>
+<script>
+const ERAS = [
+  { id: 'all', label: 'ALL' },
+  { id: 'deep', label: 'DEEP HISTORY' },
+  { id: 'contact', label: 'CONTACT ERA' },
+  { id: 'occupation', label: 'DYNIC OCCUPATION' },
+  { id: 'exodus', label: 'EXODUS & UNION' },
+  { id: 'interstice', label: 'INTERSTICE WAR' },
+  { id: 'apathy', label: 'APATHY WAR' },
+];
+
+const EVENTS = [
+// ─── Deep History ────────────────────────────────────────────────────
+{ era: 'deep', date: 'DEEP ANTIQUITY', title: 'CONSTRUCTION OF THE INTERSTICE',
+  text: 'An unknown progenitor civilisation constructs a traversable wormhole — the interstice — linking two star systems. Encircled by vast, dark rings of exotic matter, it will endure for aeons beyond its creators.',
+  tags: ['all'], highlight: false },
+{ era: 'deep', date: 'DEEP ANTIQUITY', title: 'EMERGENCE OF THE DYN',
+  text: 'On a tidally-locked world known as Firsthome, the Dyn evolve in the twilight zone between the scorching Dayside and the frozen Dusk. Their culture centres on the Line — the unbroken chain of parent to child, where the individual is a cell and the Line is the whole.',
+  tags: ['dyn'], highlight: false },
+{ era: 'deep', date: 'APPROX. 1000 BF', title: 'SEEKER\'S ODYSSEY',
+  text: 'A Dyn born to a failing line, driven by an insatiable hunger for knowledge, takes the name Seeker and becomes the first of her kind to reach orbit. She explores the inner worlds, the gas giant known as the Eye, and discovers ancient alien artifacts — including a grand orrery of her home system built into an asteroid-like shell of incomprehensible age.',
+  tags: ['dyn'], highlight: true },
+{ era: 'deep', date: 'PRE-CONTACT', title: 'DYN INTERSTELLAR EXPANSION',
+  text: 'The Dyn develop interstellar travel and expand across multiple systems. Their society remains organised around the Line — domains, territories, and hereditary claims rather than nation-states. Factional tensions between progressive and isolationist lines simmer.',
+  tags: ['dyn'], highlight: false },
+
+// ─── Contact Era ─────────────────────────────────────────────────────
+{ era: 'contact', date: 'CONTACT YEAR', title: 'FIRST CONTACT',
+  text: 'Humanity and the Dyn encounter one another. The details of initial contact remain disputed by both sides. Humanity of this era possesses significant industrial and military capability, but the Dyn\'s technological base is more mature.',
+  tags: ['dyn', 'all'], highlight: true },
+{ era: 'contact', date: 'POST-CONTACT', title: 'ESCALATION & CONFLICT',
+  text: 'Relations between humanity and the Dyn deteriorate. Hardline Dyn factions push for containment of the rapidly expanding human species. Humanity\'s warmaking capabilities alarm even moderate Dyn leaders. A faction within the Dyn pushes for the immediate extermination of humanity.',
+  tags: ['dyn'], highlight: false },
+{ era: 'contact', date: 'POST-CONTACT', title: 'THE DYN INTERVENTION',
+  text: 'Rather than extermination, the Dyn choose subjugation. Human warmaking capabilities are systematically dismantled. Earth falls under Dynic administration. K\'txl is appointed Dynic administrator of Earth — a figure whose communications with humans sound "almost human, but with an inflection that is somehow off."',
+  tags: ['dyn'], highlight: true },
+
+// ─── Dynic Occupation ────────────────────────────────────────────────
+{ era: 'occupation', date: 'EARLY OCCUPATION', title: 'ESTABLISHMENT OF ARCO',
+  text: 'In the aftermath of the Dyn intervention, an emergency administration is established to govern Earth\'s surviving population. It takes the name Arco. Its stated purpose: to keep as many alive as possible, at as high a standard of living as possible. Earth becomes a patchwork of single-person farms, grey internment blocks, and gigantic conurbation arcologies.',
+  tags: ['arco'], highlight: true },
+{ era: 'occupation', date: 'OCCUPATION ERA', title: 'THE DIRECTOR-GENERAL',
+  text: 'Arco\'s leadership consolidates around the office of the Director-General — arguably the most powerful human alive, yet ultimately subordinate to the Dyn administration. Vash, once a resistance fighter, defects to Arco and rises rapidly through its ranks. The line between collaboration and survival blurs.',
+  tags: ['arco'], highlight: false },
+{ era: 'occupation', date: 'OCCUPATION ERA', title: 'RESISTANCE MOVEMENTS',
+  text: 'Rebellion spreads as the emergency administration\'s grip weakens. Resistance cells emerge across Earth. Among them, figures like Jan — driven by personal loss after his daughter\'s abduction — fight not for ideology but for vengeance. The occupation becomes increasingly untenable.',
+  tags: ['arco'], highlight: false },
+{ era: 'occupation', date: 'LATE OCCUPATION', title: 'THE RENEGOTIATION',
+  text: 'As conditions shift, a complex renegotiation of the human-Dyn relationship begins. Some Dyn lines begin integrating human capabilities rather than suppressing them. Arco transforms from a puppet administration into something more autonomous — a genuine human-Dyn cooperative power. The seeds of interstellar expansion are planted.',
+  tags: ['arco', 'dyn'], highlight: true },
+
+// ─── Exodus & Union ──────────────────────────────────────────────────
+{ era: 'exodus', date: 'EXODUS ERA', title: 'FOUNDING OF UNION',
+  text: 'A faction of humanity, rejecting the human-Dyn accommodation, departs Sol through the interstice to establish an independent civilisation on the far side. They found Union — built on the principle of raw, unaltered human identity above all other allegiance. The interstice becomes the sole link between two diverging branches of humanity.',
+  tags: ['union'], highlight: true },
+{ era: 'exodus', date: 'EXODUS ERA', title: 'UNION MILITARY DEVELOPMENT',
+  text: 'Union develops its own naval capability around the interstice. The fleet architecture centres on destroyer battle groups — boxy, trilaterally symmetric towers bristling with torpedo tubes and gun turrets — each supported by nine unmanned corvettes. Fusion-powered, rugged, and numerous, but technologically inferior to Arco designs.',
+  tags: ['union'], highlight: false },
+{ era: 'exodus', date: 'POST-EXODUS', title: 'ARCO TECHNOLOGICAL ASCENT',
+  text: 'Drawing on Dyn knowledge and advanced materials science, Arco develops antimatter propulsion (ABC drives), hyperdiamond composites, and weapons of extraordinary power. The Annihilator-class assault vehicle represents the pinnacle: 200 metres of hyperdiamond-armoured killing machine with a crew of 11, carrying enough firepower to devastate a fleet. Its predecessor, the Arsonist-class, enters service first.',
+  tags: ['arco'], highlight: false },
+{ era: 'exodus', date: 'POST-EXODUS', title: 'THE STRIVER MOVEMENT',
+  text: 'Ideological extremists whose ancestry predates Union\'s founding. The Human Purity Front — known as Strivers — place raw, unaltered, mortal humanity above all other values. They see both Arco\'s human-alien accommodation and AI augmentation as existential threats. They adopt many names, shifting between political and religious masks as convenience demands.',
+  tags: ['striver'], highlight: false },
+
+// ─── Interstice War ──────────────────────────────────────────────────
+{ era: 'interstice', date: 'T-0:00', title: 'THE ATBARAH INCIDENT',
+  text: 'Striver operatives hijack the Kosmohansa freighter Atbarah and accelerate toward the interstice on a suicide run. The defence grid is hacked, orbital stations destroyed. Despite Union pursuit by the USC Isidore, the Atbarah enters the interstice at crushing acceleration. Its crew are already dead from G-forces.',
+  tags: ['striver', 'union'], highlight: true },
+{ era: 'interstice', date: 'T+0:00', title: 'IMPACT',
+  text: 'The Atbarah exits the interstice at relativistic velocity and strikes a habitat structure on the Arco side. Approximately 200,000 casualties. Union First Fleet establishes an emergency blockade around the aperture, but the damage to inter-civilisational relations is catastrophic.',
+  tags: ['striver', 'arco'], highlight: true },
+{ era: 'interstice', date: 'T+4:00', title: 'ARCO EMERGENCE',
+  text: 'Four Arco warships transit the interstice: three Incisor-class fast attack vehicles and one Annihilator-class IP assault vehicle. Elongated pyramids with sweeping lines like darts, ridged with projectors and weapons hardpoints, each with a gaping spinal-mount tube. They emerge into a cordon of 100 Union ships.',
+  tags: ['arco'], highlight: true },
+{ era: 'interstice', date: 'T+4:05', title: 'SABOTAGE & FIRST SHOTS',
+  text: 'Pre-planted Striver malware forces a premature torpedo launch from Union corvettes. Arco responds with devastating efficiency — X-ray lasers destroy all torpedoes across tens of thousands of kilometres. Union fleet communications are jammed. Command and control is effectively destroyed.',
+  tags: ['striver', 'arco', 'union'], highlight: false },
+{ era: 'interstice', date: 'T+4:15', title: 'THE DIAMOND DUSTER',
+  text: 'Arco\'s spinal-mounted Diamond Duster weapons open fire — streams of micron-scale hyperdiamond particles accelerated to relativistic velocities. Invisible to standard radar, they tear through Union ships like an invisible wall. Over twenty vessels are destroyed before Ensign Hansun identifies the weapon through anti-collision sensor analysis.',
+  tags: ['arco', 'union'], highlight: true },
+{ era: 'interstice', date: 'T+4:30', title: 'EXODRONE SWARM',
+  text: 'The Annihilator launches autonomous exodrone platforms — laser-propelled missiles accelerating at 200+ G with antimatter warheads. Over 200 contacts overwhelm what remains of Union point defence. The fleet is fighting blind, autonomous, without coordination.',
+  tags: ['arco'], highlight: false },
+{ era: 'interstice', date: 'T+4:45', title: 'ISIDORE\'S STAND',
+  text: 'The USC Isidore plays dead on a ballistic trajectory, then executes a surprise 30G burn directly at the nearest Incisor. Captain Ngoni and the entire crew are killed by the acceleration. Hansun alone survives, barely. A railgun strike at point-blank range penetrates the Incisor\'s engine block — the only Arco warship destroyed.',
+  tags: ['union'], highlight: true },
+{ era: 'interstice', date: 'T+4:51', title: 'WITHDRAWAL & AFTERMATH',
+  text: 'The three surviving Arco warships break engagement and return through the interstice. The punitive strike is complete. Union First Fleet is effectively destroyed: 1 destroyer, 2 corvettes survive from 100. Over 4,000 naval personnel killed in action. The lesson is delivered.',
+  tags: ['arco', 'union'], highlight: false },
+{ era: 'interstice', date: 'POST-BATTLE', title: 'FIRST DIPLOMATIC CONTACT',
+  text: 'Honed Aspect, a Dyn officer commanding the Arco battle sub-constellation, arrives aboard a silver teardrop shuttle of memory-metal. Trilaterally symmetric, with divided manipulators and pitiless black eyes, she extends condolences on behalf of Arco. Admiral Aumonier notes the deliberate gesture of sending "their alien servant" to meet the defeated.',
+  tags: ['arco', 'dyn', 'union'], highlight: true },
+
+// ─── Apathy War ──────────────────────────────────────────────────────
+{ era: 'apathy', date: 'YEARS LATER', title: 'THE APATHY ARRIVES',
+  text: 'Berserker machines of unknown origin enter civilised space. The Apathy — so named for their utter indifference to communication, negotiation, or the existence of sentient life. An agglomeration exits translight toward the star Helios: mass approximately 1 Earth, decelerating at 40,000 G. They cannot be slowed, reasoned with, or made to notice.',
+  tags: ['apathy'], highlight: true },
+{ era: 'apathy', date: 'APATHY WAR', title: 'BOWS AND ARROWS AGAINST THE LIGHTNING',
+  text: 'At Heppolon, the berserker machines arrive and everything faces annihilation within hours. A lone operative infiltrates the Apathy\'s machinery through sheer luck, finding a tiny habitable cavity within the alien structure. They become witness to humanity\'s first real stand against the existential threat.',
+  tags: ['apathy'], highlight: true },
+{ era: 'apathy', date: 'APATHY WAR', title: 'CONVERGENCE',
+  text: 'The existential threat of the Apathy forces former enemies together. Arco weapons officer Meira serves aboard an Arsonist-class vessel alongside Hu, a Dyn sensory officer — "prideful as ever." The question of how to beat the Apathy has only one answer: buy time, and each time buy a little more, until one day they find they have as long as they need.',
+  tags: ['arco', 'dyn', 'apathy'], highlight: true },
+{ era: 'apathy', date: 'APATHY WAR', title: 'THE WAR OF ALL WARS',
+  text: 'The conflict against the Apathy becomes the defining struggle of all sentient life. Former divisions between Arco and Union, between human and Dyn, become meaningless against machines that can devote the mass of an entire planet to annihilation. Virtual reality and subjective time manipulation become tools of war. Identity itself becomes a weapon.',
+  tags: ['apathy', 'arco', 'union', 'dyn'], highlight: false },
+];
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// BUILD UI
+// ═══════════════════════════════════════════════════════════════════════════════
+
+const filtersEl = document.getElementById('eraFilters');
+const timelineEl = document.getElementById('timeline');
+let activeEra = 'all';
+
+// Build filter buttons
+ERAS.forEach(era => {
+  const btn = document.createElement('button');
+  btn.className = 'era-btn' + (era.id === 'all' ? ' active' : '');
+  btn.textContent = era.label;
+  btn.dataset.era = era.id;
+  btn.addEventListener('click', () => {
+    activeEra = era.id;
+    filtersEl.querySelectorAll('.era-btn').forEach(b => b.classList.toggle('active', b.dataset.era === era.id));
+    buildTimeline();
+  });
+  filtersEl.appendChild(btn);
+});
+
+function buildTimeline() {
+  timelineEl.innerHTML = '';
+  const filtered = activeEra === 'all' ? EVENTS : EVENTS.filter(e => e.era === activeEra);
+  let currentEra = '';
+  let side = 'left';
+
+  filtered.forEach((ev, i) => {
+    // Era label
+    if (ev.era !== currentEra) {
+      currentEra = ev.era;
+      const eraInfo = ERAS.find(e => e.id === currentEra);
+      if (eraInfo && activeEra === 'all') {
+        const label = document.createElement('div');
+        label.className = 'tl-era-label clearfix';
+        label.innerHTML = '<span>' + eraInfo.label + '</span>';
+        timelineEl.appendChild(label);
+        side = 'left';
+      }
+    }
+
+    const div = document.createElement('div');
+    div.className = 'tl-event ' + side + (ev.highlight ? ' highlight' : '');
+
+    const tagsHtml = ev.tags.map(t => {
+      const label = t === 'all' ? 'UNIVERSAL' : t.toUpperCase();
+      return '<span class="tl-event-tag tag-' + t + '">' + label + '</span>';
+    }).join(' ');
+
+    div.innerHTML =
+      '<div class="tl-date">' + ev.date + '</div>' +
+      '<div class="tl-event-title">' + ev.title + '</div>' +
+      '<div class="tl-event-text">' + ev.text + '</div>' +
+      '<div style="margin-top:4px">' + tagsHtml + '</div>';
+
+    timelineEl.appendChild(div);
+
+    // Clearfix after every pair
+    if (side === 'right') {
+      const cf = document.createElement('div');
+      cf.className = 'clearfix';
+      timelineEl.appendChild(cf);
+    }
+    side = side === 'left' ? 'right' : 'left';
+  });
+
+  // Final clearfix
+  const cf = document.createElement('div');
+  cf.className = 'clearfix';
+  timelineEl.appendChild(cf);
+
+  // Trigger entrance animations
+  requestAnimationFrame(() => {
+    const events = timelineEl.querySelectorAll('.tl-event');
+    events.forEach((el, i) => {
+      setTimeout(() => el.classList.add('visible'), i * 80);
+    });
+  });
+}
+
+// Scroll-triggered reveal
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add('visible');
+  });
+}, { threshold: 0.15 });
+
+function observeEvents() {
+  document.querySelectorAll('.tl-event').forEach(el => observer.observe(el));
+}
+
+buildTimeline();
+setTimeout(observeEvents, 100);
+</script>
+</body>
+</html>
