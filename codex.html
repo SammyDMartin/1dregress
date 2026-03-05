@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Codex — Ascent Universe</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow-y: auto; }
+
+.codex-header {
+  text-align: center; padding: 30px 20px 10px; max-width: 800px; margin: 0 auto;
+}
+.codex-title { font-size: 18px; letter-spacing: 6px; color: var(--accent); font-weight: 700; }
+.codex-sub { font-size: 9px; letter-spacing: 4px; color: var(--text-dim); margin-top: 4px; }
+.codex-intro {
+  max-width: 700px; margin: 10px auto 24px; padding: 0 20px;
+  font-size: 11px; color: var(--text-dim); line-height: 1.7; text-align: center;
+}
+
+/* ─── Category Tabs ───────────────────────────────────────────────────── */
+.codex-tabs {
+  display: flex; gap: 4px; justify-content: center; flex-wrap: wrap;
+  margin-bottom: 24px; padding: 0 16px;
+}
+.codex-tab {
+  background: var(--panel); border: 1px solid var(--border);
+  color: var(--text-dim); font-size: 8px; letter-spacing: 2px;
+  padding: 6px 14px; cursor: pointer; border-radius: 2px;
+  transition: all 0.2s; font-family: var(--mono);
+}
+.codex-tab:hover { border-color: var(--accent); color: var(--accent); }
+.codex-tab.active { border-color: var(--accent); color: var(--accent); background: rgba(0,229,255,0.06); }
+
+/* ─── Dossier Cards ───────────────────────────────────────────────────── */
+.codex-container {
+  max-width: 760px; margin: 0 auto; padding: 0 16px 60px;
+}
+
+.dossier {
+  border: 1px solid var(--border); background: var(--panel);
+  margin-bottom: 14px; border-radius: 2px; overflow: hidden;
+  transition: border-color 0.3s;
+}
+.dossier:hover { border-color: rgba(0,229,255,0.3); }
+
+.dossier-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; cursor: pointer; transition: background 0.2s;
+}
+.dossier-header:hover { background: rgba(0,229,255,0.03); }
+
+.dossier-icon {
+  width: 32px; height: 32px; border-radius: 2px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+  border: 1px solid rgba(0,229,255,0.2);
+}
+.dossier-icon.faction-arco { color: var(--accent2); border-color: rgba(255,107,53,0.3); background: rgba(255,107,53,0.05); }
+.dossier-icon.faction-union { color: var(--accent); border-color: rgba(0,229,255,0.3); background: rgba(0,229,255,0.05); }
+.dossier-icon.faction-dyn { color: var(--green); border-color: rgba(0,255,136,0.3); background: rgba(0,255,136,0.05); }
+.dossier-icon.faction-striver { color: var(--red); border-color: rgba(255,51,85,0.3); background: rgba(255,51,85,0.05); }
+.dossier-icon.faction-apathy { color: #aa88ff; border-color: rgba(170,136,255,0.3); background: rgba(170,136,255,0.05); }
+.dossier-icon.type-person { border-style: dashed; }
+
+.dossier-meta { flex: 1; min-width: 0; }
+.dossier-name {
+  font-size: 10px; letter-spacing: 2px; color: rgba(200,220,230,0.9); font-weight: 700;
+}
+.dossier-type {
+  font-size: 8px; letter-spacing: 2px; color: var(--text-dim); margin-top: 1px;
+}
+.dossier-expand {
+  font-size: 11px; color: var(--text-dim); transition: transform 0.3s;
+  flex-shrink: 0;
+}
+.dossier.open .dossier-expand { transform: rotate(90deg); }
+
+.dossier-body {
+  display: none; padding: 0 14px 14px;
+  border-top: 1px solid var(--border);
+}
+.dossier.open .dossier-body { display: block; }
+
+.dossier-section {
+  margin-top: 10px;
+}
+.dossier-section-label {
+  font-size: 8px; letter-spacing: 3px; color: var(--accent2);
+  margin-bottom: 4px; text-transform: uppercase;
+}
+.dossier-text {
+  font-size: 10px; line-height: 1.7; color: rgba(200,220,230,0.7);
+}
+
+.dossier-stats {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2px 12px;
+}
+.dossier-stat {
+  display: flex; justify-content: space-between; padding: 3px 0;
+  border-bottom: 1px solid var(--text-faint);
+}
+.dossier-stat .ds-label { font-size: 9px; color: var(--text-dim); letter-spacing: 1px; }
+.dossier-stat .ds-value { font-size: 9px; color: var(--accent); letter-spacing: 0.5px; }
+
+.dossier-quote {
+  font-size: 10px; line-height: 1.6; color: rgba(200,220,230,0.5);
+  font-style: italic; border-left: 2px solid var(--border);
+  padding-left: 10px; margin-top: 8px;
+}
+.dossier-quote-attr {
+  font-size: 8px; letter-spacing: 1px; color: var(--text-dim);
+  font-style: normal; margin-top: 4px;
+}
+
+/* ─── Clearance stamp ─────────────────────────────────────────────────── */
+.clearance-stamp {
+  text-align: center; margin-bottom: 20px;
+  font-size: 8px; letter-spacing: 3px; color: var(--red);
+  padding: 6px 0; border-top: 1px solid rgba(255,51,85,0.2);
+  border-bottom: 1px solid rgba(255,51,85,0.2);
+}
+
+/* ─── Mobile ──────────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .dossier-stats { grid-template-columns: 1fr; }
+  .dossier-icon { width: 28px; height: 28px; font-size: 14px; }
+  .dossier-name { font-size: 9px; letter-spacing: 1.5px; }
+}
+</style>
+</head>
+<body>
+<div class="page-body">
+
+<div class="codex-header">
+  <div class="codex-title">INTELLIGENCE CODEX</div>
+  <div class="codex-sub">CLASSIFIED BRIEFING MATERIALS</div>
+</div>
+<div class="codex-intro">
+  Compiled from signals intelligence, diplomatic archives, debriefings, and recovered Arco data stores. Entries cover major factions, threat assessments, and personnel of significance. Access restricted to DELTA clearance and above.
+</div>
+<div class="clearance-stamp">CLASSIFICATION: DELTA — COMPARTMENTED INTELLIGENCE</div>
+
+<div class="codex-tabs" id="codexTabs"></div>
+<div class="codex-container" id="codexContainer"></div>
+
+</div>
+<script src="nav.js"></script>
+<script>
+const TABS = [
+  { id: 'all', label: 'ALL' },
+  { id: 'factions', label: 'FACTIONS' },
+  { id: 'personnel', label: 'PERSONNEL' },
+  { id: 'threats', label: 'THREATS' },
+  { id: 'vessels', label: 'VESSELS' },
+];
+
+const ENTRIES = [
+// ═══════════════════════════════════════════════════════════════════════
+// FACTIONS
+// ═══════════════════════════════════════════════════════════════════════
+{
+  tab: 'factions', icon: '◆', iconClass: 'faction-arco',
+  name: 'ARCO INTERSTELLAR AGENCY', type: 'FACTION — PEER ADVERSARY / DIPLOMATIC PARTNER',
+  sections: [
+    { label: 'Overview', text: 'Arco originated as an emergency administration established on Earth in the aftermath of the Dyn intervention. Its founding mandate — "to keep as many alive as possible, at as high a standard of living as possible" — belies its evolution into a formidable interstellar power. Through integration with Dyn knowledge and technology, Arco has developed capabilities that far exceed anything in the Union arsenal.' },
+    { label: 'Organisation', text: 'Arco is a cooperative power structure blending human governance with Dyn advisory roles and, in military contexts, direct Dyn command. The Arco Cooperative Holdings handle industrial production, with major shipyards in Mercury\'s Inner Halo. The Arco Interstellar Agency handles military and exploratory operations. Dyn officers serve in operational command positions — a deliberate institutional choice rather than an imposition.' },
+    { label: 'Military Doctrine', text: 'Arco doctrine emphasises qualitative superiority over numerical advantage. A single Arco battle sub-constellation of 3–4 warships is assessed as equivalent to an entire Union fleet. Their ships carry overwhelming firepower, advanced electronic warfare suites, and autonomous weapons platforms (exodrones). Engagement philosophy favours decisive, rapid strikes with minimal friendly casualties.' },
+    { label: 'Assessment', text: 'Arco represents the single most capable military force known to exist. Their technology base, enhanced by centuries of Dyn collaboration, is at minimum two generations ahead of Union capabilities in every measurable domain. However, their punitive doctrine and reliance on the interstice as a strategic chokepoint presents vulnerabilities.' }
+  ],
+  stats: [
+    { label: 'HOMEWORLD', value: 'Earth / Sol' },
+    { label: 'GOVERNMENT', value: 'Cooperative Administration' },
+    { label: 'TECH LEVEL', value: 'SC3+ (Antimatter / Exotic)' },
+    { label: 'SPECIES', value: 'Human / Dyn integrated' },
+  ],
+  quote: '"Someone from our side killed a quarter million of their citizens. They don\'t care who did it. They don\'t care why. What they care about is how it looks."',
+  quoteAttr: '— Admiral Aumonier, post-battle assessment',
+},
+{
+  tab: 'factions', icon: '□', iconClass: 'faction-union',
+  name: 'UNION DEFENCE FORCES', type: 'FACTION — HOME POWER',
+  sections: [
+    { label: 'Overview', text: 'Union was founded by a separatist faction of humanity that rejected the human-Dyn accommodation and departed Sol through the interstice. Built on the principle of unaltered human identity, Union represents an independent branch of human civilisation — technologically capable but doctrinally conservative. The Union Defence Forces protect Union space and the interstice approach.' },
+    { label: 'Fleet Architecture', text: 'The Union navy is organised around destroyer battle groups. Each group comprises one destroyer — a boxy, trilaterally symmetric tower bristling with torpedo tubes and gun turrets — supported by nine unmanned corvettes. The First Fleet numbered 100 vessels: 10 destroyers, 90 corvettes. Ships are fusion-powered with conventional armour and kinetic/nuclear armament.' },
+    { label: 'Capabilities & Limitations', text: 'Union ships are rugged, numerous, and mass-producible. However, the Battle of the Interstice exposed critical deficiencies: inability to detect sub-millimetre kinetic projectiles, vulnerability to broadband jamming, inadequate point defence against high-acceleration autonomous platforms, and armour insufficient against directed-energy weapons of Arco output levels.' },
+    { label: 'Current Status', text: 'Following the devastating losses at the Interstice, Union naval doctrine is under urgent review. The First Fleet was effectively destroyed — 97 of 100 vessels lost. Reconstruction and technological modernisation are the highest priorities. The question of whether to seek accommodation or confrontation with Arco divides the general staff.' }
+  ],
+  stats: [
+    { label: 'HOMEWORLD', value: 'Deliverance system' },
+    { label: 'GOVERNMENT', value: 'Parliamentary Republic' },
+    { label: 'FLEET STRENGTH', value: 'Severely depleted' },
+    { label: 'TECH LEVEL', value: 'SC2 (Fusion / Conventional)' },
+  ],
+  quote: '"It\'s been a privilege, sir."',
+  quoteAttr: '— Ensign Hansun, final transmission before Isidore\'s attack run',
+},
+{
+  tab: 'factions', icon: '△', iconClass: 'faction-dyn',
+  name: 'THE DYN', type: 'FACTION — ALIEN SPECIES / ARCO PARTNER',
+  sections: [
+    { label: 'Biology', text: 'The Dyn are a non-human species with trilateral symmetry, widely-spaced eyes of empty black, divided manipulators that bifurcate repeatedly (giving extraordinary dexterity), and distinct lithe forelimbs and powerful hindlimbs. They evolved on a tidally-locked world (Firsthome) in the twilight zone between scorching Dayside and frozen Dusk. They wear electronic modules over the lower face — possibly translators or communication augmentations.' },
+    { label: 'Culture', text: 'Dyn society centres on the Line — the unbroken chain of parent to child. The individual is a cell; the Line is the whole. Domains, territories, and hereditary claims define their political structure rather than nation-states. Status derives from lineage continuity and domain extent. A Dyn whose Line ends prematurely enters a violent, dissociative state.' },
+    { label: 'History with Humanity', text: 'Following first contact, the Dyn subjugated humanity rather than exterminating it — dismantling human warmaking capabilities and installing administrative oversight. Over time, the relationship evolved from occupation toward partnership, particularly within Arco. Dyn officers now serve in Arco military command. However, factions within Dyn society still harbour hostility toward humanity, and others advocate for their extermination.' },
+    { label: 'Notable Individuals', text: 'Seeker — an ancient Dyn explorer, first of her kind to reach orbit, discoverer of progenitor artifacts. K\'txl — Dynic administrator of Earth during the occupation. Honed Aspect — commander of the battle sub-constellation at the Interstice. Hu — a Dyn sensory officer serving aboard an Arsonist-class vessel during the Apathy War.' }
+  ],
+  stats: [
+    { label: 'HOMEWORLD', value: 'Firsthome (tidally locked)' },
+    { label: 'SYMMETRY', value: 'Trilateral' },
+    { label: 'SOCIAL STRUCTURE', value: 'Hereditary Lines / Domains' },
+    { label: 'TECH LEVEL', value: 'SC3+ (Mature base)' },
+  ],
+  quote: '"I am Honed Aspect, commander of the battle sub-constellation which — regretfully — inflicted such heavy losses on your defence fleet. On behalf of Arco, I extend my condolences."',
+  quoteAttr: '— Honed Aspect, first diplomatic contact',
+},
+{
+  tab: 'threats', icon: '⊘', iconClass: 'faction-striver',
+  name: 'HUMAN PURITY FRONT (STRIVERS)', type: 'THREAT — TERRORIST ORGANISATION',
+  sections: [
+    { label: 'Ideology', text: 'The Strivers place raw, unaltered, and above all mortal human identity above any other allegiance. They oppose AI augmentation, human-alien cooperation, and any technology that they perceive as threatening the purity of the human form and mind. Their doctrine: "In toil, absolution. In strife, salvation. In death, release." They seek to provoke a final conflict between humanity and "the Machine" to bring about societal collapse and establish "the Moral Republic."' },
+    { label: 'History', text: 'The Strivers\' ideological ancestry predates Union\'s founding and their exodus from Sol. They have existed under many names since humanity began to master the workings of its own mind. They are neither purely political nor purely religious, but a shifting chimera of both, adopting one mask or another at the demands of convenience. Their accelerationist interpretation of Anthropist doctrine drives them to increasingly extreme acts.' },
+    { label: 'Capabilities', text: 'The Strivers demonstrated sophisticated cyber-warfare capability at the Interstice — hacking the defence grid, planting malware in Union fleet networks that forced premature weapons launches, and coordinating a multi-phase attack involving physical suicide operations and network intrusion. Their operational security is exceptional, having embedded assets within both Union military and civilian infrastructure.' },
+    { label: 'Threat Assessment', text: 'CRITICAL. The Atbarah incident killed approximately 200,000 Arco citizens and directly provoked the Battle of the Interstice, resulting in the near-total destruction of the Union First Fleet. The Strivers achieved their strategic objective: escalation of inter-civilisational conflict. Their network penetration capabilities remain a severe ongoing threat.' }
+  ],
+  stats: [
+    { label: 'CLASSIFICATION', value: 'Non-state actor' },
+    { label: 'THREAT LEVEL', value: 'CRITICAL' },
+    { label: 'IDEOLOGY', value: 'Anthropist accelerationist' },
+    { label: 'KNOWN OPERATIONS', value: 'Atbarah Incident' },
+  ],
+  quote: '"They can be stopped. We only need the will to fight."',
+  quoteAttr: '— HPF manifesto broadcast from the Atbarah',
+},
+{
+  tab: 'threats', icon: '▪', iconClass: 'faction-apathy',
+  name: 'THE APATHY', type: 'THREAT — EXISTENTIAL / BERSERKER MACHINES',
+  sections: [
+    { label: 'Overview', text: 'The Apathy are berserker machines of unknown origin that arrive in civilised space without warning. They are named for their complete indifference to communication, negotiation, or the existence of sentient life. They do not respond to signals. They do not alter course. They do not notice.' },
+    { label: 'Physical Characteristics', text: 'An Apathy agglomeration observed approaching the star Helios measured approximately 1 Earth mass, decelerating at 40,000 G — indicating propulsion technology far beyond anything in the Arco or Union arsenal. Internal structure consists of machinery of incomprehensible function, with rare habitable cavities discovered by infiltrating operatives. The machines can be damaged but their capacity for self-repair and redundancy is extreme.' },
+    { label: 'Strategic Impact', text: 'The Apathy represent an existential threat that renders all inter-civilisational conflicts irrelevant. Their arrival forces former adversaries — Arco, Union, and the Dyn — into unprecedented cooperation. Arco weapons officers serve alongside Dyn sensory specialists. The distinction between human factions dissolves in the face of annihilation.' },
+    { label: 'Countermeasures', text: 'No decisive countermeasure has been developed. Current doctrine: buy time. Each engagement buys a little more, until "one day we find we have as long as we need." Virtual reality and subjective time manipulation are employed as force multipliers, allowing tactical planning on compressed timescales. The Apathy War continues.' }
+  ],
+  stats: [
+    { label: 'ORIGIN', value: 'Unknown' },
+    { label: 'OBSERVED MASS', value: '~1 Earth mass' },
+    { label: 'DECELERATION', value: '40,000 G' },
+    { label: 'THREAT LEVEL', value: 'EXISTENTIAL' },
+  ],
+  quote: '"The berserker machines had come to Heppolon and everyone and everything here would be dead within an hour."',
+  quoteAttr: '— Recovered operative testimony',
+},
+
+// ═══════════════════════════════════════════════════════════════════════
+// PERSONNEL
+// ═══════════════════════════════════════════════════════════════════════
+{
+  tab: 'personnel', icon: '◇', iconClass: 'faction-union type-person',
+  name: 'ENSIGN HANSUN', type: 'PERSONNEL — UNION DEFENCE FORCES',
+  sections: [
+    { label: 'Service Record', text: 'Assigned to the USC Isidore as combat systems operator under Captain Ngoni. Hansun distinguished himself with the highest G-endurance score aboard the Isidore and demonstrated exceptional analytical capability under extreme combat stress. He was the sole survivor of the Isidore\'s final attack run at the Battle of the Interstice.' },
+    { label: 'Key Actions', text: 'During the Battle of the Interstice, Hansun identified the Arco Diamond Duster weapon through analysis of non-tactical anti-collision sensor data — the only officer in the fleet to do so. This intelligence was disseminated fleet-wide and enabled partial countermeasures. He survived the Isidore\'s 30G attack run that destroyed one Incisor-class warship, sustaining severe injuries including nerve damage, broken ribs, and likely internal bleeding.' },
+    { label: 'Post-Battle', text: 'Recovered from injuries with residual nerve damage manifesting as a slight tremor in the right hand and occasional migraines. Awarded a commendation for bravery and promoted. Selected to attend the first diplomatic contact with Arco representative Honed Aspect, standing alongside Admiral Aumonier in a medical exoskeleton.' }
+  ],
+  stats: [
+    { label: 'RANK', value: 'Ensign (promoted post-battle)' },
+    { label: 'POSTING', value: 'USC Isidore' },
+    { label: 'SPECIALITY', value: 'Combat Systems' },
+    { label: 'STATUS', value: 'Active duty' },
+  ],
+  quote: '"Don\'t panic. React."',
+  quoteAttr: '— Internal monologue during the Diamond Duster attack',
+},
+{
+  tab: 'personnel', icon: '◇', iconClass: 'faction-union type-person',
+  name: 'CAPTAIN NGONI', type: 'PERSONNEL — UNION DEFENCE FORCES (KIA)',
+  sections: [
+    { label: 'Service Record', text: 'Commanding officer of the USC Isidore, a Union destroyer assigned to the First Fleet cordon around the interstice. Ngoni demonstrated composed leadership throughout the Battle of the Interstice, maintaining tactical awareness even as the fleet disintegrated around her.' },
+    { label: 'Final Action', text: 'With the fleet destroyed and the Isidore damaged, Ngoni devised and executed a final desperate gambit: playing dead on a ballistic trajectory, then executing a surprise attack from behind the passing Arco warship. She ordered a 30G burn that she knew would kill the crew. The plan succeeded — the Incisor was destroyed — but Captain Ngoni and all crew except Ensign Hansun were killed by the acceleration.' },
+    { label: 'Legacy', text: 'Ngoni\'s tactical ingenuity — attacking from the Arco ship\'s presumably weaker aft sensor arc, redlining the drive in low-impulse mode — achieved the only Arco casualty of the battle. Her sacrifice demonstrated that Union forces, despite their technological inferiority, could fight with lethal effectiveness when led with brilliance and courage.' }
+  ],
+  stats: [
+    { label: 'RANK', value: 'Captain' },
+    { label: 'POSTING', value: 'CO, USC Isidore' },
+    { label: 'STATUS', value: 'Killed in Action' },
+    { label: 'LEGACY', value: 'Only Arco ship kill of the battle' },
+  ],
+  quote: '"This is it."',
+  quoteAttr: '— Final words before the attack run',
+},
+{
+  tab: 'personnel', icon: '◇', iconClass: 'faction-union type-person',
+  name: 'ADMIRAL AUMONIER', type: 'PERSONNEL — UNION DEFENCE FORCES',
+  sections: [
+    { label: 'Role', text: 'Commander of the Union First Fleet and senior officer responsible for the interstice defence. Aumonier overruled hawkish elements of the general staff who advocated for a preemptive strike through the interstice, correctly prioritising de-escalation. Her orders established the blockade formation and rules of engagement that governed the First Fleet\'s response.' },
+    { label: 'Assessment', text: 'A pragmatic strategist with clear-eyed understanding of the political dimensions of the crisis. Aumonier immediately grasped that the Atbarah incident was a provocation designed to escalate conflict, and that Arco\'s response was a calculated punitive action rather than an invasion. Her post-battle analysis was incisive: "What they care about is how it looks. It makes them look mortal."' },
+    { label: 'Diplomatic Contact', text: 'Selected to lead the first diplomatic meeting with Arco representative Honed Aspect. Noted the deliberate symbolism of Arco sending a Dyn officer: "a deliberate gesture, sending their alien servant to meet us." Her interpretation of the encounter suggests deep understanding of Arco\'s political signalling.' }
+  ],
+  stats: [
+    { label: 'RANK', value: 'Admiral' },
+    { label: 'COMMAND', value: 'Union First Fleet' },
+    { label: 'STATUS', value: 'Active' },
+    { label: 'ASSESSMENT', value: 'Strategic / Diplomatic' },
+  ],
+  quote: '"Securing the interstice is the only objective more important than de-escalation."',
+  quoteAttr: '— Fleet briefing prior to Arco emergence',
+},
+{
+  tab: 'personnel', icon: '△', iconClass: 'faction-dyn type-person',
+  name: 'HONED ASPECT', type: 'PERSONNEL — ARCO / DYN OFFICER',
+  sections: [
+    { label: 'Identity', text: 'A Dyn serving as commander of the Arco battle sub-constellation that engaged the Union First Fleet at the Interstice. Aumonier identifies her as "an officer" — a designation noted as rare among the Dyn, implying that military command roles are unusual for their species.' },
+    { label: 'Physical Description', text: 'Tall and hunched, with lithe forelimbs and powerful hindlimbs that appear "broken looking." Manipulators that divide then divide again, giving fractal dexterity. Trilaterally symmetrical head with widely-spaced eyes of pitiless, empty black. Lower face obscured behind a sleek black electronic module. Moves "a little differently" than expected — more human-like, suggesting adaptation or deliberate mimicry.' },
+    { label: 'Diplomatic Role', text: 'Sent as Arco\'s representative for first diplomatic contact with Union after the battle. Her selection — a Dyn officer rather than a human Arco official — was interpreted as a deliberate political statement. She bowed upon meeting Hansun and Aumonier, extending formal condolences "on behalf of Arco" for the losses her own forces inflicted.' }
+  ],
+  stats: [
+    { label: 'SPECIES', value: 'Dyn' },
+    { label: 'RANK', value: 'Sub-constellation Commander' },
+    { label: 'AFFILIATION', value: 'Arco Interstellar Agency' },
+    { label: 'STATUS', value: 'Active' },
+  ],
+  quote: '"I am Honed Aspect, commander of the battle sub-constellation which — regretfully — inflicted such heavy losses on your defence fleet."',
+  quoteAttr: '— First diplomatic contact',
+},
+{
+  tab: 'personnel', icon: '△', iconClass: 'faction-dyn type-person',
+  name: 'SEEKER', type: 'PERSONNEL — HISTORICAL / DYN EXPLORER',
+  sections: [
+    { label: 'Origins', text: 'Born nameless, the spawn of a struggling Line that had eked out subsistence on the fringes of the Dusk for as long as ancestral memory extended. Her domain was small — a knot of cramped warrens surrounded by a few square kilometres of marginally arable land. What set her apart was her dissatisfaction: she hungered for knowledge in the way other Dyn hungered for an eternal Line or an expansive domain.' },
+    { label: 'Achievements', text: 'Seeker became the first Dyn to reach orbit, the first to see Firsthome, the inner rocky worlds, and the gas giant known as the Eye from space. She named herself — an extraordinary act of individuality in a culture defined by lineage. Her explorations led her to discover progenitor artifacts, including a grand orrery — a perfect model of her home system built into an asteroid-like shell of incomprehensible age.' },
+    { label: 'Legacy', text: 'Seeker\'s philosophical reflections are studied across civilisations, referenced in academic works on xenomythology and deep time. Her journey from the fringes of a failing Line to becoming the most significant explorer in Dyn history represents a fundamental challenge to the Line-based orthodoxy of Dyn culture.' }
+  ],
+  stats: [
+    { label: 'SPECIES', value: 'Dyn' },
+    { label: 'ERA', value: 'Pre-contact antiquity' },
+    { label: 'SIGNIFICANCE', value: 'First Dyn in orbit' },
+    { label: 'STATUS', value: 'Historical figure' },
+  ],
+  quote: '"She hungered for knowledge in the way other Dyn hungered for an eternal Line or an expansive domain."',
+  quoteAttr: '— Metaphysics and the Conception of Deep Time in Xeno-Mythology',
+},
+
+// ═══════════════════════════════════════════════════════════════════════
+// VESSELS
+// ═══════════════════════════════════════════════════════════════════════
+{
+  tab: 'vessels', icon: '◆', iconClass: 'faction-arco',
+  name: 'ANNIHILATOR-CLASS', type: 'VESSEL — SC3 INTERPLANETARY ASSAULT VEHICLE',
+  sections: [
+    { label: 'Overview', text: 'The pinnacle of Arco warship design. 200 metres of hyperdiamond-armoured assault vehicle carrying a crew of just 11, with firepower sufficient to devastate an entire fleet. Built at the Inner Halo shipyards at Mercury by Arco Cooperative Holdings. Successor to the Arsonist-class.' },
+    { label: 'Design Philosophy', text: 'The Annihilator embodies Arco\'s doctrine of qualitative superiority. Every system is designed to outperform its Union counterpart by orders of magnitude: antimatter propulsion versus fusion, terawatt-class energy weapons versus gigawatt, diamond-dust kinetics versus conventional railguns. The minimal crew requirement reflects extensive automation and, likely, Dyn-derived control systems.' },
+    { label: 'Key Systems', text: 'ABC/MIV Drive (antimatter/vacuum propulsion), 2000 GW total power output, Diamond Duster spinal mount, 4× X-ray lasers (100 GW each), 32× UV laser emitters, proton beam effector, exodrone and torpedo launch capability, 750mm hyperdiamond Whipple shield. Full specifications available in the Master Systems Display.' }
+  ],
+  stats: [
+    { label: 'LENGTH', value: '200 m' },
+    { label: 'MASS (WET)', value: '4,000 t' },
+    { label: 'CREW', value: '11' },
+    { label: 'POWER OUTPUT', value: '2,000 GW' },
+  ],
+  quote: '"Mean looking bastards."',
+  quoteAttr: '— Isidore sensor officer, first visual contact',
+},
+{
+  tab: 'vessels', icon: '◆', iconClass: 'faction-arco',
+  name: 'INCISOR-CLASS', type: 'VESSEL — FAST ATTACK VEHICLE',
+  sections: [
+    { label: 'Overview', text: 'The Incisor-class fast attack vehicle is the lighter counterpart to the Annihilator. Three Incisors accompanied the single Annihilator in the punitive sub-constellation at the Interstice. They share the distinctive elongated pyramid profile — "sweeping lines like darts, ridged with projectors and weapons hardpoints."' },
+    { label: 'Combat Performance', text: 'Somewhat smaller than Union destroyers but vastly more capable. The Incisors contributed to the rapid destruction of the Union fleet through combined laser defence, electronic warfare, and kinetic weapons employment. One Incisor was destroyed by the Isidore\'s final attack — a railgun strike to the engine block at point-blank range following a surprise 30G pursuit.' },
+    { label: 'Assessment', text: 'The loss of one Incisor to a determined close-range attack suggests vulnerability in the aft sensor and armour arc. This represents the only confirmed kill methodology against Arco warships and should inform Union tactical doctrine development.' }
+  ],
+  stats: [
+    { label: 'CLASS', value: 'Fast Attack Vehicle' },
+    { label: 'PROFILE', value: 'Elongated pyramid' },
+    { label: 'KNOWN LOSSES', value: '1 (Battle of Interstice)' },
+    { label: 'VULNERABILITY', value: 'Aft engine block' },
+  ],
+  quote: null, quoteAttr: null,
+},
+{
+  tab: 'vessels', icon: '□', iconClass: 'faction-union',
+  name: 'USC ISIDORE (DESTROYER)', type: 'VESSEL — UNION FLEET DESTROYER',
+  sections: [
+    { label: 'Overview', text: 'A standard Union fleet destroyer — boxy, trilaterally symmetric, bristling with torpedo tubes and gun turrets. The Isidore served as a lead vessel in the First Fleet cordon around the interstice under Captain Ngoni. It was supported by nine unmanned corvettes as part of its battle group.' },
+    { label: 'Combat History', text: 'The Isidore survived longer than any other Union vessel in the battle. Initial chase of the Atbarah, then participation in the blockade. During combat, the ship survived laser strikes by corkscrewing to spread thermal energy, and avoided Diamond Duster streams through violent lateral manoeuvres. After playing dead, executed the 30G attack run that destroyed one Incisor — but at the cost of the ship\'s drive and all crew except Hansun.' },
+    { label: 'Final Status', text: 'Adrift, drive destroyed (reaction chamber and nozzle melted), all crew killed in action except Ensign Hansun. Hull intact but severely damaged. One of only three Union vessels to survive the engagement.' }
+  ],
+  stats: [
+    { label: 'TYPE', value: 'Fleet Destroyer' },
+    { label: 'PROFILE', value: 'Trilateral symmetric tower' },
+    { label: 'ARMAMENT', value: 'Torpedoes, railguns, PDCs' },
+    { label: 'STATUS', value: 'Disabled / Adrift' },
+  ],
+  quote: '"Match thrust, fire a warning shot."',
+  quoteAttr: '— Captain Ngoni, opening engagement with the Atbarah',
+},
+];
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// BUILD UI
+// ═══════════════════════════════════════════════════════════════════════════════
+const tabsEl = document.getElementById('codexTabs');
+const containerEl = document.getElementById('codexContainer');
+let activeTab = 'all';
+
+TABS.forEach(tab => {
+  const btn = document.createElement('button');
+  btn.className = 'codex-tab' + (tab.id === 'all' ? ' active' : '');
+  btn.textContent = tab.label;
+  btn.dataset.tab = tab.id;
+  btn.addEventListener('click', () => {
+    activeTab = tab.id;
+    tabsEl.querySelectorAll('.codex-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab.id));
+    buildEntries();
+  });
+  tabsEl.appendChild(btn);
+});
+
+function buildEntries() {
+  containerEl.innerHTML = '';
+  const filtered = activeTab === 'all' ? ENTRIES : ENTRIES.filter(e => e.tab === activeTab);
+
+  filtered.forEach(entry => {
+    const div = document.createElement('div');
+    div.className = 'dossier';
+
+    const statsHtml = entry.stats ? entry.stats.map(s =>
+      '<div class="dossier-stat"><span class="ds-label">' + s.label + '</span><span class="ds-value">' + s.value + '</span></div>'
+    ).join('') : '';
+
+    const sectionsHtml = entry.sections.map(s =>
+      '<div class="dossier-section"><div class="dossier-section-label">' + s.label + '</div>' +
+      '<div class="dossier-text">' + s.text + '</div></div>'
+    ).join('');
+
+    const quoteHtml = entry.quote ?
+      '<div class="dossier-quote">' + entry.quote +
+      '<div class="dossier-quote-attr">' + entry.quoteAttr + '</div></div>' : '';
+
+    div.innerHTML =
+      '<div class="dossier-header" onclick="this.parentElement.classList.toggle(\'open\')">' +
+        '<div class="dossier-icon ' + entry.iconClass + '">' + entry.icon + '</div>' +
+        '<div class="dossier-meta">' +
+          '<div class="dossier-name">' + entry.name + '</div>' +
+          '<div class="dossier-type">' + entry.type + '</div>' +
+        '</div>' +
+        '<span class="dossier-expand">▸</span>' +
+      '</div>' +
+      '<div class="dossier-body">' +
+        (statsHtml ? '<div class="dossier-stats">' + statsHtml + '</div>' : '') +
+        sectionsHtml +
+        quoteHtml +
+      '</div>';
+
+    containerEl.appendChild(div);
+  });
+
+  // Auto-open first entry
+  const first = containerEl.querySelector('.dossier');
+  if (first) first.classList.add('open');
+}
+
+buildEntries();
+</script>
+</body>
+</html>

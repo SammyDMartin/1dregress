@@ -8,6 +8,8 @@
     { href: 'battle.html', label: 'BATTLE' },
     { href: 'story.html', label: 'STORY' },
     { href: 'science.html', label: 'SCIENCE' },
+    { href: 'timeline.html', label: 'TIMELINE' },
+    { href: 'codex.html', label: 'CODEX' },
   ];
 
   const current = location.pathname.split('/').pop() || 'index.html';
