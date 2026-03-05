@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MSD — Annihilator-Class</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+/* ═══════════════════════════════════════════════════════════════════════════
+   MSD PAGE — Layout & Components
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+body { overflow: hidden; }
+
+/* ─── MSD Header ────────────────────────────────────────────────────────── */
+.msd-header {
+  position: fixed; top: 40px; left: 0; right: 0; height: 36px; z-index: 50;
+  background: rgba(0,10,15,0.92); border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; padding: 0 14px; gap: 12px;
+  backdrop-filter: blur(12px);
+}
+.msd-header .ship-name {
+  font-size: 11px; letter-spacing: 3px; color: var(--accent); font-weight: 700;
+  white-space: nowrap;
+}
+.msd-header .ship-type {
+  font-size: 9px; letter-spacing: 2px; color: var(--text-dim);
+  white-space: nowrap;
+}
+.msd-header .status-dots {
+  display: flex; gap: 6px; margin-left: auto;
+}
+.msd-header .status-dot {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 8px; letter-spacing: 1px; color: var(--text-dim);
+}
+.msd-header .status-dot::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+.msd-header .dot-green::before { background: var(--green); }
+.msd-header .dot-cyan::before { background: var(--accent); }
+.msd-header .dot-orange::before { background: var(--accent2); }
+@keyframes pulse-dot { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+/* ─── MSD Layout Container ──────────────────────────────────────────────── */
+.msd-layout {
+  position: fixed; top: 76px; left: 0; right: 0; bottom: 24px;
+  display: flex;
+}
+
+/* ─── System Nav Tabs (left column desktop) ─────────────────────────────── */
+.sys-nav {
+  width: 140px; min-width: 140px;
+  background: rgba(0,10,15,0.85);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  padding: 6px 0; z-index: 20;
+  backdrop-filter: blur(12px);
+}
+.sys-nav button {
+  display: flex; align-items: center; gap: 8px;
+  background: none; border: none; border-left: 2px solid transparent;
+  color: var(--text-dim); font-size: 9px; letter-spacing: 2px;
+  padding: 10px 12px; cursor: pointer; transition: all 0.2s;
+  text-align: left; width: 100%;
+}
+.sys-nav button:hover {
+  color: var(--accent); background: rgba(0,229,255,0.04);
+}
+.sys-nav button.active {
+  color: var(--accent); border-left-color: var(--accent);
+  background: rgba(0,229,255,0.06);
+}
+.sys-nav button .tab-icon {
+  width: 14px; text-align: center; font-size: 10px;
+}
+
+/* ─── 3D Viewport ───────────────────────────────────────────────────────── */
+.viewport {
+  flex: 1; position: relative; overflow: hidden;
+}
+.viewport canvas { display: block; width: 100%; height: 100%; }
+
+/* ─── Detail Panel (right side) ─────────────────────────────────────────── */
+.detail-panel {
+  width: 320px; min-width: 280px;
+  background: rgba(0,10,15,0.9);
+  border-left: 1px solid var(--border);
+  overflow-y: auto; z-index: 20;
+  backdrop-filter: blur(12px);
+  padding: 0;
+}
+.detail-panel .panel {
+  border: none; border-radius: 0; border-bottom: 1px solid var(--border);
+  background: transparent;
+}
+
+/* ─── Quick Readout (bottom-left overlay) ───────────────────────────────── */
+.quick-readout {
+  position: absolute; bottom: 8px; left: 148px;
+  display: flex; gap: 6px; z-index: 10;
+}
+.quick-readout .qr-item {
+  background: rgba(0,10,15,0.85); border: 1px solid var(--border);
+  border-radius: 2px; padding: 5px 10px; backdrop-filter: blur(8px);
+}
+.quick-readout .qr-label {
+  font-size: 7px; letter-spacing: 2px; color: var(--text-dim); margin-bottom: 2px;
+}
+.quick-readout .qr-value {
+  font-size: 11px; letter-spacing: 1px; color: var(--accent); font-weight: 700;
+}
+.quick-readout .qr-value.warn { color: var(--warn); }
+.quick-readout .qr-value.green { color: var(--green); }
+
+/* ─── Panel content styling ─────────────────────────────────────────────── */
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+.section-label {
+  font-size: 8px; letter-spacing: 3px; color: var(--accent2);
+  margin: 10px 0 4px; text-transform: uppercase;
+}
+.spec-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2px 8px;
+}
+.spec-grid .data-row { grid-column: span 2; }
+
+.armour-row {
+  display: flex; align-items: center; gap: 6px; padding: 3px 0;
+  border-bottom: 1px solid var(--text-faint);
+}
+.armour-row .armour-label {
+  font-size: 9px; color: var(--text-dim); letter-spacing: 1px; width: 60px;
+}
+.armour-row .armour-bar-track {
+  flex: 1; height: 6px; background: rgba(0,229,255,0.06); border-radius: 2px;
+  overflow: hidden;
+}
+.armour-row .armour-bar-fill {
+  height: 100%; border-radius: 2px; transition: width 0.6s ease;
+}
+.armour-row .armour-pct {
+  font-size: 9px; color: var(--green); width: 36px; text-align: right;
+}
+
+.weapon-item {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 4px 0; border-bottom: 1px solid var(--text-faint);
+}
+.weapon-item .w-name { font-size: 9px; color: var(--accent); letter-spacing: 0.5px; }
+.weapon-item .w-count { font-size: 9px; color: var(--text-dim); }
+.weapon-item .w-detail { font-size: 8px; color: var(--text-dim); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MOBILE RESPONSIVE — screens < 768px
+   ═══════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* Header: compact */
+  .msd-header { height: 28px; padding: 0 10px; gap: 6px; }
+  .msd-header .ship-name { font-size: 10px; letter-spacing: 2px; }
+  .msd-header .ship-type { display: none; }
+  .msd-header .status-dots { display: none; }
+
+  /* Layout: stack vertically */
+  .msd-layout {
+    top: 68px; /* 40px site-nav + 28px msd-header */
+    flex-direction: column;
+  }
+
+  /* Sys nav: horizontal scrollable row */
+  .sys-nav {
+    width: 100%; min-width: unset; height: auto;
+    flex-direction: row; overflow-x: auto; overflow-y: hidden;
+    border-right: none; border-bottom: 1px solid var(--border);
+    padding: 0; flex-shrink: 0;
+    -webkit-overflow-scrolling: touch;
+  }
+  .sys-nav button {
+    border-left: none; border-bottom: 2px solid transparent;
+    padding: 8px 12px; white-space: nowrap; flex-shrink: 0;
+    font-size: 8px; letter-spacing: 1.5px;
+  }
+  .sys-nav button.active {
+    border-left-color: transparent;
+    border-bottom-color: var(--accent);
+  }
+  .sys-nav button .tab-icon { display: none; }
+
+  /* Viewport: fill remaining space */
+  .viewport { flex: 1; min-height: 200px; }
+
+  /* Detail panel: bottom sheet */
+  .detail-panel {
+    width: 100%; min-width: unset;
+    max-height: 50vh;
+    border-left: none; border-top: 1px solid var(--border);
+    overflow-y: auto; flex-shrink: 0;
+  }
+
+  /* Quick readout: hide */
+  .quick-readout { display: none; }
+}
+
+@media (max-width: 480px) {
+  .msd-header .ship-name { font-size: 9px; letter-spacing: 1.5px; }
+  .sys-nav button { padding: 6px 10px; font-size: 7px; letter-spacing: 1px; }
+  .detail-panel { max-height: 55vh; }
+  .data-row .label { font-size: 9px; }
+  .data-row .value { font-size: 9px; }
+}
+</style>
+</head>
+<body>
+<div class="page-body">
+
+<!-- ─── MSD Header ──────────────────────────────────────────────────────── -->
+<div class="msd-header">
+  <span class="ship-name">ANNIHILATOR-CLASS IP ASSAULT VEHICLE</span>
+  <span class="ship-type">SC3 INTERPLANETARY</span>
+  <div class="status-dots">
+    <span class="status-dot dot-green">REACTOR</span>
+    <span class="status-dot dot-cyan">DRIVE</span>
+    <span class="status-dot dot-orange">WEAPONS</span>
+  </div>
+</div>
+
+<!-- ─── Main Layout ─────────────────────────────────────────────────────── -->
+<div class="msd-layout">
+
+  <!-- System Nav Tabs -->
+  <div class="sys-nav" id="sysNav">
+    <button class="active" data-tab="ident"><span class="tab-icon">◇</span>IDENT</button>
+    <button data-tab="power"><span class="tab-icon">⚡</span>POWER</button>
+    <button data-tab="drive"><span class="tab-icon">▷</span>DRIVE</button>
+    <button data-tab="thermal"><span class="tab-icon">≋</span>THERMAL</button>
+    <button data-tab="defence"><span class="tab-icon">◈</span>DEFENCE</button>
+    <button data-tab="sensors"><span class="tab-icon">◎</span>SENSORS</button>
+    <button data-tab="weapons"><span class="tab-icon">✦</span>WEAPONS</button>
+  </div>
+
+  <!-- 3D Viewport -->
+  <div class="viewport" id="viewport">
+    <!-- Quick Readout (desktop only) -->
+    <div class="quick-readout">
+      <div class="qr-item">
+        <div class="qr-label">REACTOR</div>
+        <div class="qr-value green" id="qrReactor">2,000 GW</div>
+      </div>
+      <div class="qr-item">
+        <div class="qr-label">ACCEL</div>
+        <div class="qr-value" id="qrAccel">4.0 m/s²</div>
+      </div>
+      <div class="qr-item">
+        <div class="qr-label">THERMAL</div>
+        <div class="qr-value warn" id="qrThermal">42%</div>
+      </div>
+      <div class="qr-item">
+        <div class="qr-label">ARMOUR</div>
+        <div class="qr-value green" id="qrArmour">98%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail Panel -->
+  <div class="detail-panel" id="detailPanel">
+
+    <!-- IDENT Tab -->
+    <div class="tab-content active" id="tab-ident">
+      <div class="panel">
+        <div class="panel-header">
+          <span class="title">IDENTIFICATION</span>
+          <span class="badge badge-nominal">NOMINAL</span>
+        </div>
+        <div class="data-row"><span class="label">DESIGNATION</span><span class="value">Annihilator-Class</span></div>
+        <div class="data-row"><span class="label">TYPE</span><span class="value">SC3 Interplanetary Assault Ship</span></div>
+        <div class="data-row"><span class="label">BUILDER</span><span class="value">Arco Cooperative Holdings</span></div>
+        <div class="data-row"><span class="label">YARD</span><span class="value">Inner Halo, Mercury</span></div>
+        <div class="data-row"><span class="label">OPERATORS</span><span class="value">Arco Interstellar Agency, UHDF</span></div>
+        <div class="data-row"><span class="label">PREDECESSOR</span><span class="value">Arsonist-Class IP Assault Vehicle</span></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">
+          <span class="title">PHYSICAL</span>
+        </div>
+        <div class="data-row"><span class="label">LENGTH</span><span class="value">200 m</span></div>
+        <div class="data-row"><span class="label">DISPLACEMENT (DRY)</span><span class="value">2,000 t</span></div>
+        <div class="data-row"><span class="label">DISPLACEMENT (WET)</span><span class="value">4,000 t</span></div>
+        <div class="data-row"><span class="label">COMPLEMENT</span><span class="value">11 crew (285 max)</span></div>
+      </div>
+    </div>
+
+    <!-- POWER Tab -->
+    <div class="tab-content" id="tab-power">
+      <div class="panel">
+        <div class="panel-header">
+          <span class="title">POWER PLANT</span>
+          <span class="badge badge-nominal">ONLINE</span>
+        </div>
+        <div class="section-label">PRIMARY REACTOR</div>
+        <div class="data-row"><span class="label">TYPE</span><span class="value">MHD Column</span></div>
+        <div class="data-row"><span class="label">COUNT</span><span class="value">1×</span></div>
+        <div class="data-row"><span class="label">OUTPUT</span><span class="value accent2">1,000 GW</span></div>
+        <div class="section-label">SECONDARY REACTORS</div>
+        <div class="data-row"><span class="label">TYPE</span><span class="value">Aneutronic Spheromak</span></div>
+        <div class="data-row"><span class="label">COUNT</span><span class="value">2×</span></div>
+        <div class="data-row"><span class="label">OUTPUT (EACH)</span><span class="value accent2">500 GW</span></div>
+        <div class="section-label">ENERGY STORAGE</div>
+        <div class="data-row"><span class="label">ECELL COUNT</span><span class="value">100,000×</span></div>
+        <div class="data-row"><span class="label">ECELL MASS</span><span class="value">1 kg each</span></div>
+        <div class="data-row"><span class="label">TOTAL CAPACITY</span><span class="value accent2">4 TJ</span></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="title">POWER ALLOCATION</span></div>
+        <div class="power-bar">
+          <div class="bar-header"><span>MHD COLUMN</span><span id="pwrMhd">100%</span></div>
+          <div class="bar-track"><div class="bar-fill" id="pwrMhdBar" style="width:100%;background:var(--green)"></div></div>
+        </div>
+        <div class="power-bar">
+          <div class="bar-header"><span>SPHEROMAK A</span><span id="pwrSphA">100%</span></div>
+          <div class="bar-track"><div class="bar-fill" id="pwrSphABar" style="width:100%;background:var(--accent)"></div></div>
+        </div>
+        <div class="power-bar">
+          <div class="bar-header"><span>SPHEROMAK B</span><span id="pwrSphB">100%</span></div>
+          <div class="bar-track"><div class="bar-fill" id="pwrSphBBar" style="width:100%;background:var(--accent)"></div></div>
+        </div>
+        <div class="power-bar">
+          <div class="bar-header"><span>ECELL RESERVE</span><span id="pwrEcell">87%</span></div>
+          <div class="bar-track"><div class="bar-fill" id="pwrEcellBar" style="width:87%;background:var(--warn)"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DRIVE Tab -->
+    <div class="tab-content" id="tab-drive">
+      <div class="panel">
+        <div class="panel-header">
+          <span class="title">PROPULSION</span>
+          <span class="badge badge-nominal">CRUISE</span>
+        </div>
+        <div class="section-label">PRIMARY DRIVE</div>
+        <div class="data-row"><span class="label">MODEL</span><span class="value">2740-model ABC Drive</span></div>
+        <div class="data-row"><span class="label">UPGRADE</span><span class="value">2785-model MIV Drive</span></div>
+        <div class="section-label">THRUSTERS</div>
+        <div class="data-row"><span class="label">PLASMA</span><span class="value">4× main thrusters</span></div>
+        <div class="data-row"><span class="label">RCS</span><span class="value">64× reaction control</span></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="title">CRUISE PROFILE</span></div>
+        <div class="data-row"><span class="label">ACCELERATION</span><span class="value accent2">4 m/s²</span></div>
+        <div class="data-row"><span class="label">POWER DRAW</span><span class="value">72,600 GW</span></div>
+        <div class="data-row"><span class="label">EXHAUST VEL</span><span class="value">10,000 kps</span></div>
+        <div class="data-row"><span class="label">DELTA-V</span><span class="value accent2">6,931 kps</span></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="title">PEAK PROFILE</span></div>
+        <div class="data-row"><span class="label">ACCELERATION</span><span class="value accent2">200 m/s²</span></div>
+        <div class="data-row"><span class="label">POWER DRAW</span><span class="value">181,000 GW</span></div>
+        <div class="data-row"><span class="label">EXHAUST VEL</span><span class="value">500 kps</span></div>
+        <div class="data-row"><span class="label">DELTA-V</span><span class="value accent2">347 kps</span></div>
+      </div>
+    </div>
+
+    <!-- THERMAL Tab -->
+    <div class="tab-content" id="tab-thermal">
+      <div class="panel">
+        <div class="panel-header">
+          <span class="title">THERMAL MGMT</span>
+          <span class="badge badge-standby">42%</span>
+        </div>
+        <div class="data-row"><span class="label">COOLANT</span><span class="value">Carbon Nanofluid</span></div>
+        <div class="data-row"><span class="label">RESERVOIR</span><span class="value">100,000 kg</span></div>
+        <div class="section-label">RADIATORS</div>
+        <div class="data-row"><span class="label">COUNT</span><span class="value">4× panels</span></div>
+        <div class="data-row"><span class="label">MATERIAL</span><span class="value">Graphene composite</span></div>
+        <div class="data-row"><span class="label">AREA (EACH)</span><span class="value accent2">1 km²</span></div>
+        <div class="data-row"><span class="label">TOTAL AREA</span><span class="value accent2">4 km²</span></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="title">RADIATOR STATUS</span></div>
+        <div class="power-bar">
+          <div class="bar-header"><span>RAD 1 — PORT FWD</span><span>DEPLOYED</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:38%;background:var(--green)"></div></div>
+        </div>
+        <div class="power-bar">
+          <div class="bar-header"><span>RAD 2 — PORT AFT</span><span>DEPLOYED</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:45%;background:var(--warn)"></div></div>
+        </div>
+        <div class="power-bar">
+          <div class="bar-header"><span>RAD 3 — STBD FWD</span><span>DEPLOYED</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:41%;background:var(--green)"></div></div>
+        </div>
+        <div class="power-bar">
+          <div class="bar-header"><span>RAD 4 — STBD AFT</span><span>DEPLOYED</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:44%;background:var(--warn)"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEFENCE Tab -->
+    <div class="tab-content" id="tab-defence">
+      <div class="panel">
+        <div class="panel-header">
+          <span class="title">ARMOUR</span>
+          <span class="badge badge-nominal">INTACT</span>
+        </div>
+        <div class="section-label">WHIPPLE SHIELD (FORE)</div>
+        <div class="data-row"><span class="label">MATERIAL</span><span class="value">Hyperdiamond</span></div>
+        <div class="data-row"><span class="label">THICKNESS</span><span class="value accent2">750 mm</span></div>
+        <div class="section-label">FLANKS</div>
+        <div class="data-row"><span class="label">MATERIAL</span><span class="value">Hyperdiamond + Dispersive</span></div>
+        <div class="data-row"><span class="label">THICKNESS</span><span class="value accent2">200 mm</span></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="title">ARMOUR INTEGRITY</span></div>
+        <div class="armour-row">
+          <span class="armour-label">FORE</span>
+          <div class="armour-bar-track"><div class="armour-bar-fill" style="width:98%;background:var(--green)"></div></div>
+          <span class="armour-pct">98%</span>
+        </div>
+        <div class="armour-row">
+          <span class="armour-label">PORT</span>
+          <div class="armour-bar-track"><div class="armour-bar-fill" style="width:95%;background:var(--green)"></div></div>
+          <span class="armour-pct">95%</span>
+        </div>
+        <div class="armour-row">
+          <span class="armour-label">STBD</span>
+          <div class="armour-bar-track"><div class="armour-bar-fill" style="width:97%;background:var(--green)"></div></div>
+          <span class="armour-pct">97%</span>
+        </div>
+        <div class="armour-row">
+          <span class="armour-label">AFT</span>
+          <div class="armour-bar-track"><div class="armour-bar-fill" style="width:92%;background:var(--green)"></div></div>
+          <span class="armour-pct">92%</span>
+        </div>
+        <div class="armour-row">
+          <span class="armour-label">DORSAL</span>
+          <div class="armour-bar-track"><div class="armour-bar-fill" style="width:99%;background:var(--green)"></div></div>
+          <span class="armour-pct">99%</span>
+        </div>
+        <div class="armour-row">
+          <span class="armour-label">VENTRAL</span>
+          <div class="armour-bar-track"><div class="armour-bar-fill" style="width:96%;background:var(--green)"></div></div>
+          <span class="armour-pct">96%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SENSORS Tab -->
+    <div class="tab-content" id="tab-sensors">
+      <div class="panel">
+        <div class="panel-header">
+          <span class="title">SENSOR ARRAY</span>
+          <span class="badge badge-nominal">ACTIVE</span>
+        </div>
+        <div class="section-label">PASSIVE</div>
+        <div class="data-row"><span class="label">HULL SKEIN</span><span class="value">Single-photon detector array</span></div>
+        <div class="data-row"><span class="label">TELESCOPE</span><span class="value">Triple-redundant (1–1000 &#x212B;)</span></div>
+        <div class="section-label">ACTIVE</div>
+        <div class="data-row"><span class="label">LIDAR</span><span class="value">Full-spectrum ranging</span></div>
+        <div class="data-row"><span class="label">RADAR</span><span class="value">Multi-band phased array</span></div>
+        <div class="section-label">REFIT SYSTEMS</div>
+        <div class="data-row"><span class="label">NEUTRINO CAM</span><span class="value accent2">Refit addition</span></div>
+        <div class="data-row"><span class="label">GW DETECTOR</span><span class="value accent2">Refit addition</span></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">
+          <span class="title">ELECTRONIC WARFARE</span>
+          <span class="badge badge-armed">ARMED</span>
+        </div>
+        <div class="data-row"><span class="label">BURNPULSE TX</span><span class="value">8× units</span></div>
+        <div class="data-row"><span class="label">POWER (EACH)</span><span class="value accent2">200 MW</span></div>
+        <div class="data-row"><span class="label">TOTAL EW POWER</span><span class="value accent2">1,600 MW</span></div>
+      </div>
+    </div>
+
+    <!-- WEAPONS Tab -->
+    <div class="tab-content" id="tab-weapons">
+      <div class="panel">
+        <div class="panel-header">
+          <span class="title">ENERGY WEAPONS</span>
+          <span class="badge badge-armed">ARMED</span>
+        </div>
+        <div class="weapon-item">
+          <div>
+            <div class="w-name">UV LASER BATTERY</div>
+            <div class="w-detail">5 GW per emitter</div>
+          </div>
+          <span class="w-count">32×</span>
+        </div>
+        <div class="weapon-item">
+          <div>
+            <div class="w-name">X-RAY LASER</div>
+            <div class="w-detail">100 GW per emitter</div>
+          </div>
+          <span class="w-count">4×</span>
+        </div>
+        <div class="weapon-item">
+          <div>
+            <div class="w-name">PROTON BEAM</div>
+            <div class="w-detail">1 TJ output</div>
+          </div>
+          <span class="w-count">1×</span>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">
+          <span class="title">GUIDED WEAPONS</span>
+        </div>
+        <div class="weapon-item">
+          <div>
+            <div class="w-name">MICROMISSILE RAILS</div>
+            <div class="w-detail">30 mm calibre</div>
+          </div>
+          <span class="w-count">16×</span>
+        </div>
+        <div class="weapon-item">
+          <div>
+            <div class="w-name">HEAVY MISSILE RAILS</div>
+            <div class="w-detail">250 mm calibre</div>
+          </div>
+          <span class="w-count">4×</span>
+        </div>
+        <div class="weapon-item">
+          <div>
+            <div class="w-name">ACH 2705 EXODRONES</div>
+            <div class="w-detail">Autonomous combat platforms</div>
+          </div>
+          <span class="w-count">—</span>
+        </div>
+        <div class="weapon-item">
+          <div>
+            <div class="w-name">ACH 2703 TORPEDOES</div>
+            <div class="w-detail">Up to 30 Gt FAM warhead</div>
+          </div>
+          <span class="w-count">—</span>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">
+          <span class="title">KINETIC WEAPONS</span>
+        </div>
+        <div class="weapon-item">
+          <div>
+            <div class="w-name">DIAMOND DUSTER (SPINAL)</div>
+            <div class="w-detail">500 mm — fixed forward</div>
+          </div>
+          <span class="w-count">1×</span>
+        </div>
+        <div class="weapon-item">
+          <div>
+            <div class="w-name">BALLISTIC TURRETS</div>
+            <div class="w-detail">100 mm traversable</div>
+          </div>
+          <span class="w-count">4×</span>
+        </div>
+        <div class="weapon-item">
+          <div>
+            <div class="w-name">CIWS</div>
+            <div class="w-detail">2 mm point defence</div>
+          </div>
+          <span class="w-count">32×</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /detail-panel -->
+</div><!-- /msd-layout -->
+</div><!-- /page-body -->
+
+<script src="nav.js"></script>
+<script>
+/* ═══════════════════════════════════════════════════════════════════════════
+   MSD — Tab Navigation
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function() {
+  const navBtns = document.querySelectorAll('#sysNav button');
+  const tabs = document.querySelectorAll('.tab-content');
+  let activeTab = 'ident';
+
+  navBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const t = btn.dataset.tab;
+      if (t === activeTab) return;
+      activeTab = t;
+      navBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      tabs.forEach(tc => tc.classList.remove('active'));
+      document.getElementById('tab-' + t).classList.add('active');
+      highlightSubsystem(t);
+    });
+  });
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MSD — Three.js Ship Model
+   ═══════════════════════════════════════════════════════════════════════════ */
+  const viewport = document.getElementById('viewport');
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
+  camera.position.set(0, 3, 12);
+  camera.lookAt(0, 0, 0);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setClearColor(0x010a0f, 1);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  viewport.appendChild(renderer.domElement);
+
+  // Lighting
+  const ambient = new THREE.AmbientLight(0x113344, 0.6);
+  scene.add(ambient);
+  const dirLight = new THREE.DirectionalLight(0x00e5ff, 0.8);
+  dirLight.position.set(5, 5, 5);
+  scene.add(dirLight);
+  const rimLight = new THREE.DirectionalLight(0xff6b35, 0.3);
+  rimLight.position.set(-3, -2, -5);
+  scene.add(rimLight);
+
+  // Ship group
+  const ship = new THREE.Group();
+
+  // Materials
+  const hullMat = new THREE.MeshPhongMaterial({ color: 0x0a1a2a, emissive: 0x001825, shininess: 80, transparent: true, opacity: 0.9 });
+  const glowMat = new THREE.MeshBasicMaterial({ color: 0x00e5ff, transparent: true, opacity: 0.7 });
+  const engineGlowMat = new THREE.MeshBasicMaterial({ color: 0x00ccff, transparent: true, opacity: 0.8 });
+  const accentMat = new THREE.MeshPhongMaterial({ color: 0x004455, emissive: 0x002233, shininess: 60 });
+  const weaponMat = new THREE.MeshPhongMaterial({ color: 0x1a0a00, emissive: 0x331500, shininess: 40 });
+  const shieldMat = new THREE.MeshPhongMaterial({ color: 0x0a2a1a, emissive: 0x002810, shininess: 100, transparent: true, opacity: 0.6 });
+  const sensorMat = new THREE.MeshPhongMaterial({ color: 0x002a3a, emissive: 0x003344, shininess: 120 });
+
+  // 1. HULL — elongated pyramid (cone geometry with 4 radial segments)
+  const hullGeo = new THREE.ConeGeometry(1.2, 7, 4, 1);
+  const hull = new THREE.Mesh(hullGeo, hullMat);
+  hull.rotation.z = Math.PI;
+  hull.rotation.y = Math.PI / 4;
+  hull.position.set(0, 0, 0);
+  hull.name = 'hull';
+  ship.add(hull);
+
+  // Hull edge wireframe
+  const hullWire = new THREE.LineSegments(
+    new THREE.EdgesGeometry(hullGeo),
+    new THREE.LineBasicMaterial({ color: 0x00e5ff, transparent: true, opacity: 0.15 })
+  );
+  hullWire.rotation.copy(hull.rotation);
+  hullWire.position.copy(hull.position);
+  ship.add(hullWire);
+
+  // 2. ENGINE SECTION — cylinder at the rear
+  const engineGeo = new THREE.CylinderGeometry(1.0, 1.3, 1.5, 8);
+  const engine = new THREE.Mesh(engineGeo, accentMat);
+  engine.position.set(0, 4.2, 0);
+  engine.name = 'engine';
+  ship.add(engine);
+
+  // 3. NOZZLE GLOW — four engine nozzles
+  for (let i = 0; i < 4; i++) {
+    const nozzle = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.15, 0.25, 0.6, 8),
+      engineGlowMat
+    );
+    const angle = (i / 4) * Math.PI * 2 + Math.PI / 4;
+    nozzle.position.set(Math.cos(angle) * 0.6, 5.1, Math.sin(angle) * 0.6);
+    nozzle.name = 'nozzle';
+    ship.add(nozzle);
+
+    // Exhaust plume
+    const plume = new THREE.Mesh(
+      new THREE.ConeGeometry(0.18, 1.2, 8),
+      new THREE.MeshBasicMaterial({ color: 0x00ccff, transparent: true, opacity: 0.3 })
+    );
+    plume.position.set(Math.cos(angle) * 0.6, 5.9, Math.sin(angle) * 0.6);
+    plume.name = 'plume';
+    ship.add(plume);
+  }
+
+  // 4. RADIATOR STRAKES — 4 thin panels extending from mid-hull
+  const radiators = [];
+  for (let i = 0; i < 4; i++) {
+    const radGeo = new THREE.BoxGeometry(3.5, 0.02, 0.8);
+    const rad = new THREE.Mesh(radGeo, new THREE.MeshPhongMaterial({
+      color: 0x003322, emissive: 0x001a11, shininess: 40, transparent: true, opacity: 0.7,
+      side: THREE.DoubleSide
+    }));
+    const angle = (i / 4) * Math.PI * 2 + Math.PI / 4;
+    rad.position.set(Math.cos(angle) * 2.0, 1.5, Math.sin(angle) * 2.0);
+    rad.rotation.y = -angle;
+    rad.name = 'radiator';
+    radiators.push(rad);
+    ship.add(rad);
+  }
+
+  // 5. SPINAL DIAMOND DUSTER — long rail running along the hull bottom
+  const spinalGeo = new THREE.BoxGeometry(0.08, 6.0, 0.08);
+  const spinal = new THREE.Mesh(spinalGeo, weaponMat);
+  spinal.position.set(0, 0.5, -0.8);
+  spinal.name = 'spinal';
+  ship.add(spinal);
+
+  // Spinal muzzle glow
+  const muzzle = new THREE.Mesh(
+    new THREE.SphereGeometry(0.1, 8, 8),
+    new THREE.MeshBasicMaterial({ color: 0xff6b35, transparent: true, opacity: 0.5 })
+  );
+  muzzle.position.set(0, -2.8, -0.8);
+  muzzle.name = 'spinal';
+  ship.add(muzzle);
+
+  // 6. SENSOR ARRAY — dome at the nose
+  const sensorGeo = new THREE.SphereGeometry(0.25, 12, 12);
+  const sensorDome = new THREE.Mesh(sensorGeo, sensorMat);
+  sensorDome.position.set(0, -3.7, 0);
+  sensorDome.name = 'sensor';
+  ship.add(sensorDome);
+
+  // Sensor ring
+  const sensorRing = new THREE.Mesh(
+    new THREE.TorusGeometry(0.35, 0.03, 8, 16),
+    glowMat
+  );
+  sensorRing.position.set(0, -3.5, 0);
+  sensorRing.rotation.x = Math.PI / 2;
+  sensorRing.name = 'sensor';
+  ship.add(sensorRing);
+
+  // 7. WEAPON HARDPOINTS — turrets on the hull
+  const turretPositions = [
+    { x: 0.6, y: -1.0, z: 0.6 },
+    { x: -0.6, y: -1.0, z: 0.6 },
+    { x: 0.6, y: -1.0, z: -0.6 },
+    { x: -0.6, y: -1.0, z: -0.6 },
+    { x: 0.8, y: 1.0, z: 0.0 },
+    { x: -0.8, y: 1.0, z: 0.0 },
+    { x: 0.0, y: 1.0, z: 0.8 },
+    { x: 0.0, y: 1.0, z: -0.8 },
+  ];
+  turretPositions.forEach(pos => {
+    const turret = new THREE.Mesh(
+      new THREE.SphereGeometry(0.08, 6, 6),
+      weaponMat
+    );
+    turret.position.set(pos.x, pos.y, pos.z);
+    turret.name = 'weapon';
+    ship.add(turret);
+
+    const barrel = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.02, 0.02, 0.3, 4),
+      weaponMat
+    );
+    barrel.position.set(pos.x, pos.y - 0.2, pos.z);
+    barrel.name = 'weapon';
+    ship.add(barrel);
+  });
+
+  // 8. WHIPPLE SHIELD — translucent shell at the fore
+  const shieldGeo = new THREE.ConeGeometry(1.5, 2.0, 4, 1, true);
+  const shield = new THREE.Mesh(shieldGeo, shieldMat);
+  shield.rotation.z = Math.PI;
+  shield.rotation.y = Math.PI / 4;
+  shield.position.set(0, -3.0, 0);
+  shield.name = 'shield';
+  ship.add(shield);
+
+  // Tilt the ship for a better viewing angle
+  ship.rotation.x = 0.3;
+  scene.add(ship);
+
+  // ─── Subsystem highlighting ───────────────────────────────────────────
+  const subsystemMap = {
+    ident: [],
+    power: ['engine'],
+    drive: ['engine', 'nozzle', 'plume'],
+    thermal: ['radiator'],
+    defence: ['shield'],
+    sensors: ['sensor'],
+    weapons: ['weapon', 'spinal']
+  };
+
+  const originalEmissive = new Map();
+  ship.traverse(child => {
+    if (child.isMesh && child.material.emissive) {
+      originalEmissive.set(child, child.material.emissive.getHex());
+    }
+  });
+
+  function highlightSubsystem(tab) {
+    const targets = subsystemMap[tab] || [];
+    ship.traverse(child => {
+      if (!child.isMesh) return;
+      if (targets.length === 0) {
+        // IDENT — show all normally
+        if (child.material.opacity !== undefined) {
+          child.material.opacity = child.name === 'shield' ? 0.6 : (child.material === glowMat || child.material === engineGlowMat ? 0.7 : 0.9);
+        }
+        if (child.material.emissive && originalEmissive.has(child)) {
+          child.material.emissive.setHex(originalEmissive.get(child));
+        }
+      } else if (targets.includes(child.name)) {
+        // Highlighted
+        if (child.material.emissive) {
+          child.material.emissive.setHex(0x00e5ff);
+        }
+        child.material.opacity = 1.0;
+      } else {
+        // Dimmed
+        child.material.opacity = 0.15;
+        if (child.material.emissive) {
+          child.material.emissive.setHex(0x000508);
+        }
+      }
+    });
+  }
+
+  // ─── Resize handler ───────────────────────────────────────────────────
+  function onResize() {
+    const w = viewport.clientWidth;
+    const h = viewport.clientHeight;
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+  }
+  window.addEventListener('resize', onResize);
+
+  // Initial size on load
+  setTimeout(onResize, 0);
+
+  // ─── Mouse orbit ──────────────────────────────────────────────────────
+  let isDragging = false;
+  let prevMouse = { x: 0, y: 0 };
+  let orbitY = 0;
+  let orbitX = 0.3;
+  let autoRotate = true;
+
+  viewport.addEventListener('pointerdown', e => {
+    isDragging = true;
+    autoRotate = false;
+    prevMouse = { x: e.clientX, y: e.clientY };
+  });
+  window.addEventListener('pointermove', e => {
+    if (!isDragging) return;
+    const dx = e.clientX - prevMouse.x;
+    const dy = e.clientY - prevMouse.y;
+    orbitY += dx * 0.005;
+    orbitX += dy * 0.005;
+    orbitX = Math.max(-1.2, Math.min(1.2, orbitX));
+    prevMouse = { x: e.clientX, y: e.clientY };
+  });
+  window.addEventListener('pointerup', () => { isDragging = false; });
+
+  // Resume auto-rotate after 5s of no interaction
+  let autoTimer;
+  viewport.addEventListener('pointerdown', () => {
+    clearTimeout(autoTimer);
+    autoTimer = setTimeout(() => { autoRotate = true; }, 5000);
+  });
+
+  // ─── Scroll zoom ─────────────────────────────────────────────────────
+  viewport.addEventListener('wheel', e => {
+    e.preventDefault();
+    camera.position.z = Math.max(6, Math.min(25, camera.position.z + e.deltaY * 0.01));
+  }, { passive: false });
+
+  // ─── Touch pinch zoom ────────────────────────────────────────────────
+  let lastPinchDist = 0;
+  viewport.addEventListener('touchstart', e => {
+    if (e.touches.length === 2) {
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      lastPinchDist = Math.sqrt(dx * dx + dy * dy);
+    }
+  }, { passive: true });
+  viewport.addEventListener('touchmove', e => {
+    if (e.touches.length === 2) {
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const delta = lastPinchDist - dist;
+      camera.position.z = Math.max(6, Math.min(25, camera.position.z + delta * 0.03));
+      lastPinchDist = dist;
+    }
+  }, { passive: true });
+
+  // ─── Animation loop ──────────────────────────────────────────────────
+  let time = 0;
+  function animate() {
+    requestAnimationFrame(animate);
+    time += 0.016;
+
+    if (autoRotate) {
+      orbitY += 0.003;
+    }
+
+    ship.rotation.y = orbitY;
+    ship.rotation.x = orbitX;
+
+    // Pulse engine glow
+    ship.traverse(child => {
+      if (child.name === 'plume' && child.isMesh) {
+        child.material.opacity = 0.2 + Math.sin(time * 3) * 0.15;
+        child.scale.y = 1.0 + Math.sin(time * 4) * 0.2;
+      }
+      if (child.name === 'nozzle' && child.isMesh) {
+        child.material.opacity = 0.6 + Math.sin(time * 2) * 0.2;
+      }
+    });
+
+    // Pulse sensor ring
+    sensorRing.material.opacity = 0.4 + Math.sin(time * 1.5) * 0.3;
+
+    // Pulse muzzle
+    muzzle.material.opacity = 0.3 + Math.sin(time * 2.5) * 0.2;
+
+    renderer.render(scene, camera);
+  }
+  animate();
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MSD — Live Data Simulation
+   ═══════════════════════════════════════════════════════════════════════════ */
+  function updateLiveData() {
+    // Simulate minor power fluctuations
+    const mhd = 97 + Math.random() * 3;
+    const sphA = 95 + Math.random() * 5;
+    const sphB = 94 + Math.random() * 6;
+    const ecell = 84 + Math.random() * 6;
+
+    const el = id => document.getElementById(id);
+    if (el('pwrMhd')) el('pwrMhd').textContent = mhd.toFixed(1) + '%';
+    if (el('pwrMhdBar')) el('pwrMhdBar').style.width = mhd + '%';
+    if (el('pwrSphA')) el('pwrSphA').textContent = sphA.toFixed(1) + '%';
+    if (el('pwrSphABar')) el('pwrSphABar').style.width = sphA + '%';
+    if (el('pwrSphB')) el('pwrSphB').textContent = sphB.toFixed(1) + '%';
+    if (el('pwrSphBBar')) el('pwrSphBBar').style.width = sphB + '%';
+    if (el('pwrEcell')) el('pwrEcell').textContent = ecell.toFixed(1) + '%';
+    if (el('pwrEcellBar')) el('pwrEcellBar').style.width = ecell + '%';
+
+    // Quick readout
+    const totalGW = (mhd / 100 * 1000 + sphA / 100 * 500 + sphB / 100 * 500).toFixed(0);
+    if (el('qrReactor')) el('qrReactor').textContent = Number(totalGW).toLocaleString() + ' GW';
+    if (el('qrThermal')) el('qrThermal').textContent = (38 + Math.random() * 8).toFixed(0) + '%';
+  }
+
+  updateLiveData();
+  setInterval(updateLiveData, 3000);
+
+})();
+</script>
+</body>
+</html>

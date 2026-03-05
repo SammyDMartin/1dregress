@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ascent Universe — Battle of the Interstice</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow: hidden; }
+
+/* ─── Playback Controls ───────────────────────────────────────────────── */
+.battle-controls {
+  position: fixed; top: 40px; left: 0; right: 0; z-index: 50;
+  height: 44px; display: flex; align-items: center; gap: 8px;
+  padding: 0 12px;
+  background: rgba(0, 10, 15, 0.95);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+}
+.battle-controls button {
+  background: var(--panel); border: 1px solid var(--border);
+  color: var(--text-mid); font-size: 10px; letter-spacing: 2px;
+  padding: 4px 12px; cursor: pointer; border-radius: 2px;
+  transition: all 0.2s; white-space: nowrap;
+}
+.battle-controls button:hover { border-color: var(--accent); color: var(--accent); }
+.battle-controls button.active { border-color: var(--accent2); color: var(--accent2); }
+.phase-label {
+  font-size: 10px; letter-spacing: 2px; color: var(--accent);
+  flex: 1; text-align: center; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap;
+}
+.phase-counter {
+  font-size: 9px; letter-spacing: 2px; color: var(--text-dim);
+  white-space: nowrap;
+}
+
+/* ─── Main Layout ─────────────────────────────────────────────────────── */
+.battle-layout {
+  position: fixed;
+  top: 84px; /* nav 40 + controls 44 */
+  left: 0; right: 0;
+  bottom: 24px; /* status bar */
+  display: grid;
+  grid-template-columns: 220px 1fr 280px;
+  grid-template-rows: 1fr;
+  overflow: hidden;
+}
+
+/* ─── Timeline Panel (left) ───────────────────────────────────────────── */
+.timeline-panel {
+  background: var(--panel); border-right: 1px solid var(--border);
+  overflow-y: auto; padding: 6px 0;
+}
+.timeline-btn {
+  display: block; width: 100%; text-align: left;
+  background: none; border: none; border-left: 3px solid transparent;
+  padding: 8px 10px; cursor: pointer; transition: all 0.15s;
+  font-family: var(--mono);
+}
+.timeline-btn:hover { background: rgba(0,229,255,0.04); }
+.timeline-btn.active {
+  border-left-color: var(--accent);
+  background: rgba(0,229,255,0.06);
+}
+.timeline-btn .t-time {
+  font-size: 9px; letter-spacing: 2px; color: var(--accent);
+  display: block; margin-bottom: 2px;
+}
+.timeline-btn .t-name {
+  font-size: 9px; letter-spacing: 1px; color: var(--text-dim);
+}
+.timeline-btn.active .t-name { color: var(--text-mid); }
+
+/* ─── Canvas Area (center) ────────────────────────────────────────────── */
+.canvas-area {
+  position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg);
+}
+#tactical { display: block; }
+
+/* ─── Info Panel (right) ──────────────────────────────────────────────── */
+.info-panel {
+  background: var(--panel); border-left: 1px solid var(--border);
+  overflow-y: auto; padding: 12px;
+}
+.info-section-title {
+  font-size: 10px; letter-spacing: 3px; color: var(--accent2);
+  border-bottom: 1px solid rgba(255,107,53,0.2);
+  padding-bottom: 4px; margin-bottom: 8px; margin-top: 14px;
+}
+.info-section-title:first-child { margin-top: 0; }
+.sitrep-text {
+  font-size: 10px; line-height: 1.7; color: rgba(200,220,230,0.75);
+  letter-spacing: 0.3px;
+}
+.oob-table {
+  width: 100%; border-collapse: collapse; font-size: 9px;
+  letter-spacing: 1px;
+}
+.oob-table th {
+  text-align: left; color: var(--text-dim); padding: 4px 4px;
+  border-bottom: 1px solid var(--border); font-weight: normal;
+}
+.oob-table td {
+  padding: 3px 4px; border-bottom: 1px solid var(--text-faint);
+}
+.oob-union { color: var(--accent); }
+.oob-arco { color: var(--accent2); }
+.oob-destroyed { color: var(--red); }
+.oob-ok { color: var(--green); }
+
+/* ─── Mobile Layout ───────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .battle-layout {
+    display: flex; flex-direction: column;
+    overflow-y: auto; overflow-x: hidden;
+    bottom: 0; /* no footer on mobile — status bar from nav.js is enough */
+  }
+  .timeline-panel {
+    order: 2; border-right: none;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    overflow-y: hidden; overflow-x: auto;
+    display: flex; flex-direction: row;
+    padding: 0; flex-shrink: 0;
+    -webkit-overflow-scrolling: touch;
+  }
+  .timeline-btn {
+    flex: 0 0 auto; width: auto;
+    border-left: none; border-bottom: 3px solid transparent;
+    padding: 6px 10px; text-align: center;
+    min-width: 80px;
+  }
+  .timeline-btn.active {
+    border-left-color: transparent;
+    border-bottom-color: var(--accent);
+  }
+  .canvas-area {
+    order: 1; flex: 0 0 auto;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    max-height: 50vh;
+  }
+  .info-panel {
+    order: 3; border-left: none;
+    border-top: 1px solid var(--border);
+    flex: 1 0 auto; min-height: 200px;
+    padding-bottom: 32px;
+  }
+  .battle-controls { top: 40px; }
+  .phase-label { font-size: 9px; letter-spacing: 1px; }
+}
+
+@media (max-width: 600px) {
+  .battle-controls { top: auto; }
+}
+</style>
+</head>
+<body>
+
+<!-- Playback Controls -->
+<div class="battle-controls">
+  <button id="btn-play">PLAY</button>
+  <button id="btn-reset">RESET</button>
+  <span class="phase-label" id="phase-label">T-0:00 ATBARAH INCIDENT</span>
+  <span class="phase-counter" id="phase-counter">01/15</span>
+</div>
+
+<div class="page-body">
+<div class="battle-layout">
+  <!-- Timeline -->
+  <div class="timeline-panel" id="timeline-panel"></div>
+
+  <!-- Tactical Canvas -->
+  <div class="canvas-area">
+    <canvas id="tactical"></canvas>
+  </div>
+
+  <!-- Info Panel -->
+  <div class="info-panel" id="info-panel">
+    <div class="info-section-title">SITUATION REPORT</div>
+    <div class="sitrep-text" id="sitrep"></div>
+    <div class="info-section-title">ORDER OF BATTLE</div>
+    <table class="oob-table" id="oob-table"></table>
+  </div>
+</div>
+</div>
+
+<script src="nav.js"></script>
+<script>
+(function() {
+'use strict';
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BATTLE SIMULATION — Battle of the Interstice
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+// ─── Deterministic seeded random ─────────────────────────────────────────
+function seededRandom(seed) {
+  let s = seed;
+  return function() {
+    s = (s * 16807 + 0) % 2147483647;
+    return (s - 1) / 2147483646;
+  };
+}
+
+// ─── Phase Data ──────────────────────────────────────────────────────────
+const PHASES = [
+  { time: 'T-0:00', name: 'ATBARAH INCIDENT',
+    sitrep: 'Kosmohansa vessel <em>Atbarah</em> accelerates toward the interstice at maximum thrust. HPF operatives execute suicide attack — defence grid hacked, orbital stations destroyed. All personnel aboard killed by acceleration forces.',
+    unionDD: 10, unionCV: 90, arcoInc: 0, arcoAnn: 0 },
+  { time: 'T+0:00', name: 'TRANSIT',
+    sitrep: '<em>Atbarah</em> enters the interstice. Crew already dead from sustained acceleration. Ship impacts habitat structure on far side at relativistic velocity.',
+    unionDD: 10, unionCV: 90, arcoInc: 0, arcoAnn: 0 },
+  { time: 'T+0:05', name: 'AFTERMATH',
+    sitrep: 'Approximately 200,000 casualties confirmed on the far side of the interstice. Union First Fleet establishes emergency blockade formation around the aperture.',
+    unionDD: 10, unionCV: 90, arcoInc: 0, arcoAnn: 0 },
+  { time: 'T+4:00', name: 'EMERGENCE',
+    sitrep: 'Four Arco warships emerge from the interstice in tight formation. Sub-constellation identified: 3 Incisor-class fast attack vehicles, 1 Annihilator-class IP assault vehicle. Hyperdiamond armour confirmed on all contacts.',
+    unionDD: 10, unionCV: 90, arcoInc: 3, arcoAnn: 1 },
+  { time: 'T+4:02', name: 'DETECTION',
+    sitrep: 'Union sensor platforms detect intrusion. Fleet command issues combat alert. First visual confirmation of Arco warship silhouettes. Quote from signals intercept: "Mean looking bastards."',
+    unionDD: 10, unionCV: 90, arcoInc: 3, arcoAnn: 1 },
+  { time: 'T+4:05', name: 'SABOTAGE',
+    sitrep: 'Striver-class malware, pre-planted in Union fleet network, activates. Forces premature torpedo launch from multiple corvettes. Network integrity compromised. Arco electronic warfare capability far exceeds projections.',
+    unionDD: 10, unionCV: 90, arcoInc: 3, arcoAnn: 1 },
+  { time: 'T+4:08', name: 'JAMMING',
+    sitrep: 'Arco ships initiate broadband electromagnetic jamming across all standard frequencies. Fleet network links go invalid. Individual ships forced to autonomous operation. Command and control effectively destroyed.',
+    unionDD: 10, unionCV: 90, arcoInc: 3, arcoAnn: 1 },
+  { time: 'T+4:10', name: 'FIRST BLOOD',
+    sitrep: 'Arco X-ray laser batteries destroy all in-flight torpedoes across tens of thousands of kilometres. Point defence capability exceeds all known projections. No Union ordnance reaches target.',
+    unionDD: 10, unionCV: 84, arcoInc: 3, arcoAnn: 1 },
+  { time: 'T+4:15', name: 'DUSTER STRIKE',
+    sitrep: 'Diamond Duster micro-particle weapon deployed. Sub-millimetre hyperdiamond fragments accelerated to 0.9c. Undetectable by standard radar. Multiple corvettes destroyed with no warning. Catastrophic hull breaches across the formation.',
+    unionDD: 9, unionCV: 62, arcoInc: 3, arcoAnn: 1 },
+  { time: 'T+4:20', name: 'ADAPTATION',
+    sitrep: 'Ensign Hansun aboard <em>Isidore</em> identifies duster weapon signature via collision sensor analysis. Fleet survivors switch to submillimetre radar mode. Partial countermeasure achieved — dusters now visible but still lethal.',
+    unionDD: 8, unionCV: 48, arcoInc: 3, arcoAnn: 1 },
+  { time: 'T+4:25', name: 'CLOSE RANGE',
+    sitrep: 'Surviving Union fleet elements close to railgun engagement range. Laser strikes score Arco armour but fail to penetrate hyperdiamond composite. Railgun slugs deflected. Union weapons proving ineffective.',
+    unionDD: 7, unionCV: 35, arcoInc: 3, arcoAnn: 1 },
+  { time: 'T+4:30', name: 'EXODRONE SWARM',
+    sitrep: 'Annihilator-class launches exodrone swarm — smart missiles accelerating at 200+ G. Antimatter warheads confirmed. Over 200 contacts. Union point defence overwhelmed immediately.',
+    unionDD: 5, unionCV: 22, arcoInc: 3, arcoAnn: 1 },
+  { time: 'T+4:35', name: 'MASSACRE',
+    sitrep: 'Union fleet overwhelmed. Hundreds of hostile contacts on what remains of tactical displays. Ships fighting blind, autonomous, without coordination. Corvettes destroyed in waves. Destroyers taking critical damage.',
+    unionDD: 3, unionCV: 8, arcoInc: 3, arcoAnn: 1 },
+  { time: 'T+4:45', name: "ISIDORE'S STAND",
+    sitrep: '<em>Isidore</em> plays dead — all systems cold, drifting on ballistic trajectory. Hansun initiates surprise attack at 30G burn directly at nearest Incisor. Entire crew killed by acceleration except Hansun in crash couch. Railgun strike at point blank range penetrates Incisor engine block. One Arco warship destroyed.',
+    unionDD: 1, unionCV: 2, arcoInc: 2, arcoAnn: 1 },
+  { time: 'T+4:51', name: 'WITHDRAWAL',
+    sitrep: 'Arco sub-constellation breaks engagement. Three surviving warships return through the interstice. Punitive strike complete. Union First Fleet effectively destroyed — 1 destroyer, 2 corvettes survive. Over 4,000 naval personnel killed in action.',
+    unionDD: 1, unionCV: 2, arcoInc: 2, arcoAnn: 1 },
+];
+
+// ─── Deterministic ship positions ────────────────────────────────────────
+const rng = seededRandom(42);
+
+// Union destroyer positions (hemispherical cordon)
+const destroyers = [];
+for (let i = 0; i < 10; i++) {
+  const angle = (i / 10) * Math.PI * 2;
+  const radius = 0.32 + rng() * 0.06;
+  destroyers.push({
+    x: 0.5 + Math.cos(angle) * radius,
+    y: 0.5 + Math.sin(angle) * radius,
+    alive: true, destroyedAt: -1
+  });
+}
+
+// Pre-compute destroyer destruction order
+const ddDestroyOrder = [7, 3, 8, 1, 5, 9, 2, 6, 0, 4]; // deterministic
+const ddDestroyPhase =  [-1,-1,-1,-1,-1,-1,-1,-1, 7, 8]; // phases where losses happen
+// Phase 7: lose 0 (84CV), Phase 8: lose 1 DD (9DD), Phase 9: lose 1 DD (8DD), etc.
+// Actually let's compute from the data
+(function computeDestroyPhases() {
+  let prev = 10;
+  let idx = 0;
+  for (let p = 0; p < PHASES.length; p++) {
+    const lost = prev - PHASES[p].unionDD;
+    for (let j = 0; j < lost; j++) {
+      if (idx < ddDestroyOrder.length) {
+        destroyers[ddDestroyOrder[idx]].destroyedAt = p;
+        idx++;
+      }
+    }
+    prev = PHASES[p].unionDD;
+  }
+})();
+
+// Union corvettes (small dots in hemispherical cordon, further spread)
+const corvettes = [];
+for (let i = 0; i < 90; i++) {
+  const angle = (i / 90) * Math.PI * 2 + rng() * 0.15;
+  const radius = 0.22 + rng() * 0.18;
+  corvettes.push({
+    x: 0.5 + Math.cos(angle) * radius,
+    y: 0.5 + Math.sin(angle) * radius,
+    alive: true, destroyedAt: -1
+  });
+}
+
+// Pre-compute corvette destruction
+(function computeCVDestroy() {
+  // Shuffle corvette indices deterministically
+  const order = [];
+  for (let i = 0; i < 90; i++) order.push(i);
+  const r2 = seededRandom(137);
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(r2() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  let prev = 90, idx = 0;
+  for (let p = 0; p < PHASES.length; p++) {
+    const lost = prev - PHASES[p].unionCV;
+    for (let j = 0; j < lost; j++) {
+      if (idx < order.length) {
+        corvettes[order[idx]].destroyedAt = p;
+        idx++;
+      }
+    }
+    prev = PHASES[p].unionCV;
+  }
+})();
+
+// Arco ships (emerge from center at phase 3)
+const arcoShips = [
+  { x: 0.50, y: 0.48, type: 'incisor', alive: true, destroyedAt: 13, emergeAt: 3 },
+  { x: 0.48, y: 0.52, type: 'incisor', alive: true, destroyedAt: -1, emergeAt: 3 },
+  { x: 0.52, y: 0.52, type: 'incisor', alive: true, destroyedAt: -1, emergeAt: 3 },
+  { x: 0.50, y: 0.50, type: 'annihilator', alive: true, destroyedAt: -1, emergeAt: 3 },
+];
+
+// ─── Canvas Rendering ────────────────────────────────────────────────────
+const canvas = document.getElementById('tactical');
+const ctx = canvas.getContext('2d');
+let W = 0, H = 0, animFrame = 0;
+
+function resizeCanvas() {
+  const area = canvas.parentElement;
+  const rect = area.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  const size = Math.min(rect.width, rect.height);
+  canvas.width = size * dpr;
+  canvas.height = size * dpr;
+  canvas.style.width = size + 'px';
+  canvas.style.height = size + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  W = size;
+  H = size;
+}
+
+let currentPhase = 0;
+let time = 0;
+
+function draw() {
+  animFrame = requestAnimationFrame(draw);
+  time += 0.016;
+  ctx.clearRect(0, 0, W, H);
+  if (W === 0) return;
+
+  const p = currentPhase;
+  const cx = W * 0.5, cy = H * 0.5;
+
+  // Background grid
+  ctx.strokeStyle = 'rgba(0,229,255,0.04)';
+  ctx.lineWidth = 0.5;
+  const gridStep = W / 20;
+  for (let i = 0; i <= 20; i++) {
+    ctx.beginPath(); ctx.moveTo(i * gridStep, 0); ctx.lineTo(i * gridStep, H); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, i * gridStep); ctx.lineTo(W, i * gridStep); ctx.stroke();
+  }
+
+  // Range rings
+  ctx.strokeStyle = 'rgba(0,229,255,0.06)';
+  ctx.lineWidth = 0.5;
+  for (let r = 1; r <= 4; r++) {
+    ctx.beginPath();
+    ctx.arc(cx, cy, W * 0.1 * r, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+
+  // Interstice — pulsing cyan circle
+  const pulse = 0.7 + Math.sin(time * 2.5) * 0.3;
+  const iR = W * 0.025;
+  ctx.beginPath();
+  ctx.arc(cx, cy, iR, 0, Math.PI * 2);
+  ctx.fillStyle = `rgba(0,229,255,${0.15 * pulse})`;
+  ctx.fill();
+  ctx.strokeStyle = `rgba(0,229,255,${0.6 * pulse})`;
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  // Glow
+  const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, iR * 3);
+  grad.addColorStop(0, `rgba(0,229,255,${0.12 * pulse})`);
+  grad.addColorStop(1, 'rgba(0,229,255,0)');
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.arc(cx, cy, iR * 3, 0, Math.PI * 2);
+  ctx.fill();
+
+  // ─── Phase-specific effects ────────────────────────────────────────
+  const effectRng = seededRandom(p * 1000 + 7);
+
+  // Torpedo streaks (phases 5-7)
+  if (p >= 5 && p <= 7) {
+    ctx.strokeStyle = `rgba(255,170,0,${0.4 + Math.sin(time * 4) * 0.2})`;
+    ctx.lineWidth = 1;
+    const torpCount = 12 + p * 3;
+    for (let i = 0; i < torpCount; i++) {
+      const angle = effectRng() * Math.PI * 2;
+      const r1 = W * (0.15 + effectRng() * 0.15);
+      const r2 = r1 + W * 0.04;
+      ctx.beginPath();
+      ctx.moveTo(cx + Math.cos(angle) * r1, cy + Math.sin(angle) * r1);
+      ctx.lineTo(cx + Math.cos(angle) * r2, cy + Math.sin(angle) * r2);
+      ctx.stroke();
+    }
+  }
+
+  // X-ray beams (phases 7-9) — thin blue lines from center
+  if (p >= 7 && p <= 9) {
+    const beamCount = 6 + (p - 7) * 3;
+    for (let i = 0; i < beamCount; i++) {
+      const angle = effectRng() * Math.PI * 2;
+      const len = W * (0.3 + effectRng() * 0.15);
+      const flicker = 0.3 + Math.sin(time * 8 + i * 2.1) * 0.2;
+      ctx.strokeStyle = `rgba(100,180,255,${flicker})`;
+      ctx.lineWidth = 0.8;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx + Math.cos(angle) * len, cy + Math.sin(angle) * len);
+      ctx.stroke();
+    }
+  }
+
+  // Duster streams (phases 8-13) — faint red lines from center ships
+  if (p >= 8 && p <= 13) {
+    const dustCount = 20 + (p - 8) * 5;
+    for (let i = 0; i < dustCount; i++) {
+      const angle = effectRng() * Math.PI * 2;
+      const r1 = W * 0.03;
+      const r2 = W * (0.15 + effectRng() * 0.25);
+      const alpha = 0.1 + effectRng() * 0.15;
+      ctx.strokeStyle = `rgba(255,50,80,${alpha})`;
+      ctx.lineWidth = 0.5;
+      ctx.beginPath();
+      ctx.moveTo(cx + Math.cos(angle) * r1, cy + Math.sin(angle) * r1);
+      ctx.lineTo(cx + Math.cos(angle) * r2, cy + Math.sin(angle) * r2);
+      ctx.stroke();
+    }
+  }
+
+  // Exodrone swarm (phases 11-13) — orange dots scattered
+  if (p >= 11 && p <= 13) {
+    const droneCount = 40 + (p - 11) * 30;
+    for (let i = 0; i < droneCount; i++) {
+      const angle = effectRng() * Math.PI * 2;
+      const dist = W * (0.05 + effectRng() * 0.35);
+      const dx = cx + Math.cos(angle) * dist + Math.sin(time * 3 + i) * 2;
+      const dy = cy + Math.sin(angle) * dist + Math.cos(time * 2.5 + i) * 2;
+      const a = 0.4 + Math.sin(time * 5 + i * 0.7) * 0.3;
+      ctx.fillStyle = `rgba(255,170,0,${a})`;
+      ctx.beginPath();
+      ctx.arc(dx, dy, 1.2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  // Explosions (phases 12-14) — radial gradient flashes
+  if (p >= 12 && p <= 14) {
+    const expCount = 3 + (p - 12) * 2;
+    for (let i = 0; i < expCount; i++) {
+      const ex = W * (0.2 + effectRng() * 0.6);
+      const ey = H * (0.2 + effectRng() * 0.6);
+      const er = W * (0.02 + effectRng() * 0.04);
+      const flash = Math.abs(Math.sin(time * 4 + i * 1.5));
+      if (flash > 0.5) {
+        const eg = ctx.createRadialGradient(ex, ey, 0, ex, ey, er);
+        eg.addColorStop(0, `rgba(255,200,100,${flash * 0.6})`);
+        eg.addColorStop(0.5, `rgba(255,80,30,${flash * 0.3})`);
+        eg.addColorStop(1, 'rgba(255,50,20,0)');
+        ctx.fillStyle = eg;
+        ctx.beginPath();
+        ctx.arc(ex, ey, er, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+  }
+
+  // ─── Draw Ships ────────────────────────────────────────────────────
+
+  // Union corvettes (small blue dots)
+  corvettes.forEach(function(cv) {
+    const sx = cv.x * W, sy = cv.y * H;
+    if (cv.destroyedAt >= 0 && p >= cv.destroyedAt) {
+      // X marker for destroyed
+      ctx.strokeStyle = 'rgba(255,51,85,0.35)';
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(sx - 2, sy - 2); ctx.lineTo(sx + 2, sy + 2); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(sx + 2, sy - 2); ctx.lineTo(sx - 2, sy + 2); ctx.stroke();
+    } else {
+      ctx.fillStyle = 'rgba(0,229,255,0.5)';
+      ctx.beginPath();
+      ctx.arc(sx, sy, 1.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  });
+
+  // Union destroyers (square blue icons)
+  destroyers.forEach(function(dd) {
+    const sx = dd.x * W, sy = dd.y * H;
+    if (dd.destroyedAt >= 0 && p >= dd.destroyedAt) {
+      ctx.strokeStyle = 'rgba(255,51,85,0.6)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(sx - 4, sy - 4); ctx.lineTo(sx + 4, sy + 4); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(sx + 4, sy - 4); ctx.lineTo(sx - 4, sy + 4); ctx.stroke();
+    } else {
+      ctx.strokeStyle = 'rgba(0,229,255,0.8)';
+      ctx.lineWidth = 1.2;
+      ctx.strokeRect(sx - 4, sy - 4, 8, 8);
+      ctx.fillStyle = 'rgba(0,229,255,0.15)';
+      ctx.fillRect(sx - 4, sy - 4, 8, 8);
+    }
+  });
+
+  // Arco ships (red diamonds, emerge at phase 3+)
+  arcoShips.forEach(function(ship) {
+    if (p < ship.emergeAt) return;
+    const sx = ship.x * W, sy = ship.y * H;
+    const sz = ship.type === 'annihilator' ? 8 : 5;
+
+    if (ship.destroyedAt >= 0 && p >= ship.destroyedAt) {
+      ctx.strokeStyle = 'rgba(255,51,85,0.8)';
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(sx - sz, sy - sz); ctx.lineTo(sx + sz, sy + sz); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(sx + sz, sy - sz); ctx.lineTo(sx - sz, sy + sz); ctx.stroke();
+    } else {
+      ctx.save();
+      ctx.translate(sx, sy);
+      ctx.rotate(Math.PI / 4);
+      ctx.strokeStyle = 'rgba(255,107,53,0.9)';
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(-sz, -sz, sz * 2, sz * 2);
+      ctx.fillStyle = 'rgba(255,107,53,0.2)';
+      ctx.fillRect(-sz, -sz, sz * 2, sz * 2);
+      ctx.restore();
+    }
+  });
+
+  // ─── HUD overlay ───────────────────────────────────────────────────
+  ctx.fillStyle = 'rgba(0,229,255,0.3)';
+  ctx.font = '9px Courier New';
+  ctx.fillText('TACTICAL DISPLAY', 8, 14);
+  ctx.fillText(PHASES[p].time + ' ' + PHASES[p].name, 8, 26);
+
+  // Legend
+  const ly = H - 40;
+  ctx.fillStyle = 'rgba(0,229,255,0.5)';
+  ctx.fillRect(8, ly, 6, 6);
+  ctx.fillStyle = 'rgba(0,229,255,0.3)';
+  ctx.fillText('UNION', 18, ly + 6);
+
+  ctx.save();
+  ctx.translate(8 + 3, ly + 16 + 3);
+  ctx.rotate(Math.PI / 4);
+  ctx.strokeStyle = 'rgba(255,107,53,0.7)';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(-3, -3, 6, 6);
+  ctx.restore();
+  ctx.fillStyle = 'rgba(255,107,53,0.5)';
+  ctx.fillText('ARCO', 18, ly + 22);
+}
+
+// ─── UI Controls ─────────────────────────────────────────────────────────
+const phaseLabel = document.getElementById('phase-label');
+const phaseCounter = document.getElementById('phase-counter');
+const btnPlay = document.getElementById('btn-play');
+const btnReset = document.getElementById('btn-reset');
+const timelinePanel = document.getElementById('timeline-panel');
+const sitrepEl = document.getElementById('sitrep');
+const oobTable = document.getElementById('oob-table');
+
+// Build timeline buttons
+const timelineBtns = [];
+PHASES.forEach(function(ph, i) {
+  const btn = document.createElement('button');
+  btn.className = 'timeline-btn' + (i === 0 ? ' active' : '');
+  btn.innerHTML = '<span class="t-time">' + ph.time + '</span><span class="t-name">' + ph.name + '</span>';
+  btn.addEventListener('click', function() { setPhase(i); });
+  timelinePanel.appendChild(btn);
+  timelineBtns.push(btn);
+});
+
+function setPhase(idx) {
+  currentPhase = idx;
+  const ph = PHASES[idx];
+
+  // Update controls
+  phaseLabel.textContent = ph.time + ' ' + ph.name;
+  phaseCounter.textContent = String(idx + 1).padStart(2, '0') + '/' + PHASES.length;
+
+  // Update timeline
+  timelineBtns.forEach(function(b, i) {
+    b.classList.toggle('active', i === idx);
+  });
+
+  // Scroll active button into view on mobile
+  if (window.innerWidth < 768) {
+    timelineBtns[idx].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  }
+
+  // Sitrep
+  sitrepEl.innerHTML = ph.sitrep;
+
+  // OOB table
+  const unionDDLost = 10 - ph.unionDD;
+  const unionCVLost = 90 - ph.unionCV;
+  const arcoIncLost = (ph.arcoInc < 3 && idx >= 3) ? (3 - ph.arcoInc) : 0;
+
+  oobTable.innerHTML =
+    '<tr><th colspan="3" class="oob-union">UNION FIRST FLEET</th></tr>' +
+    '<tr><td class="oob-union">Destroyers</td><td class="' + (ph.unionDD > 0 ? 'oob-ok' : 'oob-destroyed') + '">' + ph.unionDD + '/10</td>' +
+    '<td class="oob-destroyed">' + (unionDDLost > 0 ? '-' + unionDDLost : '') + '</td></tr>' +
+    '<tr><td class="oob-union">Corvettes (UMV)</td><td class="' + (ph.unionCV > 0 ? 'oob-ok' : 'oob-destroyed') + '">' + ph.unionCV + '/90</td>' +
+    '<td class="oob-destroyed">' + (unionCVLost > 0 ? '-' + unionCVLost : '') + '</td></tr>' +
+    '<tr><th colspan="3" class="oob-arco" style="padding-top:8px">ARCO SUB-CONSTELLATION</th></tr>' +
+    '<tr><td class="oob-arco">Incisor-class</td><td class="' + (idx < 3 ? 'oob-union' : (ph.arcoInc >= 3 ? 'oob-ok' : 'oob-destroyed')) + '">' +
+    (idx < 3 ? '--' : ph.arcoInc + '/3') + '</td>' +
+    '<td class="oob-destroyed">' + (arcoIncLost > 0 ? '-' + arcoIncLost : '') + '</td></tr>' +
+    '<tr><td class="oob-arco">Annihilator-class</td><td class="' + (idx < 3 ? 'oob-union' : 'oob-ok') + '">' +
+    (idx < 3 ? '--' : ph.arcoAnn + '/1') + '</td><td></td></tr>';
+}
+
+// Playback
+let playing = false;
+let playTimer = null;
+
+function advancePhase() {
+  if (currentPhase < PHASES.length - 1) {
+    setPhase(currentPhase + 1);
+  } else {
+    stopPlayback();
+  }
+}
+
+function startPlayback() {
+  playing = true;
+  btnPlay.textContent = 'PAUSE';
+  btnPlay.classList.add('active');
+  playTimer = setInterval(advancePhase, 4000);
+}
+
+function stopPlayback() {
+  playing = false;
+  btnPlay.textContent = 'PLAY';
+  btnPlay.classList.remove('active');
+  if (playTimer) { clearInterval(playTimer); playTimer = null; }
+}
+
+btnPlay.addEventListener('click', function() {
+  if (playing) { stopPlayback(); }
+  else {
+    if (currentPhase >= PHASES.length - 1) setPhase(0);
+    startPlayback();
+  }
+});
+
+btnReset.addEventListener('click', function() {
+  stopPlayback();
+  setPhase(0);
+});
+
+// ─── Init ────────────────────────────────────────────────────────────────
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+setPhase(0);
+draw();
+
+})();
+</script>
+</body>
+</html>
