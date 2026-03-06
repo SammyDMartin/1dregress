@@ -1,56 +1,69 @@
 # Minor Character Analyses
 
-## Lao
+## The Listener
 
-**Role**: Eszel's closest thing to a friend. Appears on the ship and at the base. Serves as a mirror — she's what a normal, healthy teenager looks like next to Eszel.
+**What he is**: Ambiguous. Cosmic entity, possibly the Utilitaria reborn, possibly something older. Appears as a "blandly handsome" young man in a grey suit. Floats. Can manipulate spacetime. Has been nudging Eszel since childhood.
 
-**Current state**: Barely drawn. She appears in the common room scene and is referenced during the elevator excursion and after the disaster. The judge report notes she "performs a version of herself slightly less intelligent than the real thing" — a great detail.
+**Voice**: Calm, slightly amused, infinite patience. Speaks in paradoxes and redirections: "Words are strange things." "I am the space between the stars and the ground beneath your feet."
 
-**What she needs**:
-- One scene where she sees through Eszel. Not completely — but enough to be unsettled. Lao should notice that Eszel doesn't react normally to danger, or grief, or joy. She should say something about it, and Eszel should deflect, and the deflection should be the most revealing moment in their relationship.
-- Her death (in the base destruction) needs weight. Currently she's mentioned once in the disaster aftermath. If we establish her as someone who genuinely cared about Eszel, her death becomes the test of Eszel's humanity. How quickly Eszel stops thinking about Lao IS the horror.
-- The author's note says "Lao, who would have tried to talk me out of leaving, if I'd given her the chance." This is the perfect line — keep it. It implies Eszel deliberately avoided Lao before leaving. That avoidance is more damning than any confrontation.
+**What works**: His ordinariness is more disturbing than any alien appearance. The grey suit. The bland face. The warmth of his smile against the enormity of what he is. The poke-in-the-chest moment is perfect — he doesn't budge, "as if he were anchored to the world's mass. Or the world was anchored to him."
 
-## Noah
+**What needs work**: He becomes a standard cryptic mentor too quickly. "You're not afraid of death, Eszel — you never have been" is generic wisdom-figure dialogue. He should be stranger. More specific. Less comforting. When Eszel pushes, he should push back with something unsettling, not reassuring.
 
-**Role**: Another young person on the ship. Gets radiation sickness during the elevator excursion. Later referenced as dead ("blamed Noah, who died").
+**Recommended fix**: Give him one line that genuinely scares Eszel. Something that reveals his scale — not "I am everything" (too abstract) but something concrete. "I watched your species learn to chip flint. It took you eleven tries." Something that makes his timescale real and Eszel's significance microscopic.
 
-**Current state**: Functional but flat. Does art (AI-generated, which is a nice ironic detail). Goes along with Eszel's plan. Gets hurt.
-
-**What he needs**: Not much. He's a device. But the art project detail is good — keep it, and maybe reference it once more. He's a kid who cheated on his art assignment and died on an alien world. There's something quietly awful about that juxtaposition.
+---
 
 ## Eszel's Parents
 
-**Father**: Plasma physicist. Enthusiastic about the mission. "His capacity for selective delusion was, in its own way, a kind of genius." Works on anomalous inertial mass in the pit-light tubes. Eszel uses his death as a weapon in interrogation.
+**Father**: Plasma physicist. Enthusiastic about the mission ("Most people would give their lives for what I've given us"). Dies in the disaster. Eszel uses his memory as a weapon in interrogation.
 
-**Mother**: Unnamed. Worried. "She worried. That was the substrate beneath everything else." Argued against the mission but secretly wanted to go.
+**Mother**: Unnamed. Worries. Argues. "Twenty years! We can't just uproot her like this!" More emotionally present than either Eszel or the father.
 
-**What they need**:
-- The father needs one scene of genuine connection with Eszel. Not warmth — Eszel doesn't do warmth — but intellectual connection. He explains something about the pits, about the physics, and for a moment Eszel sees him clearly, respects him. This makes her later weaponization of his memory genuinely ugly.
-- The mother needs less. She's the worrier. But one moment where her worry is specifically right — she worries about Eszel's emotional state, not the aliens — would be devastating in retrospect.
-- They should NOT be developed too much. They're the people Eszel walked away from. They function as weight on the choice. Too much development and the story becomes about them rather than about Eszel's reaction to their deaths.
+**What works**: Their argument (overheard through walls) efficiently establishes a dysfunctional family. The father's "selective delusion" is good characterization. The mother's worry is the most normal human emotion in the story — which makes its irrelevance heartbreaking.
 
-## The Listener
+**What needs work**: They're currently functional — they serve the plot (the argument, the father's research, the weaponized memory) but don't quite feel like people. One more specific detail for each would help. The father's physical gesture when excited. The mother's particular way of expressing worry. Something Eszel noticed but claims not to care about.
 
-**Role**: The cosmic entity that has been shaping Eszel since childhood. Appears in person at the climax.
+---
 
-**Current state**: Works well but needs more texture. He's "blandly handsome," young-looking, wears an old-fashioned grey suit, floats, can read minds, speaks without air. His personality is bemused patience.
+## Lao
 
-**What he needs**:
-- More edge. He's not just patient — he's alien. His patience should occasionally slip, revealing something vast and inhuman underneath the human mask. A moment where he answers a question too quickly, or knows something he shouldn't, or his expression doesn't match his words.
-- The humor is good ("I don't need to") but needs to cut deeper. He's not a wise mentor — he's a manipulator on a cosmic scale. He's been steering a child toward this moment her entire life. There should be something uncomfortable about his warmth.
-- His dialogue should be more elliptical. He currently speaks in fairly conventional sentences. Given his claim to be "everything" — the space between stars and the ground beneath her feet — his language should be stranger. Not incomprehensibly strange, but off. Like he's translating from a language that doesn't have words.
+**What she is**: Eszel's closest approximation of a friend. Practical, intelligent, performs a slightly dimmer version of herself. "She performed a version of herself that was slightly less intelligent than the real thing, the way some people slouch to appear shorter."
+
+**What works**: That description is brilliant. Lao is the only person Eszel respects, which is conveyed through Eszel noticing her intelligence.
+
+**What needs work**: She has almost no dialogue. She exists as a concept (Eszel's one connection to other humans) but not as a character. For the disaster to land, Lao needs at least one real scene — a conversation, a moment where she sees through Eszel's performance, a moment where Eszel almost tells her the truth about the Mimics and doesn't.
+
+**Recommended**: One scene where Lao confronts Eszel about something — maybe her trips outside the base, maybe her emotional detachment. Lao says something true about Eszel that Eszel can't deflect. This becomes the thing Eszel thinks about during the disaster: "Lao, who would have tried to talk me out of leaving, if I'd given her the chance."
+
+---
+
+## Noah
+
+**Function**: Fellow teenager on the Invincible. Dies (implied — of radiation sickness from the elevator excursion?). Eszel blames him for the elevator incident in interrogation.
+
+**What works**: His art project done by terminal — a small detail that shows the casual automation of their world. His "nobody's ever gonna know, so who cares?" — a foil to Eszel's hyper-awareness.
+
+**What needs work**: Minimal. He's a plot function (the elevator companion) and that's fine. But if he dies from the radiation, Eszel's response to his death (or non-response) would be an early signal of her wrongness. This is currently unexploited.
+
+---
 
 ## Honed Aspect (Threshold only)
 
-**Role**: Dyn officer serving Arco. Appears at the end of Threshold. Represents the political complexity of human-alien relations.
+**What he is**: A Dyn officer serving Arco. Appears in the aftermath of the Battle of Threshold. "Strong arm, weak arm. Your species is weak, as a whole." Tells Hansun he should have died in the water.
 
-**Current state**: Brief but effective. His presence tells us everything about Arco's alliance with the Dyn without exposition.
+**What works**: An alien perspective that's genuinely alien. No morality, no comfort. Pure hierarchy.
 
-**What he needs**: Nothing. He's perfect as-is. A one-scene character who does his job.
+**What needs work**: Nothing — he serves his scene perfectly. But his philosophy of strength/weakness echoes through the whole story. Eszel is "strong" by Dyn standards. Hansun is "weak." The Listener is off the scale. This parallel could be subtly drawn.
 
-## Commander Vasik, Kessler, Yuen, Patel (Base life)
+---
 
-**Role**: Base personnel. Scientists, administrators. People who will die.
+## Commander Vasik, Dr. Kessler, Dr. Yuen, Dr. Patel (Base personnel)
 
-**What they need**: One or two distinguishing details each, no more. They exist to populate the base and to make the destruction real. The reader should remember at least one of their names when the base is destroyed. Vasik is described as "afraid of irrelevance" — good. Kessler and Yuen need similarly sharp single-detail characterizations.
+These characters appear in the base life scenes. They need to exist enough that the reader feels the weight of their deaths. One distinctive trait each is sufficient:
+- Vasik: afraid of irrelevance, over-manages
+- Kessler: head scientist, frustrated by failed Mimic communication
+- Yuen: practical, the one who actually runs the base day-to-day
+- Patel: Eszel's father's colleague? Someone who asks Eszel personal questions she doesn't want to answer
+
+Don't over-develop. Three sentences of characterization per person is enough. Their function is to be real people who die, not to have arcs.
