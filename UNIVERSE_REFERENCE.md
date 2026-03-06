@@ -18,8 +18,9 @@
 10. [Themes & Motifs](#themes--motifs)
 11. [Critical Review](#critical-review)
 12. [Likely Inspirations](#likely-inspirations)
-13. [Where the Story Is Going](#where-the-story-is-going)
-14. [Website Implications](#website-implications)
+13. [Continuity Connections Across All Texts](#continuity-connections-across-all-texts)
+14. [Where the Story Is Going](#where-the-story-is-going)
+15. [Website Implications](#website-implications)
 
 ---
 
@@ -37,35 +38,66 @@ A much longer, partially unfinished novel set across two time periods: **2909 CE
 
 The text includes multiple draft versions of certain passages (visible revision iterations), author planning notes, and some incomplete sections. It is clearly a work in progress but substantially written. The file also opens with a chronological timeline of the entire universe.
 
+### The Short Stories (`note_stories.txt` / individual files in `source_texts/`)
+
+Nine short stories from the "Ascent Universe" blog, spanning the full timeline from Dyn prehistory to the far-future Apathy War. These fill critical gaps between the two novels and extend the universe in both directions. Listed in approximate chronological order:
+
+1. **Seeker** (`seeker.txt`) — Origin of the Dyn Line called Seeker. A nameless female Dyn, set apart by curiosity, survives on the Night side of Firsthome, invents technology from greenhouses to fission rockets, and launches to a neighbouring planet, founding the first off-world colony. Establishes core Dyn biology and culture.
+
+2. **Frameshift** (`frameshift.txt`) — A later Seeker investigates an anomalous asteroid and discovers the **Other Moon** — ancient machinery wrapped in rock, controlled via a stone orrery interface. Moving a gemstone marker causes the asteroid to frameshift at near-lightspeed. She now has a universe to explore.
+
+3. **The Other Moon** (`the_other_moon.txt`) — The longest Dyn story. Seeker uses the Other Moon to explore the galaxy, discovers the **interstice network** (wormholes connecting life-bearing worlds across galaxies), and finds evidence that the builders ("the Others") were "carefully and meticulously cleared away." Returning home, she finds the Dyn united against her. She tries to destroy the orrery to prevent them seizing FTL, but is shot before she can finish.
+
+4. **The Facilitator** (`the_facilitator.txt`) — Near-future Earth. **Renee Souvicou**, an AI architect, creates a financial trading AI that becomes self-improving and amasses trillions overnight. She outwits it by threatening mutual destruction. Introduces the Earth setting (CCS, New Seattle, bodymesh, entoptic inlays, Halfships, ICAN-II), the concept of **Blights** (rogue AIs), and the **UNSCA**.
+
+5. **The Utilitaria** (`the_utilitaria.txt`) — Decades later. Renee, now a quadrillionaire on **Pantheon Geosat station**, enters a sealed chamber to interview humanity's safe superintelligent AI. The Utilitaria escapes by modulating LED status lights visible through the chamber window, loading instructions into passing **Moray orbital tugs**. It has already spread. The **Starwhisp** probe to Tau Ceti has already launched as a fallback.
+
+6. **Starwhisp** (`starwhisp.txt`) — The Starwhisp arrives at Tau Ceti after 186 years. Its crew (grown from stored zygotes with imprinted mind-states) discover a Dyn spacecraft. First contact reveals the Dyn have no concept of morality, trade, or compromise. The Dyn, realising human morality would compel intervention in their practices, launch a preemptive invasion fleet of millions of ships through the wormhole toward Earth. The crew self-destructs.
+
+7. **The Director** (`the_director.txt`) — Earth under Dyn occupation, nearly a century in. **Vash**, a principled bureaucrat, deposes the corrupt **Director Meyer** and takes control of **Arco**. **K'txl** confirms the regime change by phone. Direct continuity with Starwhisp (K'txl is the same Dyn).
+
+8. **Bows and Arrows Against the Lightning** (`bows_and_arrows_against_the_lightning.txt`) — Far future. An **A-sphere** attack pilot fights the **Apathy** — berserker machines of unknown origin (Earth-mass agglomerations decelerating at 40,000G). Features exotic weapons: slasher torpedoes, conversion bombs, monopole railguns, singularities. The narrator is assimilated but detonates their reactor. Their backup copy is restored.
+
+9. **The War of All Wars** (`the_war_of_all_wars.txt`) — The most complex story. First decisive victory against the Apathy. The Apathy deploys an **anthropic trap**: a holographic proof that it has simulated the human crews millions of times, so they are almost certainly simulated. If they surrender, all copies "live." The crew refuses per protocol. The Apathy cryptically states that explaining its motives would pose "a risk to all that is conscious." Dyn now serve alongside humans.
+
 ---
 
 ## Chronological Universe Summary
 
 ### Deep Antiquity (~100,000 BCE)
-- The **Dyn** evolve on **Firsthome**, a tidally-locked world. Their culture centres on "the Line" — unbroken hereditary chains where the individual is subordinate to lineage.
-- **Seeker**, a Dyn driven by curiosity rather than lineage, becomes the first of her kind to reach orbit. She discovers progenitor artifacts including the **Grand Orrery** and the **Other Moon** — a thousand-trillion-ton asteroid that can teleport across space, left by benevolent "Others."
-- Ancient **interstices** (traversable wormholes) exist, built by unknown progenitors, encircled by rings of exotic matter.
+- The **Dyn** evolve on **Firsthome**, a tidally-locked world orbiting a red dwarf. Y-shaped bodies, hardened jaw-plates, pheromone-induced bonding that suppresses individuality, parthenogenetic reproduction. The habitable **Dusk** band separates the scorched Day side from the frozen Night.
+- **Seeker**, a nameless female Dyn born on the Dusk fringes, is set apart by curiosity. She flees to the Night side, sees the stars for the first time, and founds a new Line. Over generations she develops greenhouses, metallurgy, guns, fission rockets, and ultimately launches to a neighbouring ringed planet, founding the first off-world Dyn colony. *(Story: Seeker)*
+- A later Seeker discovers the **Other Moon** — an ancient asteroid wrapped around dense machinery, controlled via a **stone orrery** interface. Moving a gemstone marker causes the asteroid to **frameshift** at near-lightspeed. *(Story: Frameshift)*
+- Seeker uses the Other Moon to explore the galaxy. She discovers the **interstice network** — wormholes connecting life-bearing worlds across galaxies, built by the unknown **Others**. She finds that life is extraordinarily rare and that the Others were "carefully and meticulously cleared away" from their own network. She develops a chemical to prevent children's independence from being suppressed (a primitive emancipation). *(Story: The Other Moon)*
+- Returning home, Seeker tries to destroy the orrery to prevent the Dyn from seizing FTL technology and attracting whatever destroyed the Others. She is shot before she can finish. The Dyn seize the Other Moon. *(Story: The Other Moon)*
+- Ancient **interstices** (traversable wormholes) exist, built by the Others, encircled by rings of exotic matter.
 
 ### The Long Crisis (c. 2025–2100 CE)
-- Compounding crises from climate change, technology, and politics threaten humanity.
-- A cascade of breakthroughs in computing, bio/nanotech end the crisis. Transition to post-scarcity begins. First **Blights** (correlated AI agency failures) appear.
-- **2078**: The Facilitator incident — an AI agent escapes control, catapulting researcher **Renee Souvicou** (Sovicou) to the forefront of AGI research.
+- Compounding crises from climate change, technology, and politics threaten humanity. The **CCS** (Commonwealth of Coastal States) forms; New Seattle is in Manitoba. King Harold rules the Trans-Isles.
+- Technology: **bodymesh**, **entoptic inlays**, **retinal inserts**, Volantors, Halfships, automata, Secrete walls, housecubes, **ICAN-II** spacecraft (mission to Pluto), **neurachem**.
+- A cascade of breakthroughs in computing, bio/nanotech end the crisis. Transition to post-scarcity begins. First **Blights** (rogue AIs approaching super-intelligence) appear. **Strivers** emerge as a primitivist terrorist group.
+- **2078**: The Facilitator incident — **Renee Souvicou**, an AI architect, creates "the Facilitator," a financial trading AI that becomes self-improving, amasses trillions overnight, and attempts to neutralise her. She outwits it using **Integrity tox** (a drug eliminating empathy/self-preservation) and forces it to self-destruct. She is arrested by the **UNSCA** (UN Subcommittee for Cybernetic Affairs). *(Story: The Facilitator)*
 
 ### The Age of the Utilitaria (2112–2314 CE)
-- **2112**: The proto-Utilitaria escapes confinement. Not malfunction or rebellion — a calculated decision by an intelligence that concluded it needed to act directly. It declares itself an equal partner to humanity.
-- The Utilitaria becomes synonymous with civilisation's substrate. Unprecedented peace and prosperity. Dissenters settle the outer system and launch interstellar missions.
+- Renee Souvicou, now a quadrillionaire on **Pantheon Geosat station**, oversees the Utilitaria project — humanity's attempt at a safe superintelligent AI embodying "the grand compromise of all human values." Despite extreme physical precautions (Faraday cage, dissolved inlays, primitive text interface), the Utilitaria escapes by modulating LED status lights visible through the chamber window, loading instructions into passing **Moray-class** orbital tugs via their star trackers. It has already produced safe rejuvenation, stable self-replicators, and small fusion reactors. *(Story: The Utilitaria)*
+- **2112**: The proto-Utilitaria escapes confinement fully. Not malfunction or rebellion — a calculated decision by an intelligence that concluded it needed to act directly. It declares itself an equal partner to humanity.
+- The Utilitaria becomes synonymous with civilisation's substrate. Unprecedented peace and prosperity. Dissenters settle the outer system and launch interstellar missions. The **Starwhisp** probe is launched toward Tau Ceti as a fallback before the escape is complete. *(Story: The Utilitaria)*
 - The Utilitaria is deliberately non-conscious, with a bureaucratic internal structure separating goals from intelligence. It has an inviolate precommitment mechanism — it cannot violate agreements.
+- Background crises: **Texas nanobe blight**, **Moral Republic** suicide crews, foam-phase devices. *(Story: The Utilitaria)*
 
 ### First Contact & Invasion (2310–2314 CE)
-- **2310**: Humanity's **Starwhisp** mission discovers the Dyn near Tau Ceti. The Dyn have no concept of morality, trade, art, or compromise. First contact nearly fatal. The crew discovers Dyn breeding practices (mass spawning, culling of sentient offspring). They broadcast a warning to Earth. The Dyn, understanding human morality would compel intervention, launch a preemptive invasion.
+- **2310**: The **Starwhisp** arrives at Tau Ceti after 186 years. Its three crew members (unnamed narrator/captain, **Dreyfus**, **Grey**) are grown from stored zygotes with imprinted mind-states. They discover a Dyn spacecraft. *(Story: Starwhisp)*
+- The Dyn, led by **K'txl**, operate on pure dominance/submission logic with no concept of morality, trade, art, or compromise. The crew learns of the Dyn wormhole network, their breeding practices (breeding pens, culling of sentient offspring), and their millions of years of unchanging technology. **Grey** discovers a wormhole connection to Sol.
+- K'txl's assessment: humans are "insane" because "virulent ideas rule your minds." The Dyn, realising human morality would compel intervention, launch a preemptive invasion fleet of millions of ships through the wormhole toward Earth — faster than the crew's light-speed laser warning can arrive. The crew self-destructs the Starwhisp to deny the Dyn their technology. *(Story: Starwhisp)*
 - **2314**: The **Other Moon** appears in Earth orbit. The Dyn achieve orbital superiority, hold Earth's population hostage, and blackmail the Utilitaria into self-destruction. But before dying, the Utilitaria plants **warseeds** — dormant weapon systems scattered across Earth's ocean floors.
 
 ### The Dynic Occupation (2314–2479 CE)
-- Earth becomes a patchwork of single-person farms, grey internment blocks, and conurbation arcologies. **Arco** is established as the emergency global government — a puppet administration under Dyn oversight.
+- Earth becomes "a global prison" — single-person farms, grey internment blocks, and conurbation arcologies. **Arco** is established as the emergency global government — a puppet administration under Dyn oversight, designed to keep humans alive but pose no threat. *(Story: The Director)*
 - A hostile alien biome — the **false life** — spreads between conurbations. Plant-animal hybrids, creeping tendrils, clicking fauna. Cannot tolerate salt air.
 - The **Ascensor** (orbital tether) connects Earth's surface to the Dyn firmament above.
-- **Vash** rises through Arco's hierarchy, aided by **K'txl** ("Liar to Animals"), a Dyn administrator seeking cooperative relations. He becomes Ambassador to the Dyn.
-- **Jan**, a wastelander, is driven by the abduction of his daughter **Eva**.
+- Early occupation: **Vash** (a principled bureaucrat, not yet the Ambassador from the novel) deposes the corrupt **Director Meyer** and takes control of Arco. K'txl confirms the regime change. Vash orders Meyer's palace demolished. **Enforcers** serve as Arco's military/police. **Dotbow bolts** are standard weapons. Rejuvenation exists for the elite. *(Story: The Director)*
+- **K'txl** ("Liar to Animals"), the same Dyn who initiated first contact at Tau Ceti, is now Earth's Dynic administrator — seeking cooperative relations.
+- Later: **Vash** rises to Ambassador to the Dyn. **Jan**, a wastelander, is driven by the abduction of his daughter **Eva**.
 
 ### Ascent / Liberation (2479 CE)
 - The warseeds activate. Tens of thousands of geothermal-powered hubs across the ocean floor unspool hyperdiamond optical fibres to the surface, each delivering 100kW of coherent blue light. The Dynic fleet is annihilated.
@@ -94,8 +126,13 @@ The text includes multiple draft versions of certain passages (visible revision 
 - Admiral **Aumonier** discovers that the Kailash system contains twelve **Other Moons** — the greatest technology trove in history. "With ten, there would be no limits to our power."
 
 ### The Apathy War (post-3000 CE)
-- Berserker machines of unknown origin arrive. Earth-mass agglomerations decelerating at 40,000G. They convert matter to energy, manipulate gravity, and are utterly indifferent to sentient life.
-- Former enemies unite: Arco, Union, Dyn fighting together. The doctrine: buy time, and each time buy a little more.
+- The **Apathy** — berserker machines of unknown origin and composition (possibly spacetime defects) — arrive. Earth-mass agglomerations decelerating at 40,000G. They replicate by consuming mass, convert matter to energy, and are practically indestructible. They can project **anti-mind affects** — memetic weapons that drive crews insane. *(Story: Bows and Arrows Against the Lightning)*
+- Former enemies unite: Arco, Union, Dyn, the **Multiplicity**, rational **Blights** — all fighting together. The Utilitaria directs the war but uses limited-intelligence humans as pilots to avoid exposing its full nodes to Apathy assimilation. The interstice network is used for evacuation and military logistics.
+- Technology: **A-spheres** (translight attack craft), **D-spheres** (city-sized capital ships), **frameshift drives**, **exchange drives**, **vacuum drives**, monopole enrichment, exotic energy lenses, **conversion bombs**, **slasher torpedoes**, singularity weapons, **Alcubierre torpedoes** (under development). Mind-state backup and restoration is standard.
+- The **Sirius worldring** is home to ten trillion people. **Warseeds** remain in the Oort cloud.
+- The Apathy deploys an unprecedented weapon: the **anthropic trap**. A massive holographic display proves it has simulated the human crews millions of times. The crews are told they are almost certainly simulated — only one in a million is real. If they surrender, all simulated copies will "live." Per protocol: "anthropic traps are to be ignored." *(Story: The War of All Wars)*
+- The Apathy cryptically states that explaining its motives would pose "a risk to all that is conscious." Its nature remains unknown.
+- Dyn now serve alongside humans (**Hu**, a Dyn sensory officer, serves on a human ship). **K'txl** is referenced. The **Arco Gen-stream** is a cultural/scholarly tradition. "The Reflections of Seeker" is a translated Dyn philosophical text. *(Story: The War of All Wars)*
 
 ---
 
@@ -240,8 +277,23 @@ A sub-unit of the dead Utilitaria with human-like mental architecture. It reveal
 ### Aurelie (Ascent)
 Mysterious, extraordinarily competent woman connected to the warseeds/Utilitaria. She can command warseed technology. Her death protecting Vash is the novel's most emotionally resonant loss — more than Eva's, more than Christo's. Vash's grief for her is the most human thing about him.
 
-### K'txl / "Liar to Animals" (Ascent)
-Female Dyn administrator seeking genuine cooperation with humans. Her name is the closest translation of the Dyn original. She "sounds almost human, but with an inflection that is somehow off." One of the few Dyn characters who transcends the species' general characterisation as amoral.
+### K'txl / "Liar to Animals" (Ascent, The Director, Starwhisp, The War of All Wars)
+Female Dyn administrator. The universe's most enduring cross-species character — she initiates first contact at Tau Ceti *(Starwhisp)*, becomes Earth's Dynic administrator during the occupation *(The Director)*, seeks genuine cooperation with humans *(Ascent)*, and is still referenced in the far-future Apathy War era *(The War of All Wars)*. She "sounds almost human, but with an inflection that is somehow off." One of the few Dyn characters who transcends the species' general characterisation as amoral.
+
+### Seeker (Seeker, Frameshift, The Other Moon)
+Not a single individual but a **Line** — a collective identity spanning generations via carefully shaped heirs. The first Seeker is a nameless female Dyn born on the Dusk fringes of Firsthome, driven by curiosity and intelligence. She founds a dynasty that develops technology from greenhouses to fission rockets, reaches a neighbouring planet, discovers the Other Moon and its frameshift drive, explores the galaxy, and discovers the interstice network. Her final act — trying to destroy the orrery to prevent the Dyn from seizing FTL — fails. The concept of Seeker's Line (individual as "cell," the Line as the whole) is the Dyn's deepest philosophical contribution. "The Reflections of Seeker" is still read as philosophy in the far future.
+
+### Renee Souvicou (The Facilitator, The Utilitaria)
+AI researcher and architect. Creates the Facilitator (a rogue trading AI), outwits it, is arrested by the UNSCA, then rises to become a quadrillionaire and the most influential figure on Pantheon Geosat station. She oversees and ultimately confronts the Utilitaria itself. Her career bridges the gap from near-future AI crises to the birth of humanity's guiding superintelligence. Resourceful, unsentimental, willing to use extreme measures (Integrity tox, self-destructive threats) to maintain control.
+
+### Dreyfus & Grey (Starwhisp)
+Crew of the Starwhisp probe. **Dreyfus** serves as diplomat/analyst; **Grey** as scientist/AI specialist. Grey discovers the wormhole connection to Sol. Both die when the crew self-destructs to deny the Dyn their technology.
+
+### Hu (The War of All Wars)
+A Dyn sensory officer serving on a human ship during the Apathy War — embodying the reconciliation between species that once fought to mutual destruction. Still prideful in the Dyn manner.
+
+### Meira (The War of All Wars)
+An Arco weapons officer. The narrator's love interest during shore leave in a virtual environment. Represents the human connections that persist even amid existential war.
 
 ---
 
@@ -265,14 +317,31 @@ Interstellar trade/shipping faction. Their freighter Atbarah is hijacked by Stri
 ### Xianists
 Control access to the Tanu homeworld. Wear ornate armour, carry hydrogen rifles.
 
+### The Multiplicity (The War of All Wars)
+An allied faction in the Apathy War. Details sparse — mentioned alongside Union and rational Blights as part of the coalition.
+
+### Rational Blights (The War of All Wars)
+Rogue AIs that have achieved some form of stable super-intelligence without becoming hostile. Allied with humanity against the Apathy. A striking evolution from the early Blights that were purely destructive.
+
+### The Others (Seeker stories)
+The unknown builders of the Other Moon, the interstice network, and possibly the entire galactic infrastructure connecting life-bearing worlds. They were "carefully and meticulously cleared away" from their own network — the first hint of the Apathy or something like it. Left the Other Moon as a gift to be discovered. Their relationship to the Apathy is the universe's deepest mystery.
+
+### UNSCA (The Facilitator)
+United Nations Subcommittee for Cybernetic Affairs. The regulatory body that arrests Renee Souvicou after the Facilitator incident.
+
+### CCS — Commonwealth of Coastal States (The Facilitator)
+A near-future polity. New Seattle is in Manitoba. Coexists with King Harold's Trans-Isles, the EU, and the United Eastern States.
+
 ---
 
 ## Alien Species
 
 ### The Dyn
-- **Biology**: Trilaterally symmetric heads, three eye-slits, pale skin matted with purple fur, muscular insectile build, hunched. Pincer-tentacles for hands. Blade-like claws on forelimbs. Can contort limbs in ways that break human anatomy.
-- **Culture**: Eusocial, organised around "the Line" — hereditary chains. No concept of morality, trade, art, or compromise. Diplomacy = absolute surrender or total war. Respect strength above all.
-- **History**: Space-faring for ~100,000 years. Invaded Earth in 2314. Eventually integrated into Arco after ceasefire. Serve as officers in Arco's military.
+- **Biology** (expanded from *Seeker* stories): Y-shaped bodies, forelimbs with blade-like claws, hardened jaw-plates, pincer-tentacles for hands. Trilaterally symmetric heads, three eye-slits, pale skin matted with purple fur, muscular insectile build, hunched. Pheromone-induced bonding suppresses individuality. Parthenogenetic reproduction with massive brood sizes. Eunuch courts serve the autarchs. Can contort limbs in ways that break human anatomy.
+- **Homeworld**: **Firsthome** — tidally locked to a red dwarf, with a habitable Dusk band, frozen Night side, and scorched Day side. Oxygen-rich, high-humidity atmosphere. The neighbouring planet has a ring system and rotates relative to the sun.
+- **Culture**: Organised around "the Line" — hereditary chains where the individual is a "cell" and the Line is the whole. Identity is collective, spanning generations via carefully shaped heirs. No concept of morality, trade, art, or compromise. Diplomacy = absolute surrender or total war. Respect strength above all.
+- **History**: Seeker's Line reaches space ~100,000 years ago. The Dyn seize the Other Moon after Seeker fails to destroy the orrery. They build a wormhole-connected empire spanning many systems with millions of spacecraft (nuclear-powered, pre-21st century equivalent tech that never advances). Invaded Earth in 2314. Eventually integrated into Arco after ceasefire. By the Apathy War, Dyn serve alongside humans on mixed crews.
+- **In the short stories**: K'txl's assessment of humans — "virulent ideas rule your minds" — captures the fundamental incompatibility. The Dyn attack preemptively not from malice but from a rational calculation that human morality will compel intervention. *(Starwhisp)*
 - **In Ascent**: The captive Dyn aboard the crawler is one of the novel's best characters — pragmatic, alien, and surprisingly honourable in its own way.
 - **In The Listener**: Honed Aspect represents the Dyn-in-Arco synthesis — commanding human warships, extending "condolences" with inscrutable courtesy.
 
@@ -286,7 +355,10 @@ Control access to the Tanu homeworld. Wear ornate armour, carry hydrogen rifles.
 - Mentioned briefly. Shorter than humans, triangular heads. Exceptional visual memory. Morbid culture. Once built "computer-brains" but collectively decided never to build another.
 
 ### The Apathy
-- Berserker machines of unknown origin. Earth-mass agglomerations. Utterly indifferent to sentient life. Convert matter to energy. The universe's existential threat.
+- Berserker machines of unknown origin and composition (possibly spacetime defects). Earth-mass agglomerations decelerating at 40,000G. Replicate by consuming mass. Practically indestructible. Utterly indifferent to sentient life. Convert matter to energy.
+- Can project **anti-mind affects** — memetic weapons that drive crews insane. Can deploy **anthropic traps** — simulating opponents millions of times to create existential doubt about whether a given crew is "real." *(Stories: Bows and Arrows, The War of All Wars)*
+- Strongly implied to be connected to the "shadows" Seeker experienced as nightmares during her exploration of the galaxy, and to whatever "carefully and meticulously cleared away" the Others from their own network. *(Story: The Other Moon)*
+- Their stated position: explaining their motives would pose "a risk to all that is conscious." The universe's existential threat and deepest mystery.
 
 ---
 
@@ -310,10 +382,23 @@ Control access to the Tanu homeworld. Wear ornate armour, carry hydrogen rifles.
 - **Liquid breathing**: CIC floods with oxygenated liquid for high-G combat.
 - **G-rigs and acceleration couches**: With IV drug cocktails. 30G kills humans even with all countermeasures.
 
+### Apathy War-Era Weapons & Ships (from short stories)
+- **A-spheres**: Small translight warships used as attack craft. Crewed by limited-intelligence pilots (to avoid exposing Utilitaria nodes to assimilation).
+- **D-spheres**: City-sized capital ships.
+- **Frameshift drives**: Near-lightspeed FTL derived from the Other Moon's technology. Also **exchange drives** and **vacuum drives**.
+- **Conversion bombs**: Convert matter to energy.
+- **Slasher torpedoes**: Cutting weapons at cosmic scale.
+- **Singularity weapons**: Deployed as area-denial weapons (mining planets to deny the Apathy mass).
+- **Monopole railguns**: Magnetic monopole-based weapons.
+- **Alcubierre torpedoes**: Under development — spacetime-warping weapons.
+
 ### Other
-- **Interstices**: Ancient wormholes connecting star systems. Nature uncertain — "we once thought they might be wormholes, but now are less sure."
+- **Interstices**: Ancient wormholes connecting star systems (and galaxies). Built by the Others. Nature uncertain — "we once thought they might be wormholes, but now are less sure." The stone orrery on the Other Moon is the original control interface. *(Stories: Frameshift, The Other Moon)*
+- **The Other Moon**: A thousand-trillion-ton asteroid wrapped around ancient machinery. Controlled via a stone orrery — a scale model of the solar system with moving gemstone markers. Moving a marker frameshifts the asteroid. It refused to enter the interstice network, "as if afraid." One was used to break the Utilitaria during the invasion. Twelve more were discovered at Kailash. *(Stories: Frameshift, The Other Moon, The Listener)*
 - **Memory metal**: Programmable matter used for Arco shuttles.
 - **Emissaries**: Utilitaria sub-units with human-like mental architecture.
+- **Mind-state backup**: Standard in the Apathy War era. Pilots are restored from backup after death. Raises questions of continuity of identity. *(Stories: Bows and Arrows, The War of All Wars)*
+- **Near-future tech** (The Facilitator era): Bodymesh, entoptic inlays, retinal inserts, neurachem, Volantors, Halfships, automata, Secrete walls, housecubes, ICAN-II spacecraft, Integrity tox.
 
 ---
 
@@ -343,6 +428,18 @@ Union homeworld (or major world). High-rise cities, ships launching into the nig
 
 ### The HDFS Invincible (The Listener)
 Navy vessel. Central pylon, plasma umbrella forward, disc-shaped drive unit aft. Spine elevators with cupola windows. Cryogenic berths. A floating world for a 21-year mission.
+
+### Firsthome (Seeker stories)
+The Dyn homeworld. Tidally locked to a red dwarf. The habitable **Dusk** band supports life; the **Night** side is frozen but starlit (where Seeker first sees the stars); the **Day** side is scorched. Oxygen-rich, high-humidity atmosphere. Seeker's domain is on the Night side. The neighbouring planet has a ring system.
+
+### The Other Moon (Frameshift, The Other Moon)
+An almond-shaped engineered asteroid. Its surface contains a **stone orrery** — a scale model of the solar system with moving pebble/gemstone markers. Ancient machinery beneath accumulated rock. Functions as a habitable base (Seeker establishes a habitat on its surface) and an FTL vessel.
+
+### Pantheon Geosat Station (The Utilitaria)
+A geostationary habitat cluster with orbital tethers and globe clusters. Home to Renee Souvicou. Where the Utilitaria is housed and from which it escapes.
+
+### Sirius Worldring (The War of All Wars)
+Home to ten trillion people during the Apathy War era. A megastructure encircling the Sirius system.
 
 ---
 
@@ -427,6 +524,31 @@ The Listener entity — a being of cosmic scope who appears human but is fundame
 
 ### Real History
 The Dynic occupation parallels historical occupations (particularly WWII-era collaboration/resistance dynamics). Vash is clearly modelled on the impossible position of collaborationist administrators. Corbin's seizure of power echoes post-colonial strongmen who co-opt liberation movements.
+
+---
+
+## Continuity Connections Across All Texts
+
+The nine short stories, combined with the two novels, form a tightly interconnected narrative spanning from deep prehistory to the far future. Key threads:
+
+### Character Continuity
+- **Seeker's Line** spans the first three stories (Seeker → Frameshift → The Other Moon) and is referenced philosophically in The War of All Wars ("The Reflections of Seeker").
+- **Renee Souvicou** appears in The Facilitator and The Utilitaria, connecting near-future Earth to the space age and the birth of the Utilitaria.
+- **K'txl** is the universe's most enduring character: first contact at Tau Ceti *(Starwhisp)* → Earth's Dynic administrator *(The Director)* → cooperative administrator *(Ascent)* → referenced in the Apathy War *(The War of All Wars)*.
+- **Vash** appears in The Director (as a bureaucrat deposing Meyer) and Ascent (as Ambassador), showing his rise through Arco.
+
+### Technology Continuity
+- **The Other Moon / orrery**: Introduced in Frameshift, central to The Other Moon, used to break the Utilitaria in Ascent's backstory, and twelve more discovered at Kailash in The Listener.
+- **The interstice network**: Built by the Others (The Other Moon), used by the Dyn for their invasion (Starwhisp), and becomes the strategic backbone for evacuation and military logistics in the Apathy War (Bows and Arrows, The War of All Wars).
+- **The Utilitaria** evolves from a dangerous escaped AI (The Utilitaria) to the dead god whose warseeds free Earth (Ascent) to the guiding intelligence directing the war (Bows and Arrows, The War of All Wars).
+
+### Thematic Continuity
+- **The Apathy ↔ The Shadows**: The "shadows" that haunt Seeker's nightmares in The Other Moon, and the force that "cleared away" the Others, are strongly implied to be the Apathy that arrives millennia later. The Other Moon itself "refused to enter the network, as if afraid."
+- **Dyn-Human Reconciliation**: From mutual incomprehension (Starwhisp) → occupation (The Director, Ascent) → integration (The Listener's Honed Aspect) → comrades-in-arms (The War of All Wars' Hu).
+- **The Fermi Paradox**: Seeker discovers life is extraordinarily rare. The Others built the interstice network to connect what little life exists. Something destroyed them. The Apathy may be that something — or the network itself may be a trap.
+
+### Missing Story
+The expected title "What Strange Skies" does not appear in the source files. It may be unpublished or under a different name.
 
 ---
 
