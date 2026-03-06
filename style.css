@@ -18,34 +18,95 @@
   --mono: 'Courier New', Consolas, monospace;
 }
 
-/* ─── Light / Reader Mode ──────────────────────────────────────────────── */
+/* ─── Light / Reader Mode ────────────────────────────────────────────── */
+/* Design philosophy: an advanced-civilization terminal. Hundreds of years
+   of superintelligent AI refining interfaces. The result is radical
+   simplicity — clear, readable, nothing to prove. Think Culture ship
+   display, TNG LCARS at its most restrained, or gwern.net. */
 [data-theme="light"] {
-  --accent: #1a6e7a;
-  --accent2: #c04a1a;
-  --warn: #a87700;
-  --green: #1a8a50;
-  --red: #c03040;
-  --bg: #f5f1eb;
-  --panel: rgba(235, 228, 218, 0.92);
-  --border: rgba(26, 110, 122, 0.2);
-  --text: #1a3a3f;
-  --text-mid: #3a5a5f;
-  --text-dim: #6a8a8f;
-  --text-faint: rgba(26, 110, 122, 0.1);
-  --mono: 'Courier New', Consolas, monospace;
+  --accent: #4a4a4a;
+  --accent2: #85200c;
+  --warn: #8a6d00;
+  --green: #1a6e3a;
+  --red: #b02020;
+  --bg: #fcfcfc;
+  --panel: #f5f5f5;
+  --border: #e0e0e0;
+  --text: #111111;
+  --text-mid: #333333;
+  --text-dim: #777777;
+  --text-faint: #eeeeee;
+  --light-font: system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --light-serif: Georgia, 'Times New Roman', serif;
+  --mono: 'SF Mono', 'Consolas', 'Liberation Mono', monospace;
 }
+[data-theme="light"] html, [data-theme="light"] body {
+  font-family: var(--light-font);
+}
+[data-theme="light"] button, [data-theme="light"] a { font-family: inherit; }
 [data-theme="light"] .scanlines { display: none; }
 [data-theme="light"] .starfield { display: none; }
-[data-theme="light"] #site-nav { background: rgba(245, 241, 235, 0.95); }
-[data-theme="light"] .status-bar { background: rgba(245, 241, 235, 0.95); }
-[data-theme="light"] .scene-text { color: #2a2a28; }
-[data-theme="light"] .scene-text .dialogue { color: #1a6e7a; }
-[data-theme="light"] .scene-text .thought { color: #6a8a8f; }
-[data-theme="light"] .tech-section-text { color: #3a3a38; }
-[data-theme="light"] a:hover { color: #000; }
-[data-theme="light"] ::-webkit-scrollbar-thumb { background: rgba(26,110,122,0.2); }
-[data-theme="light"] .nav-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
-[data-theme="light"] .data-row .sub { color: rgba(26,110,122,0.3); }
+[data-theme="light"] #site-nav {
+  background: var(--bg); border-bottom: 1px solid var(--border);
+  backdrop-filter: none;
+}
+[data-theme="light"] #site-nav a {
+  font-size: 11px; letter-spacing: 0.3px; color: #555;
+  text-transform: none;
+}
+[data-theme="light"] #site-nav a:hover { color: #111; border-color: #ccc; }
+[data-theme="light"] #site-nav a.active { color: #111; border-color: #999; background: rgba(0,0,0,0.04); }
+[data-theme="light"] #site-nav .nav-brand {
+  font-size: 11px; letter-spacing: 1.5px; color: #111; font-weight: 600;
+}
+[data-theme="light"] #site-nav .nav-brand .diamond { background: #999; }
+[data-theme="light"] .status-bar {
+  background: var(--bg); border-top: 1px solid var(--border);
+}
+[data-theme="light"] .status-bar .dim { color: #aaa; }
+[data-theme="light"] .status-bar .bright { color: #555; }
+[data-theme="light"] .scene-text {
+  color: #1a1a1a; font-family: var(--light-serif);
+  font-size: 17px; line-height: 1.8;
+}
+[data-theme="light"] .scene-text .dialogue { color: #1a1a1a; font-style: normal; }
+[data-theme="light"] .scene-text .thought { color: #666; font-style: italic; }
+[data-theme="light"] .scene-text .emphasis { color: #85200c; }
+[data-theme="light"] .scene-header {
+  color: #aaa; border-bottom-color: var(--border);
+}
+[data-theme="light"] .scene-title {
+  color: #1a1a1a; font-weight: 600; letter-spacing: 1px;
+}
+[data-theme="light"] .tech-section-text { color: #333; }
+[data-theme="light"] a { color: #333; text-decoration: underline; text-decoration-color: #ccc; text-underline-offset: 2px; }
+[data-theme="light"] a:hover { color: #000; text-decoration-color: #000; }
+[data-theme="light"] ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); }
+[data-theme="light"] .nav-card {
+  background: var(--bg); border: 1px solid var(--border);
+  box-shadow: none;
+}
+[data-theme="light"] .nav-card:hover { box-shadow: 0 1px 6px rgba(0,0,0,0.06); border-color: #bbb; }
+[data-theme="light"] .nav-card .card-title {
+  color: #1a1a1a; letter-spacing: 1px; font-weight: 600;
+}
+[data-theme="light"] .nav-card .card-desc {
+  font-size: 13px; color: #666; letter-spacing: 0;
+}
+[data-theme="light"] .data-row .sub { color: #aaa; }
+[data-theme="light"] .panel { background: var(--panel); border-color: var(--border); backdrop-filter: none; }
+[data-theme="light"] .panel-header .title {
+  letter-spacing: 1.5px; font-weight: 600; color: #333;
+}
+[data-theme="light"] .story-nav button {
+  background: var(--panel); border-color: var(--border); color: #555;
+}
+[data-theme="light"] .story-nav button:hover { border-color: #999; color: #111; }
+[data-theme="light"] .scene-select {
+  background: var(--bg); border-color: var(--border); color: #555;
+}
+[data-theme="light"] .scene-bg { display: none; }
+[data-theme="light"] .scene-effect { display: none; }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -226,13 +287,13 @@ a:hover { color: #fff; }
   margin-bottom: 20px; font-weight: 700;
 }
 .scene-text {
-  font-size: 13px; line-height: 1.8; color: rgba(200, 220, 230, 0.85);
-  letter-spacing: 0.3px;
+  font-size: 14px; line-height: 1.85; color: rgba(210, 225, 235, 0.9);
+  letter-spacing: 0.2px;
 }
-.scene-text p { margin-bottom: 14px; text-indent: 0; }
-.scene-text .dialogue { color: rgba(0, 229, 255, 0.7); }
+.scene-text p { margin-bottom: 16px; text-indent: 0; }
+.scene-text .dialogue { color: rgba(160, 220, 235, 0.85); }
 .scene-text .emphasis { color: var(--accent2); font-style: italic; }
-.scene-text .thought { color: rgba(0, 229, 255, 0.5); font-style: italic; }
+.scene-text .thought { color: rgba(140, 200, 220, 0.65); font-style: italic; }
 
 .story-nav {
   display: flex; justify-content: space-between; align-items: center;
