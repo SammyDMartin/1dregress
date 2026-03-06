@@ -1,0 +1,27 @@
+Chapter 23: Finality
+Jan’s eyes opened onto blackness and for a few disoriented moments he wondered whether they really were open at all. He sat still, waiting for his eyes to adjust, but the suffocating darkness never lifted. He felt around blindly, his hands brushing over something sticky on the floor, as he noticed for the first time the metallic taste in his mouth, the pain in his chest. With a growing sense of dread he touched it. It felt wet and wrong. He wasn’t going to be able to move far.
+‘Aurelie,’ he croaked. His voice sounded small, like Eva’s after a visit from her Shadows.
+There was no reply. Where was Aurelie? Had she made it out alive, leaving him trapped here in this tiny bubble of air beneath a mountain of water, only so he could die a little slower? Could he blame her after what he’d done. What had he done?
+Had he redeemed himself? Would he ever forgive himself?
+Jan felt lightheaded, his thoughts losing their focus and beginning to loop. He needed to staunch the bleeding. Tearing his shirt into strips, he did his best to bandage the wounds.
+‘Aurelie!’ he called again, as loud as he dared. Only the echo of his own voice came back.
+Maybe she was lying somewhere else in the labyrinth of tunnels, bleeding out like him. Maybe she was already dead. The unsettling image of the Dyn stalking through the darkened rooms, hunting down the survivors of its bloody rampage, came to him unbidden. He fumbled for his knife, even as he pushed the thought aside.
+Jan crawled along the floor, every movement agony, his hands feeling blindly ahead of him until he came up against a wall. His breathing ragged, he propped himself up against it, knife in hand, gripping it tight.
+He wouldn’t stand a chance if the Dyn came for him but that didn’t matter anymore - it was all over, one way or another. That was what mattered. Christo’s revolution had triumphed against all odds. They’d won, and this was what came after. All he had to do now was to survive for a little longer.
+Jan thought about how it had come to this, trying to piece together the events that had led him here, but, although he tried, it made little sense. It was as though he had been a spectator, a bystander, watching his own body blunder from one crisis to another, without any real autonomy. He had been swept up in other people’s plans ever since he had left the jungle. But now the others were gone and whilst he lived for now the only end he had ever pursued was a lost cause. They had killed Eva. They had killed her, and he had helped them. Maybe it was the right thing to do. Maybe he had spared her a worse fate. It didn’t make the pain any easier to bear.
+Jan didn’t know how long he sat there, slumped against the wall, but after a while sheer exhaustion and sensory deprivation began to set in, his eyes unseeing, his ears unhearing. Even the pain had become a background throb. He had to keep shifting his position and straining his eyes open but try as he might, he inevitably drifted into unconsciousness…
+He dreamt the same dreams he always did, but they never descended into nightmares. Just memories. He could happily let himself slip away into the past…
+He awoke.
+He could see; there was light. Eva knelt beside him. She appeared older, as she would be now, her face in clearer focus than the hands he reached out to her with. She looked so like her mother. He gasped.
+Was he hallucinating? Was this some ghost emanating from the dying machinery that entombed him? How could he ever know?
+‘You’re alive?’
+She didn’t answer, a playful smile on her lips, her hands on his. Jan knew none of it was real, but he decided to just go ahead and believe in it anyway.
+It’s real, she assured him, proving nothing. You’ll see me again. I promise.
+Then she was gone, the apparition dissolving into light.
+The light stabbed at him, then suddenly it was drenching everything, flooding into the room. Armoured figures, indistinct against the brilliant electric light, emerged through the wall. Flashes of colour that Jan’s starved mind was unable to process filled his vision. Voices, shouting. Torch beams skittered around madly, piercing the shadows that still clung in the recesses of the chamber, resting on a body, smears of blood. Jan’s mind ran around inside his dying brain, desperately reaching for something he could understand, something he could cling on to.
+One of the figures loomed larger in Jan’s vision. The figure, a mask covering his face, raised a blocky object.
+‘This one’s still alive,’ he murmured to a colleague. ‘Haemorrhaging almost everywhere, collapsed lung, five broken ribs, irregular heartbeat and neural activity in decline. Horrible wounds in his abdomen. Kidneys aren’t going to be much good…’
+‘No way he will make it,’ replied the colleague as he examined the other body. ‘Just shoot him full of morphine; nice and humane.’
+‘We have to try,’ exclaimed the man standing over Jan, reaching for something Jan couldn’t see. ‘He may be our only chance of finding out what happened here. The Ambassador was very clear that he wanted all survivors -’
+‘Not Ambassador anymore, remember?’
+The man produced a cuff, like a neck brace lined with needles and pads, fitting it around Jan’s neck. The voices of the figures blurred together and sensation ebbed away. Jan found himself slipping out of consciousness, perhaps for the last time. He smiled. He was going to see his daughter again.

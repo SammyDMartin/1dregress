@@ -99,7 +99,7 @@ body { overflow-y: auto; }
   <div class="browser-container">
     <div class="browser-header">
       <div class="browser-title">DRAFT FILE BROWSER</div>
-      <div class="browser-subtitle">ESZEL AND THE LISTENER — SECOND DRAFT & EDITORIAL</div>
+      <div class="browser-subtitle">ASCENT UNIVERSE — ALL DRAFTS & EDITORIAL</div>
     </div>
 
     <div class="file-tree" id="file-tree"></div>
@@ -114,7 +114,7 @@ body { overflow-y: auto; }
 <script>
 const FILES = {
   'drafts/second_draft': {
-    label: 'SECOND DRAFT',
+    label: 'ESZEL — SECOND DRAFT',
     files: [
       { name: 'ch00_the_whole.md', label: 'Ch 0 — The Whole' },
       { name: 'ch01_the_crater.md', label: 'Ch 1 — The Crater' },
@@ -129,8 +129,37 @@ const FILES = {
       { name: 'ch10_epilogue.md', label: 'Ch 10 — Epilogue' },
     ]
   },
+  'drafts/ascent_second_draft': {
+    label: 'ASCENT — SECOND DRAFT',
+    files: [
+      { name: 'ch01_necessity.md', label: 'Ch 1 — Necessity' },
+      { name: 'ch02_contingency.md', label: 'Ch 2 — Contingency' },
+      { name: 'ch03_complicity.md', label: 'Ch 3 — Complicity' },
+      { name: 'ch04_revolution.md', label: 'Ch 4 — Revolution' },
+      { name: 'ch05_justice.md', label: 'Ch 5 — Justice' },
+      { name: 'ch06_contact.md', label: 'Ch 6 — Contact' },
+      { name: 'ch07_memory.md', label: 'Ch 7 — Memory' },
+      { name: 'ch08_deterrence.md', label: 'Ch 8 — Deterrence' },
+      { name: 'ch09_diplomacy.md', label: 'Ch 9 — Diplomacy' },
+      { name: 'ch10_dominance.md', label: 'Ch 10 — Dominance' },
+      { name: 'ch11_dissonance.md', label: 'Ch 11 — Dissonance' },
+      { name: 'ch12_beachhead.md', label: 'Ch 12 — Beachhead' },
+      { name: 'ch13_rendezvous.md', label: 'Ch 13 — Rendezvous' },
+      { name: 'ch14_convergence.md', label: 'Ch 14 — Convergence' },
+      { name: 'ch15_succession.md', label: 'Ch 15 — Succession' },
+      { name: 'ch16_submersion.md', label: 'Ch 16 — Submersion' },
+      { name: 'ch17_revelation.md', label: 'Ch 17 — Revelation' },
+      { name: 'ch18_abyssal.md', label: 'Ch 18 — Abyssal' },
+      { name: 'ch19_consequentialism.md', label: 'Ch 19 — Consequentialism' },
+      { name: 'ch20_determination.md', label: 'Ch 20 — Determination' },
+      { name: 'ch21_conspiracy.md', label: 'Ch 21 — Conspiracy' },
+      { name: 'ch22_annihilation.md', label: 'Ch 22 — Annihilation' },
+      { name: 'ch23_finality.md', label: 'Ch 23 — Finality' },
+      { name: 'ch24_culmination.md', label: 'Ch 24 — Culmination' },
+    ]
+  },
   'editorial': {
-    label: 'EDITORIAL',
+    label: 'ESZEL — EDITORIAL',
     files: [
       { name: 'revision_guide.md', label: 'Revision Guide' },
       { name: 'structural_analysis.md', label: 'Structural Analysis' },
@@ -140,6 +169,19 @@ const FILES = {
       { name: 'character_aumonier.md', label: 'Character — Aumonier' },
       { name: 'character_minor.md', label: 'Character — Minor' },
       { name: 'dialogue_notes.md', label: 'Dialogue Notes' },
+    ]
+  },
+  'editorial/ascent': {
+    label: 'ASCENT — EDITORIAL',
+    files: [
+      { name: 'revision_guide.md', label: 'Revision Guide' },
+      { name: 'structural_analysis.md', label: 'Structural Analysis' },
+      { name: 'chapter_by_chapter.md', label: 'Chapter by Chapter' },
+      { name: 'themes_and_worldbuilding.md', label: 'Themes & Worldbuilding' },
+      { name: 'character_vash.md', label: 'Character — Vash' },
+      { name: 'character_corbin.md', label: 'Character — Corbin' },
+      { name: 'character_jan.md', label: 'Character — Jan' },
+      { name: 'character_minor.md', label: 'Character — Minor' },
     ]
   }
 };
