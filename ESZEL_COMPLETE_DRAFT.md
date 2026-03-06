@@ -1,6 +1,5 @@
 # Eszel and the Listener — Complete Draft
-
-*This document assembles the complete novel from existing text and newly written scenes. Sections marked [NEW SCENE] contain material written to fill identified gaps.*
+*Assembled from existing text and newly written scenes. [NEW SCENE] markers indicate new material.*
 
 ---
 ## Public Timeline
@@ -1127,8 +1126,7 @@ The directness of the question shocked her, and she found herself grinning. This
 "At least twelve."
 
 ---
-[NEW SCENE: First Contact with the Mimics]
-
+[NEW SCENE: First Contact / The Choice]
 
 
 
@@ -1216,7 +1214,6 @@ I didn't care.
 
 
 [NEW SCENE: The Choice]
-
 
 
 I went back three days later. Same route, same canyon, same descent. My body remembered the geometry, and the bioluminescence brightened as I passed, the pulses quickening, and I understood this was acknowledgment. I was expected.
