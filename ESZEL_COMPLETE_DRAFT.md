@@ -3,7 +3,6 @@
 *This document assembles the complete novel from existing text and newly written scenes. Sections marked [NEW SCENE] contain material written to fill identified gaps.*
 
 ---
-
 ## Public Timeline
 
 
@@ -357,7 +356,6 @@ Hansun’s.
 ‘I am Honed Aspect, commander of the battle sub-constellation which - regretfully inflicted such heavy losses on your defence fleet.’ Its synthetic voice was feminine and sibilant, its affect utterly inscrutable. ‘On behalf of Arco, I extend my condolences.’
 
 ---
-
 ## Eszel and the Listener — 2937
 
 The foreign body arrived suddenly and without warning. The first the Whole knew, a thin sliver of heavy elements was emitting concentrated forms of energy, randomising many of the Whole's smaller elements. In itself this was tolerable. Intrusions occured, and could be allowed to pass by. However, this one was different. The Whole flipped its vision, like a man turning on a night vision scope. It saw the Structure, saw Mind. And now, the intruder shone with a terrible violet-black light. It burned. The Whole considered its next move. The Whole decided.
@@ -895,7 +893,6 @@ Act like he’s hurt your feelings. I flinched, looking down as if abashed.
 “Yes, yes of course…” Hansun trailed off. “The disaster itself. You left the base immediately prior to the tragedy. Why don’t you tell me about that.”
 
 ---
-
 [NEW SCENE: Arrival at Kailash]
 
 I woke up dying, or at least that's what it felt like.
@@ -952,7 +949,7 @@ The descent to the surface was by lander — a squat, ugly thing with oversized 
 
 When the hatch opened, the air that met us was thin and cold and tasted of minerals. We wore light environment suits — the atmosphere was technically breathable for short periods, but too thin to sustain activity and laced with enough radiation to make prolonged exposure inadvisable. Through the suit's visor, the sky was a deep, bruised red, almost maroon at the zenith, shading to a livid orange near the horizon where the bloated star hung. And beyond the star, in every direction, nothing. No bright band of a galactic disc. No familiar constellations. Just a sparse scattering of ancient, reddish stars, the exhausted population of a sterile elliptical galaxy.
 
-A graveyard of red. The phrase arrived in my mind and stayed there.
+A graveyard of red.
 
 I stepped onto the surface and felt the crunch of regolith beneath my boots. The gravity was wrong — not just lighter, but subtly different in quality, as if the ground resented bearing my weight. I took a few experimental steps and felt oddly graceful, each footfall carrying me slightly further than expected.
 
@@ -976,12 +973,11 @@ I pulled my hand away and stared at the ceiling. The thought had not been mine. 
 
 Outside, the red giant hung low on the horizon, its light filtering through the habitat's tiny porthole in a wash of deep amber. I watched it for a long time, that swollen, dying star, and thought about all the light-years between me and anywhere I'd ever called home, and how none of that distance felt like enough.
 
-We were trespassing. I knew it the way you know a floorboard is rotten before it breaks — not through evidence, but through some older, less articulable sense. The planet tolerated us. For now.
+We were trespassing. I couldn't have told you how I knew. The planet tolerated us. For now.
 
 I closed my eyes, and beneath me, far beneath, the ground whispered.
 
 ---
-
 [NEW SCENE: Base Life]
 
 The days at Walker Base had a texture like recycled water — technically adequate, stripped of anything you might call flavor.
@@ -1034,7 +1030,7 @@ They did. I was certain of it in a way I couldn't articulate — a conviction th
 
 This should have been humbling. Instead it made the science teams frantic. Three months of failed contact protocols. Dr. Kessler in xenobiology had started suggesting increasingly baroque approaches — chemical signaling, seismic percussion, modulated light. Commander Vasik attended these meetings with the fixed smile of a man watching civilians rediscover the concept of futility.
 
-I attended too, sometimes, sitting in the back of the briefing room. No one stopped me. One of the advantages of being twelve on a base full of distracted adults is that you become furniture.
+I attended too, sometimes, sitting in the back of the briefing room. No one stopped me. One of the advantages of being the youngest person on a base full of distracted adults is that you become furniture.
 
 I watched them talk. I watched Kessler's enthusiasm curdle session by session into something harder. I watched Yuen and Patel exchange glances that said we came all this way for nothing. I watched my father stay quiet, bent over his own data, already pursuing a thread that none of them had noticed yet because they were all looking at the Mimics and he was looking at what the Mimics made.
 
@@ -1048,7 +1044,7 @@ It was a directionality. Not sound, not quite. A sense that down and out meant s
 
 I started lingering at the observation gallery after hours. Watching the twilight, which on Kailash lasted for hours — the star sinking through bands of ochre and violet, the plains darkening to the color of old blood, the sinkholes becoming black mouths in a landscape of black mouths. And I'd feel it. The pull. Patient, enormous, disinterested in my readiness.
 
-Come and see.
+Come closer.
 
 Not words. But close enough.
 
@@ -1084,7 +1080,7 @@ And beneath it all, beneath the damage and the chaos and the taste of dust in re
 
 Not gradual now. Not patient. The storm had shaken something loose — in the ground, in me, in whatever boundary had held the whisper to a murmur. It pressed against the inside of my skull with the blind insistence of water finding a crack.
 
-Come and see.
+Come closer.
 
 Close enough to words now that the difference hardly mattered.
 
@@ -1131,7 +1127,6 @@ The directness of the question shocked her, and she found herself grinning. This
 "At least twelve."
 
 ---
-
 [NEW SCENE: First Contact with the Mimics]
 
 
@@ -1185,11 +1180,11 @@ They had been watching since we arrived. All of them, the whole network, aware o
 
 Mine.
 
-I felt it — not as flattery, not as being chosen. As being *known*. The way a tuning fork knows the note that sets it ringing. I had spent eighteen years among people who looked at me and saw a difficult girl, a brilliant girl, a girl who watched too carefully and gave too little away. My parents loved me and did not understand me. Lao liked me and I let her, and it was the closest I had come to genuine connection, and even then there was glass between us. Always glass.
+I felt it — not as flattery, not as being chosen. As being known. The way a tuning fork knows the note that sets it ringing. I had spent eighteen years among people who looked at me and saw a difficult girl, a brilliant girl, a girl who watched too carefully and gave too little away. My parents loved me and did not understand me. Lao liked me and I let her, and it was the closest I had come to genuine connection, and even then there was glass between us. Always glass.
 
-The Mimic did not look at me and see a girl. It looked at me and saw a pattern that matched, and in that matching there was something I had never experienced and have never experienced since. Not warmth. Not affection. Recognition. Pure and geometric and without sentiment.
+The Mimic did not look at me and see a girl. It saw something it could use. A frequency it could tune to. I should have found that insulting. I didn't.
 
-Why did I feel like weeping?
+My eyes stung. I attributed it to the dust.
 
 I stood in that chamber for — I don't know how long. The dosimeter was ticking and I didn't care. The air supply gauge was dropping and I didn't care. The Mimic remained still, and the patterns flowed, and I received them, and I understood that what I was receiving was a greeting, and an invitation, and a very gentle assessment.
 
@@ -1252,7 +1247,7 @@ The Whole had noticed us.
 
 That was the phrase that formed in my mind, though the Mimics did not deal in phrases. The Whole had noticed us, and the Whole had considered, and the Whole had decided.
 
-I saw what it would do. Not in detail — not the precise mechanism, not yet. But I saw the principle. Gravity. Regions of it, focused and immense, hundreds of times the force that held me to this ground. Powered by something beneath us that drew on energies I could barely conceptualise. Wormhole-siphoned stellar plasma, the scientists would later theorise, if any of them had survived to theorise. The Whole would simply close its fist around the irritant, and the irritant would cease.
+I saw what it would do. Not in detail — not the precise mechanism, not yet. But I saw the principle. Gravity. Regions of it, focused and immense, hundreds of times the force that held me to this ground. Powered by something beneath us that drew on energies I could barely conceptualise. Wormhole-siphoned stellar plasma, as the scientists might have theorised, had any survived. The Whole would simply close its fist around the irritant, and the irritant would cease.
 
 This was not cruelty. The patterns carried no malice, no anger, no satisfaction. It was maintenance. The same function the Mimics performed every day — tending the system, correcting errors, removing what did not belong. The humans were a blockage in a pipe. The Whole would clear it.
 
@@ -1262,7 +1257,7 @@ How long did I have? The patterns were imprecise on this point. Days. Perhaps le
 
 The Mimics waited. Their exoskeletons shifted with minute adjustments, catching the light differently, and I understood that they were doing something they did not often do. They were offering a choice. Not to the humans. To me. Because I was the one who could hear, and therefore I was the one who could choose.
 
-I could go back. I could run to the base and find Aumonier or Kessler or any of them and I could try to explain what I had learned. The Whole. The danger. The need to leave immediately, to pack everything and evacuate before the gravity weapon — I was already thinking of it as a weapon, though that was the wrong word, it was a *function* — before the function activated.
+I could go back. I could run to the base and find Aumonier or Kessler or any of them and I could try to explain what I had learned. The Whole. The danger. The need to leave immediately, to pack everything and evacuate before the gravity weapon — I was already thinking of it as a weapon, though that was the wrong word, it was a function — before the function activated.
 
 I played it out in my head. I am good at playing things out. Aumonier's face, sceptical and then hungry. The military officers reaching for threat assessments and defensive protocols. The xenolinguists demanding to know how I had achieved communication and could it be replicated and documented. The committee meetings. The debates about whether to trust the word of an eighteen-year-old girl who had broken perimeter regulations and claimed to talk to aliens through geometry.
 
@@ -1272,11 +1267,7 @@ And even if by some miracle I convinced them. Even if they listened. The evacuat
 
 They would die in the middle of a committee meeting about evacuation procedures. That felt right. That felt like how it would go.
 
-I am making it sound like a rational calculation. It was not. Or it was, but there was something else beneath the rationality — something I did not want to look at then and do not want to look at now, but I have promised myself I would be honest in this account, so here it is:
-
-I did not want to go back.
-
-Not because I wanted them to die. That is important. I did not want two hundred people to die. I did not want my parents to die. I did not want Lao to die. But I also did not want to turn around and walk back into that world of committee meetings and perimeter fences and atmospheric processors and people who looked at me and saw potential, which is just another word for unfinished. I did not want to spend my remaining days arguing with people who would not listen, being dismissed by people who could not hear what I heard.
+I am making it sound like a rational calculation. It was not entirely rational. But it was not difficult, either, and that is the part I do not want to examine.
 
 The Mimics showed me the alternative. A path. Not a physical path — or not only a physical path. A direction. Forward, deeper, further. They would show me what I was meant to see. The Listener — the thing that had touched me, shaped me, opened the channel in my mind — had a purpose for me, and that purpose lay ahead, not behind.
 
@@ -1294,7 +1285,7 @@ I walked toward the deeper tunnels, and the Mimics moved with me, and behind me 
 
 I did not look back. I want to say that I wanted to. I want to say that it cost me something, that I hesitated, that I carried the weight of what I was allowing to happen. And perhaps I did, somewhere beneath the calm surface of my thoughts, in some locked room of my mind where I kept the things I could not afford to feel.
 
-But in that moment, walking deeper into the body of a sleeping god, I felt only the pull — clear and strong and final — and I followed it.
+But in that moment, walking deeper into whatever waited beneath the karst, I felt only the pull, and I followed it.
 
 Behind me, above me, two hundred people continued their lives. Eating, sleeping, arguing, repairing storm damage, filing reports. My mother was probably looking for me. My father was probably working. Lao was probably wondering where I'd gone.
 
@@ -1342,7 +1333,6 @@ As the nights wore on, I cannot even be sure that I slept. Time passed. I felt r
 Like a stone skimming over water, except that I was both the stone and its reflection, the stream of my consciousness a sinusoidal wave. As the surface of those black waters stilled, no longer broken by the troubled wake of other people’s passing thoughts, the reflected world grew clearer, mirror-like. And with every oscillation, with every cycle, it became less clear to me which world was the reflection. It became less clear to me whether such a distinction even made sense.
 
 ---
-
 [NEW SCENE: The Disaster]
 
 I felt it first in my teeth.
@@ -1351,7 +1341,7 @@ A vibration, subsonic, rising through the ground and into my bones. The Mule sto
 
 I turned around.
 
-The base was perhaps nine kilometers behind me, a faint scattering of lights at the edge of the plain. For a moment everything was ordinary. Then the lights went out. Not flickering, not failing — removed. As if someone had edited them from the landscape.
+The base was behind me, its lights a faint scatter on the horizon, barely distinguishable from stars. For a moment everything was ordinary. Then the lights went out. Not flickering, not failing — removed. As if someone had edited them from the landscape.
 
 The air changed. I don't know how else to describe it. The pressure shifted, my ears popped, and there was a sound like the planet inhaling. A deep, tidal pull. I braced without knowing why.
 
@@ -1365,7 +1355,7 @@ It lasted perhaps a minute. Maybe less. I stood there with my hand on the Mule's
 
 Then it released.
 
-Light. Not fire. Something worse than fire — the pale, searing light of matter being forced into configurations it was never meant to hold. It flared across the plain and I shut my eyes and still saw it, a white burn printed on the inside of my eyelids. The sound reached me a moment later, a low concussive thud that I felt in my chest.
+Light. Not fire. Something worse than fire — a pale, searing light that was not fire and was worse than fire. It flared across the plain and I shut my eyes and still saw it, a white burn printed on the inside of my eyelids. The sound reached me a moment later, a low concussive thud that I felt in my chest.
 
 When I opened my eyes the plain where the base had been was glowing. A dim, sullen luminescence. No structures. No shadows. Just a flat, faintly radiant smear.
 
@@ -1373,13 +1363,13 @@ I looked up.
 
 The Resolute was visible most nights, a bright point tracking steadily across the sky. I found it. I watched it. I think I already knew.
 
-It flared — a brief, silent brightening — and then it was gone. Not dimming, not falling. Gone.
+It flared — a brief, silent brightening — and then it was gone. Not dimming, not falling. Gone. I didn't know about the Invincible yet. That came later.
 
-Two hundred and twelve people had been at the base. Forty-seven aboard the Resolute. My mother. My father. Lao, who had tried to talk me out of leaving. Reyes, who had signed my provisions request without asking why.
+My mother. My father. Lao, who would have tried to talk me out of leaving, if I'd given her the chance.
 
 I sat down. I didn't decide to sit. My legs simply stopped working and I was on the ground with my hands in the dust and the Mule standing over me making soft diagnostic sounds. I was shaking. I couldn't stop shaking.
 
-I should tell you that I wept. I should tell you that grief tore through me like the gravity wave that had just crushed everything I'd known into a thin slurry. But I would be lying. What I felt was shock, and fear, and a strange ringing emptiness, and underneath all of it — underneath everything — the terrible, quiet knowledge that I had known. Not the details. Not the timing. But I had known. I had walked away.
+I should tell you that I wept. I should tell you that grief tore through me like the gravity wave that had just crushed everything I'd known into a thin slurry. But I would be lying. What I felt was shock, and fear, and a strange ringing emptiness, and underneath all of it — underneath everything — the knowledge that I had known. Not the details. Not the timing. But I had known. I had walked away.
 
 I had walked away and I was alive and they were not and some part of me had chosen this.
 
