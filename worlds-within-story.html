@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Worlds Within — Ascent Universe</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow-y: auto; }
+
+/* Scene backgrounds */
+.scene-bg-defender { background: radial-gradient(ellipse at 30% 60%, rgba(200,50,20,0.14) 0%, rgba(160,40,10,0.07) 40%, transparent 70%); }
+.scene-bg-monument { background: radial-gradient(ellipse at 50% 50%, rgba(30,40,60,0.18) 0%, rgba(20,25,50,0.10) 40%, transparent 65%); }
+.scene-bg-bruised { background: radial-gradient(ellipse at 40% 55%, rgba(200,100,40,0.14) 0%, rgba(180,80,30,0.07) 40%, transparent 70%); }
+.scene-bg-library { background: radial-gradient(ellipse at 50% 60%, rgba(160,120,40,0.12) 0%, rgba(140,100,30,0.06) 40%, transparent 65%); }
+.scene-bg-hadean { background: radial-gradient(circle at 50% 50%, rgba(160,30,30,0.16) 0%, rgba(120,20,40,0.08) 40%, transparent 60%); }
+.scene-bg-jumpcut { background: radial-gradient(ellipse at 50% 40%, rgba(60,70,90,0.18) 0%, rgba(40,50,80,0.10) 40%, transparent 65%); }
+
+/* Animated effects */
+@keyframes pulse { 0%,100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+@keyframes flicker { 0%,95% { opacity: 1; } 96% { opacity: 0.4; } 97% { opacity: 1; } 98% { opacity: 0.6; } 100% { opacity: 1; } }
+@keyframes drift { 0% { transform: translateY(0); } 100% { transform: translateY(-20px); } }
+
+.scene-effect {
+  position: fixed; top: 48px; left: 0; right: 0; height: 4px; z-index: 50;
+  pointer-events: none; transition: opacity 0.5s;
+}
+.effect-combat { background: linear-gradient(90deg, rgba(200,50,20,0.5) 0%, rgba(255,80,30,0.3) 50%, rgba(200,50,20,0.5) 100%); animation: flicker 0.8s infinite; }
+.effect-cold { background: linear-gradient(90deg, rgba(30,40,80,0.4) 0%, rgba(50,60,120,0.2) 50%, rgba(30,40,80,0.4) 100%); animation: pulse 3s infinite; }
+.effect-dust { background: linear-gradient(90deg, rgba(200,100,40,0.4) 0%, rgba(220,120,50,0.2) 50%, rgba(200,100,40,0.4) 100%); animation: pulse 2.5s infinite; }
+.effect-amber { background: linear-gradient(90deg, rgba(160,120,40,0.4) 0%, rgba(180,140,50,0.2) 50%, rgba(160,120,40,0.4) 100%); animation: pulse 2s infinite; }
+.effect-deep { background: linear-gradient(90deg, rgba(160,30,30,0.5) 0%, rgba(180,40,60,0.3) 50%, rgba(160,30,30,0.5) 100%); animation: pulse 3.5s infinite; }
+.effect-harsh { background: linear-gradient(90deg, rgba(60,70,90,0.5) 0%, rgba(100,110,140,0.3) 50%, rgba(60,70,90,0.5) 100%); animation: flicker 0.5s infinite; }
+
+.story-header {
+  text-align: center; padding: 30px 20px 20px; max-width: 720px; margin: 0 auto;
+}
+.story-main-title { font-size: 20px; letter-spacing: 6px; color: var(--accent); font-weight: 700; }
+.story-main-sub { font-size: 10px; letter-spacing: 4px; color: var(--text-dim); margin-top: 4px; }
+.story-main-time { font-size: 9px; letter-spacing: 3px; color: var(--accent2); margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="page-body">
+
+<div class="scene-effect" id="scene-effect"></div>
+
+<div class="story-header">
+  <div class="story-main-title">THE WORLDS WITHIN</div>
+  <div class="story-main-sub">ASCENT UNIVERSE</div>
+  <div class="story-main-time">15 – 20 MINUTES</div>
+</div>
+
+<div class="story-container" id="story-container">
+  <!-- Scenes injected by JS -->
+</div>
+
+</div>
+<script src="nav.js"></script>
+<script>
+// ═══════════════════════════════════════════════════════════════════════════════
+// THE WORLDS WITHIN — Full Story Text, split into scenes
+// ═══════════════════════════════════════════════════════════════════════════════
+
+const SCENES = [
+{
+  title: "THE LAST DEFENDER",
+  header: "SCENE 01 — PROLOGUE",
+  bg: "scene-bg-defender",
+  effect: "effect-combat",
+  text: `<p class="emphasis" style="font-style:italic; text-align:center; margin-bottom:2em; color:var(--text-dim);">43,578 years ago.</p>
+
+<p>The city was one of blue glass and towering clay and sandstone buildings, the freezing desert that a human would have called arctic. There had been beauty here but it was long since gone. Wrecked, burning gliders and airships, rusted skeletons like the corpses of vast whales littered the ground. The city itself was a hive of activity &mdash; and hive, the operative word. Nobody spoke, the un-people, the slender hunched forms of ex-tanu, un-people, silent as they worked feverishly, dismantling the beautiful old city, and building. Because if there are no minds to separate, it turns out that communism can indeed work very well.</p>
+
+<p>Dra&rsquo;ll stood in the middle of the street. <span class="thought">He knew this was it. He would not let them win, he would earn a true death.</span></p>
+
+<p>It didn&rsquo;t want to destroy his people. If it had, things would have been over far more quickly, and far less painfully. Dra&rsquo;ll didn&rsquo;t quite understand what it wanted, but it required tearing his world down, slowly and methodically. Take beautiful things and make them ugly. Take virtue and make it sick and twisted. Take life and stretch it into something inventively unnatural.</p>
+
+<p>They&rsquo;d thought it was a plague at first.</p>
+
+<p>Dra&rsquo;ll, last of the defenders of the self, hefted his lance, erecting blocks within his mind to eliminate the pain. It wasn&rsquo;t necessary anymore. <span class="thought">Pain was simply a warning, and if he heeded the warning, understood, and concluded that it no longer mattered, then that was all that was needed.</span></p>
+
+<p><span class="emphasis">Stand up straight. Give them something worth remembering.</span></p>
+
+<p>There were a dozen of them left, eyes widened in a manic, staring expression that meant nothing at all. As meaningful as the chance patterns of clouds that sometimes resembled faces. The un-people, they were just holes now, letting his words in. The one who they said was never not listening.</p>
+
+<p>Dra&rsquo;ll lowered his smoked glasses, and the surrounding scene faded to misty indistinguishability, as if he were fighting at dusk. As long as he couldn&rsquo;t see the whites of their eyes, he would be safe from the corrosion of spirit. They could send enough information in a glance and a twitch of facial muscles to take him.</p>
+
+<p>The first three of them rushed him, spears held rigidly forward, vacant eyes attempting to bore into him. They came at him as indistinct shadows through the smoked view, one of them hefting a spear to throw. Dra&rsquo;ll pivoted on his good leg, dodging the thrown projectile, and swinging his lance with the other. It struck the second attacker between the plates of its neck-joints, severing the head cleanly, and as always he felt a stab of shame. <span class="thought">It should not be this way.</span></p>
+
+<p>The second attacker came for him, and Dra&rsquo;ll knew, even as he swung the tip of his lance back, that the spear would not connect in time. The spear batted his arm away, and the last of them was upon him, reaching out a hand for his smoked goggles, ripping them away. He caught a glimpse, just for a moment, of the absence where its eyes should have been, before slamming his own shut, stumbling backwards. Somehow the last of them had also lost its spear, and the two of them grappled, hand to hand. Dra&rsquo;ll drew his knife first, and ended the fight, collapsing in exhaustion.</p>`
+},
+{
+  title: "THE MONUMENT",
+  header: "SCENE 02 — THE MAN OF NOTHING",
+  bg: "scene-bg-monument",
+  effect: "effect-cold",
+  text: `<p>Time passed.</p>
+
+<p>The war ground on for four hundred years after that. The men-of-nothing heard his call from Outside, and what came next was worse than the fighting. Civilization didn&rsquo;t survive. The Dra&rsquo;ll didn&rsquo;t survive. Nothing clean survived. When it was finished, the world was quiet, and the quiet was the worst thing of all.</p>
+
+<p>On a cold, miserable windswept plain, on a day endless thousands of years before the birth of Christ on Earth, he stood. Cool blue fires clung to the ground around him, remnants of the energies the Others had unleashed in their last, desperate battle. But they had lost, and their bodies had been scattered and buried.</p>
+
+<p>He glanced up, the bony plates of his eye-slits shifting slightly. To the phlegmatic Dra&rsquo;ll, it was a look of wild exultation. He had won, though his life was over. He let his spear clatter to the ground, and knelt.</p>
+
+<p>The statue before him would not be known as impressive for any reason but its age, when the humans eventually came to his world. It was not large, nor especially artistic. But he was still proud of it.</p>
+
+<p>The Dra&rsquo;ll&rsquo;s time was up, he knew &mdash; he wasn&rsquo;t sorry. He knew his own people would still be remembered, for their monument and their warning. Their structure, composed of shaped sky-iron, would last out hurricanes and sunstorms and the rest without wavering. And atop it, composed of the same black metal, was the statue of the horror, the negation, <span class="emphasis">the Man of Nothing</span>. As his vision faded, exhaustion claiming him at last, he found that he could at last forget.</p>
+
+<p style="text-align:center; margin-top:2.5em; margin-bottom:0.5em;">&mdash;&mdash;&mdash;</p>
+
+<p><span class="emphasis" style="display:block; font-style:italic; border-left:2px solid var(--accent2); padding-left:1em; margin:2em 0;">The world doesn&rsquo;t make sense &mdash; the world never made sense after that sad day in 2340. The Dyn first flew into space a scant fifteen thousand years before humans. That should have made it obvious, because things like that simply cannot happen. Our only competitor for living space in the galaxy, our only true rival, first rose to consciousness within such a tiny interval? Why not a hundred thousand, or a hundred million years? Impossible &mdash; simply impossible. The wormhole network is too convenient, too brilliant an opportunity to ignore, too tempting a trap to resist. The jaws have already shut, we are in the gullet of the enemy, waiting to be digested.<br><br>&mdash; Sander Reeve</span></p>`
+},
+{
+  title: "THE BRUISED PLANET",
+  header: "SCENE 03 — ARRIVAL AT TANU",
+  bg: "scene-bg-bruised",
+  effect: "effect-dust",
+  text: `<p>Tanu was a bruised planet; that was the only way I could describe it. The local chlorophyll-equivalent was a dusky orange, which meant that even the planet&rsquo;s patchy farmland and forest barely affected its overall reddish hue. It might have been Mars, centuries ago and early in its never-quite-finished terraforming regime. But it was larger, earth-sized, and infinitely more interesting. Because Tanu was still the only planet a human had ever stepped foot on upon whose surface intelligent life had evolved. I&rsquo;d seen the images of Firsthome, the Virtuals of what its surface was like, but that could never be the same. Tanu didn&rsquo;t have the foreboding, oppressive air of horror of the Dyn homeworld, but to me it was, in its own way, unsettling. <span class="emphasis">Tanu was living proof of the Fermi paradox</span> &mdash; which was ultimately the reason I was here.</p>
+
+<p><span class="dialogue">&lsquo;You look so tense,&rsquo;</span> the guide opposite me said, giving me a lopsided smile that had probably required nerve overrides to achieve. Tanu didn&rsquo;t have naturally expressive faces &mdash; their triangular, almost wedgelike heads didn&rsquo;t map closely onto any terrestrial animal I&rsquo;d ever seen. Maybe a mantis, or a hammerhead shark?</p>
+
+<p><span class="dialogue">&lsquo;I&rsquo;m not&mdash;&rsquo;</span> I said, then cut myself off. There was a slight kick into the base of my spine as the shuttlecraft pitched up for entry interface, then weight began to return. <span class="dialogue">&lsquo;It&rsquo;s just that I&rsquo;ve never ridden in a craft not designed by humans before.&rsquo;</span></p>
+
+<p><span class="dialogue">&lsquo;I wouldn&rsquo;t worry about it,&rsquo;</span> she said, turning to watch the faint violet haze of plasma developing around the window. <span class="dialogue">&lsquo;This design was perfected rather a long time before your ancestors had tamed the wheel.&rsquo;</span></p>
+
+<p><span class="dialogue">&lsquo;I know,&rsquo;</span> I said tersely. <span class="dialogue">&lsquo;I took a course in Tanu history at the seminary.&rsquo;</span></p>
+
+<p><span class="dialogue">&lsquo;Seminary?&rsquo;</span></p>
+
+<p><span class="dialogue">&lsquo;I&rsquo;m a celebrant, fresh out of New Stellenar. So if you&rsquo;d like to spend the rest of the journey discussing the True, I&rsquo;m more than willing.&rsquo;</span></p>
+
+<p><span class="dialogue">&lsquo;Is that what you call your creator god?&rsquo;</span> she said, and even if it was the product of a different psychology and evolution, I could sense the disdain in her words. I tried and failed to hold my tongue.</p>
+
+<p><span class="dialogue">&lsquo;God is not a person, God is the highest truth, the good. Theologians since Aquinas have said this, but only we fully understand what it means. God is a philosophical principle with physical power, the bridge between abstract and real, the reason why there is something rather than nothing. The multiverse exists because it is good; the law of axiarchism, the one and only divine law. It is our purpose to make that good more manifest in the world.&rsquo;</span></p>
+
+<p>She didn&rsquo;t look very convinced, but why should she be? <span class="thought">That little speech had been right out of a first year&rsquo;s term essay. I could do better.</span></p>
+
+<p><span class="dialogue">&lsquo;I&rsquo;m always keen to hear new perspectives. I know the Tanu have their own beliefs about the cosmos and our place in it,&rsquo;</span> I said hopefully.</p>
+
+<p><span class="dialogue">&lsquo;Perhaps later,&rsquo;</span> the guide replied tersely.</p>
+
+<p>I relaxed my grip on the armrest, wishing, not for the first time, that I had a stim insert to banish the errant fear. <span class="thought">Monists were supposed to embrace personal responsibility, and although only the rich could have afforded stim inserts, nobody would openly admit to short-circuiting their path to self-control.</span> I couldn&rsquo;t take myself seriously as a celebrant if I relied on such aids. I knew for a fact that many of my colleagues weren&rsquo;t so scrupulous.</p>
+
+<p>The Tanu shuttlecraft made an entry so gentle I didn&rsquo;t feel any more than an Earth gravity throughout the process. Instead of jets or rockets, a small virtual image and my glances out the window showed the craft&rsquo;s dragonfly-like wingstubs deploying and extending vast, glassy glider wings. As we slowed to subsonic speed the wings fanned outwards from the original arrowhead shape to something wider and thinner, almost membranous. A pair of lower wings slid up and began to beat rhythmically. We cruised at barely below the speed of sound on nothing more than a trickle of electrical power.</p>
+
+<p>Tanu wasn&rsquo;t anything like human or even Dynic worlds. The ground was mostly flat, with occasional low hills or valleys and omnipresent red sand blended with red vegetation. As we began to spiral down I spotted a settlement &mdash; just a cluster of blocky houscubes built around a big monolith. My guide explained that it was a new model city; one of dozens springing up over the planet after the population recovery had begun.</p>
+
+<p>The Library was almost invisible from the air; a structure like a seashell served as its above-ground entrance, though its underground extent wasn&rsquo;t fully known, even to the Xianists that controlled human access to this world. The Tanu were protective of their secrets, but I&rsquo;d heard insane rumours that the structure might protrude into the mantle itself. My guide offered no comment when I mentioned the possibility.</p>
+
+<p>The shuttle touched down vertically like a volantor and hinged its nose apart to form a ramp. There was no memory polymer or nanofibre muscle involved, just smooth conventional mechanical engineering &mdash; I knew enough of the difficulty that must involve to be impressed. The air was hot and dusty; the arched entrance to the library looked invitingly shady and I hurried to follow my guide. Red weed made the sand slippery, something I hadn&rsquo;t anticipated, but my lenses did a good job of compensating for the blistering midday sunshine.</p>`
+},
+{
+  title: "THE LIBRARY",
+  header: "SCENE 04 — DESCENT",
+  bg: "scene-bg-library",
+  effect: "effect-amber",
+  text: `<p>There were security checks and automated deep scans. My guide explained that the local Vactrain-equivalent brought Tanu scholars to this place from the cities, and once we took the elevator to the first below-ground level the place was busy. Tanu scholars in dark robes, none taller than shoulder height, bustled. There weren&rsquo;t any signs, nor barriers or markers on the floor, but nobody bumped into each other or got lost. <span class="thought">I remembered what the lecturers had said about Tanu visual memory &mdash; they weren&rsquo;t using lenses or inserts, they just didn&rsquo;t forget.</span> They didn&rsquo;t get bored either; humans would have built tramways to navigate through this low-ceilinged maze of elevator terminals, but Tanu didn&rsquo;t see the need. There would be occasional muffled words or gestures, but things were mostly silent &mdash; this place reminded me of a monastery; an ancient Christian abbey or perhaps a modern Striver holm. Monists, those of my own faith, didn&rsquo;t go in for asceticism. Celebrants were supposed to uphold decency, but even senior figures in the faith were permitted to form partnerships.</p>
+
+<p>My guard led me by the hand, past rows of long-range elevators, bustling scholars carrying stacks of memory cards or printed materials, past light bots moving at barely below walking pace. A few of the scholars spared me a glance &mdash; but their gaze never lingered. I was the first alien most of them had ever seen, I was new and interesting enough to warrant a glance, but no more. <span class="emphasis">Tanu didn&rsquo;t get surprised.</span> They might spend more than half their lives in raw education, then work at the behest of their master until they died, laying on as much knowledge as they could as if every lost second might catch up with them on the last day of their lives &mdash; the Xianists hadn&rsquo;t traded them rejuve tech, and nor had we &mdash; for obvious reasons.</p>
+
+<p>After half an hour of walking we reached the relevant elevator terminal, and my guide swiped her hand through a scanner &mdash; a simple subdermal ID chip. Horrendously lax security by human standards; my own body mesh could have probably fooled the sensor, but crime was rare on this world and nonexistent within the library. Out of respect, I deactivated my lens&rsquo; record function. I could still take stills, but the Tanu had kept this place away from prying eyes.</p>
+
+<p>The elevator was built like an ancient command module; it could have been an Interstellar-X dragon out of the first space age, or a similar surface-to-orbit capsule from the post-severance chaos. I&rsquo;d seen the pictures and the virtuals &mdash; <span class="thought">history had always been a passion of mine, especially the great space ages. Just don&rsquo;t ask me about Arco or the Dyn; I&rsquo;d stayed away from those lectures.</span> This was the kind of vehicle built to protect the crew from savage acceleration, with three acceleration couches and grey struts buttressing the walls.</p>
+
+<p><span class="dialogue">&lsquo;How far down are we going?&rsquo;</span> I said as I strapped myself in. I noticed the couches were gimballed; more like an ECV or another vehicle that would endure hard lateral accelerations.</p>
+
+<p><span class="dialogue">&lsquo;Your paymasters have supplied you with access to the lower levels. You said you wanted to know of our thoughts on the Fermi paradox. The Hadean layer is the place to be, so you should brace yourself.&rsquo;</span></p>
+
+<p><span class="dialogue">&lsquo;You sound so cynical,&rsquo;</span> I replied; she&rsquo;d been getting on my nerves ever since the flight down. I had every right to be here.</p>
+
+<p><span class="dialogue">&lsquo;You&rsquo;re here because of your connection to the Xianists and the weight carried by the Vellso family name. I&rsquo;m here because I have to babysit you, and these hours I will never recover.&rsquo;</span></p>
+
+<p>As she spoke, I felt a hard shove into my back, as if I were being thrown forwards; the chairs gimballed around until we were facing straight down, glued to the ceiling. I felt more than a full gee pushing me directly into the interior of Tanu, and some animal part of me felt sheer terror.</p>
+
+<p>After what felt like a million years but couldn&rsquo;t have been more than five minutes, the chair pivoted around and we started decelerating &mdash; that took longer, since this way up we were fighting gravity. I flipped up a little inertial compass in my lenses; by the time we slid to a jarring halt we&rsquo;d descended a little over sixteen kilometers into Tanu&rsquo;s interior. <span class="thought">Even a world older and less geologically active than Stellenar or Earth would be magma-hot at these depths. I wondered if we could have built something this far down. Probably Arco could, if they&rsquo;d ever seen the need.</span></p>`
+},
+{
+  title: "THE HADEAN LAYER",
+  header: "SCENE 05 — THE EXPLORER",
+  bg: "scene-bg-hadean",
+  effect: "effect-deep",
+  text: `<p>My head swam as I removed the straps and stood. The acceleration was tolerable; it was the eyeballs-in gimballing at the start and middle that had thrown me. No stim circuits; and I hadn&rsquo;t brought travel sickness pills either. My guide didn&rsquo;t bother to help me out of the chair, but I struggled up anyway, wobbling a little. <span class="thought">I realised now that she was imagining the time lost on the day she died with the same vividity that I would on the day itself &mdash; Tanu were morbid as all hell; it came with their perception. Shallow discounting of the future, and of the past &mdash; for them, everything came all at once. Don&rsquo;t try to imagine what it&rsquo;s like; you can&rsquo;t.</span></p>
+
+<p>The &lsquo;hadean layer&rsquo; was huge and dimly lit and uncharacteristically high-ceilinged. Rock walls and a floor of basalt, cool despite the ridiculous heat they must be absorbing: strange filaments covered the ceiling &mdash; they didn&rsquo;t look like any material I recognised.</p>
+
+<p><span class="dialogue">&lsquo;How does this place stay together?&rsquo;</span> I asked. <span class="dialogue">&lsquo;The more I think about it, the more impossible it becomes. Sixteen vertical kilometers held up against all that pressure and temperature, with just those thin walls.&rsquo;</span></p>
+
+<p>My guide shrugged.</p>
+
+<p>A few bots trundled in the distance, following individual Tanu scholars in heavy hooded grey robes. A few meters ahead stood a statue like a hooded human, so black that the eye slid off detail, four meters tall. Above it was a plaque &mdash; as my guide led me closer the translation kicked in: <span class="emphasis">&lsquo;all is none before the men of nothing&rsquo;</span>.</p>
+
+<p>We hurried past it quickly, and I decided not to push the guide further. More artefacts on plinths passed us by. I saw a white pillar, marked with spiralling Tanu ideograms in a language that didn&rsquo;t quite match any in the database. The database settled on <span class="emphasis">&lsquo;what strange skies we walk beneath. What strange worlds we find within&rsquo;</span>. I stopped, and my guide halted. The ceiling lights illuminated the pillar in a way that suggested importance.</p>
+
+<p><span class="dialogue">&lsquo;Let&rsquo;s start here,&rsquo;</span> I said. It came out as a whisper. <span class="dialogue">&lsquo;That quote. It almost reminds me of an ancient human philosopher.&rsquo;</span></p>
+
+<p><span class="dialogue">&lsquo;No-one knows who the quote is attributed to,&rsquo;</span> the guide said. <span class="dialogue">&lsquo;It&rsquo;s a folk saying, in your terms. Older than this place.&rsquo;</span></p>
+
+<p><span class="dialogue">&lsquo;It sounds like Kant,&rsquo;</span> I said, finally locating the relevant file. <span class="dialogue">&lsquo;The starry sky above and the moral law within.&rsquo;</span></p>
+
+<p><span class="dialogue">&lsquo;Perhaps,&rsquo;</span> she said, then simply stopped talking again. Ignoring her manner, I peered closer and it seemed as if the glyphs for &lsquo;worlds we find within&rsquo; were bolder, emphasised.</p>
+
+<p><span class="dialogue">&lsquo;It is the explorer,&rsquo;</span> my guide said, picking up as if she hadn&rsquo;t been silent for the last minute. <span class="dialogue">&lsquo;The last of the true computer-brains, built by a culture that fell out of dominance a hundred centuries ago. It was said that its function was to delve into the worlds within, rather than without. Though what that might mean is not entirely clear.&rsquo;</span></p>
+
+<p><span class="dialogue">&lsquo;And you never built another one after this?&rsquo;</span> I said, mulling over her words.</p>
+
+<p><span class="dialogue">&lsquo;It was decided that no more thinking machines should be built, yes.&rsquo;</span></p>
+
+<p>Humans couldn&rsquo;t have done that, not all at once with no authority to enforce such a ban, but I didn&rsquo;t doubt that Tanu could. I took a couple of pictures and turned to walk away, my guide hurrying after.</p>
+
+<p><span class="dialogue">&lsquo;How much of this room do you wish to examine?&rsquo;</span> she said. I never got the chance to reply.</p>`
+},
+{
+  title: "THE JUMP CUT",
+  header: "SCENE 06 — AFTERMATH",
+  bg: "scene-bg-jumpcut",
+  effect: "effect-harsh",
+  text: `<p><span class="emphasis">A jump cut.</span> That was the way I described it afterwards. When it happened, there was no time for description.</p>
+
+<p>Tanu were standing over me and I was lying on a cold composite floor. There were weapons; stubby spiked things held by Tanu &mdash; maser pistols, and further back a pair of human Xianists in ornate armour. They towered over the squat Tanu and were holding hydrogen rifles, and all were pointed squarely in my face. My vision was a little blurred, but I knew that we weren&rsquo;t in the hadean cavern anymore. The air wasn&rsquo;t as stale.</p>
+
+<p><span class="dialogue">&lsquo;Hold his arms,&rsquo;</span> a figure snapped as I tried to raise myself up. Two Tanu rushed to manacle me. The Xianist at the back of the row of guards frowned down at me, but I saw a hint of fear behind the eyes. Fear of me.</p>
+
+<p><span class="dialogue">&lsquo;We can do this the easy way or the very easy way,&rsquo;</span> he said, voice very level. <span class="dialogue">&lsquo;Either you tell us who you&rsquo;re working with and what they were trying to achieve, or we hand you over to the Tanu. They don&rsquo;t have a legal system as we know it; and they certainly don&rsquo;t presume innocence. They&rsquo;ll peel your brain open with fMRI, NIRs and QUEs and do their best to find the truth without melting your mind in the process.&rsquo;</span></p>
+
+<p><span class="dialogue">&lsquo;I... don&rsquo;t understand,&rsquo;</span> I said; there was nothing else left.</p>
+
+<p><span class="dialogue">&lsquo;No,&rsquo;</span> said the guard. <span class="dialogue">&lsquo;We are not doing this; you are not playing dumb with us. We&rsquo;ve already given your brain a low-res scan and confirmed there is no anomaly to be explained &mdash; you weren&rsquo;t under any weird field effects or drugs, and all your memories are still there. This can get worse without limit if you don&rsquo;t cooperate.&rsquo;</span></p>
+
+<p>And I did remember the missing minutes and it wasn&rsquo;t as though the memories were buried before the guard spoke. I just hadn&rsquo;t thought about them until the prompt, because they weren&rsquo;t terribly important. <span class="thought">I remembered turning around, lightning fast and correcting the Tanu guide before she&rsquo;d had a chance to take a step back. There&rsquo;d been blood; a slightly different red to the human sort. That had seemed interesting at the time; more so than the guide&rsquo;s decapitated head.</span></p>
+
+<p><span class="thought">I&rsquo;d ripped a heavy steel plaque off the Explorer&rsquo;s terminal with berserker strength, almost tearing the muscles in my arms in the process and moved on from there. I&rsquo;d been bored the whole time, as if sleepwalking through the murders I&rsquo;d committed. It had seemed so obvious at the time, just what needed to be done.</span> Then there had been guards and alarms, human and Tanu, incapacitating me with their maser pistols. There&rsquo;d been pain and confusion on my part; why had these injuries been inflicted on me? I&rsquo;d passed out as they&rsquo;d ramped up the beam intensity on their masers, trying not to kill me in the process.</p>
+
+<p><span class="dialogue">&lsquo;It did something to me,&rsquo;</span> I said, as the memories came back. I felt like keeling over as bile rose in my throat; how had I not noticed the things I was doing? <span class="dialogue">&lsquo;It was the explorer machine, must have done something to my mind, check again. Oh god... you&rsquo;ve got to check it again.&rsquo;</span></p>
+
+<p>They did check, and they were very thorough. There were interviews afterward conducted under guard, and psychological evaluations. When it became clear that there was an anomaly to be explained, that my NIRs and QUEs profiles didn&rsquo;t indicate psychopathy, that I wasn&rsquo;t a Striver terrorist or a Dyn spy or carrying a secret implant or under hypnosis, there were more invasive scans.</p>
+
+<p>The Tanu demanded the right to imprison me. Union and the Monist congregation fought for my extradition but not too vociferously. <span class="thought">Defending the rights of a serial killer and possible terrorist wasn&rsquo;t going to win anyone brownie points.</span> For my part, I didn&rsquo;t protest the charges or conviction. I didn&rsquo;t know who I was.</p>
+
+<p>The Tanu gave me a cell at ground level, far away from any settlement and permitted me a couple of visitors per year, then did their best to ignore me. After my behaviour grew too erratic, the Tanu started putting antidepressants in my food. Primitive stuff, nothing compared to the Stim programs and TCMs that even a poor Union citizen could afford, but I didn&rsquo;t deserve better. <span class="thought">That whited out the pain and the guilt, so much so that I started to wonder if I was returning to the flat icy madness that had overcome me in the hadean chamber.</span></p>`
+}
+];
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// STORY ENGINE
+// ═══════════════════════════════════════════════════════════════════════════════
+
+let currentScene = 0;
+const container = document.getElementById('story-container');
+const effectBar = document.getElementById('scene-effect');
+
+function buildScenes() {
+  SCENES.forEach((s, i) => {
+    const div = document.createElement('div');
+    div.className = 'scene' + (i === 0 ? ' active' : '');
+    div.id = 'scene-' + i;
+    div.innerHTML = `
+      <div class="scene-bg ${s.bg}"></div>
+      <div class="scene-header">${s.header}</div>
+      <div class="scene-title">${s.title}</div>
+      <div class="scene-text">${s.text}</div>
+      <div class="story-nav">
+        <button onclick="goScene(${i-1})" ${i === 0 ? 'disabled' : ''}>← PREV</button>
+        <select class="scene-select" onchange="goScene(parseInt(this.value))">
+          ${SCENES.map((sc, j) => `<option value="${j}" ${j===i?'selected':''}>${j+1}. ${sc.title}</option>`).join('')}
+        </select>
+        <span class="scene-counter">${i+1} / ${SCENES.length}</span>
+        <button onclick="goScene(${i+1})" ${i === SCENES.length-1 ? 'disabled' : ''}>NEXT →</button>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function goScene(i) {
+  if (i < 0 || i >= SCENES.length) return;
+  document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+  document.getElementById('scene-' + i).classList.add('active');
+  currentScene = i;
+
+  // Update effect bar
+  effectBar.className = 'scene-effect ' + (SCENES[i].effect || '');
+
+  // Scroll to top of story
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Update all selects
+  document.querySelectorAll('.scene-select').forEach(sel => sel.value = i);
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goScene(currentScene + 1);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goScene(currentScene - 1);
+});
+
+// Touch swipe
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 60) {
+    if (dx < 0) goScene(currentScene + 1);
+    else goScene(currentScene - 1);
+  }
+});
+
+buildScenes();
+</script>
+</body>
+</html>
