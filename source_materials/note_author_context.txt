@@ -1,0 +1,43 @@
+=== Author Context ===
+
+Purpose & context Sammy works as an AI Grant maker on the research team at Founders Pledge, a philanthropy organization.
+
+Beyond their professional role, they're actively developing an extensive science fiction universe called the "Ascent Universe" - a hard sci-fi project with detailed worldbuilding spanning civilizations, military conflicts, and speculative xenobiology.
+
+Their writing operates in the tradition of authors like Adrian Tchaikovsky, focusing on civilizational scope and technical authenticity rather than intimate character studies.
+
+Key relationships include Hannah Yang, head of communications at Founders Pledge, who is also a highly accomplished professional speculative fiction author with publications in top-tier venues and major award nominations.
+
+Their connection formed around shared literary interests during a work offsite.
+
+Current state Sammy is actively sharing their creative work with colleagues, having recently shared their short story "Seeker" with Hannah.
+
+This story showcases their approach to experimental hard sci-fi and represents part of their larger Ascent Universe.
+
+They're thoughtful about matching their work to their audience's preferences and concerned about presenting their best material.
+
+Their science fiction project includes detailed technical specifications for military engagements, ship classifications, weapon systems, and fleet compositions.
+
+Recent work has involved visualizing complex battle scenarios from their universe, specifically the Battle of Threshold set in 2909 CE.
+
+Key learnings & principles Sammy has developed a strategic approach to sharing creative work, carefully selecting pieces that showcase their strengths while avoiding direct comparison with others' different writing styles.
+
+They understand that their hard sci-fi approach - focusing on worldbuilding, technical authenticity, and civilizational scope - operates in a different mode from character-driven literary speculative fiction.
+
+They've learned the importance of accuracy and scale in representing their fictional universe, particularly when creating visualizations of complex military scenarios.
+
+Technical authenticity matters significantly to them, and they push back when their work is underestimated or when important specifications are overlooked.
+
+Approach & patterns Sammy demonstrates meticulous attention to technical detail and consistency within their fictional universe.
+
+They maintain extensive documentation of ship specifications, weapon systems, tactical details, and technological capabilities across different factions.
+
+When working on visualizations or representations of their universe, they prioritize incorporating previously established technical data rather than accepting generic approximations.
+
+They approach creative sharing strategically, evaluating which pieces best represent their work for specific audiences and contexts.
+
+Their writing process appears to involve building comprehensive technical foundations that support the narrative elements.
+
+Tools & resources Sammy utilizes Three.js for creating interactive 3D visualizations of complex space battles from their universe.
+
+They maintain detailed project knowledge bases containing both narrative content and technical specifications, and reference previous conversations to ensure consistency in their worldbuilding details.
