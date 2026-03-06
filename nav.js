@@ -13,6 +13,7 @@
     { href: 'codex.html', label: 'CODEX' },
     { href: 'worlds.html', label: 'WORLDS' },
     { href: 'ESZEL_COMPLETE_DRAFT.md', label: 'ESZEL' },
+    { href: 'facilitator.html', label: 'FACILITATOR' },
   ];
 
   const current = location.pathname.split('/').pop() || 'index.html';
