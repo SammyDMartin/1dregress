@@ -14,6 +14,8 @@
     { href: 'worlds.html', label: 'WORLDS' },
     { href: 'ESZEL_COMPLETE_DRAFT.md', label: 'ESZEL' },
     { href: 'facilitator.html', label: 'FACILITATOR' },
+    { href: 'anthropic-trap.html', label: 'TRAP' },
+    { href: 'threads.html', label: 'THREADS' },
   ];
 
   const current = location.pathname.split('/').pop() || 'index.html';
