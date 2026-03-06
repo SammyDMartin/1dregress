@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reader — Ascent Universe</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow-y: auto; }
+
+.reader-container {
+  max-width: 720px; margin: 0 auto; padding: 20px 20px 80px;
+  min-height: calc(100vh - 48px);
+}
+.reader-header {
+  text-align: center; padding: 30px 0 20px;
+  border-bottom: 1px solid var(--border); margin-bottom: 30px;
+}
+.reader-title {
+  font-size: 18px; letter-spacing: 4px; color: var(--accent); font-weight: 700;
+  margin-bottom: 4px;
+}
+.reader-meta {
+  font-size: 9px; letter-spacing: 3px; color: var(--text-dim); margin-top: 6px;
+}
+.reader-back {
+  display: inline-block; font-size: 10px; letter-spacing: 1px;
+  color: var(--text-dim); margin-bottom: 16px;
+}
+
+.reader-body {
+  font-size: 14px; line-height: 1.85; color: rgba(210, 225, 235, 0.9);
+  letter-spacing: 0.2px;
+}
+.reader-body h1 {
+  font-size: 18px; letter-spacing: 3px; color: var(--accent);
+  margin: 40px 0 16px; font-weight: 700;
+}
+.reader-body h2 {
+  font-size: 15px; letter-spacing: 2px; color: var(--accent);
+  margin: 32px 0 12px; font-weight: 700;
+}
+.reader-body h3 {
+  font-size: 13px; letter-spacing: 2px; color: var(--accent2);
+  margin: 24px 0 10px; font-weight: 700;
+}
+.reader-body p { margin-bottom: 16px; text-indent: 0; }
+.reader-body hr {
+  border: none; border-top: 1px solid var(--border);
+  margin: 32px 0;
+}
+.reader-body em { font-style: italic; }
+.reader-body strong { font-weight: 700; color: var(--accent); }
+.reader-body blockquote {
+  border-left: 2px solid var(--border); padding-left: 16px;
+  color: var(--text-dim); margin: 16px 0;
+}
+
+.reader-loading {
+  text-align: center; padding: 60px 0;
+  font-size: 11px; letter-spacing: 2px; color: var(--text-dim);
+}
+.reader-error {
+  text-align: center; padding: 60px 0;
+  font-size: 12px; color: var(--red);
+}
+
+/* Light mode overrides */
+[data-theme="light"] .reader-body {
+  color: #1a1a1a; font-family: var(--light-serif);
+  font-size: 17px; line-height: 1.8;
+}
+[data-theme="light"] .reader-body h1,
+[data-theme="light"] .reader-body h2 { color: #1a1a1a; }
+[data-theme="light"] .reader-body h3 { color: #555; }
+[data-theme="light"] .reader-body strong { color: #1a1a1a; }
+[data-theme="light"] .reader-title { color: #1a1a1a; }
+</style>
+</head>
+<body>
+<div class="page-body">
+
+<div class="reader-container">
+  <a href="stories.html" class="reader-back">&larr; ALL STORIES</a>
+  <div class="reader-header">
+    <div class="reader-title" id="reader-title">LOADING</div>
+    <div class="reader-meta" id="reader-meta"></div>
+  </div>
+  <div class="reader-body" id="reader-body">
+    <div class="reader-loading">LOADING...</div>
+  </div>
+</div>
+
+</div>
+<script src="nav.js"></script>
+<script>
+(function() {
+  const params = new URLSearchParams(location.search);
+  const src = params.get('src');
+  const title = params.get('title');
+  const meta = params.get('meta');
+
+  if (title) {
+    document.getElementById('reader-title').textContent = title;
+    document.title = title + ' — Ascent Universe';
+  }
+  if (meta) {
+    document.getElementById('reader-meta').textContent = meta;
+  }
+
+  if (!src) {
+    document.getElementById('reader-body').innerHTML = '<div class="reader-error">No source file specified.</div>';
+    return;
+  }
+
+  fetch(src)
+    .then(r => { if (!r.ok) throw new Error(r.status); return r.text(); })
+    .then(text => {
+      document.getElementById('reader-body').innerHTML = renderMarkdown(text);
+      if (!title) {
+        const h1 = text.match(/^#\s+(.+)$/m);
+        if (h1) {
+          document.getElementById('reader-title').textContent = h1[1].replace(/[*_]/g, '');
+          document.title = h1[1].replace(/[*_]/g, '') + ' — Ascent Universe';
+        }
+      }
+    })
+    .catch(err => {
+      document.getElementById('reader-body').innerHTML =
+        '<div class="reader-error">Could not load file: ' + src + '</div>';
+    });
+
+  function renderMarkdown(md) {
+    // Split into lines and process
+    const lines = md.split('\n');
+    let html = '';
+    let inParagraph = false;
+    let inBlockquote = false;
+
+    for (let i = 0; i < lines.length; i++) {
+      let line = lines[i];
+
+      // Horizontal rule
+      if (/^---+\s*$/.test(line) || /^\*\*\*+\s*$/.test(line)) {
+        if (inParagraph) { html += '</p>'; inParagraph = false; }
+        if (inBlockquote) { html += '</blockquote>'; inBlockquote = false; }
+        html += '<hr>';
+        continue;
+      }
+
+      // Headers
+      const h3 = line.match(/^###\s+(.+)/);
+      if (h3) {
+        if (inParagraph) { html += '</p>'; inParagraph = false; }
+        html += '<h3>' + inlineFormat(h3[1]) + '</h3>';
+        continue;
+      }
+      const h2 = line.match(/^##\s+(.+)/);
+      if (h2) {
+        if (inParagraph) { html += '</p>'; inParagraph = false; }
+        html += '<h2>' + inlineFormat(h2[1]) + '</h2>';
+        continue;
+      }
+      const h1m = line.match(/^#\s+(.+)/);
+      if (h1m) {
+        if (inParagraph) { html += '</p>'; inParagraph = false; }
+        html += '<h1>' + inlineFormat(h1m[1]) + '</h1>';
+        continue;
+      }
+
+      // Blockquote
+      if (line.startsWith('>')) {
+        if (inParagraph) { html += '</p>'; inParagraph = false; }
+        if (!inBlockquote) { html += '<blockquote>'; inBlockquote = true; }
+        html += inlineFormat(line.replace(/^>\s*/, '')) + '<br>';
+        continue;
+      } else if (inBlockquote) {
+        html += '</blockquote>';
+        inBlockquote = false;
+      }
+
+      // Empty line = paragraph break
+      if (line.trim() === '') {
+        if (inParagraph) { html += '</p>'; inParagraph = false; }
+        continue;
+      }
+
+      // Regular text
+      if (!inParagraph) {
+        html += '<p>';
+        inParagraph = true;
+      } else {
+        html += ' ';
+      }
+      html += inlineFormat(line);
+    }
+
+    if (inParagraph) html += '</p>';
+    if (inBlockquote) html += '</blockquote>';
+    return html;
+  }
+
+  function inlineFormat(text) {
+    // Escape HTML
+    text = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    // Bold+italic
+    text = text.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
+    // Bold
+    text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    // Italic (both * and _)
+    text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    text = text.replace(/_(.+?)_/g, '<em>$1</em>');
+    return text;
+  }
+})();
+</script>
+</body>
+</html>

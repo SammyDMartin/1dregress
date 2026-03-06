@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stories — Ascent Universe</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow-y: auto; }
+
+.stories-header {
+  text-align: center; padding: 30px 20px 10px;
+  max-width: 800px; margin: 0 auto;
+}
+.stories-title {
+  font-size: 18px; letter-spacing: 6px; color: var(--accent); font-weight: 700;
+}
+.stories-sub {
+  font-size: 9px; letter-spacing: 4px; color: var(--text-dim); margin-top: 4px;
+}
+.stories-intro {
+  max-width: 700px; margin: 10px auto 30px; padding: 0 20px;
+  font-size: 11px; color: var(--text-dim); line-height: 1.7; text-align: center;
+}
+
+.attribution-note {
+  max-width: 700px; margin: 0 auto 30px; padding: 12px 20px;
+  background: var(--panel); border: 1px solid var(--border); border-radius: 2px;
+  font-size: 10px; line-height: 1.7; color: var(--text-mid);
+}
+.attribution-note strong { color: var(--accent); }
+
+.story-list {
+  max-width: 700px; margin: 0 auto; padding: 0 20px 80px;
+}
+
+.era-label {
+  font-size: 9px; letter-spacing: 4px; color: var(--accent2); font-weight: 700;
+  padding: 20px 0 8px; border-bottom: 1px solid rgba(255,107,53,0.2);
+  margin-bottom: 12px; margin-top: 20px;
+}
+.era-label:first-child { margin-top: 0; }
+
+.story-entry {
+  display: block; padding: 12px 0; border-bottom: 1px solid var(--text-faint);
+  text-decoration: none; transition: all 0.2s;
+}
+.story-entry:hover { padding-left: 8px; }
+.story-entry:last-child { border-bottom: none; }
+
+.story-entry-top {
+  display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+}
+.story-name {
+  font-size: 12px; letter-spacing: 2px; color: var(--accent); font-weight: 700;
+}
+.story-date {
+  font-size: 9px; letter-spacing: 1px; color: var(--text-dim);
+}
+.story-badge {
+  font-size: 8px; letter-spacing: 1px; padding: 1px 5px;
+  border: 1px solid currentColor; border-radius: 2px;
+  margin-left: auto;
+}
+.badge-novel { color: var(--accent2); }
+.badge-short { color: var(--green); }
+.badge-interactive { color: var(--accent); }
+
+.story-desc {
+  font-size: 10px; color: var(--text-dim); line-height: 1.6;
+  margin-top: 4px; letter-spacing: 0.3px;
+}
+.story-authorship {
+  font-size: 8px; letter-spacing: 1px; color: var(--text-dim);
+  margin-top: 3px; opacity: 0.7;
+}
+.story-wordcount {
+  font-size: 8px; color: var(--text-dim); letter-spacing: 1px;
+}
+
+/* Light mode */
+[data-theme="light"] .story-name { color: #1a1a1a; }
+[data-theme="light"] .story-entry:hover { background: var(--panel); }
+[data-theme="light"] .attribution-note { background: var(--panel); }
+[data-theme="light"] .attribution-note strong { color: #1a1a1a; }
+</style>
+</head>
+<body>
+<div class="page-body">
+
+<div class="stories-header">
+  <div class="stories-title">STORIES</div>
+  <div class="stories-sub">ASCENT UNIVERSE — CHRONOLOGICAL INDEX</div>
+</div>
+
+<div class="stories-intro">
+  All fiction set in the Ascent Universe, ordered by in-universe date.
+  Stories range from deep Dyn prehistory (~100,000 BCE) to the Apathy War (~3200 CE).
+</div>
+
+<div class="attribution-note">
+  <strong>Authorship note:</strong> Stories marked <em>human</em> were written entirely by the author.
+  Stories marked <em>AI-assisted</em> were written collaboratively with Claude (Anthropic) —
+  typically human-plotted with AI drafting and expansion. Stories marked <em>AI-edited</em>
+  were human-written originals with AI-assisted revision. See the README for full details.
+</div>
+
+<div class="story-list">
+
+  <div class="era-label">DEEP ANTIQUITY — ~100,000 BCE</div>
+
+  <a class="story-entry" href="reader.html?src=source_texts/frameshift.txt&title=FRAMESHIFT&meta=~100,000 BCE — Deep Dyn prehistory">
+    <div class="story-entry-top">
+      <span class="story-name">FRAMESHIFT</span>
+      <span class="story-date">~100,000 BCE</span>
+      <span class="story-wordcount">~1,700 words</span>
+      <span class="story-badge badge-short">SHORT</span>
+    </div>
+    <div class="story-desc">Dyn prehistory on Firsthome.</div>
+    <div class="story-authorship">Human</div>
+  </a>
+
+  <a class="story-entry" href="reader.html?src=source_texts/the_other_moon.txt&title=THE OTHER MOON&meta=~100,000 BCE — Firsthome">
+    <div class="story-entry-top">
+      <span class="story-name">THE OTHER MOON</span>
+      <span class="story-date">~100,000 BCE</span>
+      <span class="story-wordcount">~7,500 words</span>
+      <span class="story-badge badge-short">SHORT</span>
+    </div>
+    <div class="story-desc">The Other Moon — an artefact in orbit around the tidally-locked Dyn homeworld.</div>
+    <div class="story-authorship">Human</div>
+  </a>
+
+  <a class="story-entry" href="seeker-story.html">
+    <div class="story-entry-top">
+      <span class="story-name">SEEKER</span>
+      <span class="story-date">~100,000 BCE</span>
+      <span class="story-wordcount">~3,500 words</span>
+      <span class="story-badge badge-interactive">INTERACTIVE</span>
+    </div>
+    <div class="story-desc">The Dyn origin story. The Nameless One becomes Seeker on the twilight plains of Firsthome.</div>
+    <div class="story-authorship">Human</div>
+  </a>
+
+  <div class="era-label">NEAR FUTURE — 2078–2112 CE</div>
+
+  <a class="story-entry" href="reader.html?src=source_texts/the_facilitator.txt&title=THE FACILITATOR&meta=2078 CE — Near-future Earth">
+    <div class="story-entry-top">
+      <span class="story-name">THE FACILITATOR</span>
+      <span class="story-date">2078 CE</span>
+      <span class="story-wordcount">~5,100 words</span>
+      <span class="story-badge badge-short">SHORT</span>
+    </div>
+    <div class="story-desc">Souvicou creates an AI trading algorithm. It works. Near-future Earth, rogue AI, the birth of the Ascent timeline.</div>
+    <div class="story-authorship">Human</div>
+  </a>
+
+  <a class="story-entry" href="inheritor-story.html">
+    <div class="story-entry-top">
+      <span class="story-name">INHERITOR</span>
+      <span class="story-date">2085 CE</span>
+      <span class="story-wordcount">~4,900 words</span>
+      <span class="story-badge badge-interactive">INTERACTIVE</span>
+    </div>
+    <div class="story-desc">Seven years after the Facilitator. Souvicou is interrogated, escapes, and the golden thread of the Utilitaria vision begins.</div>
+    <div class="story-authorship">AI-assisted</div>
+  </a>
+
+  <a class="story-entry" href="reader.html?src=source_texts/the_utilitaria.txt&title=THE UTILITARIA&meta=2112 CE">
+    <div class="story-entry-top">
+      <span class="story-name">THE UTILITARIA</span>
+      <span class="story-date">2112 CE</span>
+      <span class="story-wordcount">~4,900 words</span>
+      <span class="story-badge badge-short">SHORT</span>
+    </div>
+    <div class="story-desc">The Utilitaria is born — an AI built with inviolate precommitments. The machine that will safeguard humanity for centuries.</div>
+    <div class="story-authorship">Human</div>
+  </a>
+
+  <div class="era-label">STARWHISP ERA — 2310–2314 CE</div>
+
+  <a class="story-entry" href="reader.html?src=source_texts/starwhisp.txt&title=STARWHISP&meta=2310 CE">
+    <div class="story-entry-top">
+      <span class="story-name">STARWHISP</span>
+      <span class="story-date">2310 CE</span>
+      <span class="story-wordcount">~6,300 words</span>
+      <span class="story-badge badge-short">SHORT</span>
+    </div>
+    <div class="story-desc">Humanity reaches for the stars with fragile light-sail probes. First interstellar contact approaches.</div>
+    <div class="story-authorship">Human</div>
+  </a>
+
+  <a class="story-entry" href="reader.html?src=THE_LAST_DUTY.md&title=THE LAST DUTY&meta=2314 CE">
+    <div class="story-entry-top">
+      <span class="story-name">THE LAST DUTY</span>
+      <span class="story-date">2314 CE</span>
+      <span class="story-wordcount">~2,200 words</span>
+      <span class="story-badge badge-short">SHORT</span>
+    </div>
+    <div class="story-desc">The Utilitaria dies. A maintenance engineer approves a firmware update. 165 years later, the sky catches fire.</div>
+    <div class="story-authorship">AI-assisted</div>
+  </a>
+
+  <div class="era-label">THE DIRECTOR & ARCO — 2432–2480 CE</div>
+
+  <a class="story-entry" href="reader.html?src=source_texts/the_director.txt&title=THE DIRECTOR&meta=2432 CE">
+    <div class="story-entry-top">
+      <span class="story-name">THE DIRECTOR</span>
+      <span class="story-date">2432 CE</span>
+      <span class="story-wordcount">~4,000 words</span>
+      <span class="story-badge badge-short">SHORT</span>
+    </div>
+    <div class="story-desc">The Director of Arco. Power, ambition, and the shape of the empire to come.</div>
+    <div class="story-authorship">Human</div>
+  </a>
+
+  <a class="story-entry" href="reader.html?src=source_texts/ascent_text.txt&title=ASCENT&meta=2479 CE">
+    <div class="story-entry-top">
+      <span class="story-name">ASCENT</span>
+      <span class="story-date">2479 CE</span>
+      <span class="story-wordcount">~76,000 words</span>
+      <span class="story-badge badge-novel">NOVEL</span>
+    </div>
+    <div class="story-desc">The full novel. Jan, a wastelander on post-collapse Earth, is drawn into the orbit of Arco and the interstellar war.</div>
+    <div class="story-authorship">Human</div>
+  </a>
+
+  <a class="story-entry" href="headhunted-story.html">
+    <div class="story-entry-top">
+      <span class="story-name">HEADHUNTED</span>
+      <span class="story-date">2480 CE</span>
+      <span class="story-wordcount">~6,300 words</span>
+      <span class="story-badge badge-interactive">INTERACTIVE</span>
+    </div>
+    <div class="story-desc">General Khurram Singh defends a city against Arco's headhunter drones. Corbin makes an offer.</div>
+    <div class="story-authorship">AI-assisted</div>
+  </a>
+
+  <div class="era-label">TANU & MONISTS — 2736 CE</div>
+
+  <a class="story-entry" href="worlds-within-story.html">
+    <div class="story-entry-top">
+      <span class="story-name">THE WORLDS WITHIN</span>
+      <span class="story-date">2736 CE</span>
+      <span class="story-wordcount">~4,000 words</span>
+      <span class="story-badge badge-interactive">INTERACTIVE</span>
+    </div>
+    <div class="story-desc">A Monist celebrant visits the Tanu library and encounters an ancient horror that was never not listening.</div>
+    <div class="story-authorship">AI-assisted</div>
+  </a>
+
+  <div class="era-label">THE LISTENER — 2909–2937 CE</div>
+
+  <a class="story-entry" href="story.html">
+    <div class="story-entry-top">
+      <span class="story-name">THRESHOLD</span>
+      <span class="story-date">2909 CE</span>
+      <span class="story-wordcount">~3,500 words</span>
+      <span class="story-badge badge-interactive">INTERACTIVE</span>
+    </div>
+    <div class="story-desc">The Battle of the Interstice from Union ensign Hansun's POV. First contact through the barrel of a gun.</div>
+    <div class="story-authorship">Human</div>
+  </a>
+
+  <a class="story-entry" href="reader.html?src=ESZEL_COMPLETE_DRAFT.md&title=ESZEL %26 THE LISTENER&meta=2909–2937 CE">
+    <div class="story-entry-top">
+      <span class="story-name">ESZEL & THE LISTENER</span>
+      <span class="story-date">2909–2937 CE</span>
+      <span class="story-wordcount">~31,000 words</span>
+      <span class="story-badge badge-novel">NOVEL</span>
+    </div>
+    <div class="story-desc">The complete novel. The Kailash expedition, the mimics, and an entity that claims to be everything.</div>
+    <div class="story-authorship">Human, AI-edited</div>
+  </a>
+
+  <div class="era-label">THE APATHY WAR — ~3100–3221 CE</div>
+
+  <a class="story-entry" href="reader.html?src=source_texts/bows_and_arrows_against_the_lightning.txt&title=BOWS AND ARROWS AGAINST THE LIGHTNING&meta=~3200 CE — The Apathy War">
+    <div class="story-entry-top">
+      <span class="story-name">BOWS AND ARROWS AGAINST THE LIGHTNING</span>
+      <span class="story-date">~3200 CE</span>
+      <span class="story-wordcount">~3,700 words</span>
+      <span class="story-badge badge-short">SHORT</span>
+    </div>
+    <div class="story-desc">The Apathy War. Humanity faces an enemy that may be unbeatable.</div>
+    <div class="story-authorship">Human</div>
+  </a>
+
+  <a class="story-entry" href="reader.html?src=source_texts/the_war_of_all_wars.txt&title=THE WAR OF ALL WARS&meta=~3200 CE — The Apathy War">
+    <div class="story-entry-top">
+      <span class="story-name">THE WAR OF ALL WARS</span>
+      <span class="story-date">~3200 CE</span>
+      <span class="story-wordcount">~7,700 words</span>
+      <span class="story-badge badge-short">SHORT</span>
+    </div>
+    <div class="story-desc">The final war. Everything humanity has built, tested against the Apathy.</div>
+    <div class="story-authorship">Human</div>
+  </a>
+
+</div>
+
+</div>
+<script src="nav.js"></script>
+</body>
+</html>

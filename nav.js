@@ -4,24 +4,20 @@
 (function() {
   const pages = [
     { href: 'index.html', label: 'HOME' },
+    { href: 'stories.html', label: 'STORIES' },
     { href: 'msd.html', label: 'MSD' },
     { href: 'battle.html', label: 'BATTLE' },
-    { href: 'story.html', label: 'THRESHOLD' },
-    { href: 'seeker-story.html', label: 'SEEKER' },
-    { href: 'worlds-within-story.html', label: 'WORLDS WITHIN' },
-    { href: 'headhunted-story.html', label: 'HEADHUNTED' },
-    { href: 'inheritor-story.html', label: 'INHERITOR' },
     { href: 'science.html', label: 'SCIENCE' },
     { href: 'timeline.html', label: 'TIMELINE' },
     { href: 'codex.html', label: 'CODEX' },
     { href: 'worlds.html', label: 'WORLDS' },
-    { href: 'ESZEL_COMPLETE_DRAFT.md', label: 'ESZEL' },
     { href: 'facilitator.html', label: 'FACILITATOR' },
     { href: 'anthropic-trap.html', label: 'TRAP' },
     { href: 'threads.html', label: 'THREADS' },
   ];
 
   const current = location.pathname.split('/').pop() || 'index.html';
+  const storyPages = ['reader.html','story.html','seeker-story.html','worlds-within-story.html','headhunted-story.html','inheritor-story.html'];
 
   const nav = document.createElement('nav');
   nav.id = 'site-nav';
@@ -69,7 +65,8 @@
     const a = document.createElement('a');
     a.href = p.href;
     a.textContent = p.label;
-    if (current === p.href || (current === '' && p.href === 'index.html')) {
+    if (current === p.href || (current === '' && p.href === 'index.html') ||
+        (p.href === 'stories.html' && storyPages.includes(current))) {
       a.className = 'active';
     }
     a.addEventListener('click', () => links.classList.remove('open'));
