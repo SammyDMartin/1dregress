@@ -12,6 +12,7 @@
     { href: 'timeline.html', label: 'TIMELINE' },
     { href: 'codex.html', label: 'CODEX' },
     { href: 'worlds.html', label: 'WORLDS' },
+    { href: 'ESZEL_COMPLETE_DRAFT.md', label: 'ESZEL' },
   ];
 
   const current = location.pathname.split('/').pop() || 'index.html';
@@ -23,6 +24,29 @@
   brand.className = 'nav-brand';
   brand.innerHTML = '<span class="diamond"></span>ASCENT UNIVERSE';
   nav.appendChild(brand);
+
+  // Theme toggle
+  const themeBtn = document.createElement('button');
+  themeBtn.className = 'theme-toggle';
+  themeBtn.setAttribute('aria-label', 'Toggle light/dark mode');
+  const saved = localStorage.getItem('au-theme');
+  if (saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  function updateThemeIcon() {
+    themeBtn.textContent = document.documentElement.getAttribute('data-theme') === 'light' ? '◐' : '◑';
+  }
+  updateThemeIcon();
+  themeBtn.addEventListener('click', () => {
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    if (isLight) {
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.setItem('au-theme', 'dark');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+      localStorage.setItem('au-theme', 'light');
+    }
+    updateThemeIcon();
+  });
+  nav.appendChild(themeBtn);
 
   const hamburger = document.createElement('button');
   hamburger.className = 'hamburger';

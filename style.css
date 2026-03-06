@@ -18,6 +18,35 @@
   --mono: 'Courier New', Consolas, monospace;
 }
 
+/* ─── Light / Reader Mode ──────────────────────────────────────────────── */
+[data-theme="light"] {
+  --accent: #1a6e7a;
+  --accent2: #c04a1a;
+  --warn: #a87700;
+  --green: #1a8a50;
+  --red: #c03040;
+  --bg: #f5f1eb;
+  --panel: rgba(235, 228, 218, 0.92);
+  --border: rgba(26, 110, 122, 0.2);
+  --text: #1a3a3f;
+  --text-mid: #3a5a5f;
+  --text-dim: #6a8a8f;
+  --text-faint: rgba(26, 110, 122, 0.1);
+  --mono: 'Courier New', Consolas, monospace;
+}
+[data-theme="light"] .scanlines { display: none; }
+[data-theme="light"] .starfield { display: none; }
+[data-theme="light"] #site-nav { background: rgba(245, 241, 235, 0.95); }
+[data-theme="light"] .status-bar { background: rgba(245, 241, 235, 0.95); }
+[data-theme="light"] .scene-text { color: #2a2a28; }
+[data-theme="light"] .scene-text .dialogue { color: #1a6e7a; }
+[data-theme="light"] .scene-text .thought { color: #6a8a8f; }
+[data-theme="light"] .tech-section-text { color: #3a3a38; }
+[data-theme="light"] a:hover { color: #000; }
+[data-theme="light"] ::-webkit-scrollbar-thumb { background: rgba(26,110,122,0.2); }
+[data-theme="light"] .nav-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+[data-theme="light"] .data-row .sub { color: rgba(26,110,122,0.3); }
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 html, body {
@@ -70,6 +99,13 @@ a:hover { color: #fff; }
 #site-nav a:hover { color: var(--accent); border-color: var(--border); }
 #site-nav a.active { color: var(--accent); border-color: var(--accent); background: rgba(0,229,255,0.08); }
 #site-nav .nav-links { display: flex; gap: 2px; overflow-x: auto; flex: 1; }
+#site-nav .theme-toggle {
+  background: none; border: 1px solid var(--border);
+  color: var(--text-dim); font-size: 14px; padding: 2px 8px; cursor: pointer;
+  border-radius: 2px; margin-left: auto; margin-right: 4px;
+  transition: all 0.2s ease;
+}
+#site-nav .theme-toggle:hover { color: var(--accent); border-color: var(--accent); }
 #site-nav .hamburger {
   display: none; background: none; border: 1px solid var(--border);
   color: var(--accent); font-size: 16px; padding: 4px 8px; cursor: pointer;
@@ -79,6 +115,7 @@ a:hover { color: #fff; }
 @media (max-width: 600px) {
   #site-nav { flex-wrap: wrap; height: auto; padding: 6px 10px; }
   #site-nav .nav-brand { flex: 1; font-size: 9px; }
+  #site-nav .theme-toggle { margin-left: auto; margin-right: 6px; font-size: 12px; padding: 2px 6px; }
   #site-nav .hamburger { display: block; }
   #site-nav .nav-links {
     display: none; flex-direction: column; width: 100%;

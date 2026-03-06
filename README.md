@@ -45,6 +45,7 @@ The site is hosted via GitHub Pages from the root of this repository. All pages 
 ├── source_texts/           # Extracted plain-text versions of all stories
 ├── UNIVERSE_REFERENCE.md   # Comprehensive reference document (all 11 texts)
 ├── BRAINSTORMING.md        # Development log, ideas, and notes for future work
+├── AI_ADVICE.md            # Practical advice for AI models working on this project
 └── README.md               # This file
 ```
 
@@ -72,6 +73,8 @@ The universe is built from 11 source texts:
 - **`UNIVERSE_REFERENCE.md`** — Comprehensive reference covering synopses, characters, factions, technology, themes, continuity connections, and analysis across all 11 texts. Start here for any development work.
 
 - **`BRAINSTORMING.md`** — Development log, stream-of-consciousness thoughts on the universe, brainstormed ideas (implemented and unimplemented), and notes for future AI-assisted sessions.
+
+- **`AI_ADVICE.md`** — Practical advice for AI models working on this project. Covers common pitfalls (don't waste tokens retyping prose), architecture notes, visual language guidelines, and what's been done vs. what's left. **Read this before starting any AI-assisted work.**
 
 ## Development
 

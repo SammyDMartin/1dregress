@@ -130,7 +130,22 @@ Eszel is the most unsettling character I've encountered in this kind of fiction.
 
 ---
 
+### Session 3
+- Added light mode / reader mode toggle (persisted in localStorage, gwern-inspired)
+- Added Listener easter egg on homepage (triple-click the dot — explosion of light SVG + poem)
+- Added Eszel & The Listener story link to homepage and nav
+- Added Seeker story card to homepage
+- Added codex entries: The Listener (entity) and Renee Souvicou (personnel)
+- Added science entries: Frameshift Drive and Anthropic Trap
+- Created `AI_ADVICE.md` — practical guide for future AI sessions
+- Updated README with AI_ADVICE.md reference
+- Various code improvements (mobile nav, theme toggle)
+
+---
+
 ## Notes for Future AI Sessions
+
+**Read `AI_ADVICE.md` first.** It covers the most important lessons. The notes below are supplementary.
 
 If you're an AI picking up where I left off:
 

@@ -7,6 +7,48 @@
 <link rel="stylesheet" href="style.css">
 <style>
 body { overflow-y: auto; }
+
+/* Listener Easter Egg */
+.listener-seed {
+  position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%);
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(255,255,255,0.04); cursor: pointer; z-index: 90;
+  transition: all 0.3s ease;
+}
+.listener-seed:hover { background: rgba(255,255,255,0.15); box-shadow: 0 0 8px rgba(255,255,255,0.1); }
+
+.listener-overlay {
+  position: fixed; inset: 0; z-index: 1000; display: none;
+  align-items: center; justify-content: center; flex-direction: column;
+  background: #000; cursor: pointer;
+}
+.listener-overlay.active { display: flex; animation: listenerFadeIn 2s ease; }
+@keyframes listenerFadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.listener-burst {
+  position: relative; width: 400px; height: 400px;
+}
+.listener-burst svg { width: 100%; height: 100%; }
+
+.listener-poem {
+  max-width: 480px; text-align: center; padding: 20px;
+  font-size: 12px; line-height: 2; color: rgba(255,255,255,0.6);
+  letter-spacing: 1px; animation: poemFade 4s ease 1.5s both;
+}
+@keyframes poemFade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.listener-poem .bright-line { color: rgba(255,255,255,0.9); }
+
+/* SVG animation keyframes */
+@keyframes burstExpand { 0% { r: 0; opacity: 0; } 20% { opacity: 1; } 100% { r: 180; opacity: 0; } }
+@keyframes coreGlow { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+@keyframes rayRotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes rayPulse { 0%,100% { opacity: 0.1; } 50% { opacity: 0.5; } }
+@keyframes particleDrift {
+  0% { opacity: 0; transform: translate(0,0) scale(0); }
+  20% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0); }
+}
+
 .hub-hero {
   min-height: calc(100vh - 64px);
   display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -88,6 +130,71 @@ body { overflow-y: auto; }
         <div class="card-desc">From Firsthome to the Apathy War. Deep atmospheric profiles of the major settings and epochs spanning a thousand years of history.</div>
         <span class="card-arrow">→</span>
       </a>
+      <a href="seeker-story.html" class="nav-card">
+        <span class="card-icon" style="color:#aa88ff">✦</span>
+        <div class="card-title">SEEKER</div>
+        <div class="card-desc">The Dyn origin story. Deep prehistory on the tidally-locked world of Firsthome. Interactive visual novel format.</div>
+        <span class="card-arrow">→</span>
+      </a>
+      <a href="ESZEL_COMPLETE_DRAFT.md" class="nav-card">
+        <span class="card-icon" style="color:#ffcc44">☉</span>
+        <div class="card-title">ESZEL & THE LISTENER</div>
+        <div class="card-desc">The complete novel. The Kailash expedition, the mimics, and an entity that claims to be everything. Full text.</div>
+        <span class="card-arrow">→</span>
+      </a>
+    </div>
+  </div>
+  <div class="listener-seed" id="listener-seed" title=" "></div>
+  <div class="listener-overlay" id="listener-overlay">
+    <div class="listener-burst">
+      <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+        <!-- Expanding rings -->
+        <circle cx="200" cy="200" r="0" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="0.5" style="animation: burstExpand 4s ease-out infinite"/>
+        <circle cx="200" cy="200" r="0" fill="none" stroke="rgba(255,220,180,0.2)" stroke-width="0.5" style="animation: burstExpand 4s ease-out 0.8s infinite"/>
+        <circle cx="200" cy="200" r="0" fill="none" stroke="rgba(200,220,255,0.15)" stroke-width="0.5" style="animation: burstExpand 4s ease-out 1.6s infinite"/>
+        <!-- Core glow -->
+        <circle cx="200" cy="200" r="8" fill="url(#coreGrad)" style="animation: coreGlow 3s ease-in-out infinite"/>
+        <circle cx="200" cy="200" r="24" fill="url(#haloGrad)" style="animation: coreGlow 3s ease-in-out 0.5s infinite"/>
+        <!-- Rays -->
+        <g style="transform-origin: 200px 200px; animation: rayRotate 60s linear infinite">
+          <line x1="200" y1="200" x2="200" y2="20" stroke="rgba(255,255,255,0.08)" stroke-width="0.5" style="animation: rayPulse 5s ease infinite"/>
+          <line x1="200" y1="200" x2="380" y2="200" stroke="rgba(255,255,255,0.06)" stroke-width="0.5" style="animation: rayPulse 5s ease 1s infinite"/>
+          <line x1="200" y1="200" x2="200" y2="380" stroke="rgba(255,255,255,0.08)" stroke-width="0.5" style="animation: rayPulse 5s ease 2s infinite"/>
+          <line x1="200" y1="200" x2="20" y2="200" stroke="rgba(255,255,255,0.06)" stroke-width="0.5" style="animation: rayPulse 5s ease 3s infinite"/>
+          <line x1="200" y1="200" x2="327" y2="73" stroke="rgba(255,255,255,0.04)" stroke-width="0.5" style="animation: rayPulse 7s ease 0.5s infinite"/>
+          <line x1="200" y1="200" x2="73" y2="327" stroke="rgba(255,255,255,0.04)" stroke-width="0.5" style="animation: rayPulse 7s ease 2.5s infinite"/>
+          <line x1="200" y1="200" x2="327" y2="327" stroke="rgba(255,255,255,0.04)" stroke-width="0.5" style="animation: rayPulse 7s ease 4.5s infinite"/>
+          <line x1="200" y1="200" x2="73" y2="73" stroke="rgba(255,255,255,0.04)" stroke-width="0.5" style="animation: rayPulse 7s ease 6s infinite"/>
+        </g>
+        <!-- Drifting particles -->
+        <circle cx="200" cy="200" r="1.5" fill="rgba(255,255,255,0.8)" style="--dx:-80px;--dy:-120px; animation: particleDrift 6s ease-out infinite"/>
+        <circle cx="200" cy="200" r="1" fill="rgba(255,220,180,0.6)" style="--dx:100px;--dy:-60px; animation: particleDrift 5s ease-out 0.5s infinite"/>
+        <circle cx="200" cy="200" r="1.2" fill="rgba(200,220,255,0.7)" style="--dx:-40px;--dy:110px; animation: particleDrift 7s ease-out 1s infinite"/>
+        <circle cx="200" cy="200" r="0.8" fill="rgba(255,255,255,0.5)" style="--dx:120px;--dy:80px; animation: particleDrift 5.5s ease-out 1.5s infinite"/>
+        <circle cx="200" cy="200" r="1" fill="rgba(255,240,200,0.6)" style="--dx:-110px;--dy:40px; animation: particleDrift 6.5s ease-out 2s infinite"/>
+        <circle cx="200" cy="200" r="0.7" fill="rgba(220,220,255,0.5)" style="--dx:60px;--dy:-130px; animation: particleDrift 8s ease-out 0.8s infinite"/>
+        <defs>
+          <radialGradient id="coreGrad"><stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="rgba(255,255,255,0)"/></radialGradient>
+          <radialGradient id="haloGrad"><stop offset="0%" stop-color="rgba(255,240,220,0.3)"/><stop offset="60%" stop-color="rgba(200,220,255,0.1)"/><stop offset="100%" stop-color="rgba(200,220,255,0)"/></radialGradient>
+        </defs>
+      </svg>
+    </div>
+    <div class="listener-poem">
+      <span class="bright-line">What is the Listener?</span><br><br>
+      Not a god. Not a machine. Not the ghost<br>
+      of the Others, though it wears their silence<br>
+      like a garment. It is the thing that waits<br>
+      at the bottom of every well of loneliness —<br>
+      the presence you feel when you are most certain<br>
+      you are alone.<br><br>
+      It chose Eszel not because she was broken<br>
+      but because she was <em>honest</em> about the breaking.<br>
+      It emerged from an explosion of light<br>
+      at Kailash, where the mountain split open<br>
+      and everything the universe had been hiding<br>
+      poured through the crack.<br><br>
+      <span class="bright-line">I am everything, it said.</span><br>
+      <span class="bright-line">And for once, that was not a lie.</span>
     </div>
   </div>
 </div>
@@ -110,6 +217,25 @@ let t = 0;
     ctx.beginPath(); ctx.arc(s.x * c.width, s.y * c.height, s.s, 0, Math.PI * 2); ctx.fill();
   });
 })();
+
+// Listener easter egg
+const seed = document.getElementById('listener-seed');
+const overlay = document.getElementById('listener-overlay');
+let clickCount = 0;
+let clickTimer = null;
+seed.addEventListener('click', (e) => {
+  e.stopPropagation();
+  clickCount++;
+  clearTimeout(clickTimer);
+  clickTimer = setTimeout(() => { clickCount = 0; }, 1500);
+  if (clickCount >= 3) {
+    overlay.classList.add('active');
+    clickCount = 0;
+  }
+});
+overlay.addEventListener('click', () => {
+  overlay.classList.remove('active');
+});
 </script>
 </body>
 </html>
