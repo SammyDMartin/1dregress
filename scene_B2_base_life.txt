@@ -1,0 +1,109 @@
+The days at Walker Base had a texture like recycled water — technically adequate, stripped of anything you might call flavor.
+
+I'd been there long enough that the rhythms had calcified into something resembling normalcy. Wake to the soft chime at 0600, which was arbitrary since Kailash's rotation gave us a thirty-one-hour day that the base administration had simply refused to acknowledge. Union Standard Time, imposed on a world that had never asked for clocks. The air cycled through the same four filters and arrived in your lungs with a faint metallic sweetness, like sucking on a coin. You stopped noticing after the first week. Or you told yourself you stopped noticing.
+
+Breakfast was communal in the south canteen — one of two identical chambers that the design algorithm had produced with the creative flair of a man filling out tax forms. Beige walls of programmable silicon, capable of reconfiguring into any number of shapes and surfaces but set permanently to "institutional." Bench seating. Overhead strips that mimicked Terran daylight at a color temperature that made everyone look vaguely consumptive. I'd counted the ceiling panels once. Three hundred and twelve. I'd counted them again to be sure.
+
+This is what boredom does. It makes you count ceiling panels twice.
+
+My father would be there by the time I arrived, already halfway through his coffee, which wasn't really coffee but a suspension of roasted protein compounds that the printers produced in grudging approximation. He drank it like it was real. He drank everything like it was real. That was the thing about my father — his capacity for selective delusion was, in its own way, a kind of genius.
+
+"Morning, Essie." Every morning. The same two words, the same upward inflection, as though each day might be the one where I'd surprise him with enthusiasm.
+
+"Morning."
+
+He'd nod, satisfied with this exchange, and return to whatever was scrolling across his tablet. Spectral analyses, mostly. The pit-light tubes had become his entire world — those strange filaments of structured plasma the Mimics exchanged between their karst recesses, threading them through the dark like luminous veins. He'd spent weeks characterizing their emission spectra and found nothing unusual. Then he'd started on the particle dynamics, and that was when things got interesting, though I only understood this later. At the time, he'd simply grown quieter at meals. More intent. The way he held his stylus changed — not writing but pressing, as though he could push the answers through the screen by force of will.
+
+He was finding that the ions in the plasma streams didn't behave the way ions should. Their inertial mass was wrong. Not by much — fractions of a percent, variances that any reasonable physicist would attribute to instrument error. But my father was not a reasonable physicist. He was a stubborn one, which is the more useful thing to be.
+
+My mother would arrive ten minutes after us, always, as though she'd timed the gap deliberately. She probably had. Lena Marchetti brought the same tactical precision to family meals that she brought to her actual work, which was administrative coordination of the civilian science teams — a role that required her to mediate between people who agreed on nothing except that they were each individually correct. She was good at it. She was good at most things that required the application of controlled warmth.
+
+She worried. That was the substrate beneath everything else — a deep, thrumming anxiety that she managed so expertly most people never saw it. I saw it. In the way she checked the atmospheric seals on my suit before I went to the observation gallery. In the way she positioned herself between me and the canteen doors, as though something might come through them. She'd argued against bringing me to Kailash. I knew this not because anyone told me but because the argument had left a residue on both my parents — a stiffness between them that surfaced in small negotiations over portion sizes and sleep schedules, proxy wars for the larger battle they'd already fought and my father had won.
+
+She loved us. That's not complicated. People act as though love requires explanation, but it doesn't. It only requires attention, and she paid hers in full.
+
+The base housed roughly two hundred people, which was enough to form a small society and not enough to escape anyone in it. Military personnel occupied the east modules — HDF regulars under Commander Vasik, who ran his section with the grim efficiency of a man who believed that discipline was a prophylactic against the unknown. He was afraid, though he'd have died before admitting it. Not of the Mimics specifically. Of irrelevance. He'd come expecting a first contact that required force, and the Mimics had denied him the courtesy of being threatening.
+
+The science teams spread across the west modules and the deep labs. Xenobiologists, geologists, atmospheric chemists, two linguists who'd been brought to crack a communication problem that turned out to have no communication in it. Dr. Yuen and Dr. Patel, the linguists — I liked them, inasmuch as I liked anyone. They played chess in the south canteen after dinner and argued about Chomskyan universals with the passion of people who suspected their discipline might not apply here. They were right to suspect.
+
+Then there were the families. Eleven children on the base, counting me, ranging from a three-year-old named Mira whose mother was a geochemist, to a sixteen-year-old called Daro who had already decided he would join the HDF and practiced looking stern in mirrors. There were tutoring sessions in module 14, run by a rotating cast of scientists who taught us whatever they happened to know, which meant I received an education heavy on crystallography and light on literature.
+
+And there was Lao. Lao Chen, fourteen, whose father ran atmospheric monitoring. Lao, who followed me around the observation gallery and asked me questions I didn't want to answer. She was sharp — sharper than she let on, which I found both endearing and exhausting. She performed a version of herself that was slightly less intelligent than the real thing, the way some people slouch to appear shorter. I never understood why. Perhaps it was easier. Perhaps being fully yourself in a place like Walker Base felt like wearing a coat that didn't fit.
+
+"Do you think they know we're here?" she asked me once, pressing her face against the gallery's outer window. Beyond the triple-paned glass, the rust-colored plains of Kailash stretched to a horizon that looked bitten — ragged with karst collapses, the surface pocked and broken where the limestone substrate had given way to the labyrinth beneath.
+
+"The Mimics?"
+
+"Who else?"
+
+I watched two figures in environment suits moving along the marked path toward Sinkhole Seven, where the primary observation post had been established. At that distance they looked like toys. Beyond them, near the sinkhole's lip, I could see the Mimics.
+
+They were difficult to describe because they resisted description. Small — not much taller than my chest. Dense. They moved in clusters of three or four, draped in what the xenobiologists called integument and what everyone else called coats, because that's what they looked like. Like midgets in greatcoats, someone had said early on, and the image had stuck with the tenacity of all unkind observations. Their faces, if they had faces, were hidden. Their limbs, if they were limbs, were folded. They emerged from the karst at irregular intervals, exchanged their plasma filaments between sinkhole openings in patterns that the linguists mapped obsessively, and withdrew.
+
+They did not respond to signals. They did not respond to gifts. They did not respond to Dr. Yuen standing at the edge of Sinkhole Seven for six hours holding a sign with a mathematical proof on it, which had been Patel's idea and which Yuen had executed with the weary dedication of a man repaying a chess debt.
+
+"They know," I said.
+
+They did. I was certain of it in a way I couldn't articulate — a conviction that sat below language, in the part of the mind that knows when it's being watched. The Mimics were aware of us the way you're aware of weather. They simply didn't consider us a phenomenon worth addressing.
+
+This should have been humbling. Instead it made the science teams frantic. Three months of failed contact protocols. Dr. Kessler in xenobiology had started suggesting increasingly baroque approaches — chemical signaling, seismic percussion, modulated light. Commander Vasik attended these meetings with the fixed smile of a man watching civilians rediscover the concept of futility.
+
+I attended too, sometimes, sitting in the back of the briefing room. No one stopped me. One of the advantages of being twelve on a base full of distracted adults is that you become furniture.
+
+I watched them talk. I watched Kessler's enthusiasm curdle session by session into something harder. I watched Yuen and Patel exchange glances that said we came all this way for nothing. I watched my father stay quiet, bent over his own data, already pursuing a thread that none of them had noticed yet because they were all looking at the Mimics and he was looking at what the Mimics made.
+
+I watched, and I felt the distance between myself and every person in that room like a pane of glass — transparent, solid, there.
+
+And beneath the distance, beneath the recycled air and the counted ceiling panels and the low hum of life support that was the base's mechanical heartbeat, there was the pull.
+
+I don't know when it started. That's not true. I know exactly when it started — the first night, lying on my cot in the family quarters, feeling the floor vibrate with some deep tectonic whisper. But acknowledging that would mean acknowledging that I'd spent months ignoring it, and I preferred to think of it as gradual. A slow accretion, like dust.
+
+It was a directionality. Not sound, not quite. A sense that down and out meant something — that the karst beneath the base held a geometry I could almost perceive, the way you can almost hear a conversation in the next room. Not words. Never words. Just the shape of intent, pressing up through kilometers of stone.
+
+I started lingering at the observation gallery after hours. Watching the twilight, which on Kailash lasted for hours — the star sinking through bands of ochre and violet, the plains darkening to the color of old blood, the sinkholes becoming black mouths in a landscape of black mouths. And I'd feel it. The pull. Patient, enormous, disinterested in my readiness.
+
+Come and see.
+
+Not words. But close enough.
+
+---
+
+The storm came on a Tuesday, which was a Wednesday on Kailash and meaningless either way.
+
+I was in module 14 when the first warning sounded — a sharp triple tone I'd never heard outside drills. The lights shifted to amber. The floor shuddered, not the gentle tectonic murmur I'd grown accustomed to but a violent lateral jolt that sent tablets skittering off desks and Mira's mother stumbling into a wall.
+
+The base's PA crackled. Vasik's voice, stripped of its usual measured cadence: "All personnel, shelter protocol. Seal all modules. This is not a drill."
+
+What followed was twelve hours of noise, fear, and the particular helplessness of people trained for emergencies discovering that this emergency had not read their training manuals.
+
+The seismics came first — three major jolts that cracked the silicon cladding in modules 6 and 11 and ruptured a water reclamation line in the east wing. Then the radiation spike. Kailash's star — an undistinguished main-sequence furnace that the astronomers had catalogued and dismissed — produced a coronal event of a magnitude that the atmospheric monitors had considered statistically implausible. The base's shielding held, mostly. The suits in the outer airlock did not. The comms array on the surface did not. The satellite uplink did not.
+
+And the Resolute, in orbit, caught the full unshielded wave.
+
+We learned this later, in fragments. The Resolute had lost its port sensor array and taken damage to three decks. No deaths, but injuries, and a ship suddenly operating on reduced capability above a world that had just demonstrated it was not as quiet as advertised.
+
+My father found me in the family shelter, wedged between my mother and a storage crate. He had dust in his hair and a cut above his left eye, and he knelt down and held my face in both hands and looked at me the way he did when he was making sure I was real.
+
+"I'm fine," I said.
+
+"I know," he said, not believing me, not needing to.
+
+My mother's arm around my shoulders was a vice. She didn't speak. She didn't need to. Her body said I told you. I told you this would happen. I told you not to bring her here. And beneath that: Thank God. Thank God. Thank God.
+
+The base stabilized. Repair crews mobilized. Vasik's voice returned to the PA with instructions that were calm, sequential, and transparently designed to impose order on a situation that had none. Module 6 was evacuated. Module 11 sealed for repair. Medical teams to the east wing. All nonessential personnel confined to quarters.
+
+I lay in my cot that night and listened to the base breathe — the strained wheeze of damaged ventilation, the intermittent clang of repair bots in the corridors, the murmured conversations of frightened people pretending to be calm. My mother slept with one hand on my arm. My father didn't sleep at all. I could hear him on the other side of the partition, scrolling through his data with the compulsive focus of a man who has found that understanding is the only antidote to fear.
+
+And beneath it all, beneath the damage and the chaos and the taste of dust in recycled air, the pull surged.
+
+Not gradual now. Not patient. The storm had shaken something loose — in the ground, in me, in whatever boundary had held the whisper to a murmur. It pressed against the inside of my skull with the blind insistence of water finding a crack.
+
+Come and see.
+
+Close enough to words now that the difference hardly mattered.
+
+I lay still. I breathed. I felt my mother's hand on my arm and my father's attention bent toward his screen and the whole fragile architecture of Walker Base settling around me like a house of cards that had survived one gust and would not survive the next.
+
+Three days. In three days I would go.
+
+I didn't know that yet. But the thing beneath the karst did.
