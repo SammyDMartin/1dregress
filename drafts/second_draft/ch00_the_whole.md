@@ -2,8 +2,4 @@
 
 ---
 
-For as long as the star has burned, the Whole has endured beneath the surface. It does not think as smaller things think. It does not plan or hope or fear. It tends. It maintains. It persists.
-
-When the intrusions began — the electromagnetic noise, the vibrations in the substrate, the clumsy drilling into nodes that had been stable for aeons — the Whole perceived them as one perceives a splinter working its way beneath the skin. Not with anger. Not with alarm. With the calm, total awareness of a system registering a fault.
-
-The Whole decided.
+The foreign body arrived suddenly and without warning. The first the Whole knew, a thin sliver of heavy elements was emitting concentrated forms of energy, randomising many of the Whole's smaller elements. In itself this was tolerable. Intrusions occurred, and could be allowed to pass by. However, this one was different. The Whole flipped its vision, like a man turning on a night-vision scope. It saw the Structure, saw Mind. And now, the intruder shone with a terrible violet-black light. It burned. The Whole considered its next move. The Whole decided.
