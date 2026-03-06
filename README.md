@@ -19,6 +19,7 @@ The site is hosted via GitHub Pages from the root of this repository. All pages 
 | **Timeline** | `timeline.html` | Interactive chronology from Deep Antiquity to the Apathy War, filterable by era |
 | **Codex** | `codex.html` | Intelligence dossiers on factions, personnel, vessels, threats, and entities |
 | **Worlds** | `worlds.html` | Atmospheric profiles of major settings and epochs |
+| **Facilitator** | `facilitator.html` | Facilitator canon analysis, comparison to modern AI/Claude, interactive chat |
 
 ## Shared Resources
 
@@ -38,14 +39,21 @@ The site is hosted via GitHub Pages from the root of this repository. All pages 
 ├── timeline.html           # Historical Timeline
 ├── codex.html              # Intelligence Codex
 ├── worlds.html             # Worlds & Eras
+├── facilitator.html        # Facilitator analysis + interactive chat
 ├── style.css               # Shared stylesheet
 ├── nav.js                  # Shared navigation
 ├── msd/                    # MSD React/Vite source (separate project)
 ├── source_materials/       # Original uploaded files (docx, pdf, txt)
 ├── source_texts/           # Extracted plain-text versions of all stories
+├── drafts/                 # Working drafts (Hansun reconciliation, etc.)
 ├── UNIVERSE_REFERENCE.md   # Comprehensive reference document (all 11 texts)
 ├── BRAINSTORMING.md        # Development log, ideas, and notes for future work
 ├── AI_ADVICE.md            # Practical advice for AI models working on this project
+├── THE_LAST_DUTY.md        # Original short story — 2314 CE, the Utilitaria's death
+├── ESZEL_COMPLETE_DRAFT.md # Complete Eszel & The Listener novel draft
+├── ESZEL_GAP_BRAINSTORMING.md  # Gap analysis for Eszel novel
+├── ESZEL_COMPLETION_PLANNING.md # Planning doc for Eszel completion
+├── ESZEL_JUDGE_REPORT.md   # Quality assessment of Eszel draft
 └── README.md               # This file
 ```
 
