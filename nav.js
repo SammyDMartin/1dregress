@@ -14,6 +14,7 @@
     { href: 'facilitator.html', label: 'FACILITATOR' },
     { href: 'anthropic-trap.html', label: 'TRAP' },
     { href: 'threads.html', label: 'THREADS' },
+    { href: 'drafts.html', label: 'DRAFTS' },
   ];
 
   const current = location.pathname.split('/').pop() || 'index.html';
