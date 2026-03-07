@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Starwhisp — Ascent Universe</title>
+<meta name="description" content="Humanity's first interstellar mission reaches Tau Ceti and discovers an alien civilization. An interactive story reader.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow: hidden; }
+
+/* Scene backgrounds */
+.scene-bg { position: fixed; inset: 0; z-index: 0; transition: opacity 1.5s ease; pointer-events: none; }
+.scene-bg-waking { background: radial-gradient(ellipse at 50% 60%, rgba(20,40,60,0.2) 0%, rgba(0,5,10,0.8) 100%); }
+.scene-bg-arrival { background: radial-gradient(ellipse at 30% 40%, rgba(0,80,120,0.15) 0%, rgba(0,5,15,0.8) 100%); }
+.scene-bg-contact { background: radial-gradient(ellipse at 60% 50%, rgba(60,20,40,0.12) 0%, rgba(5,0,10,0.8) 100%); }
+.scene-bg-revelation { background: radial-gradient(ellipse at 50% 30%, rgba(80,20,20,0.15) 0%, rgba(10,0,0,0.8) 100%); }
+.scene-bg-end { background: radial-gradient(ellipse at 50% 50%, rgba(100,60,20,0.12) 0%, rgba(0,0,0,0.95) 100%); }
+
+/* Scene effects */
+.scene-effect { position: fixed; bottom: 0; left: 0; right: 0; height: 3px; z-index: 1; pointer-events: none; }
+.effect-cold { background: linear-gradient(90deg, transparent, rgba(100,150,200,0.3), transparent); animation: effectPulse 4s ease infinite; }
+.effect-wonder { background: linear-gradient(90deg, transparent, rgba(0,229,255,0.4), transparent); animation: effectPulse 3s ease infinite; }
+.effect-dread { background: linear-gradient(90deg, transparent, rgba(200,50,50,0.4), transparent); animation: effectPulse 2.5s ease infinite; }
+.effect-fire { background: linear-gradient(90deg, transparent, rgba(255,150,50,0.5), transparent); animation: effectPulse 1.5s ease infinite; }
+@keyframes effectPulse { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
+</style>
+</head>
+<body>
+<div class="page-body">
+
+<div class="scene-bg" id="sceneBg"></div>
+<div class="scene-effect" id="sceneEffect"></div>
+
+<div class="scene-container">
+  <div class="scene-header" id="sceneHeader">
+    <a href="stories.html" class="scene-back">&larr; ALL STORIES</a>
+    <div class="scene-title" id="sceneTitle">STARWHISP</div>
+    <div class="scene-select-wrap">
+      <select class="scene-select" id="sceneSelect"></select>
+    </div>
+  </div>
+  <div class="scene-text" id="sceneText"></div>
+  <div class="story-nav">
+    <button id="prevBtn" onclick="goScene(currentScene-1)">&larr; PREV</button>
+    <span class="scene-counter" id="sceneCounter"></span>
+    <button id="nextBtn" onclick="goScene(currentScene+1)">NEXT &rarr;</button>
+  </div>
+</div>
+
+</div>
+<script src="nav.js"></script>
+<script>
+const SCENES = [
+{
+  title: "WAKING",
+  header: "20TH OF JULY — 10 AU FROM TAU CETI",
+  bg: "scene-bg-waking",
+  effect: "effect-cold",
+  text: `<p>There was something wrong. It took my groggy mind a few moments to isolate the feeling, collapse the vague anxiety down to a specific point. The numbers blinking on the bulkhead overhead swam into focus, and my eyes fixed on one particular number. The date was too early by far — we were still 10 AUs from our destination and my body not fully grown when the ship brought me to reluctant consciousness.</p>
+
+<p>I dragged myself lethargically out of the chamber, into chambers still being expanded and only recently pressurised, every gram sieved from local space. Why send intact humans weighing dozens of kilograms along with all the ancillary garbage of life support and cold-sleep facilities? Much more efficient to send zygotes, super-accelerate their growth, feed them using food processed from local matter and shape the developing brains according to a stored template, placing old minds into new bodies.</p>
+
+<p>The process had side effects — my own memories were blurry and affectless, and I didn't think all my motor skills were quite matured. The light of the axial corridor stung my newly grown eyes.</p>
+
+<p><span class="dialogue">"Where the hell are we?"</span> I said slowly, coughing up a few spots of tank fluid as I pulled my way up the ladder that ran along the ship's spine.</p>
+
+<p><span class="dialogue">"Decelerating towards Tau Ceti at full thrust,"</span> the ship replied. <span class="dialogue">"All stored personalities and zygotes are intact and all ship systems are functioning optimally. Just head to the bridge, I can brief you there."</span></p>
+
+<p>The bridge had been an afterthought — under what circumstances would any human be able to fly the spacecraft more competently than the controlling AI? My immature body flopped down into the conference chair. My arm ached, as the muscle hadn't ever been used before, and when I looked down I saw the body of an anaemic child.</p>
+
+<p><span class="dialogue">"So, what joys does the future bring?"</span></p>
+
+<p><span class="dialogue">"Several days ago I detected something that registered like a black hole on the mass sensors. It wasn't a black hole. I'm forced to conclude that the object ahead of us is artificial."</span></p>
+
+<p>Another drop of tank fluid dribbled out of my dumbly gaping mouth. The projector on the table winked on, showing a dodecahedron of glowing lights surrounding a milky pool of darkness. More points of light surrounded it.</p>
+
+<p>My fingers whitened around the chair armrests and ice filled every nerve as I felt the same terror that Stone Age tribesmen must have experienced when the first colonial armies rode over the horizon. This was beyond me.</p>
+
+<p><span class="dialogue">"A wormhole,"</span> I breathed. <span class="dialogue">"An artificially sustained wormhole. And what are those lights?"</span></p>
+
+<p><span class="dialogue">"Spacecraft,"</span> said the Starwhisp. <span class="dialogue">"They are inert, emitting in the infrared only, but each one is between two and five hundred metres long."</span></p>`
+},
+{
+  title: "FIRST CONTACT",
+  header: "1ST AUGUST — APPROACHING THE WORMHOLE",
+  bg: "scene-bg-arrival",
+  effect: "effect-wonder",
+  text: `<p>Dreyfus and Grey — our contact expert and resident physicist — had been force-grown over the last ten days. Not the most exciting or the most qualified team for the most pivotal moment in human history, but we could do worse.</p>
+
+<p><span class="dialogue">"Frankly, I don't understand any of it,"</span> said Grey. <span class="dialogue">"We expected the aliens to detect us almost the moment we approached. We're barely a million kilometres from the wormhole and as far as I can tell they're still ignoring us."</span></p>
+
+<p><span class="dialogue">"I don't find that surprising,"</span> Dreyfus interrupted. <span class="dialogue">"Why would they care about primitives who can't even manipulate the fabric of the universe?"</span></p>
+
+<p>We broadcast our first message — prime numbers, periodic tables, images of human beings. The response was immediate.</p>
+
+<p><span class="dialogue">"They're accelerating towards us!"</span> Grey shouted. <span class="dialogue">"I'm reading three fast-movers launching from the lead ship. Missiles, heading straight for us. Impact in twenty seconds."</span></p>
+
+<p>In those moments my thoughts turned to all the family and friends stored inside the memory cores, everyone who'd put their trust in me. I would be the one who would have to kill them — if the aliens attempted to board I would have to release the antimatter containment.</p>
+
+<p>The seconds ticked away and suddenly the missiles were passing us, brushing less than a kilometre from the hull. Then the alien ships danced ahead, evading at the last moment.</p>
+
+<p><span class="dialogue">"A threat display,"</span> said Dreyfus slowly. <span class="dialogue">"Like deer butting horns — a show of martial strength. I think they're inviting us to respond."</span></p>
+
+<p>We lit up the antimatter drive — a brilliant torrent of charged particles hotter than the fusing core of a nova, billowing out for more than a thousand kilometres. Their reply was almost instantaneous.</p>
+
+<p><span class="dialogue">"Good to see you didn't stab us. What we have is yours. Come and see."</span></p>`
+},
+{
+  title: "ABOARD THE DYN SHIP",
+  header: "3RD AUGUST — K'TXL'S VESSEL",
+  bg: "scene-bg-contact",
+  effect: "effect-wonder",
+  text: `<p>They called themselves the Dyn. They had travelled far for some reason that didn't seem to translate very well, they liked that we were strong and they were apparently giving themselves up to us, because we were obviously stronger.</p>
+
+<p>We loaded magnetic pistols, strapped them to our belts and kicked out into the interior space of the ship. The first thing I noticed was the busyness of it all. Machines protruded from the dimly lit walls and floors, and everywhere the Dyn crowded.</p>
+
+<p>My first impression was of bears — they were huge and hunched over. But the heads were tapering and trilaterally symmetrical, muscular and insectile, with three narrow slits for eyes. Their skin was pale and wormlike but matted with shocking purple fur which seemed more like lichen.</p>
+
+<p>Animal eyes stared back at the two of us, but then the Dyn all turned away and went back to their tasks. We wandered the ship apparently ignored. The ship itself was old technology, no different in fundamentals to something we could have built in the 20th century.</p>
+
+<p>In the centre of a command chamber, K'txl floated; a little larger than the other Dyn, with a strange light in its eyes. Something about it indicated an intelligence we hadn't seen in the other aliens.</p>
+
+<p><span class="dialogue">"Do you like what you've found?"</span> the translator said.</p>
+
+<p><span class="dialogue">"We can share knowledge and technology in time. Do we have permission to remain aboard?"</span></p>
+
+<p><span class="dialogue">"What is… permission?"</span></p>
+
+<p><span class="dialogue">"Will you let us stay onboard for now?"</span></p>
+
+<p><span class="dialogue">"That's a contradiction. You are strong. Why would you pretend to let us control you? That's a lie."</span></p>
+
+<p><span class="dialogue">"We have no desire to hurt you, we don't mean you any harm."</span></p>
+
+<p>The translator bleeped — it couldn't translate the last phrase. That didn't seem like a good sign.</p>
+
+<p><span class="dialogue">"Why not? You didn't stab us, so you must want us for something."</span></p>`
+},
+{
+  title: "THE REVELATION",
+  header: "4TH AUGUST — THE BRIDGE",
+  bg: "scene-bg-revelation",
+  effect: "effect-dread",
+  text: `<p>K'txl had given us recordings. We all stared in mute silence at grainy footage. Armies were charging at each other as huge artillery guns fired, fronts dozens of kilometres wide running with whatever the Dyn used for blood. Whole populations up in arms and running headlong to their deaths.</p>
+
+<p>The view changed. A seething mass of Dyn were crammed inside a high-walled circular pen the size of a city. Dead bodies and dismembered limbs littered the ground.</p>
+
+<p><span class="dialogue">"Stop it. Just stop, I can't watch anymore."</span></p>
+
+<p><span class="dialogue">"This is a record of K'txl's domain. She wanted to show us how powerful she was,"</span> said Dreyfus, voice cracking.</p>
+
+<p><span class="dialogue">"Those weren't death camps,"</span> Grey said. <span class="dialogue">"They were breeding pens the Dyn set up for their own offspring. They spawn thousands and cull the excess. The children are fully sentient."</span></p>
+
+<p><span class="dialogue">"They don't even have a concept of morality as we understand it,"</span> said Dreyfus. <span class="dialogue">"The only outcome when Dyn meet is absolute surrender or total war. I don't think they understand what trade or compromise are."</span></p>
+
+<p>I felt my thoughts harden. <span class="dialogue">"If we don't do anything, maybe no human being will ever come to this system again. We send a message to Earth and tell them what we've learnt."</span></p>
+
+<p>Then Grey pulled himself along the access tube, a light in his eyes. <span class="dialogue">"I've found a wormhole connection to Earth. The map was hard to interpret, but it's quite clear. There is a wormhole somewhere in this star system, leading to somewhere in Earth's solar system."</span></p>
+
+<p><span class="dialogue">"Grey, prepare to transmit all our logs and the Dyn records by interstellar laser to the Sol system. Then I want a full burn out of here."</span></p>
+
+<p>Everyone nodded grimly, understanding what I meant. The message might spell our doom, but we had to do something.</p>`
+},
+{
+  title: "THE END",
+  header: "6TH AUGUST — FLEEING",
+  bg: "scene-bg-end",
+  effect: "effect-fire",
+  text: `<p>The first Dyn ship slid out of the wormhole almost as soon as we'd finished broadcasting. They came through nose-to-tail, at a rate of one every four seconds, as if there was a loading mechanism on the other side spitting the vessels out like bullets.</p>
+
+<p><span class="dialogue">"More than three hundred so far, but there's no sign of them slowing. They started as soon as we began broadcasting at Earth."</span></p>
+
+<p>K'txl's translated voice filled my ears.</p>
+
+<p><span class="dialogue">"You imagine that we are your enemy, though we surrendered. We heard the words you sent us, and we know you will hate us. Morality, law, all these strange imaginings. You live in a made-up world, where strong and virulent ideas rule your minds, and those ideas tell you to kill us for how we act."</span></p>
+
+<p><span class="dialogue">"Your warning moves at the speed of light, but wormholes go faster."</span></p>
+
+<p>Then the video feed came. The scale panned and zoomed out, showing a rubble field in deep space — larger and larger. Then new lights began to twinkle; the blue exhausts of nuclear engines, so many that our technological advantage wouldn't mean anything. The Dyn had been in space for a long time. They had built a fleet of millions.</p>
+
+<p>Dreyfus almost exploded. <span class="dialogue">"You idiot! You never even thought that maybe the Dyn would have a plan to deal with us?"</span></p>
+
+<p>I knew what we had to do. The Dyn were gaining, and it was a mathematical certainty they would close the gap. I had to prevent them from stealing our technology. It would give Earth a fighting chance.</p>
+
+<p><span class="dialogue">"Starwhisp,"</span> I said, voice cracking. <span class="dialogue">"Begin auto-destruct sequence. Let's give it fifteen minutes."</span></p>
+
+<p>We sat in silence as the awful countdown progressed, watching the Dyn creep up on us and wishing desperately that we'd made any other choice for any other reason. Dreyfus looked a few times like he was about to say something, but didn't.</p>
+
+<p>The end came in an instant as all the stored antimatter detonated at once. The Dyn spacecraft continued through the expanding debris field, onward to the wormhole and Earth.</p>`
+}
+];
+
+// ═══════════════════════════════════════════════════════════════
+// SCENE ENGINE (same pattern as other story readers)
+// ═══════════════════════════════════════════════════════════════
+let currentScene = 0;
+const select = document.getElementById('sceneSelect');
+SCENES.forEach((s, i) => {
+  const opt = document.createElement('option');
+  opt.value = i;
+  opt.textContent = (i + 1) + '. ' + s.title;
+  select.appendChild(opt);
+});
+select.addEventListener('change', () => goScene(+select.value));
+
+function goScene(i) {
+  if (i < 0 || i >= SCENES.length) return;
+  currentScene = i;
+  const s = SCENES[i];
+
+  document.getElementById('sceneHeader').querySelector('.scene-title').textContent = s.header;
+  document.getElementById('sceneText').innerHTML = s.text;
+  document.getElementById('sceneCounter').textContent = (i + 1) + ' / ' + SCENES.length;
+  document.getElementById('prevBtn').disabled = i === 0;
+  document.getElementById('nextBtn').disabled = i === SCENES.length - 1;
+  select.value = i;
+
+  const bg = document.getElementById('sceneBg');
+  bg.className = 'scene-bg ' + s.bg;
+  const eff = document.getElementById('sceneEffect');
+  eff.className = 'scene-effect ' + s.effect;
+
+  document.querySelector('.scene-text').scrollTop = 0;
+}
+
+goScene(0);
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goScene(currentScene + 1);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goScene(currentScene - 1);
+});
+
+// Touch/swipe
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 60) goScene(currentScene + (dx < 0 ? 1 : -1));
+});
+</script>
+</body>
+</html>
