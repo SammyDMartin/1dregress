@@ -31,7 +31,7 @@
   ];
 
   const current = location.pathname.split('/').pop() || 'index.html';
-  const storyPages = ['reader.html','story.html','seeker-story.html','worlds-within-story.html','headhunted-story.html','inheritor-story.html','oblivion-story.html','sixty-percent-story.html','starwhisp-story.html','director-story.html','facilitator-story.html'];
+  const storyPages = ['reader.html','story.html','seeker-story.html','worlds-within-story.html','headhunted-story.html','inheritor-story.html','oblivion-story.html','sixty-percent-story.html','starwhisp-story.html','director-story.html','facilitator-story.html','bows-arrows-story.html'];
 
   const nav = document.createElement('nav');
   nav.id = 'site-nav';
