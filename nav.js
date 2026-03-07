@@ -20,6 +20,7 @@
     { href: 'ai-analysis.html', label: 'AI ANALYSIS' },
     { href: 'interstice-map.html', label: 'NETWORK' },
     { href: 'reflections.html', label: 'REFLECTIONS' },
+    { href: 'diamond-duster.html', label: 'DUSTER' },
     { href: 'drafts.html', label: 'DRAFTS' },
   ];
 
