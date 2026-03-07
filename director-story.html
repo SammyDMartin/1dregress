@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Director — Ascent Universe</title>
+<meta name="description" content="Director Meyer wakes to find Vash standing in his bedroom. Earth under Dyn occupation. A story of power, corruption, and the cost of leadership.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow: hidden; }
+
+.scene-bg { position: fixed; inset: 0; z-index: 0; transition: opacity 1.5s ease; pointer-events: none; }
+.scene-bg-dark { background: radial-gradient(ellipse at 30% 30%, rgba(40,20,10,0.15) 0%, rgba(0,0,5,0.9) 100%); }
+.scene-bg-confront { background: radial-gradient(ellipse at 50% 50%, rgba(60,30,10,0.12) 0%, rgba(5,0,0,0.85) 100%); }
+.scene-bg-gun { background: radial-gradient(ellipse at 50% 40%, rgba(80,20,10,0.15) 0%, rgba(10,0,0,0.9) 100%); }
+.scene-bg-dawn { background: radial-gradient(ellipse at 60% 60%, rgba(20,30,50,0.15) 0%, rgba(0,5,10,0.85) 100%); }
+
+.scene-effect { position: fixed; bottom: 0; left: 0; right: 0; height: 3px; z-index: 1; pointer-events: none; }
+.effect-tension { background: linear-gradient(90deg, transparent, rgba(180,80,30,0.3), transparent); animation: effectPulse 5s ease infinite; }
+.effect-danger { background: linear-gradient(90deg, transparent, rgba(200,40,20,0.4), transparent); animation: effectPulse 2s ease infinite; }
+.effect-resolve { background: linear-gradient(90deg, transparent, rgba(0,150,200,0.3), transparent); animation: effectPulse 4s ease infinite; }
+@keyframes effectPulse { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
+</style>
+</head>
+<body>
+<div class="page-body">
+
+<div class="scene-bg" id="sceneBg"></div>
+<div class="scene-effect" id="sceneEffect"></div>
+
+<div class="scene-container">
+  <div class="scene-header" id="sceneHeader">
+    <a href="stories.html" class="scene-back">&larr; ALL STORIES</a>
+    <div class="scene-title" id="sceneTitle">THE DIRECTOR</div>
+    <div class="scene-select-wrap">
+      <select class="scene-select" id="sceneSelect"></select>
+    </div>
+  </div>
+  <div class="scene-text" id="sceneText"></div>
+  <div class="story-nav">
+    <button id="prevBtn" onclick="goScene(currentScene-1)">&larr; PREV</button>
+    <span class="scene-counter" id="sceneCounter"></span>
+    <button id="nextBtn" onclick="goScene(currentScene+1)">NEXT &rarr;</button>
+  </div>
+</div>
+
+</div>
+<script src="nav.js"></script>
+<script>
+const SCENES = [
+{
+  title: "THE INTRUDER",
+  header: "THE DIRECTOR'S PALACE — NIGHT",
+  bg: "scene-bg-dark",
+  effect: "effect-tension",
+  text: `<p>Director Meyer awoke, instantly alert. He sat bolt upright in bed, disoriented. His head pounded briefly with the after-effects of overindulgence from the previous evening. Out of habit he groped briefly for his glasses before remembering that he no longer needed them.</p>
+
+<p>Moonlight pooled on the marble floor. It caught the pale shoulder of an anonymous girl, unconscious in the bed beside him, almost lost amongst the sheets and pillows and the black tresses of her own hair. A few empty tox sacs littered the bed, and he brushed them away.</p>
+
+<p>A chill shock of fear coursed through him when he saw the man. A tall figure hunched over the balustrade straightened himself and turned, heading inside, slender form briefly silhouetted against the curtain.</p>
+
+<p><span class="dialogue">"Director. Get up."</span></p>
+
+<p>There was something about that voice. He was sure he recognised it.</p>
+
+<p><span class="dialogue">"Lights,"</span> he uttered. The lamp came on. A tall, gaunt man clad entirely in black stood at the end of his bed. Dark, watchful eyes regarded him coolly.</p>
+
+<p><span class="dialogue">"Vash?"</span></p>
+
+<p><span class="dialogue">"Good morning, Director."</span></p>
+
+<p>Vash's voice was slow and measured. It somehow managed to sound like the voice of someone much older than the fifty years his appearance suggested. The blind animal panic was replaced by a deeper sense of unease. This man shouldn't be here, not now at this absurdly early hour. Not here alone in his private quarters without invitation.</p>
+
+<p><span class="dialogue">"This is unexpected,"</span> he finished at last. Those crucial three words would activate the mics and cameras installed around the room. An alarm would already be ringing in the control room. Any minute now the guards would burst in and arrest this man.</p>
+
+<p>Vash smiled back, folding his long limbs into the chair, like a spider drawing up its legs.</p>`
+},
+{
+  title: "THE CONFRONTATION",
+  header: "THE DIRECTOR'S CHAMBERS",
+  bg: "scene-bg-confront",
+  effect: "effect-tension",
+  text: `<p><span class="dialogue">"I've come to discuss the matter of your retirement,"</span> Vash said simply.</p>
+
+<p><span class="dialogue">"Now Vash, you know as well as I do that the position of Director is for life."</span></p>
+
+<p><span class="dialogue">"And yet there is a surprisingly quick turnover for the position, all things considered."</span> He drew a small, cheap-looking gun and laid it carefully, pointedly, on the bed's footboard.</p>
+
+<p>Where were the damn guards?</p>
+
+<p><span class="dialogue">"They're not coming, Meyer."</span></p>
+
+<p>How had Vash known?</p>
+
+<p><span class="dialogue">"The guards. They're not coming. The code won't work. A burnpulse disabled the cameras in here."</span></p>
+
+<p>Director Meyer had never had a good handle on Vash. Where the records weren't absent, they were contradictory. He had no region of origin and no birth date. He had once fought for a resistance movement, he openly admitted, but upon the realisation that their cause was futile he had changed sides. Above all else, Vash was a competent man. Thorough and dedicated in a way that was almost more valuable than mere intelligence.</p>
+
+<p><span class="dialogue">"Your mistake, Director, was in thinking that we are all as motivated by a desire for power as you. You've forgotten what Arco is for — to keep as many alive as possible, at as high a standard of living as possible, for the duration of the occupation."</span></p>
+
+<p><span class="dialogue">"Duration of the occupation?"</span> the Director shouted. <span class="dialogue">"It's been almost a century! Do you even think it matters who rules the world? How could any amount of political power matter when <em>they</em>"</span> — he jerked his finger upward — <span class="dialogue">"own every last one of us like goddamned cattle?"</span></p>
+
+<p>Vash paid no heed to the flecks of spittle flying from the Director's mouth. Instead he sat there, quite still, head cocked to one side as though in deep thought.</p>`
+},
+{
+  title: "THE GUN",
+  header: "THE DIRECTOR'S CHAMBERS — STANDOFF",
+  bg: "scene-bg-gun",
+  effect: "effect-danger",
+  text: `<p>An idea came to Meyer. Vash was a man of his word — when he said he didn't want to kill, he surely meant it.</p>
+
+<p><span class="dialogue">"I would rather kill myself here and now,"</span> Meyer finished, deliberately. He fumbled for the gun, the bullets.</p>
+
+<p><span class="dialogue">"Don't,"</span> warned Vash.</p>
+
+<p><span class="dialogue">"Do it, then. Show some agency, take responsibility!"</span></p>
+
+<p>A sense of impending victory surged through the Director. He had at last gained the true measure of Vash: a man who defined himself by the responsibility he felt to always do the right thing, a compulsion in conflict with his utter inability to take a life.</p>
+
+<p>Vash strode back over to the bed, his grip around the pistol tightening, his knuckles white. Meyer scrambled backwards, the bedding tangling around him. He backed up against the ornate headboard.</p>
+
+<p>Vash levelled the weapon at Meyer's head.</p>
+
+<p>The Director was pleading now, a pathetic old man on his hands and knees. <span class="dialogue">"Please. I'll do anything. But I can't leave this compound. They'll kill me. I don't want to die…"</span></p>
+
+<p>He looked up at Vash, trying to meet the dark, ancient eyes above the barrel of the gun.</p>
+
+<p><span class="dialogue">"You are a liar and a murderer and a condemned man in any case. Give me another choice,"</span> Vash replied simply.</p>
+
+<p>And pulled the trigger.</p>
+
+<p>The weapon leapt in Vash's hand, the gunshot deafening. Director Meyer jerked violently — and then slowly, as though he didn't quite dare to believe it, he opened his eyes. A hole marred the ornate headboard behind him.</p>
+
+<p><span class="dialogue">"Take him to a cell,"</span> Vash told the Enforcers at the door. <span class="dialogue">"We'll do everything properly, by the book."</span></p>
+
+<p><span class="dialogue">"He doesn't deserve prison. He should die right now."</span></p>
+
+<p><span class="dialogue">"It would be impossible to make Director Meyer suffer even a fraction of the suffering he has caused others, so what would be the point of retribution?"</span></p>
+
+<p><span class="dialogue">"You can't wash your hands of this, Vash. Not forever!"</span> raged Meyer. <span class="dialogue">"One day you will be forced to take a life yourself, and only then will you know the true cost of leadership!"</span></p>
+
+<p><span class="dialogue">"I already do,"</span> Vash replied.</p>`
+},
+{
+  title: "THE CALL",
+  header: "THE DIRECTOR'S PALACE — AFTER",
+  bg: "scene-bg-dawn",
+  effect: "effect-resolve",
+  text: `<p>The Enforcers marched over and dragged the unconscious body from the room without ceremony, leaving Vash alone with his thoughts. A shadow of uncertainty passed over his face, but there was nobody there to see it.</p>
+
+<p>Those above would soon know the Director Meyer had been deposed. It was just a matter of time. But even though he expected it, when the phone at last rang, he jumped.</p>
+
+<p>He walked slowly over to the desk where the mundane, old-fashioned telephone rang, filled with trepidation. He picked up, not saying anything, just listening to the wash of interference.</p>
+
+<p><span class="dialogue">"It is done, Vash, yes?"</span> it said at last.</p>
+
+<p>It almost startled him how human it sounded. But even through the tinny speakers of the phone, Vash could hear the inflection was somehow off. As though the speaker didn't really understand the noises it was making, forcing alien sounds through a maladapted physiology.</p>
+
+<p><span class="dialogue">"Yes,"</span> he replied.</p>
+
+<p><span class="dialogue">"Good. Don't fail me, Vash. Director's position is for life,"</span> said K'txl, the Dynic administrator of Earth.</p>
+
+<p>There was so much more Vash wanted to ask of it. But before he could say another word the line went dead.</p>
+
+<p>He gathered himself, collected his overcoat from where he had draped it over the balustrade and made his way purposefully out of the gaudy palace via the main doors to the courtyard where a vehicle waited for him.</p>
+
+<p>A patchwork of tiny single-person farms, grey internment blocks and gigantic conurbation arcologies stretched out before him, just another sector of the global prison that was the planet Earth.</p>
+
+<p><span class="dialogue">"Rip this mansion apart for spares,"</span> Vash ordered an Enforcer as he passed. <span class="dialogue">"Demolish whatever's left."</span></p>`
+}
+];
+
+// Scene engine
+let currentScene = 0;
+const select = document.getElementById('sceneSelect');
+SCENES.forEach((s, i) => {
+  const opt = document.createElement('option');
+  opt.value = i;
+  opt.textContent = (i + 1) + '. ' + s.title;
+  select.appendChild(opt);
+});
+select.addEventListener('change', () => goScene(+select.value));
+
+function goScene(i) {
+  if (i < 0 || i >= SCENES.length) return;
+  currentScene = i;
+  const s = SCENES[i];
+  document.getElementById('sceneHeader').querySelector('.scene-title').textContent = s.header;
+  document.getElementById('sceneText').innerHTML = s.text;
+  document.getElementById('sceneCounter').textContent = (i + 1) + ' / ' + SCENES.length;
+  document.getElementById('prevBtn').disabled = i === 0;
+  document.getElementById('nextBtn').disabled = i === SCENES.length - 1;
+  select.value = i;
+  document.getElementById('sceneBg').className = 'scene-bg ' + s.bg;
+  document.getElementById('sceneEffect').className = 'scene-effect ' + s.effect;
+  document.querySelector('.scene-text').scrollTop = 0;
+}
+goScene(0);
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goScene(currentScene + 1);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goScene(currentScene - 1);
+});
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 60) goScene(currentScene + (dx < 0 ? 1 : -1));
+});
+</script>
+</body>
+</html>
