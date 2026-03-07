@@ -15,7 +15,10 @@
     { href: 'anthropic-trap.html', label: 'TRAP' },
     { href: 'threads.html', label: 'THREADS' },
     { href: 'utilitaria.html', label: 'UTILITARIA' },
+    { href: 'utilitaria-chat.html', label: 'EMISSARY' },
     { href: 'orrery.html', label: 'ORRERY' },
+    { href: 'ai-analysis.html', label: 'AI ANALYSIS' },
+    { href: 'interstice-map.html', label: 'NETWORK' },
     { href: 'drafts.html', label: 'DRAFTS' },
   ];
 

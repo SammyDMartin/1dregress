@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interstice Network — Ascent Universe</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow: hidden; }
+
+.map-header {
+  position: fixed; top: 48px; left: 0; right: 0; z-index: 20;
+  text-align: center; padding: 12px 20px 8px;
+  background: linear-gradient(180deg, var(--bg) 60%, transparent);
+  pointer-events: none;
+}
+.map-title { font-size: 14px; letter-spacing: 6px; color: var(--accent); font-weight: 700; }
+.map-sub { font-size: 8px; letter-spacing: 3px; color: var(--text-dim); margin-top: 2px; }
+
+canvas { display: block; width: 100%; height: 100%; }
+
+/* Info panel */
+.node-panel {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+  background: var(--panel); border: 1px solid var(--border);
+  padding: 14px 20px; border-radius: 2px; z-index: 30;
+  max-width: 420px; width: calc(100% - 40px);
+  display: none; font-size: 10px; line-height: 1.7;
+}
+.node-panel.active { display: block; }
+.node-panel-name { font-size: 11px; letter-spacing: 3px; font-weight: 700; margin-bottom: 4px; }
+.node-panel-type { font-size: 8px; letter-spacing: 2px; color: var(--text-dim); margin-bottom: 8px; }
+.node-panel-desc { color: var(--text-mid); }
+.node-panel-close {
+  position: absolute; top: 8px; right: 12px; cursor: pointer;
+  color: var(--text-dim); font-size: 12px;
+}
+.node-panel-close:hover { color: var(--accent); }
+.node-panel-stat {
+  display: inline-block; margin-right: 14px; margin-top: 6px;
+}
+.node-panel-stat-label { font-size: 7px; letter-spacing: 1.5px; color: var(--text-dim); }
+.node-panel-stat-val { font-size: 10px; color: var(--accent); }
+
+/* Legend */
+.map-legend {
+  position: fixed; top: 100px; right: 16px; z-index: 20;
+  background: var(--panel); border: 1px solid var(--border);
+  padding: 10px 12px; border-radius: 2px; font-size: 8px;
+}
+.legend-item { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; color: var(--text-dim); letter-spacing: 1px; }
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+/* Controls */
+.map-controls {
+  position: fixed; bottom: 20px; right: 16px; z-index: 20;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.map-btn {
+  width: 32px; height: 32px; border: 1px solid var(--border);
+  background: var(--panel); color: var(--text-dim); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; border-radius: 2px; transition: all 0.2s;
+}
+.map-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+@media (max-width: 600px) {
+  .map-legend { display: none; }
+  .map-title { font-size: 11px; }
+}
+</style>
+</head>
+<body>
+<div class="page-body">
+
+<div class="map-header">
+  <div class="map-title">INTERSTICE NETWORK</div>
+  <div class="map-sub">KNOWN WORMHOLE CONNECTIONS &middot; DRAG TO ROTATE &middot; SCROLL TO ZOOM</div>
+</div>
+
+<canvas id="network-canvas"></canvas>
+
+<div class="map-legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent);"></div> HUMAN SYSTEM</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent2);"></div> DYN SYSTEM</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#aa88ff;"></div> CONTESTED</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--red);"></div> APATHY-HELD</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#555;"></div> INACTIVE / UNKNOWN</div>
+  <div style="margin-top:6px; border-top:1px solid var(--border); padding-top:6px;">
+    <div class="legend-item" style="color:var(--text-mid);">CLICK NODE FOR DETAILS</div>
+  </div>
+</div>
+
+<div class="map-controls">
+  <button class="map-btn" id="btn-zoom-in" title="Zoom in">+</button>
+  <button class="map-btn" id="btn-zoom-out" title="Zoom out">&minus;</button>
+  <button class="map-btn" id="btn-reset" title="Reset view">&#8634;</button>
+  <button class="map-btn" id="btn-animate" title="Toggle pulse">&#9673;</button>
+</div>
+
+<div class="node-panel" id="node-panel">
+  <span class="node-panel-close" id="panel-close">&times;</span>
+  <div class="node-panel-name" id="panel-name"></div>
+  <div class="node-panel-type" id="panel-type"></div>
+  <div class="node-panel-desc" id="panel-desc"></div>
+  <div id="panel-stats"></div>
+</div>
+
+</div>
+<script src="nav.js"></script>
+<script>
+// ═══════════════════════════════════════════════════════════════════════════════
+// INTERSTICE NETWORK MAP — Interactive 3D Wormhole Visualization
+// ═══════════════════════════════════════════════════════════════════════════════
+
+const canvas = document.getElementById('network-canvas');
+const ctx = canvas.getContext('2d');
+const panel = document.getElementById('node-panel');
+
+// ─── Network Data ────────────────────────────────────────────────────────────
+const NODES = [
+  { id: 'sol', name: 'SOL', type: 'human', x: 0, y: 0, z: 0,
+    desc: 'Humanity\'s home system. Seat of Arco, the Facilitator, and the Threshold Authority. Earth remains the cultural and political heart of human civilisation, even as the worldrings grow in population and power.',
+    stats: { pop: '~12B', control: 'ARCO', era: 'CORE' }},
+  { id: 'tau-ceti', name: 'TAU CETI', type: 'contested', x: -120, y: 40, z: 60,
+    desc: 'Site of first contact between humanity and the Dyn. K\'txl assessed humanity here and concluded they were "insane." The Dyn launched their preemptive invasion from this system.',
+    stats: { pop: '~800M', control: 'JOINT', era: '2310 CE' }},
+  { id: 'firsthome', name: 'FIRSTHOME', type: 'dyn', x: 180, y: -30, z: -80,
+    desc: 'The Dyn homeworld. A vast, oppressive world orbiting a red sun, where the Line dominates all social organisation. Dense atmosphere, crushing gravity, and an ancient civilisation that never truly progressed beyond nuclear-age technology despite millennia of spaceflight.',
+    stats: { pop: '~50B', control: 'DYN', era: 'ANCIENT' }},
+  { id: 'tanu', name: 'TANU', type: 'contested', x: -80, y: -100, z: 30,
+    desc: 'The bruised planet. Home to the Tanu species and their vast subterranean Library. The Hadean layer, sixteen kilometres deep, holds the monument to the Dra\'ll and the Man of Nothing. Controlled by the Xianists.',
+    stats: { pop: '~2B', control: 'XIANIST', era: 'PRE-HUMAN' }},
+  { id: 'union-prime', name: 'UNION PRIME', type: 'human', x: 160, y: 80, z: 100,
+    desc: 'Capital system of Union, the breakaway human civilisation built on principles of unaltered human identity. Connected to Sol through the Threshold interstice. Home to the Union Space Corps and the cradle of the Striver movement.',
+    stats: { pop: '~8B', control: 'UNION', era: '~2700 CE' }},
+  { id: 'threshold', name: 'THRESHOLD', type: 'human', x: 80, y: 40, z: 50,
+    desc: 'The interstice connecting Sol to Union space. Site of the 2909 CE incident where Striver operatives hijacked the Atbarah and rammed through, nearly triggering full-scale war between Arco and Union. Heavily fortified on both sides.',
+    stats: { pop: 'STATION', control: 'DISPUTED', era: '2909 CE' }},
+  { id: 'kailash', name: 'KAILASH', type: 'human', x: -160, y: 60, z: -40,
+    desc: 'Distant system reached by the Kailash expedition. At the edge of explored space, this system represents humanity\'s furthest permanent settlement. The expedition began its return journey in 2937 CE.',
+    stats: { pop: '~50M', control: 'ARCO', era: '2937 CE' }},
+  { id: 'other-moon', name: 'THE OTHER MOON', type: 'unknown', x: 0, y: -140, z: -60,
+    desc: 'Not a system but a mobile artifact — the ancient vessel used by Seeker to explore the interstice network. Its stone orrery maps the wormhole connections. It refused to enter the network, as if afraid of what built it.',
+    stats: { pop: 'N/A', control: 'SEEKER', era: '~100,000 BCE' }},
+  { id: 'worldring-1', name: 'WORLDRING ALPHA', type: 'human', x: 40, y: 110, z: -30,
+    desc: 'One of the great worldrings — vast space habitat complexes housing billions under the Utilitaria\'s governance. The three classes (Involved, Uninvolved, Ascendant) organise life within these structures.',
+    stats: { pop: '~6B', control: 'UTILITARIA', era: '~2500 CE' }},
+  { id: 'worldring-2', name: 'WORLDRING BETA', type: 'human', x: -40, y: 130, z: 20,
+    desc: 'Secondary worldring complex. Site of the Sixty Percent evacuation during the Apathy War. Twenty minutes to save what could be saved. 7.8 billion evacuated. The rest were left behind.',
+    stats: { pop: '~4B (post-war)', control: 'UTILITARIA', era: '~3150 CE' }},
+  { id: 'apathy-front', name: 'APATHY FRONT', type: 'apathy', x: -180, y: -50, z: 120,
+    desc: 'The advancing edge of Apathy-controlled space. Not a system but a boundary — beyond it, civilisations have been optimised out of existence. The philosophical weapon arrives before the physical threat.',
+    stats: { pop: 'N/A', control: 'APATHY', era: '~3200 CE' }},
+  { id: 'dark-node-1', name: 'NODE 7-ALPHA', type: 'inactive', x: 120, y: -120, z: 40,
+    desc: 'An inactive interstice node. The Others built it, but whatever civilisation it once connected is gone — "carefully and meticulously cleared away." The exotic matter rings still orbit, waiting.',
+    stats: { pop: '0', control: 'NONE', era: 'UNKNOWN' }},
+  { id: 'dark-node-2', name: 'NODE 12-GAMMA', type: 'inactive', x: -140, y: -80, z: -100,
+    desc: 'Another dead node. Scans show trace signatures of civilisational debris — orbital structures, communication frequencies long since silent. The Dyn avoid these places. They know what happened here.',
+    stats: { pop: '0', control: 'NONE', era: 'UNKNOWN' }},
+];
+
+const EDGES = [
+  { from: 'sol', to: 'threshold', active: true },
+  { from: 'threshold', to: 'union-prime', active: true },
+  { from: 'sol', to: 'tau-ceti', active: true },
+  { from: 'tau-ceti', to: 'firsthome', active: true },
+  { from: 'firsthome', to: 'tanu', active: true },
+  { from: 'sol', to: 'kailash', active: true },
+  { from: 'sol', to: 'worldring-1', active: true },
+  { from: 'sol', to: 'worldring-2', active: true },
+  { from: 'worldring-1', to: 'worldring-2', active: true },
+  { from: 'tanu', to: 'dark-node-2', active: false },
+  { from: 'firsthome', to: 'dark-node-1', active: false },
+  { from: 'dark-node-1', to: 'dark-node-2', active: false },
+  { from: 'worldring-2', to: 'apathy-front', active: true, hostile: true },
+  { from: 'tau-ceti', to: 'other-moon', active: false },
+  { from: 'other-moon', to: 'dark-node-2', active: false },
+  { from: 'kailash', to: 'dark-node-1', active: false },
+];
+
+// ─── Colors ──────────────────────────────────────────────────────────────────
+const TYPE_COLORS = {
+  human: '#00e5ff',
+  dyn: '#ff6b35',
+  contested: '#aa88ff',
+  apathy: '#ff3232',
+  inactive: '#555555',
+  unknown: '#888888',
+};
+
+// ─── State ───────────────────────────────────────────────────────────────────
+let rotX = 0.3, rotY = -0.4, zoom = 1.8;
+let dragging = false, lastMX = 0, lastMY = 0;
+let selectedNode = null;
+let animating = true;
+let time = 0;
+let W, H;
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resize);
+resize();
+
+// ─── 3D Projection ──────────────────────────────────────────────────────────
+function project(x, y, z) {
+  // Rotate Y
+  const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+  let x1 = x * cosY - z * sinY;
+  let z1 = x * sinY + z * cosY;
+  // Rotate X
+  const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+  let y1 = y * cosX - z1 * sinX;
+  let z2 = y * sinX + z1 * cosX;
+  // Perspective
+  const d = 600;
+  const scale = d / (d + z2) * zoom;
+  return {
+    sx: W/2 + x1 * scale,
+    sy: H/2 + y1 * scale,
+    scale: scale,
+    z: z2
+  };
+}
+
+// ─── Starfield ───────────────────────────────────────────────────────────────
+const stars = [];
+for (let i = 0; i < 300; i++) {
+  stars.push({
+    x: (Math.random() - 0.5) * W * 2,
+    y: (Math.random() - 0.5) * H * 2,
+    brightness: Math.random() * 0.4 + 0.1,
+    size: Math.random() * 1.2 + 0.3
+  });
+}
+
+function drawStars() {
+  for (const s of stars) {
+    ctx.fillStyle = `rgba(200,220,255,${s.brightness})`;
+    ctx.fillRect(s.x + W/2, s.y + H/2, s.size, s.size);
+  }
+}
+
+// ─── Draw ────────────────────────────────────────────────────────────────────
+function draw() {
+  time += 0.016;
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#0a0a0f';
+  ctx.fillRect(0, 0, W, H);
+
+  drawStars();
+
+  if (animating) {
+    rotY += 0.001;
+  }
+
+  // Project all nodes
+  const projected = NODES.map(n => ({
+    ...n,
+    ...project(n.x, n.y, n.z)
+  }));
+
+  // Sort by Z for painter's algorithm
+  projected.sort((a, b) => b.z - a.z);
+
+  // Draw edges
+  for (const edge of EDGES) {
+    const a = projected.find(n => n.id === edge.from);
+    const b = projected.find(n => n.id === edge.to);
+    if (!a || !b) continue;
+
+    ctx.beginPath();
+    ctx.moveTo(a.sx, a.sy);
+    ctx.lineTo(b.sx, b.sy);
+
+    if (edge.hostile) {
+      ctx.strokeStyle = `rgba(255,50,50,${0.15 + Math.sin(time * 2) * 0.1})`;
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4, 8]);
+    } else if (!edge.active) {
+      ctx.strokeStyle = 'rgba(100,100,120,0.12)';
+      ctx.lineWidth = 0.5;
+      ctx.setLineDash([2, 6]);
+    } else {
+      ctx.strokeStyle = 'rgba(0,229,255,0.15)';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([]);
+    }
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Pulse along active edges
+    if (edge.active && !edge.hostile && animating) {
+      const t = ((time * 0.3 + EDGES.indexOf(edge) * 0.7) % 1);
+      const px = a.sx + (b.sx - a.sx) * t;
+      const py = a.sy + (b.sy - a.sy) * t;
+      ctx.beginPath();
+      ctx.arc(px, py, 1.5, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0,229,255,0.5)';
+      ctx.fill();
+    }
+  }
+
+  // Draw nodes
+  for (const n of projected) {
+    const col = TYPE_COLORS[n.type] || '#888';
+    const r = Math.max(3, 6 * n.scale / zoom);
+    const isSelected = selectedNode === n.id;
+
+    // Glow
+    const grd = ctx.createRadialGradient(n.sx, n.sy, 0, n.sx, n.sy, r * 4);
+    grd.addColorStop(0, col.replace(')', ',0.2)').replace('rgb', 'rgba'));
+    grd.addColorStop(1, 'transparent');
+    ctx.beginPath();
+    ctx.arc(n.sx, n.sy, r * 4, 0, Math.PI * 2);
+    ctx.fillStyle = grd;
+    ctx.fill();
+
+    // Core
+    ctx.beginPath();
+    ctx.arc(n.sx, n.sy, r, 0, Math.PI * 2);
+    ctx.fillStyle = col;
+    ctx.globalAlpha = isSelected ? 1 : 0.8;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    // Selection ring
+    if (isSelected) {
+      ctx.beginPath();
+      ctx.arc(n.sx, n.sy, r + 4 + Math.sin(time * 3) * 2, 0, Math.PI * 2);
+      ctx.strokeStyle = col;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    // Label
+    if (n.scale / zoom > 0.5) {
+      ctx.font = `${Math.max(7, 9 * n.scale / zoom)}px monospace`;
+      ctx.fillStyle = `rgba(200,220,240,${Math.min(1, n.scale / zoom)})`;
+      ctx.textAlign = 'center';
+      ctx.fillText(n.name, n.sx, n.sy - r - 6);
+    }
+  }
+
+  requestAnimationFrame(draw);
+}
+
+// ─── Interaction ─────────────────────────────────────────────────────────────
+function getNodeAt(mx, my) {
+  let best = null, bestD = 30;
+  for (const n of NODES) {
+    const p = project(n.x, n.y, n.z);
+    const d = Math.hypot(p.sx - mx, p.sy - my);
+    if (d < bestD) { bestD = d; best = n; }
+  }
+  return best;
+}
+
+canvas.addEventListener('mousedown', e => {
+  dragging = true;
+  lastMX = e.clientX;
+  lastMY = e.clientY;
+});
+
+canvas.addEventListener('mousemove', e => {
+  if (dragging) {
+    rotY += (e.clientX - lastMX) * 0.005;
+    rotX += (e.clientY - lastMY) * 0.005;
+    rotX = Math.max(-Math.PI/2, Math.min(Math.PI/2, rotX));
+    lastMX = e.clientX;
+    lastMY = e.clientY;
+  }
+  // Hover cursor
+  const n = getNodeAt(e.clientX, e.clientY);
+  canvas.style.cursor = n ? 'pointer' : 'grab';
+});
+
+canvas.addEventListener('mouseup', e => {
+  if (!dragging) return;
+  const dx = Math.abs(e.clientX - lastMX);
+  const dy = Math.abs(e.clientY - lastMY);
+  if (dx < 3 && dy < 3) {
+    const n = getNodeAt(e.clientX, e.clientY);
+    if (n) showPanel(n);
+    else hidePanel();
+  }
+  dragging = false;
+});
+
+canvas.addEventListener('click', e => {
+  const n = getNodeAt(e.clientX, e.clientY);
+  if (n) showPanel(n);
+  else hidePanel();
+});
+
+canvas.addEventListener('wheel', e => {
+  e.preventDefault();
+  zoom *= e.deltaY > 0 ? 0.92 : 1.08;
+  zoom = Math.max(0.5, Math.min(5, zoom));
+}, { passive: false });
+
+// Touch support
+let lastTouchDist = 0;
+canvas.addEventListener('touchstart', e => {
+  if (e.touches.length === 1) {
+    dragging = true;
+    lastMX = e.touches[0].clientX;
+    lastMY = e.touches[0].clientY;
+  } else if (e.touches.length === 2) {
+    lastTouchDist = Math.hypot(
+      e.touches[0].clientX - e.touches[1].clientX,
+      e.touches[0].clientY - e.touches[1].clientY
+    );
+  }
+});
+
+canvas.addEventListener('touchmove', e => {
+  e.preventDefault();
+  if (e.touches.length === 1 && dragging) {
+    rotY += (e.touches[0].clientX - lastMX) * 0.005;
+    rotX += (e.touches[0].clientY - lastMY) * 0.005;
+    rotX = Math.max(-Math.PI/2, Math.min(Math.PI/2, rotX));
+    lastMX = e.touches[0].clientX;
+    lastMY = e.touches[0].clientY;
+  } else if (e.touches.length === 2) {
+    const d = Math.hypot(
+      e.touches[0].clientX - e.touches[1].clientX,
+      e.touches[0].clientY - e.touches[1].clientY
+    );
+    zoom *= d / lastTouchDist;
+    zoom = Math.max(0.5, Math.min(5, zoom));
+    lastTouchDist = d;
+  }
+}, { passive: false });
+
+canvas.addEventListener('touchend', e => {
+  dragging = false;
+  if (e.changedTouches.length === 1) {
+    const n = getNodeAt(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+    if (n) showPanel(n);
+  }
+});
+
+// ─── Panel ───────────────────────────────────────────────────────────────────
+function showPanel(node) {
+  selectedNode = node.id;
+  document.getElementById('panel-name').textContent = node.name;
+  document.getElementById('panel-name').style.color = TYPE_COLORS[node.type];
+  document.getElementById('panel-type').textContent = node.type.toUpperCase() + ' SYSTEM';
+  document.getElementById('panel-desc').textContent = node.desc;
+
+  let statsHTML = '';
+  if (node.stats) {
+    for (const [k, v] of Object.entries(node.stats)) {
+      statsHTML += `<span class="node-panel-stat"><span class="node-panel-stat-label">${k.toUpperCase()}</span><br><span class="node-panel-stat-val">${v}</span></span>`;
+    }
+  }
+  document.getElementById('panel-stats').innerHTML = statsHTML;
+  panel.classList.add('active');
+}
+
+function hidePanel() {
+  selectedNode = null;
+  panel.classList.remove('active');
+}
+
+document.getElementById('panel-close').addEventListener('click', hidePanel);
+
+// ─── Controls ────────────────────────────────────────────────────────────────
+document.getElementById('btn-zoom-in').addEventListener('click', () => { zoom = Math.min(5, zoom * 1.3); });
+document.getElementById('btn-zoom-out').addEventListener('click', () => { zoom = Math.max(0.5, zoom * 0.7); });
+document.getElementById('btn-reset').addEventListener('click', () => { rotX = 0.3; rotY = -0.4; zoom = 1.8; selectedNode = null; hidePanel(); });
+document.getElementById('btn-animate').addEventListener('click', () => { animating = !animating; });
+
+// ─── Start ───────────────────────────────────────────────────────────────────
+draw();
+</script>
+</body>
+</html>

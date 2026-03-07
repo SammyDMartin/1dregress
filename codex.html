@@ -830,6 +830,102 @@ const ENTRIES = [
   quote: null,
   quoteAttr: null,
 },
+// ═══════════════════════════════════════════════════════════════════════
+// ADDITIONAL FACTIONS
+// ═══════════════════════════════════════════════════════════════════════
+{
+  tab: 'factions', icon: '⧗', iconClass: 'faction-arco',
+  name: 'THRESHOLD AUTHORITY', type: 'FACTION — INTERSTICE GOVERNANCE',
+  sections: [
+    { label: 'Overview', text: 'The Threshold Authority is the joint administrative body governing the interstice connecting Sol to Union space. Established in the aftermath of Union\'s founding exodus, it operates under a fragile treaty between Arco and Union, responsible for traffic control, security, and the enforcement of the Siren Protocols — strict information security measures necessitated by the advanced and unpredictable agencies on the Arco side.' },
+    { label: 'Security Architecture', text: 'The Threshold is defended by automated weapons platforms, electronic warfare suites, and dedicated patrol vessels from both Arco and Union fleets. The defence grid operates under Siren Protocols — airgapped from both sides\' main networks to prevent cyberattack or AI infiltration. In theory, this makes the system impregnable. In practice, the 2909 Atbarah Incident demonstrated catastrophic vulnerabilities.' },
+    { label: 'Strategic Significance', text: 'The Threshold interstice is the sole physical link between the two branches of humanity. Its destruction would permanently sever Sol from Union space. This makes it simultaneously the most fortified and most targeted location in known space. Striver ideology specifically targets the Threshold as both symbol and practical link to the "corruption" they seek to escape.' },
+    { label: 'Post-Incident Status', text: 'Following the 2909 Incident, the Threshold entered a period of heightened security and mutual suspicion. Both sides reinforced their positions. The joint governance structure technically survived, but trust — already fragile — was shattered. The Strivers achieved their goal: the two halves of humanity drifted further apart.' }
+  ],
+  stats: [
+    { label: 'LOCATION', value: 'Sol-Union interstice' },
+    { label: 'GOVERNANCE', value: 'Joint Arco-Union treaty' },
+    { label: 'SECURITY', value: 'Siren Protocols (airgapped)' },
+    { label: 'STATUS', value: 'COMPROMISED (post-2909)' },
+  ],
+  quote: '"The Threshold Authority operates in accordance with strict Siren Protocols, the necessary product of dealing with the advanced and unpredictable agencies on the other side."',
+  quoteAttr: '— USC Isidore tactical briefing',
+},
+{
+  tab: 'factions', icon: '⬡', iconClass: 'faction-arco',
+  name: 'HUMAN PURITY FRONT (STRIVERS)', type: 'FACTION — TERRORIST / IDEOLOGICAL',
+  sections: [
+    { label: 'Overview', text: 'The Strivers — formally the Human Purity Front — are an accelerationist faction seeking to provoke a final conflict between humanity and "the Machine." Their ideological ancestry predates Union\'s founding, rooted in the belief that raw, unaltered, mortal human identity must be preserved above all other allegiance. They are not purely political nor purely religious, but a shifting chimera of the two.' },
+    { label: 'Ideology', text: 'Strivers place unaltered human identity above any other value. They view cognitive enhancement, AI governance, and Dyn collaboration as existential threats — not to human safety, but to human nature. Their manifesto declares: "In toil, absolution. In strife, salvation. In death, release." They see Arco\'s citizens as "abhumans and machine slaves" who have traded their souls for material comfort.' },
+    { label: 'Methods', text: 'The Strivers operate through cells embedded within Union society. Their tactics range from political agitation to mass-casualty terrorism. The 2909 Atbarah Incident — hijacking a Kosmohansa freighter, disabling the Threshold defences, and ramming through the interstice — represented their most sophisticated operation. The simultaneous cyberattack on both the defence grid and Union naval systems suggests deep institutional penetration.' },
+    { label: 'Assessment', text: 'The Strivers are dangerous precisely because their ideology resonates with a substantial minority of Union citizens. While most reject their methods, the underlying fear — that humanity is being changed beyond recognition — is widespread. The Atbarah Incident was a strategic victory for the Strivers: they wanted war, and they nearly got it. Even without full-scale conflict, they achieved the poisoning of Arco-Union relations they sought.' }
+  ],
+  stats: [
+    { label: 'BASE', value: 'Union space (dispersed cells)' },
+    { label: 'IDEOLOGY', value: 'Anthropist accelerationism' },
+    { label: 'THREAT LEVEL', value: 'HIGH' },
+    { label: 'STATUS', value: 'ACTIVE' },
+  ],
+  quote: '"They tore out their souls. Traded them in for worthless trinkets. And in their place there is only a hole, a void where their humanity used to be."',
+  quoteAttr: '— Striver manifesto, Atbarah broadcast',
+},
+// ═══════════════════════════════════════════════════════════════════════
+// ADDITIONAL PERSONNEL
+// ═══════════════════════════════════════════════════════════════════════
+{
+  tab: 'personnel', icon: '◇', iconClass: 'faction-union',
+  name: 'ENSIGN HANSUN', type: 'PERSONNEL — UNION SPACE CORPS',
+  sections: [
+    { label: 'Service Record', text: 'Ensign aboard the USC Isidore at the time of the 2909 Threshold Incident. Previously experienced combat during a patrol mission ambushed by Striver raiders. Despite his junior rank, Hansun demonstrated exceptional composure under extreme pressure during the crisis, eventually being promoted for his heroism during the incident.' },
+    { label: 'The Threshold Incident', text: 'Hansun served as weapons officer aboard the Isidore during the pursuit of the hijacked Kosmohansa freighter Atbarah. He witnessed the Striver manifesto broadcast, the destruction of the interstice defence stations, and the emergence of Arco warships. When the Striver cyberattack triggered unauthorized weapons fire at the Arco vessels, Hansun was among those attempting to shoot down Union\'s own torpedoes before they could strike.' },
+    { label: 'Character Assessment', text: 'Hansun represents the best of Union\'s military: competent, principled, and resistant to the ideological poison that drives the Strivers. His first instinct upon receiving the manifesto was revulsion — "the rhetoric was as familiar as it was poisonous." His promotion was earned but carries the weight of a day that should never have happened.' }
+  ],
+  stats: [
+    { label: 'RANK', value: 'Ensign → (promoted)' },
+    { label: 'VESSEL', value: 'USC Isidore' },
+    { label: 'ERA', value: '2909 CE' },
+    { label: 'STATUS', value: 'ACTIVE DUTY' },
+  ],
+  quote: '"Sometimes you just know you\'ve been thrown into the middle of a massive fuck up."',
+  quoteAttr: '— Ensign Hansun, internal monologue',
+},
+{
+  tab: 'personnel', icon: '◇', iconClass: 'faction-union',
+  name: 'ADMIRAL AUMONIER', type: 'PERSONNEL — UNION FLEET COMMAND',
+  sections: [
+    { label: 'Overview', text: 'Admiral in command of Union forces during the 2909 Threshold Incident. Aumonier issued the crucial orders that prevented the crisis from escalating into full-scale war, authorising the diversion of sixty percent of in-system assets to secure the interstice while simultaneously insisting on a defensive posture.' },
+    { label: 'Command Philosophy', text: 'Aumonier\'s approach during the Threshold crisis was pragmatic restraint. Despite pressure from hawks within the general staff who wanted to "seize this unique opportunity" and launch a preemptive strike through the interstice, Aumonier recognised that the Strivers\' entire strategy depended on provoking exactly that response. His orders were clear: hold fire unless fired upon, secure the interstice, prioritise deescalation.' },
+    { label: 'Assessment', text: 'Aumonier\'s calm command under extreme pressure prevented a civilisation-ending war. His post-battle assessment was characteristically blunt: "Someone from our side killed a quarter million of their citizens. They don\'t care who did it. They don\'t care why. What they care about is how it looks." He understood that even in victory, the Strivers had won.' }
+  ],
+  stats: [
+    { label: 'RANK', value: 'Admiral' },
+    { label: 'COMMAND', value: 'Union First Fleet' },
+    { label: 'ERA', value: '2909 CE' },
+    { label: 'STATUS', value: 'ACTIVE COMMAND' },
+  ],
+  quote: '"We may not be able to re-establish communications with them until they emerge. We\'ll keep trying to get through, and with any luck, this won\'t become a shooting war."',
+  quoteAttr: '— Admiral Aumonier, pre-engagement briefing',
+},
+// ═══════════════════════════════════════════════════════════════════════
+// ADDITIONAL VESSELS
+// ═══════════════════════════════════════════════════════════════════════
+{
+  tab: 'vessels', icon: '▣', iconClass: 'faction-union',
+  name: 'USC ISIDORE', type: 'VESSEL — UNION DESTROYER',
+  sections: [
+    { label: 'Classification', text: 'Union Space Corps destroyer, part of the First Fleet stationed near the Threshold interstice. Boxy, almost trilaterally symmetric tower design, bristling with torpedo tubes and gun turrets. Supported by nine unmanned corvettes in a standard battle group configuration.' },
+    { label: 'Systems', text: 'The Isidore features a fully liquid-immersion CIC (Combat Information Centre) for high-G operations. Crew are suspended in oxygen-rich breathable liquid during combat manoeuvres, with IV lines delivering circulation-enhancing drugs to prevent G-LOC. Acceleration couches are gimballed for multi-axis thrust.' },
+    { label: 'Notable Service', text: 'The Isidore was the closest Union warship to the Atbarah during the 2909 Incident, initially on an intercept course before being outrun. Captain Ngoni commanded during the crisis, ordering the pursuit, the failed intercept, and the subsequent transition to rescue operations and defensive positioning.' }
+  ],
+  stats: [
+    { label: 'CLASS', value: 'Destroyer' },
+    { label: 'COMPLEMENT', value: '10 (battle group)' },
+    { label: 'CAPTAIN', value: 'Ngoni' },
+    { label: 'STATUS', value: 'ACTIVE SERVICE' },
+  ],
+  quote: '"Match thrust, fire a warning shot."',
+  quoteAttr: '— Captain Ngoni, opening engagement',
+},
 ];
 
 // ═══════════════════════════════════════════════════════════════════════════════

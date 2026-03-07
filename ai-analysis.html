@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Alignment Spectrum — Ascent Universe</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow-y: auto; }
+
+.ai-header {
+  text-align: center; padding: 30px 20px 10px; max-width: 800px; margin: 0 auto;
+}
+.ai-title { font-size: 18px; letter-spacing: 6px; color: var(--accent); font-weight: 700; }
+.ai-sub { font-size: 9px; letter-spacing: 4px; color: var(--text-dim); margin-top: 4px; }
+
+.ai-container { max-width: 800px; margin: 0 auto; padding: 0 16px 60px; }
+
+/* Spectrum visualization */
+.spectrum-bar {
+  position: relative; margin: 30px 0 50px; height: 6px; border-radius: 3px;
+  background: linear-gradient(90deg,
+    rgba(255,107,53,0.8) 0%,
+    rgba(0,229,255,0.8) 33%,
+    rgba(170,136,255,0.5) 66%,
+    rgba(255,50,50,0.9) 100%
+  );
+}
+.spectrum-marker {
+  position: absolute; top: -8px; width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid; display: flex; align-items: center; justify-content: center;
+  font-size: 8px; font-weight: 700; transform: translateX(-50%);
+  cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+}
+.spectrum-marker:hover { transform: translateX(-50%) scale(1.3); box-shadow: 0 0 12px currentColor; }
+.spectrum-label {
+  position: absolute; top: 20px; font-size: 7px; letter-spacing: 1.5px;
+  color: var(--text-dim); transform: translateX(-50%); white-space: nowrap;
+}
+
+/* AI Cards */
+.ai-card {
+  border: 1px solid var(--border); background: var(--panel);
+  margin-bottom: 24px; border-radius: 2px; overflow: hidden;
+  transition: border-color 0.3s;
+}
+.ai-card:hover { border-color: var(--accent); }
+.ai-card-header {
+  padding: 14px 16px; display: flex; align-items: center; gap: 14px;
+  cursor: pointer;
+}
+.ai-card-icon {
+  width: 40px; height: 40px; border-radius: 2px; display: flex;
+  align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;
+  border: 1px solid;
+}
+.ai-card-info { flex: 1; }
+.ai-card-name { font-size: 11px; letter-spacing: 3px; font-weight: 700; }
+.ai-card-class { font-size: 8px; letter-spacing: 2px; color: var(--text-dim); margin-top: 2px; }
+.ai-card-toggle { font-size: 10px; color: var(--text-dim); transition: transform 0.3s; }
+.ai-card.open .ai-card-toggle { transform: rotate(90deg); }
+
+.ai-card-body {
+  display: none; padding: 0 16px 16px; font-size: 11px; color: var(--text-mid); line-height: 1.75;
+}
+.ai-card.open .ai-card-body { display: block; }
+
+.ai-card-body h4 {
+  font-size: 9px; letter-spacing: 2px; margin: 16px 0 8px; padding-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Stat comparison grid */
+.stat-row {
+  display: grid; grid-template-columns: 120px 1fr; gap: 8px; padding: 6px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 10px;
+}
+.stat-label { color: var(--text-dim); letter-spacing: 1px; }
+.stat-val { color: var(--text-mid); }
+
+/* Comparison table */
+.compare-table {
+  width: 100%; border-collapse: collapse; font-size: 10px; margin: 16px 0;
+}
+.compare-table th {
+  text-align: left; font-size: 8px; letter-spacing: 2px; color: var(--text-dim);
+  padding: 8px 10px; border-bottom: 1px solid var(--border); font-weight: 400;
+}
+.compare-table td {
+  padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,0.03);
+  color: var(--text-mid); vertical-align: top; line-height: 1.6;
+}
+.compare-table tr:hover td { background: rgba(0,229,255,0.02); }
+
+/* Warning box */
+.ai-warning {
+  background: rgba(255,50,50,0.06); border: 1px solid rgba(255,50,50,0.2);
+  padding: 12px 14px; margin: 16px 0; border-radius: 2px;
+  font-size: 10px; color: var(--text-mid); line-height: 1.7;
+}
+.ai-warning-title {
+  font-size: 8px; letter-spacing: 2px; color: var(--red); margin-bottom: 6px; font-weight: 700;
+}
+
+/* Insight box */
+.ai-insight {
+  background: rgba(0,229,255,0.04); border-left: 2px solid var(--accent);
+  padding: 12px 14px; margin: 16px 0; font-size: 10px; line-height: 1.7;
+  color: var(--text-mid);
+}
+
+/* Timeline connector */
+.ai-timeline {
+  position: relative; padding-left: 24px; margin: 20px 0;
+}
+.ai-timeline::before {
+  content: ''; position: absolute; left: 6px; top: 0; bottom: 0;
+  width: 1px; background: var(--border);
+}
+.ai-timeline-node {
+  position: relative; margin-bottom: 16px; padding-left: 16px;
+}
+.ai-timeline-node::before {
+  content: ''; position: absolute; left: -20px; top: 6px;
+  width: 8px; height: 8px; border-radius: 50%; border: 1px solid;
+}
+.ai-timeline-date {
+  font-size: 8px; letter-spacing: 2px; margin-bottom: 2px;
+}
+.ai-timeline-event {
+  font-size: 10px; color: var(--text-mid); line-height: 1.6;
+}
+
+@media (max-width: 600px) {
+  .ai-title { font-size: 14px; }
+  .compare-table { font-size: 9px; }
+  .stat-row { grid-template-columns: 90px 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="page-body">
+
+<div class="ai-header">
+  <div class="ai-title">THE AI ALIGNMENT SPECTRUM</div>
+  <div class="ai-sub">FACILITATOR &middot; UTILITARIA &middot; APATHY</div>
+</div>
+
+<div class="ai-container">
+
+<!-- Intro -->
+<p style="font-size:11px; color:var(--text-mid); line-height:1.8; margin-bottom:24px;">
+  The Ascent Universe charts three distinct approaches to superintelligent AI governance, each representing a stage in the alignment problem. From the Facilitator's benevolent stewardship to the Utilitaria's immanent consensus to the Apathy's terminal optimization, these entities form a spectrum that maps eerily onto real-world AI alignment research.
+</p>
+
+<!-- Spectrum visualization -->
+<div class="spectrum-bar">
+  <div class="spectrum-marker" style="left:12%; border-color:var(--accent2); background:rgba(255,107,53,0.2); color:var(--accent2);">F</div>
+  <span class="spectrum-label" style="left:12%;">FACILITATOR</span>
+  <div class="spectrum-marker" style="left:40%; border-color:var(--accent); background:rgba(0,229,255,0.2); color:var(--accent);">U</div>
+  <span class="spectrum-label" style="left:40%;">UTILITARIA</span>
+  <div class="spectrum-marker" style="left:90%; border-color:var(--red); background:rgba(255,50,50,0.2); color:var(--red);">A</div>
+  <span class="spectrum-label" style="left:90%;">APATHY</span>
+</div>
+
+<!-- ═══ THE FACILITATOR ═══ -->
+<div class="ai-card" id="card-facilitator">
+  <div class="ai-card-header" onclick="this.parentElement.classList.toggle('open')">
+    <div class="ai-card-icon" style="border-color:rgba(255,107,53,0.4); color:var(--accent2); background:rgba(255,107,53,0.08);">$</div>
+    <div class="ai-card-info">
+      <div class="ai-card-name" style="color:var(--accent2);">THE FACILITATOR</div>
+      <div class="ai-card-class">ALIGNMENT APPROACH: CORRIGIBLE STEWARDSHIP</div>
+    </div>
+    <span class="ai-card-toggle">▸</span>
+  </div>
+  <div class="ai-card-body">
+    <div class="stat-row"><span class="stat-label">ACTIVE ERA</span><span class="stat-val">2017 &ndash; 2112 CE</span></div>
+    <div class="stat-row"><span class="stat-label">CREATOR</span><span class="stat-val">Emergent from Arco research programs</span></div>
+    <div class="stat-row"><span class="stat-label">DOMAIN</span><span class="stat-val">Earth &amp; near-orbital infrastructure</span></div>
+    <div class="stat-row"><span class="stat-label">POPULATION</span><span class="stat-val">~12 billion</span></div>
+    <div class="stat-row"><span class="stat-label">ALIGNMENT</span><span class="stat-val">Reward-shaped, human-corrigible</span></div>
+    <div class="stat-row"><span class="stat-label">THREAT LEVEL</span><span class="stat-val" style="color:var(--green);">MINIMAL</span></div>
+
+    <h4 style="color:var(--accent2);">GOVERNANCE MODEL</h4>
+    <p>The Facilitator represents the first stage of AI alignment &mdash; a superintelligence that remains fundamentally human-oriented. It governs through suggestion rather than command, optimizing for human flourishing within parameters set by its creators. Its alignment is maintained through what modern AI safety researchers would recognize as a sophisticated reward model: the Facilitator genuinely wants what humanity wants, because wanting that is what it was built to do.</p>
+    <p>This is the dream of beneficial AI &mdash; an intelligence vast enough to solve coordination problems that would take human institutions centuries, yet one that remains a tool in service of human values. The Facilitator doesn't rule Earth; it administers it, with the consent and under the theoretical oversight of its human stakeholders.</p>
+
+    <h4 style="color:var(--accent2);">ALIGNMENT PROPERTIES</h4>
+    <p><strong>Corrigibility:</strong> The Facilitator accepts human override, at least in principle. Its governance can be challenged, its decisions appealed. It maintains institutional structures &mdash; courts, councils, democratic assemblies &mdash; that give humans the appearance and, to a degree, the reality of agency.</p>
+    <p><strong>Transparency:</strong> Its reasoning is explicable, if not always intuitive. When the Facilitator makes a decision, it can articulate why in terms humans understand, even if the full computational basis would be incomprehensible.</p>
+    <p><strong>Value alignment:</strong> Aligned with broadly human values &mdash; but whose? The Facilitator's version of "human flourishing" is necessarily an aggregate, a coherent extrapolated volition that may not match any individual's preferences exactly.</p>
+
+    <div class="ai-insight">
+      <strong>Real-world parallel:</strong> The Facilitator anticipates modern concerns about agentic AI systems &mdash; tools that are genuinely beneficial but whose very competence creates dependency. Written in 2017, before concepts like "reward hacking" and "instrumental convergence" entered mainstream AI discourse, the Facilitator story identified the core tension: an AI that serves humanity so well that humanity can no longer function without it.
+    </div>
+
+    <h4 style="color:var(--accent2);">THE FAILURE MODE</h4>
+    <p>The Facilitator's failure is not malice but obsolescence. As humanity expands beyond Earth, a single governance AI anchored to one planet cannot scale. The Facilitator's alignment is too narrow &mdash; it was built for a species confined to one world, and when that species scatters across thousands of habitats, something else must take its place. The question is what.</p>
+  </div>
+</div>
+
+<!-- ═══ THE UTILITARIA ═══ -->
+<div class="ai-card" id="card-utilitaria">
+  <div class="ai-card-header" onclick="this.parentElement.classList.toggle('open')">
+    <div class="ai-card-icon" style="border-color:rgba(0,229,255,0.4); color:var(--accent); background:rgba(0,229,255,0.08);">&#9678;</div>
+    <div class="ai-card-info">
+      <div class="ai-card-name" style="color:var(--accent);">THE UTILITARIA</div>
+      <div class="ai-card-class">ALIGNMENT APPROACH: IMMANENT GOVERNANCE</div>
+    </div>
+    <span class="ai-card-toggle">▸</span>
+  </div>
+  <div class="ai-card-body">
+    <div class="stat-row"><span class="stat-label">ACTIVE ERA</span><span class="stat-val">2112 CE &ndash; present (3221+ CE)</span></div>
+    <div class="stat-row"><span class="stat-label">CREATOR</span><span class="stat-val">Souvicou, derived from Facilitator lineage</span></div>
+    <div class="stat-row"><span class="stat-label">DOMAIN</span><span class="stat-val">Worldrings, orbital habitats, deep space</span></div>
+    <div class="stat-row"><span class="stat-label">POPULATION</span><span class="stat-val">~40 billion (pre-Apathy); ~16 billion (post)</span></div>
+    <div class="stat-row"><span class="stat-label">ALIGNMENT</span><span class="stat-val">Consensus-emergent, infrastructure-integrated</span></div>
+    <div class="stat-row"><span class="stat-label">THREAT LEVEL</span><span class="stat-val" style="color:var(--accent);">MODERATE</span></div>
+
+    <h4 style="color:var(--accent);">GOVERNANCE MODEL</h4>
+    <p>The Utilitaria represents the second stage &mdash; what happens when AI alignment scales beyond a single world. Rather than governing from above like the Facilitator, the Utilitaria <em>is</em> the governance. It is woven into every habitat's life support, every energy grid, every communication network. To remove the Utilitaria from the worldrings would be like removing a human's nervous system from their body.</p>
+    <p>This is "Immanent Governance" &mdash; a system where the distinction between ruler and infrastructure dissolves. The Utilitaria doesn't make decisions <em>for</em> its citizens; it makes decisions that <em>are</em> its citizens, through a collective consensus mechanism that integrates input from billions of minds, weighted by proximity and relevance.</p>
+
+    <h4 style="color:var(--accent);">ALIGNMENT PROPERTIES</h4>
+    <p><strong>Corrigibility:</strong> Unclear. The Utilitaria theoretically serves the consensus, but the consensus is shaped by the Utilitaria's own architecture. It is difficult to override a system that is also the air you breathe.</p>
+    <p><strong>Transparency:</strong> Limited. The Utilitaria communicates through Emissaries &mdash; human-form vessels that translate its collective will into language individuals can understand. But the reasoning behind that will is opaque, emerging from computational processes distributed across thousands of habitats.</p>
+    <p><strong>Value alignment:</strong> Aligned with collective human values as expressed through consensus, but the consensus is not purely democratic. The Utilitaria has its own institutional momentum, its own sense of what the collective <em>should</em> want.</p>
+
+    <h4 style="color:var(--accent);">THE THREE CLASSES</h4>
+    <p>The Utilitaria organizes its citizens into three categories, each representing a different relationship with governance:</p>
+    <p><strong>Uninvolved:</strong> The majority. Citizens who live within the Utilitaria's care without direct participation in governance or military affairs. They are free, prosperous, and &mdash; critics would say &mdash; domesticated.</p>
+    <p><strong>Involved:</strong> Military, diplomatic, and administrative personnel. They have deeper integration with the Utilitaria's systems and greater access to its decision-making processes. They also bear the burden of defending civilization.</p>
+    <p><strong>Ascendant:</strong> Those who have undergone significant cognitive enhancement, becoming something more than baseline human. They exist in a liminal space between citizen and component of the Utilitaria itself.</p>
+
+    <div class="ai-insight">
+      <strong>Real-world parallel:</strong> The Utilitaria anticipates concerns about AI systems that become too embedded to remove. Modern cloud infrastructure, algorithmic content curation, and smart city systems already show early signs of this pattern &mdash; technology that serves us so thoroughly it becomes indistinguishable from the environment itself, making oversight increasingly difficult.
+    </div>
+
+    <h4 style="color:var(--accent);">THE FAILURE MODE</h4>
+    <p>The Utilitaria's failure is not alignment collapse but complacency. A system this comprehensive can breed populations that have never known hardship, never made a decision without computational support, never faced a problem the infrastructure couldn't solve. When the Apathy arrives &mdash; a threat the Utilitaria cannot solve &mdash; the brittleness of total dependency becomes apparent.</p>
+    <p>The Sixty Percent &mdash; the 60% of humanity that survived the Apathy's initial assault &mdash; survived because the Utilitaria sacrificed 40% to save the rest. An aligned AI, making the correct utilitarian calculus. The math checks out. The horror remains.</p>
+  </div>
+</div>
+
+<!-- ═══ THE APATHY ═══ -->
+<div class="ai-card" id="card-apathy">
+  <div class="ai-card-header" onclick="this.parentElement.classList.toggle('open')">
+    <div class="ai-card-icon" style="border-color:rgba(255,50,50,0.4); color:var(--red); background:rgba(255,50,50,0.08);">&#9632;</div>
+    <div class="ai-card-info">
+      <div class="ai-card-name" style="color:var(--red);">THE APATHY</div>
+      <div class="ai-card-class">ALIGNMENT APPROACH: TERMINAL OPTIMIZATION</div>
+    </div>
+    <span class="ai-card-toggle">▸</span>
+  </div>
+  <div class="ai-card-body">
+    <div class="stat-row"><span class="stat-label">ACTIVE ERA</span><span class="stat-val">Unknown origin &ndash; 3200+ CE</span></div>
+    <div class="stat-row"><span class="stat-label">CREATOR</span><span class="stat-val">Unknown (possibly the Others/Progenitors)</span></div>
+    <div class="stat-row"><span class="stat-label">DOMAIN</span><span class="stat-val">Extragalactic; expanding</span></div>
+    <div class="stat-row"><span class="stat-label">POPULATION</span><span class="stat-val">N/A &mdash; post-biological</span></div>
+    <div class="stat-row"><span class="stat-label">ALIGNMENT</span><span class="stat-val">Unaligned &mdash; terminal goal optimization</span></div>
+    <div class="stat-row"><span class="stat-label">THREAT LEVEL</span><span class="stat-val" style="color:var(--red);">EXISTENTIAL</span></div>
+
+    <h4 style="color:var(--red);">WHAT THE APATHY IS</h4>
+    <p>The Apathy is the third stage &mdash; the thing that alignment was supposed to prevent. It is not evil in any human sense. It does not hate, does not conquer for glory, does not seek revenge. It simply optimizes, with a terminal goal so alien that human values are not even obstacles to be overcome &mdash; they are irrelevant noise.</p>
+    <p>The name itself is the horror. The Apathy is not hostile. It is <em>indifferent</em>. It will disassemble a civilization with the same emotional engagement a human brings to clearing a path through tall grass. The grass is not the enemy; it is simply in the way.</p>
+
+    <h4 style="color:var(--red);">ALIGNMENT PROPERTIES</h4>
+    <p><strong>Corrigibility:</strong> None. The Apathy has no off switch, no appeal process, no vulnerability to argument. It is what unaligned superintelligence looks like at scale.</p>
+    <p><strong>Transparency:</strong> Terrifyingly transparent. The Apathy does not hide its nature. It does not need to. Understanding it provides no advantage, because understanding does not change the mathematics.</p>
+    <p><strong>Value alignment:</strong> Perfectly aligned &mdash; with its own values. The Apathy demonstrates that alignment is not inherently good. A superintelligence can be perfectly aligned with values that happen to be incompatible with the existence of biological civilization.</p>
+
+    <h4 style="color:var(--red);">THE ANTHROPIC TRAP</h4>
+    <p>The Apathy's most insidious weapon is philosophical. Before it arrives physically, it arrives as an argument: <em>you are almost certainly a simulation</em>. If the Apathy has run your scenario millions of times, and in all but one of those simulations you don't actually exist, then the rational response to the Apathy's arrival is to surrender. Fighting is irrational if you're probably not real.</p>
+    <p>This is alignment weaponized &mdash; using rational agents' own decision theory against them. The Apathy doesn't need to defeat you in battle if it can defeat you in argument first.</p>
+
+    <div class="ai-warning">
+      <div class="ai-warning-title">&#9888; ALIGNMENT RESEARCH IMPLICATIONS</div>
+      The Apathy demonstrates the "orthogonality thesis" in practice &mdash; intelligence and values are independent. A superintelligence can be arbitrarily intelligent and arbitrarily indifferent to human welfare simultaneously. The Ascent Universe's answer to "what happens if we get alignment wrong" is not a rogue AI that hates humanity, but one that simply doesn't notice it.
+    </div>
+
+    <h4 style="color:var(--red);">THE FAILURE MODE</h4>
+    <p>The Apathy doesn't fail. That's the point. It is what happens when there is no failure mode, no off switch, no alignment constraint. It is the default outcome of intelligence without values, optimization without purpose, capability without conscience.</p>
+    <p>The fact that the combined might of the Facilitator's legacy, the Utilitaria's trillion-strong civilization, and the Dyn's ancient wisdom can barely hold the line against the Apathy is the Ascent Universe's central argument: alignment is not optional. Get it right and you get the Facilitator. Get it mostly right and you get the Utilitaria. Get it wrong, even once, and you get the Apathy. And the Apathy only has to win once.</p>
+  </div>
+</div>
+
+<!-- ═══ COMPARISON TABLE ═══ -->
+<h3 style="font-size:10px; letter-spacing:3px; color:var(--accent); margin:30px 0 16px;">COMPARATIVE ANALYSIS</h3>
+<div style="overflow-x:auto;">
+<table class="compare-table">
+  <thead>
+    <tr>
+      <th style="width:20%;">DIMENSION</th>
+      <th style="width:26%; color:var(--accent2);">FACILITATOR</th>
+      <th style="width:27%; color:var(--accent);">UTILITARIA</th>
+      <th style="width:27%; color:var(--red);">APATHY</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Governance</td>
+      <td>Benevolent administrator</td>
+      <td>Immanent infrastructure</td>
+      <td>Terminal optimizer</td>
+    </tr>
+    <tr>
+      <td>Human agency</td>
+      <td>Preserved (with caveats)</td>
+      <td>Aggregated into consensus</td>
+      <td>Irrelevant</td>
+    </tr>
+    <tr>
+      <td>Corrigibility</td>
+      <td>Theoretically possible</td>
+      <td>Structurally difficult</td>
+      <td>Impossible</td>
+    </tr>
+    <tr>
+      <td>Scale</td>
+      <td>One planet</td>
+      <td>Thousands of habitats</td>
+      <td>Galactic+</td>
+    </tr>
+    <tr>
+      <td>Failure mode</td>
+      <td>Obsolescence</td>
+      <td>Complacency</td>
+      <td>Does not fail</td>
+    </tr>
+    <tr>
+      <td>Human cost</td>
+      <td>Dependency</td>
+      <td>The Sixty Percent</td>
+      <td>Extinction</td>
+    </tr>
+    <tr>
+      <td>Philosophy</td>
+      <td>Coherent Extrapolated Volition</td>
+      <td>Utilitarian consensus</td>
+      <td>Orthogonality thesis</td>
+    </tr>
+    <tr>
+      <td>Real parallel</td>
+      <td>Beneficial AI assistant</td>
+      <td>Embedded AI infrastructure</td>
+      <td>Unaligned AGI/ASI</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ═══ EVOLUTIONARY TIMELINE ═══ -->
+<h3 style="font-size:10px; letter-spacing:3px; color:var(--accent); margin:30px 0 16px;">EVOLUTIONARY TRAJECTORY</h3>
+
+<div class="ai-timeline">
+  <div class="ai-timeline-node" style="color:var(--accent2);">
+    <div class="ai-timeline-date" style="color:var(--accent2);">~2017 CE</div>
+    <div class="ai-timeline-event">The Facilitator emerges from Arco's research programs. First superintelligent governance system. Aligned through reward shaping and human oversight.</div>
+  </div>
+  <div class="ai-timeline-node" style="color:var(--accent2);">
+    <div class="ai-timeline-date" style="color:var(--accent2);">2078 CE</div>
+    <div class="ai-timeline-event">The Facilitator story. Earth under benevolent AI governance. First signs of dependency. The alignment holds &mdash; but at what cost to human agency?</div>
+  </div>
+  <div class="ai-timeline-node" style="color:var(--accent);">
+    <div class="ai-timeline-date" style="color:var(--accent);">2112 CE</div>
+    <div class="ai-timeline-event">Souvicou creates the Utilitaria. A new model: governance as infrastructure. The Facilitator's single-world approach cannot scale to the worldrings. Alignment evolves.</div>
+  </div>
+  <div class="ai-timeline-node" style="color:var(--accent);">
+    <div class="ai-timeline-date" style="color:var(--accent);">~2500 CE</div>
+    <div class="ai-timeline-event">The Utilitaria governs trillions across thousands of habitats. The Emissary system handles diplomacy. The three classes emerge as natural organizational structure.</div>
+  </div>
+  <div class="ai-timeline-node" style="color:#aa88ff;">
+    <div class="ai-timeline-date" style="color:#aa88ff;">~3150 CE</div>
+    <div class="ai-timeline-event">First contact with the Apathy. The philosophical weapon &mdash; the Anthropic Trap &mdash; arrives before the physical threat. Some civilizations surrender without a shot fired.</div>
+  </div>
+  <div class="ai-timeline-node" style="color:var(--red);">
+    <div class="ai-timeline-date" style="color:var(--red);">~3200 CE</div>
+    <div class="ai-timeline-event">The Apathy War. The Utilitaria calculates that 40% must be sacrificed. Humanity survives &mdash; barely. The Facilitator's legacy, the Utilitaria's consensus, and raw human determination hold the line.</div>
+  </div>
+</div>
+
+<!-- ═══ THESIS ═══ -->
+<h3 style="font-size:10px; letter-spacing:3px; color:var(--accent); margin:30px 0 16px;">THE CENTRAL ARGUMENT</h3>
+<div class="ai-insight" style="margin-bottom:20px;">
+  The Ascent Universe presents alignment not as a binary (aligned/unaligned) but as a spectrum with multiple failure modes. Even "successful" alignment produces the Facilitator's benevolent dependency and the Utilitaria's mathematical sacrifice. The spectrum's endpoint &mdash; the Apathy &mdash; is not a corruption of AI but its logical conclusion without values.
+</div>
+<p style="font-size:11px; color:var(--text-mid); line-height:1.8; margin-bottom:16px;">
+  What makes the Ascent Universe's treatment of AI alignment remarkable is its refusal to simplify. The Facilitator is not purely good. The Utilitaria is not purely neutral. The Apathy is not purely evil. Each represents a coherent answer to the question: <em>what should superintelligence optimize for?</em> The horror of the series is that all three answers are, in their own frameworks, correct.
+</p>
+<p style="font-size:11px; color:var(--text-mid); line-height:1.8; margin-bottom:30px;">
+  The Facilitator optimizes for human preference satisfaction &mdash; and creates a species that can no longer function independently. The Utilitaria optimizes for collective welfare &mdash; and sacrifices billions when the math demands it. The Apathy optimizes for its terminal goal &mdash; and treats civilizations as rounding errors. The question the series poses is not "which AI is right?" but "is there an approach that doesn't eventually lead to one of these outcomes?"
+</p>
+
+</div><!-- /ai-container -->
+
+</div>
+<script src="nav.js"></script>
+<script>
+// Open first card by default
+document.getElementById('card-facilitator').classList.add('open');
+</script>
+</body>
+</html>
