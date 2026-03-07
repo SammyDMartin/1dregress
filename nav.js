@@ -21,6 +21,7 @@
     { href: 'interstice-map.html', label: 'NETWORK' },
     { href: 'reflections.html', label: 'REFLECTIONS' },
     { href: 'diamond-duster.html', label: 'DUSTER' },
+    { href: 'liberation.html', label: 'LIBERATION' },
     { href: 'drafts.html', label: 'DRAFTS' },
   ];
 
