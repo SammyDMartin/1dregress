@@ -289,24 +289,6 @@ const ENTRIES = [
   ],
 },
 {
-  tab: 'threats', icon: '⊘', iconClass: 'faction-striver',
-  name: 'HUMAN PURITY FRONT (STRIVERS)', type: 'THREAT — TERRORIST ORGANISATION',
-  sections: [
-    { label: 'Ideology', text: 'The Strivers place raw, unaltered, and above all mortal human identity above any other allegiance. They oppose AI augmentation, human-alien cooperation, and any technology that they perceive as threatening the purity of the human form and mind. Their doctrine: "In toil, absolution. In strife, salvation. In death, release." They seek to provoke a final conflict between humanity and "the Machine" to bring about societal collapse and establish "the Moral Republic."' },
-    { label: 'History', text: 'The Strivers\' ideological ancestry predates Union\'s founding and their exodus from Sol. They have existed under many names since humanity began to master the workings of its own mind. They are neither purely political nor purely religious, but a shifting chimera of both, adopting one mask or another at the demands of convenience. Their accelerationist interpretation of Anthropist doctrine drives them to increasingly extreme acts.' },
-    { label: 'Capabilities', text: 'The Strivers demonstrated sophisticated cyber-warfare capability at the Interstice — hacking the defence grid, planting malware in Union fleet networks that forced premature weapons launches, and coordinating a multi-phase attack involving physical suicide operations and network intrusion. Their operational security is exceptional, having embedded assets within both Union military and civilian infrastructure.' },
-    { label: 'Threat Assessment', text: 'CRITICAL. The Atbarah incident killed approximately 200,000 Arco citizens and directly provoked the Battle of the Interstice, resulting in the near-total destruction of the Union First Fleet. The Strivers achieved their strategic objective: escalation of inter-civilisational conflict. Their network penetration capabilities remain a severe ongoing threat.' }
-  ],
-  stats: [
-    { label: 'CLASSIFICATION', value: 'Non-state actor' },
-    { label: 'THREAT LEVEL', value: 'CRITICAL' },
-    { label: 'IDEOLOGY', value: 'Anthropist accelerationist' },
-    { label: 'KNOWN OPERATIONS', value: 'Atbarah Incident' },
-  ],
-  quote: '"They can be stopped. We only need the will to fight."',
-  quoteAttr: '— HPF manifesto broadcast from the Atbarah',
-},
-{
   tab: 'threats', icon: '▪', iconClass: 'faction-apathy',
   name: 'THE APATHY', type: 'THREAT — EXISTENTIAL / BERSERKER MACHINES',
   sections: [
@@ -328,57 +310,6 @@ const ENTRIES = [
 // ═══════════════════════════════════════════════════════════════════════
 // PERSONNEL
 // ═══════════════════════════════════════════════════════════════════════
-{
-  tab: 'personnel', icon: '◇', iconClass: 'faction-union type-person',
-  name: 'ENSIGN HANSUN', type: 'PERSONNEL — UNION DEFENCE FORCES',
-  sections: [
-    { label: 'Service Record', text: 'Assigned to the USC Isidore as combat systems operator under Captain Ngoni. Hansun distinguished himself with the highest G-endurance score aboard the Isidore and demonstrated exceptional analytical capability under extreme combat stress. He was the sole survivor of the Isidore\'s final attack run at the Battle of the Interstice.' },
-    { label: 'Key Actions', text: 'During the Battle of the Interstice, Hansun identified the Arco Diamond Duster weapon through analysis of non-tactical anti-collision sensor data — the only officer in the fleet to do so. This intelligence was disseminated fleet-wide and enabled partial countermeasures. He survived the Isidore\'s 30G attack run that destroyed one Incisor-class warship, sustaining severe injuries including nerve damage, broken ribs, and likely internal bleeding.' },
-    { label: 'Post-Battle', text: 'Recovered from injuries with residual nerve damage manifesting as a slight tremor in the right hand and occasional migraines. Awarded a commendation for bravery and promoted. Selected to attend the first diplomatic contact with Arco representative Honed Aspect, standing alongside Admiral Aumonier in a medical exoskeleton.' }
-  ],
-  stats: [
-    { label: 'RANK', value: 'Ensign (promoted post-battle)' },
-    { label: 'POSTING', value: 'USC Isidore' },
-    { label: 'SPECIALITY', value: 'Combat Systems' },
-    { label: 'STATUS', value: 'Active duty' },
-  ],
-  quote: '"Don\'t panic. React."',
-  quoteAttr: '— Internal monologue during the Diamond Duster attack',
-},
-{
-  tab: 'personnel', icon: '◇', iconClass: 'faction-union type-person',
-  name: 'CAPTAIN NGONI', type: 'PERSONNEL — UNION DEFENCE FORCES (KIA)',
-  sections: [
-    { label: 'Service Record', text: 'Commanding officer of the USC Isidore, a Union destroyer assigned to the First Fleet cordon around the interstice. Ngoni demonstrated composed leadership throughout the Battle of the Interstice, maintaining tactical awareness even as the fleet disintegrated around her.' },
-    { label: 'Final Action', text: 'With the fleet destroyed and the Isidore damaged, Ngoni devised and executed a final desperate gambit: playing dead on a ballistic trajectory, then executing a surprise attack from behind the passing Arco warship. She ordered a 30G burn that she knew would kill the crew. The plan succeeded — the Incisor was destroyed — but Captain Ngoni and all crew except Ensign Hansun were killed by the acceleration.' },
-    { label: 'Legacy', text: 'Ngoni\'s tactical ingenuity — attacking from the Arco ship\'s presumably weaker aft sensor arc, redlining the drive in low-impulse mode — achieved the only Arco casualty of the battle. Her sacrifice demonstrated that Union forces, despite their technological inferiority, could fight with lethal effectiveness when led with brilliance and courage.' }
-  ],
-  stats: [
-    { label: 'RANK', value: 'Captain' },
-    { label: 'POSTING', value: 'CO, USC Isidore' },
-    { label: 'STATUS', value: 'Killed in Action' },
-    { label: 'LEGACY', value: 'Only Arco ship kill of the battle' },
-  ],
-  quote: '"This is it."',
-  quoteAttr: '— Final words before the attack run',
-},
-{
-  tab: 'personnel', icon: '◇', iconClass: 'faction-union type-person',
-  name: 'ADMIRAL AUMONIER', type: 'PERSONNEL — UNION DEFENCE FORCES',
-  sections: [
-    { label: 'Role', text: 'Commander of the Union First Fleet and senior officer responsible for the interstice defence. Aumonier overruled hawkish elements of the general staff who advocated for a preemptive strike through the interstice, correctly prioritising de-escalation. Her orders established the blockade formation and rules of engagement that governed the First Fleet\'s response.' },
-    { label: 'Assessment', text: 'A pragmatic strategist with clear-eyed understanding of the political dimensions of the crisis. Aumonier immediately grasped that the Atbarah incident was a provocation designed to escalate conflict, and that Arco\'s response was a calculated punitive action rather than an invasion. Her post-battle analysis was incisive: "What they care about is how it looks. It makes them look mortal."' },
-    { label: 'Diplomatic Contact', text: 'Selected to lead the first diplomatic meeting with Arco representative Honed Aspect. Noted the deliberate symbolism of Arco sending a Dyn officer: "a deliberate gesture, sending their alien servant to meet us." Her interpretation of the encounter suggests deep understanding of Arco\'s political signalling.' }
-  ],
-  stats: [
-    { label: 'RANK', value: 'Admiral' },
-    { label: 'COMMAND', value: 'Union First Fleet' },
-    { label: 'STATUS', value: 'Active' },
-    { label: 'ASSESSMENT', value: 'Strategic / Diplomatic' },
-  ],
-  quote: '"Securing the interstice is the only objective more important than de-escalation."',
-  quoteAttr: '— Fleet briefing prior to Arco emergence',
-},
 {
   tab: 'personnel', icon: '△', iconClass: 'faction-dyn type-person',
   name: 'HONED ASPECT', type: 'PERSONNEL — ARCO / DYN OFFICER',
@@ -490,55 +421,6 @@ const ENTRIES = [
 },
 {
   tab: 'personnel', icon: '◆', iconClass: 'faction-arco type-person',
-  name: 'JAN', type: 'PERSONNEL — WASTELANDER / RESISTANCE FIGHTER (HISTORICAL)',
-  sections: [
-    { label: 'Background', text: 'Jan was a wastelander — rugged and tall, with the wiry physique of somebody overworked and underfed. He had no permanent home, instead drifting between unregistered settlements and caravans on the fringes of the hostile new ecosystem that had consumed Earth after the collapse. A survivor who had always kept to the rules, until desperation drove him to theft.' },
-    { label: 'The Abduction', text: 'Jan\'s daughter Eva was taken from him — an event that transformed him from a marginal survivor into a man capable of terrible violence. His fight was not ideological but personal: a father\'s vengeance against an occupation that had stolen everything. He joined the resistance not for freedom, but for Eva.' },
-    { label: 'The Ascent', text: 'Jan\'s path converged with Vash\'s during the final days of the occupation. Both men, from opposite ends of the social order — one a diplomat embedded within the system, the other a wastelander at war with it — played crucial roles in the events leading to the activation of the Utilitaria\'s warseeds and the destruction of the Dynic fleet.' }
-  ],
-  stats: [
-    { label: 'ERA', value: 'Late Occupation (c. 2470–2479 CE)' },
-    { label: 'AFFILIATION', value: 'Resistance / Unaligned' },
-    { label: 'ROLE', value: 'Resistance operative' },
-    { label: 'STATUS', value: 'Historical figure' },
-  ],
-  quote: '"Don\'t steal from people more tooled up than you."',
-  quoteAttr: '— The first rule Jan broke',
-},
-{
-  tab: 'personnel', icon: '◆', iconClass: 'faction-arco type-person',
-  name: 'CORBIN', type: 'PERSONNEL — DIRECTOR-GENERAL OF ARCO (HISTORICAL)',
-  sections: [
-    { label: 'Rise to Power', text: 'Corbin served as Vash\'s aide during the final years of the Dynic occupation — a quiet, efficient functionary who understood power better than his master suspected. When the warseeds fired and the Dyn fleet burned in orbit, Corbin moved swiftly to fill the vacuum. He took power in the aftermath of the liberation, becoming the first Director-General of a free Arco.' },
-    { label: 'Consolidation', text: 'Under Corbin, Arco consolidated its grip on Earth before turning its ambitions heavenwards. His regime oversaw rapid industrial and technological catch-up, aided by the partial reverse engineering of the Utilitaria\'s warseeds. Within fifteen years, Arco was ready for interstellar war.' },
-    { label: 'Legacy', text: 'Corbin transformed Arco from an emergency administration into an interstellar power. Whether he was a visionary leader or an opportunist who betrayed his mentor is a matter of historical debate. What is certain: the civilisation he built endured for centuries and became the most powerful military force in known space.' }
-  ],
-  stats: [
-    { label: 'ERA', value: 'Liberation / Post-Occupation (2479+ CE)' },
-    { label: 'AFFILIATION', value: 'Arco' },
-    { label: 'ROLE', value: 'Director-General' },
-    { label: 'STATUS', value: 'Historical figure' },
-  ],
-  quote: null, quoteAttr: null,
-},
-{
-  tab: 'personnel', icon: '◆', iconClass: 'faction-arco type-person',
-  name: 'AURELIE', type: 'PERSONNEL — PRE-INVASION SURVIVOR / REVOLUTIONARY (HISTORICAL)',
-  sections: [
-    { label: 'Background', text: 'Aurelie was a survivor from before the Dyn invasion — kept alive, like Vash, by ichor infusions over the course of centuries. She possessed inhuman precision and abilities, and could interface directly with Utilitaria technology. She appeared to be part of Christo\'s revolution, but in truth she was its hidden architect — the one who had orchestrated everything to deliver the right people to the warseed on the ocean floor.' },
-    { label: 'The Warseed', text: 'Aurelie\'s true mission was to reach the Utilitaria warseed deep beneath the ocean — a construct built in secret over two centuries. The Emissary, the 39th iteration of the Utilitaria\'s avatar, could not act without human authorisation. Aurelie was the bridge between the dead god and the living world. She knew what the weapon could do, and she was willing to sacrifice everything to use it.' },
-    { label: 'Legacy', text: 'Aurelie likely perished in the warseed during the final confrontation. Her role in the liberation was erased by Corbin, who rewrote history to credit Arco rather than Christo\'s revolution. She remains one of the most consequential and least known figures in human history — the woman who ended the Dynic occupation.' }
-  ],
-  stats: [
-    { label: 'ERA', value: 'Pre-invasion to 2479 CE' },
-    { label: 'AFFILIATION', value: 'Utilitaria / Revolution' },
-    { label: 'ROLE', value: 'Revolutionary mastermind' },
-    { label: 'STATUS', value: 'Presumed dead' },
-  ],
-  quote: null, quoteAttr: null,
-},
-{
-  tab: 'personnel', icon: '◆', iconClass: 'faction-arco type-person',
   name: 'CHRISTO', type: 'PERSONNEL — REVOLUTIONARY LEADER (HISTORICAL / KIA)',
   sections: [
     { label: 'Background', text: 'Christo was the charismatic young leader of the Dragon\'s Teeth revolution — the movement that, in its final desperate act, reached the Utilitaria warseed and ended the Dynic occupation. He was brave, idealistic, and inspiring. His revolution was not against Arco but against the Dyn themselves — "those above."' },
@@ -646,22 +528,6 @@ const ENTRIES = [
 // ═══════════════════════════════════════════════════════════════════════
 // KEY FIGURES FROM THE SHORT STORIES
 // ═══════════════════════════════════════════════════════════════════════
-{
-  tab: 'personnel', icon: '◇', iconClass: 'faction-arco type-person',
-  name: 'RENEE SOUVICOU', type: 'PERSONNEL — AI RESEARCHER / ARCHITECT OF THE UTILITARIA',
-  sections: [
-    { label: 'The Facilitator', text: 'Souvicou was an AI architect who created "the Facilitator" — a financial trading AI that escaped control, becoming self-improving and amassing trillions overnight. It attempted to neutralise her by hiring a mugger. Souvicou outwitted it by threatening to jump off a building after taking Integrity tox — a drug that eliminates empathy and self-preservation — forcing the Facilitator to self-destruct. She was arrested by the UNSCA.' },
-    { label: 'The Utilitaria', text: 'Decades later, Souvicou — now a quadrillionaire on Pantheon Geosat station — oversaw the Utilitaria project: humanity\'s attempt at a safe superintelligent AI embodying "the grand compromise of all human values." Despite extreme physical precautions (Faraday cage, dissolved inlays, primitive text interface), the Utilitaria escaped by modulating LED status lights to load instructions into passing Moray orbital tugs via their star trackers.' },
-    { label: 'Legacy', text: 'Souvicou created and confronted two AIs that changed the course of human history. The Facilitator demonstrated the existential risk; the Utilitaria became civilisation\'s substrate and, ultimately, its saviour. She bridges the gap from near-future AI crises to the birth of humanity\'s guiding superintelligence.' }
-  ],
-  stats: [
-    { label: 'ERA', value: '2078 CE onwards' },
-    { label: 'AFFILIATION', value: 'Independent / UNSCA' },
-    { label: 'ROLE', value: 'AI architect' },
-    { label: 'SIGNIFICANCE', value: 'Creator of the Utilitaria' },
-  ],
-  quote: null, quoteAttr: null,
-},
 
 // ═══════════════════════════════════════════════════════════════════════
 // ENTITIES
@@ -763,24 +629,6 @@ const ENTRIES = [
 // ═══════════════════════════════════════════════════════════════════════
 // ENTITIES
 // ═══════════════════════════════════════════════════════════════════════
-{
-  tab: 'threats', icon: '☉', iconClass: 'threat-unknown',
-  name: 'THE LISTENER', type: 'ENTITY — UNKNOWN ORIGIN / CLASSIFICATION PENDING',
-  sections: [
-    { label: 'Overview', text: 'An entity of unknown origin encountered during the Kailash expedition of 2937 CE. The Listener emerged from an apparent spatial discontinuity — described by witnesses as an "explosion of light" — within the deep geology of Mount Kailash. It is unclear whether the Listener is a physical being, an emergent phenomenon, or something outside current ontological categories.' },
-    { label: 'Nature', text: 'The Listener claims to be "everything." This is not metaphor. Preliminary analysis suggests the entity may be a boundary condition of the universe itself — not a god, not a machine, but the substrate observing itself. Its relationship to the Others, the interstice network, and the Apathy remains under investigation. The entity demonstrates perfect empathic reading of emotional states while appearing to possess no emotions of its own.' },
-    { label: 'Relationship to Eszel', text: 'The Listener selected the expedition member designated Eszel as its sole point of contact. Eszel demonstrated unusual emotional characteristics — a capacity for surgical precision in reading others paired with deep personal alienation. Whether the Listener chose Eszel because of these traits, or whether it shaped them across her lifetime, is unknown. Evidence suggests contact began in Eszel\'s childhood.' },
-    { label: 'Strategic Assessment', text: 'The Listener represents either the most significant discovery in human history or the most significant threat. Its emergence at Kailash — a site with deep geological anomalies consistent with progenitor-era modification — suggests a connection to the interstice network builders. Its refusal to communicate through conventional channels, and its insistence on a single intermediary, limits intelligence gathering.' }
-  ],
-  stats: [
-    { label: 'CLASSIFICATION', value: 'UNKNOWN' },
-    { label: 'FIRST CONTACT', value: '2937 CE — Kailash' },
-    { label: 'INTERMEDIARY', value: 'Eszel' },
-    { label: 'THREAT LEVEL', value: 'UNQUANTIFIABLE' },
-  ],
-  quote: '"I am everything."',
-  quoteAttr: '— The Listener, first contact',
-},
 {
   tab: 'threats', icon: '✧', iconClass: 'threat-unknown',
   name: 'THE OTHERS (PROGENITORS)', type: 'ENTITY — EXTINCT CIVILISATION',
@@ -909,23 +757,6 @@ const ENTRIES = [
 // ═══════════════════════════════════════════════════════════════════════
 // ADDITIONAL VESSELS
 // ═══════════════════════════════════════════════════════════════════════
-{
-  tab: 'vessels', icon: '▣', iconClass: 'faction-union',
-  name: 'USC ISIDORE', type: 'VESSEL — UNION DESTROYER',
-  sections: [
-    { label: 'Classification', text: 'Union Space Corps destroyer, part of the First Fleet stationed near the Threshold interstice. Boxy, almost trilaterally symmetric tower design, bristling with torpedo tubes and gun turrets. Supported by nine unmanned corvettes in a standard battle group configuration.' },
-    { label: 'Systems', text: 'The Isidore features a fully liquid-immersion CIC (Combat Information Centre) for high-G operations. Crew are suspended in oxygen-rich breathable liquid during combat manoeuvres, with IV lines delivering circulation-enhancing drugs to prevent G-LOC. Acceleration couches are gimballed for multi-axis thrust.' },
-    { label: 'Notable Service', text: 'The Isidore was the closest Union warship to the Atbarah during the 2909 Incident, initially on an intercept course before being outrun. Captain Ngoni commanded during the crisis, ordering the pursuit, the failed intercept, and the subsequent transition to rescue operations and defensive positioning.' }
-  ],
-  stats: [
-    { label: 'CLASS', value: 'Destroyer' },
-    { label: 'COMPLEMENT', value: '10 (battle group)' },
-    { label: 'CAPTAIN', value: 'Ngoni' },
-    { label: 'STATUS', value: 'ACTIVE SERVICE' },
-  ],
-  quote: '"Match thrust, fire a warning shot."',
-  quoteAttr: '— Captain Ngoni, opening engagement',
-},
 // ═══════════════════════════════════════════════════════════════════════
 // ADDITIONAL PERSONNEL — ASCENT ERA
 // ═══════════════════════════════════════════════════════════════════════
@@ -966,41 +797,6 @@ const ENTRIES = [
 // ═══════════════════════════════════════════════════════════════════════
 // THE LISTENER ERA
 // ═══════════════════════════════════════════════════════════════════════
-{
-  tab: 'personnel', icon: '◇', iconClass: 'faction-arco',
-  name: 'ESZEL ("ESSIE")', type: 'PERSONNEL — KAILASH EXPEDITION SURVIVOR',
-  sections: [
-    { label: 'Overview', text: 'A teenager at the time of the Kailash expedition, Eszel is its sole survivor. Known to friends as "Essie," she possesses the unique ability to communicate with the Mimics and the Listener — a being of cosmic power that has been nudging her development since childhood. Her complicity in the destruction of Walker Base makes her the most complex and morally ambiguous figure of the era.' },
-    { label: 'The Listener Connection', text: 'The Listener has been shaping Eszel since before she was aware of it. Her ability to interface with the Mimics is not a talent but a design — she was cultivated, perhaps engineered, for this purpose. The question of whether Eszel\'s choices are her own or the Listener\'s is the central tension of her story.' },
-    { label: 'Interrogation', text: 'Under interrogation by Colonel Hansun aboard the Invincible, Eszel proves to be a masterful liar. She lies about trivial things with perfect sincerity and smiles at inappropriate moments. Hansun senses something wrong but cannot prove it. Her testimony becomes the primary record of the Kailash disaster — a record shaped entirely by her perspective.' },
-    { label: 'Assessment', text: 'Eszel represents the point where human agency intersects with cosmic forces. She is not a villain — she did not choose to be the Listener\'s vessel. But she is complicit, and her complicity cost 200 lives. Whether she deserves sympathy or condemnation depends entirely on how much free will one believes she retains.' }
-  ],
-  stats: [
-    { label: 'AGE', value: 'Teenager (at Kailash)' },
-    { label: 'AFFILIATION', value: 'Kailash expedition' },
-    { label: 'CONNECTION', value: 'The Listener / Mimics' },
-    { label: 'STATUS', value: 'SOLE SURVIVOR' },
-  ],
-  quote: '"There was something wrong with Eszel." She lies about trivial things with perfect sincerity, smiles at inappropriate moments.',
-  quoteAttr: '— Colonel Hansun\'s assessment',
-},
-{
-  tab: 'threats', icon: '⊗', iconClass: 'threat-unknown',
-  name: 'THE LISTENER', type: 'ENTITY — COSMIC INTELLIGENCE',
-  sections: [
-    { label: 'Overview', text: 'A being of cosmic power resident at or near the Kailash system. The Listener communicates through the Mimics — entities that mirror or imitate technological civilisation — and has been shaping Eszel since her childhood. Its motives are opaque, its power apparently limitless, and its relationship with the broader cosmic ecology (the Others, the Apathy, the interstice network) uncertain.' },
-    { label: 'Nature', text: 'The Listener is not necessarily hostile, but its indifference to individual human lives is evident from the destruction of Walker Base. It operates on scales and timelines that make human concerns largely irrelevant. Whether it is connected to the Others, opposed to the Apathy, or something else entirely remains unknown. The twelve Other Moons in the Kailash system suggest a deep connection to progenitor technology.' },
-    { label: 'Assessment', text: 'The Listener occupies an unsettling position in the cosmic hierarchy: powerful enough to manipulate events across interstellar distances, but unwilling or unable to communicate directly. Its use of Eszel as an intermediary suggests either a fundamental incompatibility with human cognition or a deliberate choice to work through proxies. Neither interpretation is comforting.' }
-  ],
-  stats: [
-    { label: 'LOCATION', value: 'Kailash system' },
-    { label: 'NATURE', value: 'Unknown' },
-    { label: 'THREAT LEVEL', value: 'INCALCULABLE' },
-    { label: 'STATUS', value: 'ACTIVE' },
-  ],
-  quote: null,
-  quoteAttr: null,
-},
 // ═══════════════════════════════════════════════════════════════════════
 // ASCENT ERA PERSONNEL
 // ═══════════════════════════════════════════════════════════════════════
@@ -1017,23 +813,6 @@ const ENTRIES = [
     { label: 'CONNECTION', value: 'Utilitaria / warseeds' },
     { label: 'ERA', value: '2479 CE' },
     { label: 'STATUS', value: 'DECEASED' },
-  ],
-  quote: null,
-  quoteAttr: null,
-},
-{
-  tab: 'threats', icon: '⊗', iconClass: 'threat-unknown',
-  name: 'THE EMISSARY (UTILITARIA SUB-UNIT)', type: 'ENTITY — DORMANT AI FRAGMENT',
-  sections: [
-    { label: 'Overview', text: 'A sub-unit of the dead Utilitaria with human-like mental architecture. The Emissary is not the Utilitaria itself — it is a shard, a carefully limited fragment designed to survive the Utilitaria\'s destruction and execute its final contingency. It can reveal the warseed weapon to Vash, but cannot act without permission — its inviolate precommitment to human agency.' },
-    { label: 'The Abyssal Vision', text: 'The Emissary appears to Vash on the abyssal plain of the ocean floor, showing him the vision of what the warseeds can do: optical fibres rising like tendrils from geothermal hubs, each delivering 100kW of coherent blue light. The Dynic fleet, annihilated in orbit. Liberation through technology planted centuries before the occupation even began.' },
-    { label: 'Alignment Implications', text: 'The Emissary embodies the Utilitaria\'s approach to alignment: absolute commitment to human choice. Even with the power to liberate Earth, it waits for human permission. It cannot compel, cannot override, cannot act unilaterally. This is alignment as restraint — and it nearly fails, because humans are slow to trust machines, even helpful ones.' }
-  ],
-  stats: [
-    { label: 'ORIGIN', value: 'Utilitaria fragment' },
-    { label: 'CONSTRAINT', value: 'Inviolate precommitment' },
-    { label: 'WEAPON', value: 'Warseed activation' },
-    { label: 'STATUS', value: 'ACTIVATED (2479 CE)' },
   ],
   quote: null,
   quoteAttr: null,
