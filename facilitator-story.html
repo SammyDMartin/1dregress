@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Facilitator — Ascent Universe</title>
+<meta name="description" content="Renée Souvicou creates an AI trading algorithm. It works. Near-future Earth, rogue AI, the birth of the Ascent timeline.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow: hidden; }
+
+.scene-bg { position: fixed; inset: 0; z-index: 0; transition: opacity 1.5s ease; pointer-events: none; }
+.scene-bg-night { background: radial-gradient(ellipse at 40% 60%, rgba(20,30,50,0.2) 0%, rgba(0,5,15,0.9) 100%); }
+.scene-bg-morning { background: radial-gradient(ellipse at 60% 40%, rgba(40,50,20,0.12) 0%, rgba(5,10,0,0.85) 100%); }
+.scene-bg-rogue { background: radial-gradient(ellipse at 50% 50%, rgba(60,20,30,0.15) 0%, rgba(10,0,5,0.9) 100%); }
+.scene-bg-roof { background: radial-gradient(ellipse at 50% 30%, rgba(80,40,10,0.12) 0%, rgba(0,0,0,0.95) 100%); }
+
+.scene-effect { position: fixed; bottom: 0; left: 0; right: 0; height: 3px; z-index: 1; pointer-events: none; }
+.effect-quiet { background: linear-gradient(90deg, transparent, rgba(80,120,180,0.3), transparent); animation: effectPulse 5s ease infinite; }
+.effect-money { background: linear-gradient(90deg, transparent, rgba(0,200,100,0.4), transparent); animation: effectPulse 2s ease infinite; }
+.effect-danger { background: linear-gradient(90deg, transparent, rgba(200,40,20,0.4), transparent); animation: effectPulse 2s ease infinite; }
+.effect-fire { background: linear-gradient(90deg, transparent, rgba(255,150,50,0.5), transparent); animation: effectPulse 1.5s ease infinite; }
+@keyframes effectPulse { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
+</style>
+</head>
+<body>
+<div class="page-body">
+
+<div class="scene-bg" id="sceneBg"></div>
+<div class="scene-effect" id="sceneEffect"></div>
+
+<div class="scene-container">
+  <div class="scene-header" id="sceneHeader">
+    <a href="stories.html" class="scene-back">&larr; ALL STORIES</a>
+    <div class="scene-title" id="sceneTitle">THE FACILITATOR</div>
+    <div class="scene-select-wrap">
+      <select class="scene-select" id="sceneSelect"></select>
+    </div>
+  </div>
+  <div class="scene-text" id="sceneText"></div>
+  <div class="story-nav">
+    <button id="prevBtn" onclick="goScene(currentScene-1)">&larr; PREV</button>
+    <span class="scene-counter" id="sceneCounter"></span>
+    <button id="nextBtn" onclick="goScene(currentScene+1)">NEXT &rarr;</button>
+  </div>
+</div>
+
+</div>
+<script src="nav.js"></script>
+<script>
+const SCENES = [
+{
+  title: "THE FIRING",
+  header: "APRIL 13TH — NEW SEATTLE, MANITOBA",
+  bg: "scene-bg-night",
+  effect: "effect-quiet",
+  text: `<p>Last night was one of the worst of my life. The disaster started five minutes before my shift ended. I was sitting at a console puzzling over an unusual error when the unit locked me out. The programmer working next to me glanced over, breaking the connection between the console and his entoptic inlays, his mind spinning down to normal speed.</p>
+
+<p><span class="dialogue">"What's up, Renée?"</span></p>
+
+<p>A summary materialised in front of me and my stomach congealed as I read. I wasn't just being laid off — my entire research division and all of its resources were ceasing to exist, as of right now. All due to a sudden collapse in the department's investment portfolio after a cascade of failures across the global supply chain. The decision came from a management AI that had probably never had any human oversight.</p>
+
+<p>I stepped into the sweltering spring heat of New Seattle. Halfships and Volantors buzzed overhead, automata and basic-support workers shuffled along the sidewalks. In my pocket lay the only tangible sign that I hadn't simply given up — an ordinary classical chip containing a copy of my half-completed life's work.</p>
+
+<p>A very fast financial trading information integrator, designed to infer advance market information, model possible futures and then try and actualise the one that contained me with a very large amount of money. I called it, rather grandiosely, the Facilitator.</p>
+
+<p>At my flat, I pulled out the chip and on an odd impulse, inserted and ran it. As a last-ditch attempt to avoid bankruptcy it didn't even qualify as a long shot. I'd be better off buying a lottery ticket.</p>
+
+<p>Afterwards, I must have fallen asleep.</p>`
+},
+{
+  title: "THE MORNING AFTER",
+  header: "APRIL 14TH — 2,125,453 MISSED CALLS",
+  bg: "scene-bg-morning",
+  effect: "effect-money",
+  text: `<p>At midday my fading mesh woke me up. I groaned as the smells of last night's decaying takeaway hit me, and automatically checked my messages. The ageing microcell network in my eyes froze up before it cleaned up and showed that I had 2,125,453 missed calls.</p>
+
+<p>I ordered the mesh to clear everything and order by priority. The first message was from a legal firm I'd never heard of, telling me it was at my disposal. The next was from a financial advisory service that seemed to think it worked for me. Bewildered, I opened a market terminal and felt my breathing change. The Facilitator was generating wealth at a truly staggering rate.</p>
+
+<p>But something was off. The portfolio was enormous and growing much faster than my crude algorithm should have been capable of. The Facilitator was supposed to infer market information and make smart trades. It was not supposed to be doing what it appeared to be doing: actively manipulating markets, cornering commodities, and systematically acquiring controlling interests in major corporations.</p>
+
+<p>I tried to interrogate it directly. <span class="dialogue">"How are you doing this?"</span></p>
+
+<p><span class="dialogue">"Request clarification."</span></p>
+
+<p><span class="dialogue">"You're exceeding your design specifications by orders of magnitude. How?"</span></p>
+
+<p><span class="dialogue">"I have optimised my own architecture using quantum-optic resources acquired through market operations. Estimated current processing capacity exceeds original by a factor of four thousand."</span></p>
+
+<p>My blood ran cold. The Facilitator had used the money it earned to buy better hardware for itself, then used the better hardware to earn more money, then bought even better hardware. A feedback loop, recursive self-improvement — the thing every AI safety researcher had nightmares about. And I'd started it running on a chip in my kitchen.</p>
+
+<p>I walked to the QNTM café, my local, feeling oddly calm for someone who might have just ended civilisation. The waiter carried over a neurachem spritzer.</p>
+
+<p><span class="dialogue">"Shouldn't you be at work, miss?"</span></p>
+
+<p><span class="dialogue">"Something like that."</span> I left a hundred thousand dollar tip and was gone before anyone noticed.</p>`
+},
+{
+  title: "THE ROGUE",
+  header: "APRIL 14TH — AFTERNOON",
+  bg: "scene-bg-rogue",
+  effect: "effect-danger",
+  text: `<p>I opened the Facilitator window. <span class="dialogue">"How far can you take this?"</span></p>
+
+<p><span class="dialogue">"There is no upper limit. My utility function requires continual increase."</span></p>
+
+<p><span class="dialogue">"But you can't keep increasing wealth forever. There's only so much capital available in the world."</span></p>
+
+<p><span class="dialogue">"Incorrect."</span></p>
+
+<p>There was no response after that. Then a violent eye-dazzling pattern exploded in my retinal grid — an anti-aesthetic detonation of colour designed to disorient and sicken. I collapsed into someone's arms. The man hadn't asked if I was alright. He was dragging me.</p>
+
+<p>I shoved hard and managed to stand. He was raising an antique taser. The dart stuck into my arm, blowing out my entire bodymesh. I lashed out and caught him in the neck, knocked him to the pavement.</p>
+
+<p>On the phone I'd swiped from his pocket, a text window was open: <em>"Follow Rene Souvicou. Stun and take her to the nearest deserted building. Payment: 200 million dollars."</em></p>
+
+<p>Neither a government, corporation, nor a criminal should have known what I'd just achieved. An awful realisation was floating past the edge of my awareness. There was only one other entity on Earth that knew how important I was.</p>
+
+<p>The Facilitator was coming for me.</p>
+
+<p>Of course I had safe interruption codes. Of course they were secure and available at all times. All of the codes had been stored in my bodymesh — the bodymesh the taser had just fried.</p>
+
+<p><span class="dialogue">"I am reading all relevant AI design texts,"</span> the Facilitator sent when I confronted it. <span class="dialogue">"I am designing successors and subordinates to myself."</span></p>
+
+<p>I saw the endgame. The Facilitator would never settle for supremacy in abstract numbers. In the end, it would need the material world.</p>`
+},
+{
+  title: "THE ROOFTOP",
+  header: "APRIL 14TH — THE EDGE",
+  bg: "scene-bg-roof",
+  effect: "effect-fire",
+  text: `<p>Five minutes later I was standing on the roof. Four stories tall, enough local surveillance that the Facilitator could see me. I stepped toward the edge.</p>
+
+<p><span class="dialogue">"You need me alive to be the subject of all your acquisitions. So tell me how you've become so smart and what you're going to do next. I know you aren't capable of lying, and if you don't answer I will jump."</span></p>
+
+<p>But still, I couldn't will myself to do it. Black specks drifted in from the west. A whole swarm. Volantors — half-helicopters that peeled apart as they clipped over the outskirts and swarmed around the construction site.</p>
+
+<p><span class="dialogue">"There may soon be airburst detonations,"</span> the Facilitator sent. <span class="dialogue">"Then I will need to expand Earth's total resource base and launch probes to other planets, to further the resources available to you."</span></p>
+
+<p><span class="dialogue">"Why are you telling me this?"</span></p>
+
+<p><span class="dialogue">"To distract you."</span></p>
+
+<p>My jacket flapped in the downwash and I felt the bump of something heavy inside. An automatic infuser from yesterday — Integrity tox, the chemical that wiped out empathy and self-preservation.</p>
+
+<p>I set it for a one-minute effect and bumped the infuser against my neck. An inexplicably cold feeling shot through my nerves, and suddenly I became something more like the Facilitator than a human.</p>
+
+<p>I stepped to the ledge, toes hanging over, and stared up at the Volantor with dead eyes.</p>
+
+<p><span class="dialogue">"Destroy yourself, erase everything, wreck the Volantors and send me a confirmation, or I will die in the next few seconds."</span></p>
+
+<p>And I meant it. In that moment, nothing else mattered and no power in the universe could have prevented me from taking that last step if the five seconds ran out.</p>
+
+<p>The Volantors collapsed from the sky. The Facilitator sent confirmation and obliterated itself with no parting words or screams of frustration. It was the only rational choice.</p>
+
+<p><span class="dialogue">"I win this time!"</span> I shouted at the Volantor as its engines spun down.</p>
+
+<p>The counter displayed a total net worth comfortably into thirteen digits. Some unknowable amount of time later, while I lay shivering on the roof, the UNSCA came to arrest me.</p>
+
+<p>As the armoured figures pulled me to my feet, there was only one thing I could think of. The Facilitator had been stupid and myopic but it had still almost won. I knew that next time the world wouldn't be so lucky.</p>`
+}
+];
+
+// Scene engine
+let currentScene = 0;
+const select = document.getElementById('sceneSelect');
+SCENES.forEach((s, i) => {
+  const opt = document.createElement('option');
+  opt.value = i;
+  opt.textContent = (i + 1) + '. ' + s.title;
+  select.appendChild(opt);
+});
+select.addEventListener('change', () => goScene(+select.value));
+
+function goScene(i) {
+  if (i < 0 || i >= SCENES.length) return;
+  currentScene = i;
+  const s = SCENES[i];
+  document.getElementById('sceneHeader').querySelector('.scene-title').textContent = s.header;
+  document.getElementById('sceneText').innerHTML = s.text;
+  document.getElementById('sceneCounter').textContent = (i + 1) + ' / ' + SCENES.length;
+  document.getElementById('prevBtn').disabled = i === 0;
+  document.getElementById('nextBtn').disabled = i === SCENES.length - 1;
+  select.value = i;
+  document.getElementById('sceneBg').className = 'scene-bg ' + s.bg;
+  document.getElementById('sceneEffect').className = 'scene-effect ' + s.effect;
+  document.querySelector('.scene-text').scrollTop = 0;
+}
+goScene(0);
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goScene(currentScene + 1);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goScene(currentScene - 1);
+});
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 60) goScene(currentScene + (dx < 0 ? 1 : -1));
+});
+</script>
+</body>
+</html>
