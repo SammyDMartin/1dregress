@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Other Moon — Ascent Universe</title>
+<meta name="description" content="Seeker discovers a false asteroid that can cross the stars. She leaves her species behind to explore the universe — and finds a network built by vanished gods. An interactive story reader.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow: hidden; }
+
+.scene-bg { position: fixed; inset: 0; z-index: 0; transition: opacity 1.5s ease; pointer-events: none; }
+.scene-bg-firsthome { background: radial-gradient(ellipse at 40% 60%, rgba(60,30,10,0.15) 0%, rgba(5,2,0,0.9) 100%); }
+.scene-bg-stars { background: radial-gradient(ellipse at 50% 40%, rgba(20,30,60,0.15) 0%, rgba(0,2,10,0.9) 100%); }
+.scene-bg-awakening { background: radial-gradient(ellipse at 50% 50%, rgba(40,20,50,0.12) 0%, rgba(5,0,10,0.85) 100%); }
+.scene-bg-network { background: radial-gradient(ellipse at 60% 40%, rgba(0,60,80,0.15) 0%, rgba(0,5,15,0.9) 100%); }
+.scene-bg-return { background: radial-gradient(ellipse at 50% 50%, rgba(80,30,10,0.15) 0%, rgba(10,0,0,0.9) 100%); }
+
+.scene-effect { position: fixed; bottom: 0; left: 0; right: 0; height: 3px; z-index: 1; pointer-events: none; }
+.effect-warm { background: linear-gradient(90deg, transparent, rgba(200,100,30,0.3), transparent); animation: effectPulse 5s ease infinite; }
+.effect-cold { background: linear-gradient(90deg, transparent, rgba(100,150,200,0.3), transparent); animation: effectPulse 4s ease infinite; }
+.effect-think { background: linear-gradient(90deg, transparent, rgba(150,80,200,0.3), transparent); animation: effectPulse 5s ease infinite; }
+.effect-wonder { background: linear-gradient(90deg, transparent, rgba(0,200,255,0.4), transparent); animation: effectPulse 3s ease infinite; }
+.effect-fire { background: linear-gradient(90deg, transparent, rgba(255,100,30,0.5), transparent); animation: effectPulse 1.5s ease infinite; }
+@keyframes effectPulse { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
+</style>
+</head>
+<body>
+<div class="page-body">
+
+<div class="scene-bg" id="sceneBg"></div>
+<div class="scene-effect" id="sceneEffect"></div>
+
+<div class="scene-container">
+  <div class="scene-header" id="sceneHeader">
+    <a href="stories.html" class="scene-back">&larr; ALL STORIES</a>
+    <div class="scene-title" id="sceneTitle">THE OTHER MOON</div>
+    <div class="scene-select-wrap">
+      <select class="scene-select" id="sceneSelect"></select>
+    </div>
+  </div>
+  <div class="scene-text" id="sceneText"></div>
+  <div class="story-nav">
+    <button id="prevBtn" onclick="goScene(currentScene-1)">&larr; PREV</button>
+    <span class="scene-counter" id="sceneCounter"></span>
+    <button id="nextBtn" onclick="goScene(currentScene+1)">NEXT &rarr;</button>
+  </div>
+</div>
+
+</div>
+<script src="nav.js"></script>
+<script>
+const SCENES = [
+{
+  title: "THE DISCOVERY",
+  header: "THE FIRST SYSTEM — THE OTHER MOON",
+  bg: "scene-bg-firsthome",
+  effect: "effect-warm",
+  text: `<p>There is star-filled space, a dim and distant orange-red sun and, off to one side, the umber cloud-tops of a gas giant. There is a flash of brilliant actinic light, and it appears like a conjuring trick, like the universe itself has glitched — the Other Moon, huge as a mountain.</p>
+
+<p>To all appearances, it is an asteroid — almond-shaped, grey-brown and pitted by craters, tall as a city. It sits motionless, ten thousand kilometres above the clouds, in grand defiance of orbital mechanics. Clinging to its fore end, in the midst of a flat expanse clear of boulders and canyons, is a curious stone orrery, a miniature representation of this stellar system shaped out of asteroidal rock. It was built when the universe was young, made to be understood. It is the control interface — moving a marker across the orrery will move the Other Moon, as if by sympathetic magic.</p>
+
+<p>In its midst sits a hunched, suited, four-limbed figure, bony jaw-plates and keenly intelligent eyes searching, always searching, for something new to comprehend and master. She is an explorer, the most cunning and curious of all Dyn — and, as she would tell it, the wisest. She calls herself Seeker, and though she has already discovered much, her journey is far from over.</p>
+
+<p>Seeker relaxed, relieved to have escaped the threatening environment around Firsthome. Below her, the churning clouds of the giant world her people knew as 'The Eye' filled half the sky. She looked down at the orrery, at the gem she'd placed next to the rounded pebble that represented The Eye. That was it — the last planet to be visited. She was the first to see many of these places from orbit. There were no more anomalies — absolutely nothing to indicate the former presence of the Others. She needed to look further.</p>
+
+<p>Seeker glanced down at the grand orrery — it was a perfect model of her home system, the First system, but that was all. Of course, there were no representations of anything beyond the First system — but there was no fundamental reason for that limit. She just needed to give it the correct instruction. And then, the stars.</p>
+
+<p><span class="dialogue">"Tell me how you work,"</span> she said, in her own language. No response. <span class="dialogue">"Tell me why you are here."</span> No response. <span class="dialogue">"Tell me who made you."</span></p>
+
+<p>Seeker sat before the orrery for long hours. Those who built this place had almost nothing in common with her except, apparently, a desire to help and to be understood. The orrery was evidence of that. If the Others could interpret the orrery, perhaps they could understand a code of hers.</p>
+
+<p>Seeker drew a grabber from the belt around her midsection, and began scratching in the ground. She had long since memorised charts of local space — the only remaining question was one of projection. Extend a plane out of the First system's ecliptic, scale distances correctly. Find and grind pebbles to a rough scale approximation. Make it understand where she needed to be.</p>
+
+<p>It was done within an hour. The orrery shifted beneath Seeker, the pebbles moving slightly as the Other Moon made corrections. It understood. This was not the end of the mystery. It was the beginning.</p>
+
+<p>Seeker raised the gem, and placed it next to the nearest pebble. The universe folded around her.</p>`
+},
+{
+  title: "THE VOYAGE",
+  header: "INTERSTELLAR SPACE — DECADES PASS",
+  bg: "scene-bg-stars",
+  effect: "effect-cold",
+  text: `<p>Dyn knew the meaning of their lives. It was to play their part in the Line — immortal, omnipresent, all-consuming. The connection of parent to child, the unbroken chain of inheritance, provided a greater purpose than any single mind or body could contrive. The individual was a cell, the Line was the whole, the end-in-itself.</p>
+
+<p>Seeker knew her Line would endure. She knew her destiny was the universe. She had everything a Dyn could desire. Why was she not satisfied?</p>
+
+<p>The speed of the engine Seeker stood on had turned the stars into a distorted swirl of light. The sky was black, aside from a single splash of blue light to the fore. Her ship had been dismantled over the first weeks and months of her journey and reassembled into a makeshift shelter on the surface of her new home.</p>
+
+<p>The complex around the orrery grew until it resembled a small but functional domain on the homeworld — hydroponics, machine-shop, astronomical instruments, and a barracks, all scavenged from the ship or manufactured from the silicon and iron of the Other Moon's surface. Off to one side, the tall towers of heat-radiators stood above a fission reactor, and all around were the tiny mobile shadows of suited upper-children roaming about the craggy surface.</p>
+
+<p>In a chamber which had once been the flight deck of her exploration vessel, Seeker sat, hunched over in concentration. The topic of her thoughts never wavered — the Others, their motives and their apparent absence from the universe. The Other Moon was left by a benevolent mind. It was a thousand-trillion ton asteroid which could blink out of existence in one place and then flare up in another like a forest fire. It was meant to be used for something great. It was a gift.</p>
+
+<p><span class="dialogue">"But why?"</span> Seeker wondered. Why not simply send a message? If their power was so incredible, why not simply appear in person? Instead, they had left a dumb tool and an implicit message — use this as you see fit.</p>
+
+<p>When the nightmares began she was not prepared. Dyn rarely sleep — their brains rest in stages, ensuring a minimal level of consciousness at all times. But they still have the capacity to fully escape consciousness. One word only described the dreams — <em>shadows</em>. Like those cast by the ancient hunter-kites which used to prey on careless young Dyn, like something vast and terrible had turned slowly to look at her.</p>
+
+<p>The Other Moon appeared high above the second system's ecliptic. Her telescopes found new worlds, none life bearing, and imaged asteroids by the thousands. None showed anomalous motion. She saw wonders; towering mountains of ice, churning cloud tops in colours her brain had never catalogued before, rivers of molten metal on planets blasted by solar radiation.</p>
+
+<p>After what felt like a million centuries of exploration, the second system had been surveyed completely. There was nothing. No sign of the Others having ever existed — which was insane. Not that they were gone — rather, that they had left behind <em>nothing</em>. No mined-out asteroids, no structures, no monuments or lasting legacy — as if they had carefully tidied up after themselves, or had been made to never be — impossible.</p>
+
+<p>Seeker knew that if she had a fraction of their power she would have remade the universe — whole worlds mined and converted to habitats, Dyson swarms, clouds of interstellar ships so dense they blotted out the starlight. If she had such fantasies, surely some among the Others had as well. Even if they were gone, where was their legacy?</p>`
+},
+{
+  title: "THE AWAKENING",
+  header: "THE THIRD SYSTEM — A NEW UNDERSTANDING",
+  bg: "scene-bg-awakening",
+  effect: "effect-think",
+  text: `<p>Seeker had taken to conversing with the lower-children, those young enough that they had not fallen entirely under her control. Of the hundreds corralled into the barracks, not one in ten would survive to adulthood. They cowered from her at first, but when she ordered them to stand and speak to her they obeyed — out of fear, not loyalty or love.</p>
+
+<p>Seeker remembered being very much like them. These young contained a piece of her mind, each one had that potential. But every time she returned to the barracks she addressed different Dyn: too many of the former individuals were culled in the interim by the obedient upper-children, or lost to starvation.</p>
+
+<p><em>'Too many?'</em> what a bizarre thought. Where had it come from?</p>
+
+<p>Seeker wondered if, so far from her origin, she had begun to return to an emotional childhood, when nothing seemed more important than her own body's survival, when the Line was a distant abstraction. Ridiculous. And yet — so many children were wasted in the churn. She had never tried to imagine a better alternative.</p>
+
+<p>Her thoughts had been held back by a self-assured ignorance, a bald assertion that no improvement was possible or even desirable, that the Line required a constant churn of deaths. Now was the time to ask. The children died because their numbers grew too large, because the alternative was a population crash, or sterile stagnation. Fear of mortality kept the young alive, ensured the strongest prospered, served as a stop against atrophy.</p>
+
+<p>But why did it have to be that way, why not simply prolong individual lives or use cloning or any of a dozen other solutions? Whatever benefit gained from choosing amongst competing children could be attained directly by simple genetic selection. Seeker realised that she already had the knowledge to preserve her Line's vigour without such a churn, without a vast domain supported on the bodies of thousands of children, living and dying beneath her.</p>
+
+<p>The third system came and went. More decades passed, Seeker saw more wonders. She looked up and found that she struggled to pick the First Sun out of the background stars.</p>
+
+<p>She had told herself that the individual was nothing, lost in the depths of the Line. But Seeker cared for her own life, for her own experience. Her desire to know the universe served her Line, but the experience was enjoyed by <em>her</em>, this Seeker, not by the Line. The implication was clear.</p>
+
+<p><em>No</em>, said the voice of tradition: the vitality of the Line was the death of the individual. Imagine if every cell within her body refused to stop dividing, citing its own life as more important than the whole. It was obviously absurd.</p>
+
+<p>Even so, Seeker could not deny what she had come to understand. She couldn't let her moral sense, which screamed at the outrage, get in the way of doing what she knew was right. She knew for a fact, from the inside, despite all instinct and tradition, that her own life mattered apart from the Line. The next question was why not the others — why not the children?</p>
+
+<p>It seemed undeniable — they all mattered, every Dyn. That settled it; she would have to find a solution, and no matter that the problem presented an impossible dilemma. She could imagine the impossible.</p>
+
+<p>She began limiting the growth of her domain — fewer children meaning fewer deaths, and pondered ways to make their lives more tolerable. It was a project worthy of her attention, one that would likely take centuries — and one that would surely drive her apart from the rest of her species.</p>`
+},
+{
+  title: "THE NETWORK",
+  header: "THE FIFTH SYSTEM — ANOTHER GALAXY",
+  bg: "scene-bg-network",
+  effect: "effect-wonder",
+  text: `<p>The fifth system was nearly devoid of planets — two inner rocky worlds circling a brilliant white main-sequence star. Seeker spotted the anomaly on the second day of surveillance.</p>
+
+<p>What she saw was beyond any words she knew. It was a structure, a roughly spherical swirl of enmeshed layers interpenetrating, flickering blue like the sparks from an engine igniter. It was surrounded by a dodecahedral cage, a Platonic solid which Seeker knew to be perfect and timeless: mathematics made material. And within the dodecahedron and the swirl of energy was distorted starlight, an alien sun. Another world.</p>
+
+<p>Seeker understood. It was so obvious. The Other Moon was nothing more than a cart. Just as a Dyn might ride a motor carriage before boarding an intercontinental train, so the Other Moon was meant to navigate between these places, like a blood cell flowing through capillaries, driven through a larger system. The interstice — the name came to her at once.</p>
+
+<p>But the Other Moon refused to play its part. For unguessable alien reasons, it had decided 'No' — like a skittish draft animal.</p>
+
+<p>With only a vague sense that she ought to be fearful, Seeker boarded an excursion module and jetted away towards the interstice. She keyed into the Other Moon's radio, and listened as the intervals between its clock updates grew longer, time and space stretching around her.</p>
+
+<p>Shapes swirled around Seeker, the vibrations growing until her eyesight faded. Then the world came rushing in from every direction, and she was moving away from the structure. She was on the other side, and unfamiliar yellow-white sunlight spilled in through the porthole.</p>
+
+<p>She looked up at a band of stars — not the uniform haze every Dyn would recognise as the wider galaxy, but a near-solid arc of translucent light. She was within a spiral galaxy. <em>Another galaxy.</em></p>
+
+<p>Seeker recoiled from the window as if it had delivered an electrical shock. She imagined floating just above her original home, remembering precisely the low yurt where she and a hundred other immature Dyn had once been crammed, then zooming out, clicking up and up through factors of a thousand, a million, a billion, and still further to the unknown, universe-spanning distance across which the interstice had delivered her. And yet, it was all still true — that dome and this interstice were part of one and the same reality, a unity.</p>
+
+<p>She could imagine the impossible.</p>
+
+<p>There was a planet nearby — a green-grey surface and absorption lines for oxygen in its atmosphere. Life-bearing. And above, in a close orbit — another interstice, shadowing the planet. The link in the network.</p>
+
+<p>The purpose of all this was to connect life to life. How rare was life or intelligence? Too rare to ever meet, and so the Others had decided that something had to be done about this. They'd used their godlike powers to join the universe up, to allow for an eventual meeting of minds.</p>
+
+<p>If the whole chain of supposition was correct, then there must be another intelligence somewhere out there, one at a level of development like hers, which had not yet discovered the network.</p>
+
+<p>Seeker yearned to walk upon the planet's surface, but no matter how she ran the numbers it was impossible. She took one last look through her scopes, then pulsed the reaction control thrusters, aiming her shuttle back through the interstice. The alien galaxy vanished.</p>`
+},
+{
+  title: "THE RETURN",
+  header: "THE FIRST SYSTEM — AMBUSH",
+  bg: "scene-bg-return",
+  effect: "effect-fire",
+  text: `<p>Seeker laid in a course for the First System, and the universe imploded around her. The nightmares — the shadows — returned, worse than ever. She saw them out among the stars, so intensely that they almost bled into waking life. She ignored them.</p>
+
+<p>She had discovered a partial solution to preservation of domains without the infliction of unnecessary suffering. A simple alteration to the control pheromones, worked up in her chemical laboratory, was able to prevent the subsumption of independence when the children reached maturity. She tried to imagine where this would end up — would there be a hundred small Lines, all cooperating as equals? Even she feared what such a future might bring.</p>
+
+<p>The First System drew closer. What had become of her Line in the vast stretch of time since she'd departed?</p>
+
+<p>The sky flickered and light spilled away, and a crater-scarred, ash-choked brown world appeared before her.</p>
+
+<p><em>Wrong.</em> The thought was immediate and absolute.</p>
+
+<p>There was a vibration beneath her, an impact. An alarm shrieked. Seeker looked down at the radar display — it was choked with fast-movers, too many to count. Hundreds of spacecraft — no, thousands — no, far more. They'd spent a long time working on this trap.</p>
+
+<p>An unfamiliar voice — it had been so long since she'd spoken to an equal. <span class="dialogue">"I speak on behalf of all domains. We cannot allow a rogue unchallengeable power to exist above all Dyn. Grant us the use of your vessel and you will be honoured."</span></p>
+
+<p>No — this was wrong. This could not be happening, there was too much left to do. She would not give into them, she would not give them access to all the worlds beyond. What would Dyn do with the Other Moon? Perpetuate themselves, fly across the universe but never change, never evolve, stuck in an inescapable pit of suffering.</p>
+
+<p><span class="dialogue">"You are the last of your Line, but we do not wish to extinguish you. We will respect your value if you cooperate."</span></p>
+
+<p>Liar. Seeker silenced the voice and ordered her excursion craft to launch. She watched one attacker balloon apart, surrounded by a halo of smaller, yellow exhaust flames. An excursion craft arrowed into the ship, tearing both into a shower of fast-moving debris.</p>
+
+<p>Time to leave. Seeker sent the command and the attackers vanished. Four ships had made it within the boundary. There was an astounding flash that whited out the skydome and blew apart half of her instruments.</p>
+
+<p>Goal — prevent their capture of the Other Moon, either by successful defence or destroying the control interface. Seeker donned a suit and made it to the surface. A ship had already landed between her and the habitation units that housed her children. Nothing to be done. She had to reach the Orrery.</p>
+
+<p>Bullets peppered the complex, working their way around the machine-shop and reactor, avoiding her quarters but destroying decades of work. They meant to take her alive. Landers disgorged — four Dyn rode each one, flipping and braking at the last moment.</p>
+
+<p>Seeker had already drawn a gaspistol, had already put one needle through the faceplate of an invader before they noticed her. She jumped high and released a grapple line, using momentum to pull herself down towards the surviving two. She put a needle through one and fought limb-to-limb with the other, slashing and weaving with the fury any Dyn throughout all the millions of years of their history would have recognised — defend your territory, your domain, at any cost.</p>
+
+<p>She punctured the suit of the last attacker, slicing the flesh below its jaw-plates. It fell slowly, leaking pale blood into the vacuum.</p>
+
+<p>Seeker raised herself to her full height, backing towards the Orrery. She had to destroy it. Why was this so important to her, more important than her life and domain?</p>
+
+<p>Because they would perpetuate Dynic suffering, yes, but there was something more. She hadn't wanted to admit why she'd turned back from the interstice. It was because she was afraid. The Others were missing, carefully and meticulously cleared away from the Network they had created. The Other Moon had refused to enter the Network, as if <em>it</em> were afraid. The nightmares grew worse the longer she travelled in Frameshift.</p>
+
+<p>Add together the anomalies, and see which hypotheses explain them.</p>
+
+<p>Eight more Dyn closed in. Seeker fired, working the gun closer. They were aiming to restrain her, hand to hand. She climbed through the hole in the dome, drew the grapple, searching for something to damage. She took a swipe at a robot arm, but it didn't budge.</p>
+
+<p>A Dyn bounded in, grasping a limb. She swung the grapple-gun, gouging a hole in its suit. Another was already climbing through. She fired the gas-pistol once, tearing through the attacker's faceplate, then pulled the trigger again but it was out of ammunition.</p>
+
+<p>She screamed then, turning on the radio and wailing her fury at a universe she knew was not indifferent — rather, it was actively hostile. That voice repeating endlessly: <span class="dialogue">"We cannot allow a rogue unchallengeable power over all Dyn."</span></p>
+
+<p>Seeker flung the gas pistol at the last attacker and snatched its explosive rifle. She turned back to the Orrery. Maybe this could do some damage. She raised the weapon and fired a round wildly. It exploded, blowing one of the perfectly rounded pebbles apart. A few more shots and the Other Moon would be disabled.</p>
+
+<p>Behind her, three Dyn drew their own weapons.</p>
+
+<p>Seeker never saw them fire.</p>`
+}
+];
+
+// Scene engine
+let currentScene = 0;
+const select = document.getElementById('sceneSelect');
+SCENES.forEach((s, i) => {
+  const opt = document.createElement('option');
+  opt.value = i;
+  opt.textContent = (i + 1) + '. ' + s.title;
+  select.appendChild(opt);
+});
+select.addEventListener('change', () => goScene(+select.value));
+
+function goScene(i) {
+  if (i < 0 || i >= SCENES.length) return;
+  currentScene = i;
+  const s = SCENES[i];
+  document.getElementById('sceneHeader').querySelector('.scene-title').textContent = s.header;
+  document.getElementById('sceneText').innerHTML = s.text;
+  document.getElementById('sceneCounter').textContent = (i + 1) + ' / ' + SCENES.length;
+  document.getElementById('prevBtn').disabled = i === 0;
+  document.getElementById('nextBtn').disabled = i === SCENES.length - 1;
+  select.value = i;
+  document.getElementById('sceneBg').className = 'scene-bg ' + s.bg;
+  document.getElementById('sceneEffect').className = 'scene-effect ' + s.effect;
+  document.querySelector('.scene-text').scrollTop = 0;
+}
+goScene(0);
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goScene(currentScene + 1);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goScene(currentScene - 1);
+});
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 60) goScene(currentScene + (dx < 0 ? 1 : -1));
+});
+</script>
+</body>
+</html>
