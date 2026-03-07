@@ -20,6 +20,7 @@
     { href: 'utilitaria-chat.html', label: 'EMISSARY' },
     { href: 'ai-analysis.html', label: 'AI ANALYSIS' },
     { href: 'reflections.html', label: 'REFLECTIONS' },
+    { href: 'occupied-earth.html', label: 'OCCUPIED' },
     { sep: true },
     { href: 'battle.html', label: 'BATTLE' },
     { href: 'msd.html', label: 'MSD' },

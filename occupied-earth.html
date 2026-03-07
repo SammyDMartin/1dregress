@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Occupied Earth — Ascent Universe</title>
+<meta name="description" content="Interactive exploration of Earth under Dyn occupation. Walk through Conurbation One, the wasteland, and the Hollow Tower in 2479 CE.">
+<meta property="og:title" content="Occupied Earth — Ascent Universe">
+<meta property="og:description" content="Explore Earth under alien occupation. Conurbation One, 2479 CE.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow-y: auto; }
+
+.walk-container {
+  max-width: 680px; margin: 0 auto; padding: 20px 20px 80px;
+  min-height: calc(100vh - 48px);
+}
+
+.walk-header {
+  text-align: center; padding: 30px 0 20px;
+  border-bottom: 1px solid var(--border); margin-bottom: 30px;
+}
+.walk-title { font-size: 16px; letter-spacing: 6px; color: var(--accent2); font-weight: 700; }
+.walk-sub { font-size: 8px; letter-spacing: 3px; color: var(--text-dim); margin-top: 6px; }
+.walk-date { font-size: 9px; letter-spacing: 2px; color: var(--accent); margin-top: 8px; }
+
+.walk-location {
+  font-size: 9px; letter-spacing: 3px; color: var(--accent); margin-bottom: 4px;
+  border-bottom: 1px solid var(--border); padding-bottom: 6px;
+}
+
+.walk-text {
+  font-size: 13px; line-height: 1.85; color: rgba(210, 225, 235, 0.9);
+  margin-bottom: 20px;
+}
+.walk-text p { margin-bottom: 14px; }
+.walk-text .detail { color: var(--text-dim); font-size: 11px; line-height: 1.7; }
+.walk-text .warning { color: var(--accent2); }
+.walk-text em { font-style: italic; color: var(--text-mid); }
+
+.walk-choices {
+  margin-top: 24px; display: flex; flex-direction: column; gap: 8px;
+}
+.walk-choice {
+  display: block; padding: 12px 16px;
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: 2px; cursor: pointer;
+  text-decoration: none; transition: all 0.2s;
+  text-align: left;
+}
+.walk-choice:hover { border-color: var(--accent); }
+.walk-choice-label {
+  font-size: 10px; letter-spacing: 2px; color: var(--accent); margin-bottom: 2px;
+}
+.walk-choice-desc {
+  font-size: 10px; color: var(--text-dim); line-height: 1.5;
+}
+
+.walk-divider {
+  text-align: center; padding: 16px 0; color: var(--text-dim);
+  font-size: 10px; letter-spacing: 8px;
+}
+
+.walk-intel {
+  background: var(--panel); border: 1px solid var(--border);
+  padding: 12px 16px; margin: 16px 0; border-radius: 2px;
+  font-size: 10px; line-height: 1.7;
+}
+.walk-intel-label {
+  font-size: 8px; letter-spacing: 3px; color: var(--accent2); margin-bottom: 6px;
+}
+.walk-intel-text { color: var(--text-dim); }
+
+/* Light mode */
+[data-theme="light"] .walk-text { color: #1a1a1a; }
+[data-theme="light"] .walk-text .detail { color: #666; }
+[data-theme="light"] .walk-text .warning { color: var(--accent2); }
+[data-theme="light"] .walk-choice:hover { border-color: var(--accent); }
+
+/* Fade-in animation */
+.walk-scene { opacity: 0; transform: translateY(12px); transition: opacity 0.6s, transform 0.6s; }
+.walk-scene.visible { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 600px) {
+  .walk-title { font-size: 13px; letter-spacing: 4px; }
+}
+</style>
+</head>
+<body>
+<div class="page-body">
+<div class="walk-container">
+
+<div class="walk-header">
+  <div class="walk-title">OCCUPIED EARTH</div>
+  <div class="walk-sub">AN INTERACTIVE EXPLORATION</div>
+  <div class="walk-date">CONURBATION ONE &middot; 2479 CE &middot; DYNIC OCCUPATION YEAR 165</div>
+</div>
+
+<div id="scene"></div>
+
+</div>
+</div>
+<script src="nav.js"></script>
+<script>
+const LOCATIONS = {
+  start: {
+    location: 'CONURBATION ONE — OUTER PERIMETER',
+    text: `<p>You stand at the edge of Conurbation One. Twenty-two billion people live here, packed into a terraced valley of concrete and rust that stretches to the horizon in every direction. Mountains of habitation blocks rise around a flooded valley, tier upon tier, the upper levels catching the last light of a sun that seems smaller than it should be.</p>
+
+<p>Above you, impossibly thin and impossibly long, the Ascensor stretches from the surface into the sky — a thread of carbyne chains connecting Earth to the Dyn firmament in orbit. It catches the light and vanishes. Catches it again. A reminder, always visible, that this world is no longer ours.</p>
+
+<p>The air tastes of ozone and something organic. To the south, beyond the perimeter wall, the wasteland begins — a hostile alien jungle they call the false life. You can hear it clicking and rustling even from here. Tendrils creep over the base of the wall, green-black and glistening.</p>
+
+<p class="detail">The checkpoint ahead is manned by Arco Enforcers in grey body armour. They carry dotbow bolts — short-range weapons that fire magnetically accelerated flechettes. Standard issue. Non-lethal at low settings. They don't use low settings.</p>`,
+    choices: [
+      { id: 'hollow_tower', label: 'ENTER THE CONURBATION', desc: 'Pass through the checkpoint toward the Hollow Tower and the administrative district.' },
+      { id: 'slums', label: 'CLIMB THE TERRACES', desc: 'Take the outer stairs into the mountain slums. No Enforcers up there.' },
+      { id: 'wasteland', label: 'TURN BACK TO THE WASTELAND', desc: 'The false life jungle between conurbations. Dangerous, but free.' }
+    ]
+  },
+
+  hollow_tower: {
+    location: 'THE HOLLOW TOWER — ARCO ADMINISTRATIVE DISTRICT',
+    text: `<p>The Hollow Tower rises from the centre of Conurbation One like a dead tooth. It was once something else — a cathedral, a parliament, a monument to something human. Now it is the seat of Arco, Earth's puppet government. The walls are grey composite. The windows are dark. Armed Enforcers stand at every entrance, their faces hidden behind reflective visors.</p>
+
+<p>Inside, the corridors echo. Memory machines hum in dim offices — Dyn technology adapted for human use, storing the bureaucratic records of a captive species. Clerks move between rooms carrying data-slates, their movements careful and quiet. Nobody speaks louder than necessary. The Ambassador's office is on the upper floors, but you won't be going there.</p>
+
+<p>A portrait of Ambassador Vash hangs in the main hall. He looks older than you expected — tired eyes, the lines of a man who has carried something heavy for too long. Beneath it, in small letters: <em>Arco endures. Humanity endures.</em></p>
+
+<p class="detail">Vash replaced the corrupt Director Meyer almost a century ago. Meyer had turned Arco into a personal fiefdom — rejuvenation treatments, palace guards, executions for dissent. Vash had him removed with K'txl's blessing. The Dyn don't care who runs the prison, only that the prisoners stay quiet.</p>`,
+    intel: {
+      label: 'ARCO INTELLIGENCE BRIEFING',
+      text: 'Arco is Earth\'s emergency government — established in the early days of the occupation as a puppet administration under Dyn oversight. Its mandate: keep humans alive. Its unspoken function: ensure they pose no threat. The Ambassador governs with Dyn permission. Enforcers maintain order. The arrangement has held for 165 years.'
+    },
+    choices: [
+      { id: 'memory_office', label: 'ENTER A MEMORY OFFICE', desc: 'The dim rooms where Arco clerks maintain records of every human on Earth.' },
+      { id: 'slums', label: 'LEAVE FOR THE TERRACES', desc: 'The mountain slums where most of the twenty-two billion live.' },
+      { id: 'ascensor_base', label: 'APPROACH THE ASCENSOR BASE', desc: 'The orbital tether that connects Earth to the Dyn firmament above.' }
+    ]
+  },
+
+  memory_office: {
+    location: 'MEMORY OFFICE — LEVEL 14, HOLLOW TOWER',
+    text: `<p>The room is small and dim. A single memory machine sits on a desk — a Dyn device the size of a human skull, smooth and featureless except for a contact interface that responds to touch. It contains the records of everyone in Sector 7 of Conurbation One. Births, deaths, ration allocations, work assignments, infractions. Two hundred million lives reduced to data.</p>
+
+<p>The clerk doesn't look up. She moves her fingers across the interface with practised ease, updating entries. A death. A reassignment. A child born. The machine accepts each input with a soft pulse of light.</p>
+
+<p>"Don't touch anything," she says, without turning. "If you corrupt a record, they make you disappear. Not the Dyn — Arco. The Dyn don't care about individuals. Arco does, because Arco has to account for every mouth."</p>
+
+<p>On her desk, a small photograph — faded, pre-occupation. A family on a beach. She catches you looking at it and covers it with her hand.</p>
+
+<p class="detail">The single-person farms stretch for hundreds of kilometres outside the conurbation walls. Each farm feeds one person. The mathematics of occupation: enough to survive, never enough to thrive. The Dyn calculated the minimum viable caloric intake for a human adult and allocated exactly that. Arco administers the system. Memory machines track compliance.</p>`,
+    choices: [
+      { id: 'hollow_tower', label: 'RETURN TO THE MAIN HALL', desc: 'Back to the administrative district.' },
+      { id: 'slums', label: 'LEAVE THE TOWER', desc: 'Head for the terraced slums.' }
+    ]
+  },
+
+  slums: {
+    location: 'THE TERRACES — UPPER CONURBATION ONE',
+    text: `<p>The terraces climb the mountainside in tiers of grey concrete, each level narrower than the last. Down below, the flooded valley glitters in the weak sun — the lowest levels of the conurbation are partially submerged, and people still live there, in half-drowned buildings with water lapping at the second storey. Up here, the air is cleaner but the buildings are worse. Improvised structures cling to the concrete like barnacles.</p>
+
+<p>Children play in the corridors. That surprises you — the ordinariness of it. A ball bounces off a wall. Someone laughs. An old woman sells something from a stall that smells of fried grain and salt. The Dyn have no presence here. The Enforcers rarely come this high. Up in the terraces, people have built something like a life.</p>
+
+<p>But the Ascensor is always visible. That thin line stretching from the valley floor to the sky, shimmering in the haze. A woman next to you follows your gaze and spits. "My grandmother saw it go up," she says. "Said the sky tore open and the chains came down like the legs of a spider. Took three days."</p>
+
+<p class="detail">The terraces house roughly four billion of Conurbation One's population. No running water above Level 30. Power is sporadic — tapped from the conurbation's main grid through illegal splices. Arco turns a blind eye. The occupation runs on managed neglect: keep people alive, keep them contained, keep them too exhausted to fight.</p>`,
+    intel: {
+      label: 'OCCUPATION DEMOGRAPHICS',
+      text: 'Pre-invasion Earth population: ~12 billion. Current population: ~22 billion. The Dyn did not reduce humanity — they contained it. Conurbation arcologies, designed as temporary emergency housing, became permanent. The false life jungle between conurbations made expansion impossible. Humanity grew into its cage.'
+    },
+    choices: [
+      { id: 'resistance', label: 'FOLLOW THE RUMOURS', desc: 'Someone in the upper terraces knows about the crawlers — the resistance vehicles that cross the wasteland.' },
+      { id: 'ascensor_base', label: 'DESCEND TO THE VALLEY', desc: 'Go down to the flooded valley and the base of the Ascensor.' },
+      { id: 'hollow_tower', label: 'GO TO THE HOLLOW TOWER', desc: 'The administrative heart of Arco.' }
+    ]
+  },
+
+  resistance: {
+    location: 'THE UPPER TERRACES — LEVEL 47',
+    text: `<p>The man doesn't give his name. He sits in a room with no windows, behind a door that looks like every other door in the terrace, and he talks in a voice barely above a whisper.</p>
+
+<p>"The crawlers cross the wasteland between conurbations. Massive land vehicles — bigger than buildings. The false life can't get through the hull plating. We carry supplies, information, people. The Dyn don't monitor the wasteland. Why would they? Nothing human can survive out there without a crawler."</p>
+
+<p>He leans forward. "Something is coming. I don't know what. The Ambassador's people — the real ones, not the bureaucrats — they've been moving assets for months. Weapons caches. Communications equipment. They're planning something and they're not telling us what it is."</p>
+
+<p>He pauses. "There are warseeds. Buried in the ocean floors, decades ago. Arco planted them under the Dyn's noses. Hypercrystalline devices — they grow optical fibres through the seabed like roots. When the signal comes, they'll fire. Every ocean on Earth, simultaneously. The Dyn fleet will burn."</p>
+
+<p class="warning">He looks at you steadily. "When it happens, stay indoors. Stay low. The sky is going to catch fire."</p>`,
+    intel: {
+      label: 'CLASSIFIED — ARCO STRATEGIC PLANNING',
+      text: 'The warseeds were planted by the Utilitaria in 2314 CE — 165 years before liberation. The Utilitaria calculated that the occupation would end, and prepared the means. It did this knowing it would not survive to see the result. Each warseed grows a network of optical fibres through the ocean floor, connecting to geothermal hubs. When activated, the fibres channel coherent energy into the atmosphere. The Dyn orbital fleet — every ship in Earth orbit — will be destroyed in seconds.'
+    },
+    choices: [
+      { id: 'wasteland', label: 'JOIN A CRAWLER CONVOY', desc: 'Cross the wasteland to the next conurbation.' },
+      { id: 'slums', label: 'RETURN TO THE TERRACES', desc: 'You\'ve heard enough. Go back.' },
+      { id: 'liberation', label: 'WAIT FOR THE SIGNAL', desc: 'Stay. See what happens when the warseeds fire.' }
+    ]
+  },
+
+  wasteland: {
+    location: 'THE WASTELAND — FALSE LIFE ZONE',
+    text: `<p>Beyond the conurbation walls, Earth is unrecognisable.</p>
+
+<p>The false life stretches in every direction — an alien biome that has colonised the space between human settlements. It is not quite plant and not quite animal. Thick tendrils the colour of bruised copper snake across the ground, pulsing faintly with bioluminescence. Taller growths — tree-analogues — rise twenty metres, their canopies spreading in fractal patterns that catch the light and hold it. Things click in the undergrowth. Things rustle. You cannot see them.</p>
+
+<p>The air is warm and wet, heavy with pollen-like particles that catch in your throat. Everything smells of copper and rotting sweetness. The false life cannot tolerate salt air — that's why the coasts are still clear, why fishing communities cling to shorelines. But here, inland, it owns the world.</p>
+
+<p>The ground underfoot is soft — root networks have broken through the old roads, the old cities. You can see fragments of the previous world poking through: a road sign, the corner of a building, a rusted vehicle consumed by tendrils. Civilisation, digested.</p>
+
+<p class="detail">The false life appeared within months of the Dyn invasion. Its origin is debated — Dyn bioweapon, accidental contamination from alien biospheres, or something older. It spread exponentially, consuming Earth's native ecosystems. Only salt, fire, and the conurbation walls keep it at bay. Wastelanders — the people who live outside the walls — have adapted, but barely.</p>`,
+    choices: [
+      { id: 'start', label: 'RETURN TO THE PERIMETER', desc: 'Head back toward the conurbation walls.' },
+      { id: 'wastelander_camp', label: 'FIND A WASTELANDER SETTLEMENT', desc: 'There are people out here. Unregistered. Free.' }
+    ]
+  },
+
+  wastelander_camp: {
+    location: 'WASTELANDER SETTLEMENT — COORDINATES UNKNOWN',
+    text: `<p>The settlement is invisible until you're inside it. Built into the ruins of a pre-invasion town, camouflaged with false-life cuttings that have been trained to grow over the structures. From the air — from a Dyn sensor sweep — it would look like undifferentiated jungle. Up close, you can see the windows, the doors, the carefully maintained paths.</p>
+
+<p>Maybe two hundred people live here. They fish in salt-treated ponds. They grow Earth crops in sealed greenhouses. They move between conurbations on foot or in the crawlers — massive armoured vehicles that rumble through the false life like submarines through an alien ocean.</p>
+
+<p>A man sits by a fire, cleaning a pre-invasion rifle. "The Dyn don't come down here," he says. "They stay up in the firmament. They watch through the Ascensor, through satellite, through the Other Moon's sensors. But they don't walk the ground. They're afraid of the false life too."</p>
+
+<p>He looks at you. "My grandfather was born before the occupation. He said the sky used to be blue all the way to the horizon. No shimmer. No Ascensor. No clicking in the trees. Just — sky." He shakes his head. "I can't imagine it."</p>
+
+<p class="detail">Jan — the man who would trigger liberation — lived in settlements like this. He carried a photograph of his daughter Eva, abducted years earlier. The resistance recruited him because he had nothing left to lose. A spectator watching his own body blunder from one crisis to another.</p>`,
+    choices: [
+      { id: 'wasteland', label: 'CONTINUE INTO THE WASTELAND', desc: 'Press deeper into the false life zone.' },
+      { id: 'start', label: 'RETURN TO CONURBATION ONE', desc: 'Head back to the perimeter.' },
+      { id: 'liberation', label: 'WAIT FOR THE SIGNAL', desc: 'The wastelanders say something is coming. Stay and see.' }
+    ]
+  },
+
+  ascensor_base: {
+    location: 'THE ASCENSOR — BASE TERMINAL',
+    text: `<p>The Ascensor is the single most visible symbol of the occupation. A cable of woven carbyne chains, each thinner than a human hair, braided into a ribbon that stretches from the surface of the Earth to geostationary orbit and beyond — to the Dyn firmament, the vast military platform from which the occupation is administered.</p>
+
+<p>At its base, it emerges from a fortified terminal in the centre of the flooded valley. The water around it is black and still. Dyn cargo pods climb the cable in silence — smooth ovoids the size of houses, ascending and descending in an endless loop. Resources go up. Orders come down. No humans ride the Ascensor. It is not for you.</p>
+
+<p>The terminal is the only place in Conurbation One where you see Dyn technology unmediated. The surfaces are smooth, organic, grown rather than built. The lighting has no visible source. The air inside tastes different — filtered, processed, alien. Enforcer guards stand at the perimeter, but they face outward. They're not protecting the terminal from humans. They're protecting humans from the terminal.</p>
+
+<p class="detail">K'txl — the Dyn administrator who authorised the occupation — oversees Earth from the firmament above. She has governed for over a century, never once visiting the surface. To K'txl, humanity is a manageable risk: dangerous in aggregate, individually insignificant. "Your species is insane," she told the first human envoy. "Virulent ideas rule your minds." She was not being cruel. She was being accurate, from her frame of reference.</p>`,
+    intel: {
+      label: 'DYN FIRMAMENT — ORBITAL INTELLIGENCE',
+      text: 'The firmament is a network of orbital platforms connected by the Ascensor system. From it, the Dyn monitor and administer Earth. Their fleet — warships, transports, sensor platforms — maintains permanent station above the major conurbations. The firmament is believed to house several thousand Dyn and an unknown number of automated systems. It has never been attacked. It has never needed to be defended. Until the warseeds fire.'
+    },
+    choices: [
+      { id: 'hollow_tower', label: 'GO TO THE HOLLOW TOWER', desc: 'The administrative centre of Arco.' },
+      { id: 'slums', label: 'CLIMB THE TERRACES', desc: 'Head up into the mountain slums.' },
+      { id: 'liberation', label: 'WAIT FOR THE SIGNAL', desc: 'Something is about to change. You can feel it.' }
+    ]
+  },
+
+  liberation: {
+    location: 'CONURBATION ONE — LIBERATION DAY',
+    text: `<p>It happens at dawn.</p>
+
+<p>The oceans light up. Not metaphorically — they <em>light up</em>. From horizon to horizon, the water blazes with coherent blue light as the warseeds fire simultaneously, their optical fibre networks channelling geothermal energy into focused beams that lance upward through the atmosphere. The sky turns white. Then blue. Then a colour you have no name for.</p>
+
+<p>The Dyn fleet — every ship in Earth orbit — burns. You can see them die: bright points of light flaring and fading in the upper atmosphere, one after another, like a string of firecrackers. The firmament, that vast orbital structure that has loomed over humanity for 165 years, comes apart in pieces. The Ascensor cable snaps somewhere above the stratosphere. The severed end whips down across a hundred kilometres of landscape, carving a trench in the false life before coming to rest.</p>
+
+<p>People pour into the streets. They are screaming, weeping, staring at the sky. An old woman falls to her knees. Children point at the falling debris and laugh because they don't understand what they're seeing. A man holds his daughter and says her name over and over.</p>
+
+<p>On every screen, every speaker, every communication channel on Earth, a voice speaks. It is Corbin — the man who will take credit for everything. "Today," he says, "a brighter day has dawned."</p>
+
+<p>He is lying. The warseeds were planted by the Utilitaria 165 years ago. Corbin didn't build them. Corbin didn't plan this. But Corbin will tell the story, and the story will become the truth, and the age of Ascent — humanity's rise to interstellar power — will be built on a foundation of lies.</p>
+
+<p class="detail">Jan triggered the warseeds. Not because he understood the plan — because he had nothing left. His daughter was gone. His world was gone. He pushed the button because there was nothing else to push. A spectator watching his own body blunder from one crisis to another. And the world changed.</p>`,
+    choices: [
+      { id: 'start', label: 'BEGIN AGAIN', desc: 'Return to the perimeter. See the world as it was.' }
+    ]
+  }
+};
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER ENGINE
+// ═══════════════════════════════════════════════════════════════
+const sceneEl = document.getElementById('scene');
+
+function showScene(id) {
+  const loc = LOCATIONS[id];
+  if (!loc) return;
+
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  const scene = document.createElement('div');
+  scene.className = 'walk-scene';
+
+  let html = '<div class="walk-location">' + loc.location + '</div>';
+  html += '<div class="walk-text">' + loc.text + '</div>';
+
+  if (loc.intel) {
+    html += '<div class="walk-intel">' +
+      '<div class="walk-intel-label">' + loc.intel.label + '</div>' +
+      '<div class="walk-intel-text">' + loc.intel.text + '</div>' +
+      '</div>';
+  }
+
+  html += '<div class="walk-divider">◆ ◆ ◆</div>';
+  html += '<div class="walk-choices">';
+  loc.choices.forEach(c => {
+    html += '<div class="walk-choice" data-target="' + c.id + '">' +
+      '<div class="walk-choice-label">' + c.label + '</div>' +
+      '<div class="walk-choice-desc">' + c.desc + '</div>' +
+      '</div>';
+  });
+  html += '</div>';
+
+  scene.innerHTML = html;
+  sceneEl.innerHTML = '';
+  sceneEl.appendChild(scene);
+
+  // Fade in
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      scene.classList.add('visible');
+    });
+  });
+
+  // Attach click handlers
+  scene.querySelectorAll('.walk-choice').forEach(el => {
+    el.addEventListener('click', () => showScene(el.dataset.target));
+  });
+
+  // Update URL hash for bookmarking
+  history.replaceState(null, '', '#' + id);
+}
+
+// Start from hash or beginning
+const startId = location.hash ? location.hash.slice(1) : 'start';
+showScene(LOCATIONS[startId] ? startId : 'start');
+</script>
+</body>
+</html>
