@@ -81,6 +81,18 @@ body { overflow-y: auto; }
 .section-rule {
   height: 1px; background: var(--border);
 }
+.hub-intro {
+  max-width: 640px; text-align: center; margin-bottom: 32px;
+  font-size: 12px; line-height: 1.8; color: var(--text-dim);
+  padding: 0 20px;
+}
+.hub-intro p { margin: 0 0 10px 0; }
+.hub-intro .intro-highlight { color: var(--text); }
+.hub-intro a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--border); }
+.hub-intro a:hover { border-color: var(--accent); }
+[data-theme="light"] .hub-intro { color: #666; }
+[data-theme="light"] .hub-intro .intro-highlight { color: #333; }
+[data-theme="light"] .hub-intro a { color: #0066cc; border-color: #ccc; }
 [data-theme="light"] .section-label { color: #999; }
 @media (max-width: 600px) {
   .hub-title { font-size: 16px; letter-spacing: 5px; }
@@ -98,6 +110,10 @@ body { overflow-y: auto; }
       <div class="hub-subtitle">INTERSTELLAR CONFLICT ARCHIVE</div>
       <div class="hub-line"></div>
       <div class="hub-class">ANNIHILATOR-CLASS IP ASSAULT VEHICLE</div>
+    </div>
+    <div class="hub-intro">
+      <p class="intro-highlight">A science fiction universe spanning 100,000 years. Two novels and fourteen short stories trace the collision between humanity and the alien Dyn &mdash; from deep prehistory to the far-future war against the Apathy, a force that may be killing us for our own good.</p>
+      <p>This companion site is an interactive archive: story readers, tactical reconstructions, 3D models, and intelligence dossiers built around the source fiction. The original stories are published at <a href="https://ascentuniverse.wordpress.com" target="_blank" rel="noopener">ascentuniverse.wordpress.com</a>.</p>
     </div>
     <div class="card-grid">
 
