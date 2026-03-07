@@ -45,20 +45,57 @@ Toggle using the theme button in the nav bar.
 
 ## Pages
 
+### Core Pages
+
 | Page | File | Description |
 |------|------|-------------|
 | **Home** | `index.html` | Hub page with navigation cards |
 | **Stories** | `stories.html` | Chronological index of all fiction with attribution |
 | **Reader** | `reader.html` | Lightweight markdown/text reader for source texts |
+| **Drafts** | `drafts.html` | Draft browser for second-draft manuscripts |
 | **MSD** | `msd.html` | Interactive 3D Master Systems Display for the Annihilator-class warship |
 | **Battle** | `battle.html` | Phase-by-phase animated tactical reconstruction of the Battle of the Interstice |
 | **Science** | `science.html` | Science Compendium — real physics behind the fictional technology |
 | **Timeline** | `timeline.html` | Interactive chronology from Deep Antiquity to the Apathy War |
 | **Codex** | `codex.html` | Intelligence dossiers on factions, personnel, vessels, and threats |
 | **Worlds** | `worlds.html` | Atmospheric profiles of major settings and epochs |
-| **Facilitator** | `facilitator.html` | Facilitator canon analysis, comparison to modern AI, interactive chat |
-| **Anthropic Trap** | `anthropic-trap.html` | Interactive exploration of the Apathy's anthropic trap argument |
 | **Threads** | `threads.html` | Character threads across all stories, colour-coded by entity |
+
+### Interactive / AI Pages
+
+| Page | File | Description |
+|------|------|-------------|
+| **Facilitator** | `facilitator.html` | Facilitator canon analysis, comparison to modern AI, interactive chat |
+| **Utilitaria** | `utilitaria.html` | Utilitaria canon analysis and philosophical exploration |
+| **Emissary Chat** | `utilitaria-chat.html` | Interactive diplomatic channel chat with the Utilitaria |
+| **AI Analysis** | `ai-analysis.html` | Comparative analysis of Facilitator vs Utilitaria vs Apathy AI systems |
+| **Anthropic Trap** | `anthropic-trap.html` | Interactive exploration of the Apathy's anthropic trap argument |
+
+### Visualisations
+
+| Page | File | Description |
+|------|------|-------------|
+| **Orrery** | `orrery.html` | Interactive solar system orrery |
+| **Interstice Network** | `interstice-map.html` | 3D canvas visualisation of the wormhole network |
+| **Diamond Duster** | `diamond-duster.html` | Animated weapon firing sequence with HUD telemetry |
+| **Liberation Day** | `liberation.html` | Animated warseed activation sequence from Ascent (2479 CE) |
+
+### In-Universe Documents
+
+| Page | File | Description |
+|------|------|-------------|
+| **Reflections** | `reflections.html` | "The Reflections of Seeker" — Dyn philosophical text |
+
+### Story Readers
+
+| File | Story | Era |
+|------|-------|-----|
+| `seeker-story.html` | Seeker | ~100,000 BCE |
+| `inheritor-story.html` | Inheritor | 2085 CE |
+| `sixty-percent-story.html` | Sixty Percent | — |
+| `worlds-within-story.html` | The Worlds Within | 2736 CE |
+| `headhunted-story.html` | Headhunted | 2480 CE |
+| `oblivion-story.html` | Oblivion | — |
 
 ## Shared Resources
 

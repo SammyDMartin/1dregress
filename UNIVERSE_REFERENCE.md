@@ -582,18 +582,20 @@ Having read both source texts thoroughly, several observations about the current
 - The **ship specifications** (MSD) are detailed and compelling
 - The **timeline** provides good structural scaffolding
 
-### What's missing or could be improved
-- **Ascent is barely represented**: The foundational text — the event the universe is named after — has almost no presence on the site. The liberation sequence, the occupation, Jan's story, Vash's story, Corbin's rise — all of this is central and absent.
-- **Character depth**: The codex has brief dossiers, but the characters' complexity (especially Eszel, Vash, Corbin, the Jan-Dyn relationship) deserves more
-- **The occupied Earth**: The site's world-building focuses on the Threshold era and space combat, but the richest setting in the source material — occupied Earth with its false life, conurbations, wasteland, and Ascensor — is underrepresented
-- **The Listener/Eszel content**: Eszel's story, the Kailash expedition, and the Listener entity are fascinating but barely featured beyond brief timeline/codex entries
-- **Thematic depth**: The site presents events but doesn't explore the themes (truth/deception, cost of liberation, human nature under pressure) that give the source material its weight
-- **The Dyn as characters**: The site treats the Dyn primarily as a military threat, but the source material's Dyn characters (the captive in Ascent, K'txl, Honed Aspect) are among the most compelling elements
-- **Quotes and prose**: The source material contains extraordinary prose. More of it should be surfaced — the liberation sequence, the Isidore's stand, Eszel's journey across Kailash
+### What's been addressed (Sessions 7–10)
+- **Ascent representation**: Liberation Day visualisation, Jan/Vash/Ngoni codex entries, Jan and Vash character threads, Ascent story description expanded, Diamond Duster weapon visualisation
+- **Character depth**: Extensive codex entries for Eszel, Hansun, Aumonier, Corbin, Reeve, Aurelie, Jan, Ngoni, Honed Aspect thread
+- **The occupied Earth**: Near-Future Earth world section expanded, Union Space section added to worlds.html
+- **The Listener/Eszel content**: Listener and Eszel codex entries, Kailash world section with Mimics and Other Moons, Kailash timeline events
+- **Thematic depth**: Alignment Problem and Fermi Paradox character threads, AI Analysis comparative page, Reflections of Seeker in-universe philosophical text
+- **The Dyn as characters**: Dra'll/Man of Nothing codex entry, Reflections of Seeker, Firsthome Night Side and Dyn Psychology world sections, Honed Aspect thread
+- **Quotes and prose**: Reflections of Seeker (5 chapters of Dyn philosophy), liberation sequence in Liberation Day visualisation
 
-### Priority improvements
-1. Add Ascent-era content (occupied Earth, the liberation, key characters)
-2. Expand character profiles with source-material depth
-3. Surface more actual prose from the source texts
-4. Add the Kailash/Listener content as a distinct section
-5. Represent the thematic architecture of the universe
+### Remaining gaps
+- **Threshold story reader**: Draft exists (`drafts/threshold_story.md`) but the HTML story reader page (`threshold-story.html`) hasn't been created yet
+- **More story readers**: Frameshift, The Other Moon, The Facilitator, Starwhisp, The Director, Bows and Arrows, War of All Wars could all get interactive readers
+- **Character relationship web**: Visual graph showing connections between characters across stories
+- **Corbin**: Full codex entry exists but could be expanded with his rise through Ascent
+- **Sound design**: Ambient audio for story readers and visualisations
+- **The Kailash trek**: Eszel's journey across Kailash deserves its own detailed treatment (world section or story reader)
+- **Occupied Earth detail**: The conurbations, false life, wasteland culture — could be a dedicated world section
