@@ -19,6 +19,7 @@
     { href: 'orrery.html', label: 'ORRERY' },
     { href: 'ai-analysis.html', label: 'AI ANALYSIS' },
     { href: 'interstice-map.html', label: 'NETWORK' },
+    { href: 'reflections.html', label: 'REFLECTIONS' },
     { href: 'drafts.html', label: 'DRAFTS' },
   ];
 
