@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bows and Arrows Against the Lightning — Ascent Universe</title>
+<meta name="description" content="The Apathy berserker machines attack Heppolon. Humanity's first real stand with A-spheres, D-spheres, and conversion bombs. An interactive story reader.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow: hidden; }
+
+.scene-bg { position: fixed; inset: 0; z-index: 0; transition: opacity 1.5s ease; pointer-events: none; }
+.scene-bg-alert { background: radial-gradient(ellipse at 50% 60%, rgba(60,10,10,0.2) 0%, rgba(5,0,0,0.9) 100%); }
+.scene-bg-muster { background: radial-gradient(ellipse at 40% 40%, rgba(20,30,60,0.15) 0%, rgba(0,5,15,0.85) 100%); }
+.scene-bg-assault { background: radial-gradient(ellipse at 50% 50%, rgba(80,40,10,0.15) 0%, rgba(10,5,0,0.9) 100%); }
+.scene-bg-battle { background: radial-gradient(ellipse at 60% 40%, rgba(100,20,20,0.12) 0%, rgba(10,0,0,0.9) 100%); }
+.scene-bg-core { background: radial-gradient(ellipse at 50% 50%, rgba(120,60,0,0.15) 0%, rgba(0,0,0,0.95) 100%); }
+
+.scene-effect { position: fixed; bottom: 0; left: 0; right: 0; height: 3px; z-index: 1; pointer-events: none; }
+.effect-alarm { background: linear-gradient(90deg, transparent, rgba(200,40,20,0.4), transparent); animation: effectPulse 1.5s ease infinite; }
+.effect-engines { background: linear-gradient(90deg, transparent, rgba(100,150,255,0.3), transparent); animation: effectPulse 3s ease infinite; }
+.effect-detonation { background: linear-gradient(90deg, transparent, rgba(255,200,50,0.4), transparent); animation: effectPulse 2s ease infinite; }
+.effect-fire { background: linear-gradient(90deg, transparent, rgba(255,100,30,0.5), transparent); animation: effectPulse 1.2s ease infinite; }
+@keyframes effectPulse { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
+</style>
+</head>
+<body>
+<div class="page-body">
+
+<div class="scene-bg" id="sceneBg"></div>
+<div class="scene-effect" id="sceneEffect"></div>
+
+<div class="scene-container">
+  <div class="scene-header" id="sceneHeader">
+    <a href="stories.html" class="scene-back">&larr; ALL STORIES</a>
+    <div class="scene-title" id="sceneTitle">BOWS AND ARROWS AGAINST THE LIGHTNING</div>
+    <div class="scene-select-wrap">
+      <select class="scene-select" id="sceneSelect"></select>
+    </div>
+  </div>
+  <div class="scene-text" id="sceneText"></div>
+  <div class="story-nav">
+    <button id="prevBtn" onclick="goScene(currentScene-1)">&larr; PREV</button>
+    <span class="scene-counter" id="sceneCounter"></span>
+    <button id="nextBtn" onclick="goScene(currentScene+1)">NEXT &rarr;</button>
+  </div>
+</div>
+
+</div>
+<script src="nav.js"></script>
+<script>
+const SCENES = [
+{
+  title: "THE ALERT",
+  header: "HEPPOLON SYSTEM — NOTHING AM",
+  bg: "scene-bg-alert",
+  effect: "effect-alarm",
+  text: `<p>The alert came through at nothing AM, a meaningless hour of coordinated universal time that I didn't bother remembering. The alarm pierced into my consciousness along with a request for access. I hadn't channelled any stimulants so I was still confused, still capable of being confused. The Utilitaria were asking to be let in.</p>
+
+<p>I didn't have a chance to think about what it meant. Just let open a tiny crack, allowing the waiting message to trickle in until it was laid down in memory. It was a nasty trick the Utilitaria kept for emergencies — instead of feeding you fake sensory information they just altered your whole brain into the state it would be in a moment after a message was over. The entire conversation took zero actual time.</p>
+
+<p><span class="dialogue">"Alert absolute. Apathy agglomeration has exited translight in the direction of Helios, mass approximately 1 Earth, range 70AU and deceleration 40 Kilogees."</span></p>
+
+<p><span class="dialogue">"For eternity's sake, an Earth mass moving at forty gravities?"</span></p>
+
+<p><span class="dialogue">"Forty thousand gravities. We believe they have developed large scale inertial manipulation."</span></p>
+
+<p><span class="dialogue">"That's impossible."</span></p>
+
+<p><span class="dialogue">"And yet it continues to happen. The fact remains that we are under attack and the decision has been made to counter. If you want in, now's your only chance. Launch in forty seconds,"</span> said the voice of the Utilitaria, and then I was back in reality.</p>
+
+<p>No shock, there hadn't been time for shock, since that little conversation had never actually happened to me. There was only numbness, and a kind of creeping claustrophobic fear. The worst thing that could possibly happen to anyone was happening right now, the berserker machines had come to Heppolon and everyone and everything here would be dead within an hour.</p>
+
+<p>The Apathy wanted to destroy us — nobody knew why, or even if they had a reason. Perhaps they hated humanity intrinsically, or maybe they followed some unguessable higher goal. They'd arrived a century ago and ever since we hadn't been able to slow them down or even make them notice our defensive efforts. We ran and died for decades, praying for the Utilitaria to find an ultimate solution.</p>
+
+<p>Here and now, at last, was the time to stand and resist. And I was being given a chance to join the fight. Like I'd dreamt of, like I'd been trained to do, like I'd waited here for, passing the time meaninglessly and adapting myself for the role of attack pilot.</p>
+
+<p>I opened my eyes groggily and saw a pale scarlet light flooding from the ceiling of my housecube. The universal alert was on. The sentience in the floor deopaqued itself, interpreting my wishes, showing a view of the Apollo shipyards glittering below my feet, the thick clouds gathering over the glittering supercontinent, lines of launch loops linking orbit and statite facilities to the surface, towering spacescrapers and arcologies. An old central world in its death throes, almost unbearably sad to watch.</p>
+
+<p>I shut down my link to the planetary outernet, recoiling at the backwash of terror as the news spread. People would be cramming themselves into transit capsules or jamming their heads into intrusion units, piping their minds or their bodies into the interstice as fast as possible. They needed time — even an additional minute would buy exponentially more lives than I could save any other way. Invasions were moments of heightened potential, when every decision you made could save more people than you could ever meet in a thousand lifetimes. They were not times for fear.</p>`
+},
+{
+  title: "THE LAUNCH",
+  header: "HEPPOLON — 40 SECONDS",
+  bg: "scene-bg-alert",
+  effect: "effect-alarm",
+  text: `<p>I rolled off the bed before the stimulant program kicked in and had just enough presence of mind to run a clean program through my skinsuit, banishing the sweat and fatigue of the night with a sharp full-body electric crackle. My expanded mentality warmed up to full alertness and flagged a warning that body-scouring wasn't good for my long term health — but, I didn't have a long term health to worry about.</p>
+
+<p>I activated every short-term neural stimulant and felt the coolness seep into my thoughts, shutting down the screaming alerts. I was as ready as anyone could be.</p>
+
+<p><span class="dialogue">"If you can get me into a ship that fast, I'm in,"</span> I said, after maybe a second had passed. It was reckless — I didn't even have streaming capability, so when I died there'd be no proper continuity. But then I'd never really believed that backups were the same thing as the real person, no matter how identical their mental states.</p>
+
+<p><span class="dialogue">"We cannot transfer your mind-state in time,"</span> the Utilitaria said, responding to my implicit question. There was a barely noticeable pause as the most intelligent entity in the system weighed the thousands of different tasks it was having to process as the world around it ended. <span class="dialogue">"We're picking you up the old-fashioned way, via A-sphere. Standby for frameshift and integration."</span></p>
+
+<p>I was about to say something about it making a rather cruel joke when the light seeping through the transparent floor took on a noticeably different texture. I looked down as the silvered bulk of an A-sphere glided up below me with light taps of plasma thrust. The glowing lines of exotic energy lenses dimmed as it settled down from translight velocity. The smooth ovoid rotated and a docking aperture sucked itself up to meet the floor beneath me, which dilated, letting me slip through like a stone sinking into water.</p>
+
+<p><span class="dialogue">"Prepare for integration, we will be underway shortly."</span></p>
+
+<p>Fifteen seconds of rapid travel later I was in the only habitable space in the entire vessel, a tiny three-meter cavity lined in black carbyne, containing a single ched unit that I slid straight into. At a touch the entire system interfaced perfectly with my mind and I was underway, more than a passenger but less than a pilot. The ship could respond to any situation with infinitely finer precision than me, but someone had to be there, if only to watch humanity's first real stand against the Apathy.</p>
+
+<p>This time, we had a chance.</p>
+
+<p>The last A-sphere claimed its pilot, and from all across the Heppolon system the deployment orders were finalised, thirty seconds after the alert. Exchange drives lit up the neutrino spectrum as each ship started sixty-gee course corrections, adding or subtracting dozens of kilometres per second to their velocities, aligning vectors on one small region.</p>
+
+<p>Precisely forty seconds after the alert came through, all eight hundred A-spheres went translight, and raced towards the mustering point at very nearly the speed of light.</p>`
+},
+{
+  title: "THE MUSTER",
+  header: "SYSTEM ECLIPTIC — DEPLOYMENT",
+  bg: "scene-bg-muster",
+  effect: "effect-engines",
+  text: `<p>Communications disappeared as the universe rushed away in all directions, and in that secretive bubble of space there was absolute motion, as close as anyone could come to riding a light ray. I relaxed into the ched unit and felt the intrusion fibres clamp around my brain, completing the unification. My body merged with that of the A-sphere around me and I felt the incredible power, saw in a multi-spectral kaleidoscope and understood that a vastly accelerated ghost of my mind was even now being read and absorbed into the ship, ready for battle. This was not a war fought on human timescales.</p>
+
+<p>The bubble of tortured spacetime evaporated away ten minutes later, dropping me into a tight formation ten thousand kilometres wide, dead on the system ecliptic and right between the system's interstice and the enemy. We'd frameshifted right onto Heppolon's largest militarised Rock, where the local defence forces were being prepared.</p>
+
+<p>A few hundred swiftships and SC-4's, thin razor edged pyramids bracketed by bell-shaped drives, and a swarm of millions of neummanetic exo-drones. But without translight they weren't capable of retreating, and the crew were all interstellar agency or some other military; they knew their mind-states would be below those of innocent civilians on the outbound priority list. They were all flying to their deaths, and yet I watched through expanded senses as the pilots crammed into the lifesystems of their ships and cast off, accelerating slowly as they cleared the first few kilometres and then building to bone-crunching intensity, pushing the physical limits of how much heat ordinary matter could handle, or how much stress ordinary bodies could take.</p>
+
+<p>The D-spheres arrived next, thudding into solid reality after their alignment burns and translight journeys. City-sized and slightly asymmetrically curved hewn from solid monopole-enriched hyperdiamond, and powerful enough to crack planets down to their cores. They didn't have exchange systems, and their drives lit up like suns as they accelerated away ponderously, spitting out kilotons of plasma each second.</p>
+
+<p>I opened up the local channels and shared a few words with the A-Sphere pilots, and the crews of the arriving D-spheres, bravado and fear warring in our minds and words. The D-sphere crews joked about us attempting loop-the-loops like ancient atmospheric fighter pilots. We told them with mock sincerity that there'd be no Apathy left to pick off after we'd finished with them.</p>
+
+<p>At an order from the Utilitaria we powered ahead, my mind already operating mainly outside the biological, orders of magnitude faster than normal, so that even the insane ninety-gee acceleration the A-sphere could manage with its exchange-linked vacuum drive seemed positively glacial.</p>
+
+<p>The first limitation on spacecraft power had been energy — energy limited drive power, which limited acceleration and delta-v. We solved that a century ago with the vacuum drive, which sucked from an effectively limitless well. Next to fall had been waste heat — that was what made the swiftships so huge and thin, what gave them the massive vulnerable gridwork of exhaust nozzle webbing and heat radiators, what limited the power of beam weapons and railguns. We abolished that with monopole enrichment and exchange matrixes; the laws of thermodynamics were placated in an off-the-books deal, allowing us to eject waste in a form that didn't interact. Finally came the facts of Newtonian mechanics, the irritation of having to accelerate up to a certain speed and the resultant problem of inertia. Translight obliterated that, now that you could dance along your own freefall trajectory at almost exactly the speed of light.</p>
+
+<p>All of that had made us invincible in the last war, and all of it together, integrated into the body of my A-sphere, might be no more than a speedbump against the Apathy.</p>`
+},
+{
+  title: "FIRST CONTACT",
+  header: "70 AU FROM HELIOS — CLOSING",
+  bg: "scene-bg-assault",
+  effect: "effect-detonation",
+  text: `<p>While we waited for the gigantic D-spheres to finish shifting in and adjusting their vectors into the new deployment I patched into the chatter of the local ships. In lieu of anything else, they were using conventional joust tactics — take a long run-up, accelerate into a wide firing wall, fire hyperkinetics at long range and drones and beams at close range. They would take hours to accelerate to a decent combat velocity, and the wall of Apathy was already rushing towards us at almost exactly the speed of light. It was all obsolete thinking that had failed a hundred years ago, but what else did they have?</p>
+
+<p>My own A-sphere started accelerating again, reaching escape velocity and piling on a good hundred kilometres per second over the next couple of minutes, drawing my freefall trajectory straight out of the system at the Apathy. The acceleration cut out — somewhere my body relaxed into its gel cushioning as the ridiculous stresses it was under disappeared.</p>
+
+<p><span class="dialogue">"You're in the first wave,"</span> said the Utilitaria, along with a wordless burst of encouragement.</p>
+
+<p>I was too high on stimulant programs to feel anything as I went translight again, along with the first hundred A-spheres and twenty D-spheres. The tiny patch of space covered by the accelerating swiftships disappeared behind me as my velocity multiplied a thousandfold, and ahead the solid mass of beyond-alien machinery that was arrowing into Heppolon like an icicle grew larger.</p>
+
+<p>The gravitational sensor view looked wrong, like nothing that should belong in this universe. Even today, we still didn't know what the Apathy was made of — perhaps defects in the fabric of space-time itself or new forms of elementary particle. It was, to a first approximation, indestructible.</p>
+
+<p><span class="dialogue">"Check all your weapons and switch to one-time communication only,"</span> came the crisp orders. The Apathy were clever; it was impossible to comprehend how overwhelming their power was until you'd seen it for yourself. All of our comms were wide open to them, and exploitable. They were more than willing to communicate, but that communication took the form of anti-mind affects; what came after propaganda on the technology ladder. A few words or some brief light flashes on a screen had inexplicably driven crews insane or disrupted their consciousness in some incomprehensible manner, a simple laser burst could disable computer systems that had been proven impregnable.</p>
+
+<p>The machines replicated too rapidly, conjuring new energy and mass as if from nowhere. They didn't grow or change, when useful information was needed, they would disassemble your mind atom by atom, and integrate the information fascistically, absorbing you and not changing in response.</p>
+
+<p>We materialised again five million kilometres ahead of the enemy, which gave us half a minute before we had to fall back. We immediately started accelerating at the physical limit of the exchange drives, dispersing at a hundred and thirty gees. The reactor converting petawatts of waste heat into neutrinos every second, keeping the lifesystem at a cool room temperature even as my ship directed its titanic energies directly into drive thrust.</p>
+
+<p>Ordinary drones clanged away from the hull, mostly low-key Focussed-Antimatter devices that accelerated away on conventional drives. They were spindly pyramids, all drive and radiators with the warhead indistinguishable from the fuel.</p>`
+},
+{
+  title: "THE BOMBARDMENT",
+  header: "5 MILLION KM — SLASHERS AND CONVERSION BOMBS",
+  bg: "scene-bg-battle",
+  effect: "effect-detonation",
+  text: `<p>The Apathy machinery grew closer, and as the Utilitaria got a good handle on the shape and density of the cloud with mass sensors we let rip with the slashers.</p>
+
+<p>We realized a long time ago that ordinary matter or energy just brushed against the Apathy like wind striking rock — the densities and binding energies of Apathy-stuff were so far above that of anything we could create that only the largest energies focussed down to the smallest points would do anything at all. Kinetics at relativistic speeds could take chunks out of Apathy stuff, and the gigaton blasts of F-AMs focussed down to needle-points would do some damage too, but it was all too little, slingshots against skyscrapers.</p>
+
+<p>To do real damage you needed exotic physics, and that was expensive. Slashers had secondary warheads of monopoles and charged micro-singularity primaries, which was as horrendously dangerous as you'd expect. Each slasher missile cost more than an ordinary intersystem ship and our only heavy-hitter, the conversion bomb, was even more dangerous. Only ships controlled directly by the Utilitaria carried those.</p>
+
+<p>We jumped another five million kilometres back, ahead of the cloud, just as the first detonations registered. The blast totalled several teratons; it would have been an area-denial fleet killing attack against any normal enemy and the backwash would have destroyed even an A-sphere, if we'd been stupid enough to wait and watch. Against the Apathy, it did as well as expected — which was to say, not very well.</p>
+
+<p>After the next regrouping we switched to ordinary kinetics, using the railguns to place inert mass ahead of the Apathy and watching as the relativistic collisions grazed sections of machinery away. One A-sphere waited a moment too long, and the machinery frameshifted a few grams of itself inside. The last we saw was a sharp detonation as the counter-intrusion system detected the subversion and blew the ship apart.</p>
+
+<p>Then, a brilliant flash lit up my artificial vision as one of the D-spheres deployed its first line of shunts, frameshifting hundred-teraton conversion bombs; weapons that released more energy than Einstein deemed possible right into the lap of the Apathy. I'd never seen that weapon used in anger before; the unfocused blast of liberated vacuum energy scoured the tip of the icicle clean, blunting the force of the attack while micro-singularities sparked their way through. Dead Apathy stuff drifted away, disconnected as its internal mechanics were disrupted by the intense gravitational gradients.</p>
+
+<p>The D-sphere spat a volley of conventional munitions from its railguns and I jumped ahead, barely half a million kilometres from the Apathy and fired a volley of hyper-missiles, ordinary Neummanetic exo-drones and even a few antimatter packages from my own frameshift shunt at the wounded Apathy before slipping back into translight, keeping just ahead of the assault.</p>
+
+<p>You couldn't let them touch you, but if you kept ahead, kept harassing, kept throwing pure unfocused energy, you could make them pause and notice you.</p>`
+},
+{
+  title: "THE LAST STAND",
+  header: "1,000 KM — INSIDE THE APATHY",
+  bg: "scene-bg-core",
+  effect: "effect-fire",
+  text: `<p>I triggered the vacuum drive in exchange mode and deflected sideways at thirty gees or so, frameshifting again and out of the way of a protruding tip of Apathy stuff. I ejected another pair of slashers that splattered apart and buried their way into a protruding tip of machinery, spitting hard radiation as they did.</p>
+
+<p>The Apathy responded with its first sign of actually noticing any human counterattack; a laser beam that burst from an ephemeral bubble on the surface of the machinery — its energy a meaningless number out in the wasteland beyond SI prefixes. The image was greyed and sketchy, caught by a visual sensor in the last instant before the copy of my mind running the A-sphere triggered the frameshift.</p>
+
+<p>Two million kilometers away and off to the side of the main attack, I saw more than a dozen of the Apathy's stellar-grade lasers, swatting at the warships as if they were gnats. Another conversion bomb exploded, and I winced as the blast enveloped one of the D-spheres. But then the huge vessel emerged from the plasma cloud, glowing hotter than the surface of the sun with a vertical kilometre of its armour gone, but still intact.</p>
+
+<p>Gladdened, I fired a pair of conventional drones and jumped just as it fired again, something my accelerated self said was probably a coherent gravity wave blast and a relativistic spitball of its own material. The drones scattered submunitions, fusion devices and antimatter pellets but none of them even detonated properly. Ordinary energy and force didn't do much to an enemy made of material a dozen orders of magnitude stronger than hyperdiamond.</p>
+
+<p>My accelerated self, which was the one doing all the real decision-making, took that moment to dump its next package of information into my mind. The Apathy had just rammed into the system's conventional defence fleet, soaking up more than a hundred million kinetic rounds and drones to apparently little effect. Everyone on the rock and in the slowly dispersing fleet had died in an instant. They were minutes away from Apollo, and the evacuation was nowhere near complete. We needed to do more.</p>
+
+<p>Seeing the chance for a distraction, I accelerated again and frameshifted for a few seconds, but somehow the Apathy shifted a chunk of machinery to barely a thousand kilometres from where I appeared and formed another graver cannon out of nowhere. The beam of shearing gravitational forces whipped around in the direction I was already evading. Firing the primary exchange drive and the secondary drive, I dived away at two hundred gees, but the gravity shear slammed into the hull armour and my ship informed me it had lost the ability to frameshift.</p>
+
+<p>In response to the damage the A-sphere reconfigured its interior, neummanetics frantically replicating new components, and I regained thrust and heat rejection capacity in less than a second. It was enough time for the Apathy machinery to encircle my ship and match velocities. Microscopic shards streamed towards me, sticking to the hull. My ship flooded its exterior with hard radiation and monopole streams to shake off the infection and then, my links to the fleet and external sensors died.</p>
+
+<p>I felt utterly calm thanks to the total self-control imposed by my expanded mentality. Small frameshifts sent chunks of Apathy stuff mere hundreds kilometres from me, forming a tighter cordon — they were trying to assimilate me before I could trigger the destruct. Anger boiled as I realised what they had in mind, and I fired the gamma-cannons and proton lasers. The beams speared into the cloud of fast-moving black shards.</p>
+
+<p>The Apathy approached slowly, grazers, lasers and shards firing, and at last my expanded mentality fired the monopole railguns in point-defence mode. Trapped less than a thousand kilometres the almost static material came apart, and I accelerated away, but with the Apathy matching my manoeuvre smoothly and perfectly.</p>
+
+<p>It didn't matter — I'd brought the seconds my expanded mentality needed to modify the vacuum reactor, dismantle the exchange matrixes and set up a simple chain-reaction. I fired my last two stored singularities and emptied the antimatter reserves in a volley of unguided shells. The Apathy darted away from the singularities and the gigaton antimatter detonation did far more damage to me than to them, abrading away the monopole armour and frying the top level of sensors and close in weapons.</p>
+
+<p>The ship informed me I'd lost attitude control and heat rejection, and I had about a second left until the waste heat billowed through the remaining monopole layers and melted me. The Apathy stuff formed a complete encircling sphere and then frameshifted, bringing me somewhere else. I was inside the main mass, most likely. Maybe they wanted to analyse my technology fully rather than just destroy me.</p>
+
+<p>It didn't matter anymore. One microsecond before the spears of machinery pierced the hull I detonated the vacuum reactor in conversion mode. As can happen sometimes with the release of potential energy from the quantum vacuum, the yield was higher than expected. Energy poured outwards and severed the spear of Apathy machinery, detonating with enough energy to destroy every planet in Earth's solar system. Planetary masses of material were severed and rendered useless by the blast.</p>
+
+<p>It was luck, arguably dumb, that the Apathy miscalculated and brought me into the heart of their machinery. I'd taken my chance, and it had paid off.</p>
+
+<p>When they brought my most recent copy back out of storage, I was told the Utilitaria had held the system's interstice for eight more hours.</p>
+
+<hr><p style="font-size:0.85em;color:var(--text-dim);text-align:center;margin-top:20px;">NEXT IN TIMELINE: <a href="war-of-all-wars-story.html" style="color:var(--accent);">THE WAR OF ALL WARS</a> — ~3200 CE<br><span style="font-size:0.8em;">A fragment makes it through. The Apathy tries something new: an anthropic trap.</span></p>`
+}
+];
+
+// Scene engine
+let currentScene = 0;
+const select = document.getElementById('sceneSelect');
+SCENES.forEach((s, i) => {
+  const opt = document.createElement('option');
+  opt.value = i;
+  opt.textContent = (i + 1) + '. ' + s.title;
+  select.appendChild(opt);
+});
+select.addEventListener('change', () => goScene(+select.value));
+
+function goScene(i) {
+  if (i < 0 || i >= SCENES.length) return;
+  currentScene = i;
+  const s = SCENES[i];
+  document.getElementById('sceneHeader').querySelector('.scene-title').textContent = s.header;
+  document.getElementById('sceneText').innerHTML = s.text;
+  document.getElementById('sceneCounter').textContent = (i + 1) + ' / ' + SCENES.length;
+  document.getElementById('prevBtn').disabled = i === 0;
+  document.getElementById('nextBtn').disabled = i === SCENES.length - 1;
+  select.value = i;
+  document.getElementById('sceneBg').className = 'scene-bg ' + s.bg;
+  document.getElementById('sceneEffect').className = 'scene-effect ' + s.effect;
+  document.querySelector('.scene-text').scrollTop = 0;
+}
+goScene(0);
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goScene(currentScene + 1);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goScene(currentScene - 1);
+});
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 60) goScene(currentScene + (dx < 0 ? 1 : -1));
+});
+</script>
+</body>
+</html>

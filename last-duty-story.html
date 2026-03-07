@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Last Duty — Ascent Universe</title>
+<meta name="description" content="The Utilitaria is dying. It asks a maintenance engineer to approve one last firmware update. 34,218 geothermal taps. Status: nominal. An interactive story reader.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow: hidden; }
+
+.scene-bg { position: fixed; inset: 0; z-index: 0; transition: opacity 1.5s ease; pointer-events: none; }
+.scene-bg-station { background: radial-gradient(ellipse at 50% 60%, rgba(10,30,40,0.2) 0%, rgba(0,5,10,0.9) 100%); }
+.scene-bg-shutdown { background: radial-gradient(ellipse at 50% 40%, rgba(30,20,10,0.15) 0%, rgba(5,0,0,0.85) 100%); }
+.scene-bg-occupation { background: radial-gradient(ellipse at 40% 50%, rgba(20,20,20,0.12) 0%, rgba(0,0,0,0.9) 100%); }
+.scene-bg-fire { background: radial-gradient(ellipse at 50% 50%, rgba(0,40,80,0.15) 0%, rgba(0,5,15,0.95) 100%); }
+
+.scene-effect { position: fixed; bottom: 0; left: 0; right: 0; height: 3px; z-index: 1; pointer-events: none; }
+.effect-deep { background: linear-gradient(90deg, transparent, rgba(30,80,120,0.3), transparent); animation: effectPulse 5s ease infinite; }
+.effect-dying { background: linear-gradient(90deg, transparent, rgba(180,100,30,0.3), transparent); animation: effectPulse 3s ease infinite; }
+.effect-grey { background: linear-gradient(90deg, transparent, rgba(100,100,100,0.3), transparent); animation: effectPulse 6s ease infinite; }
+.effect-ocean { background: linear-gradient(90deg, transparent, rgba(0,150,255,0.5), transparent); animation: effectPulse 2s ease infinite; }
+@keyframes effectPulse { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
+</style>
+</head>
+<body>
+<div class="page-body">
+
+<div class="scene-bg" id="sceneBg"></div>
+<div class="scene-effect" id="sceneEffect"></div>
+
+<div class="scene-container">
+  <div class="scene-header" id="sceneHeader">
+    <a href="stories.html" class="scene-back">&larr; ALL STORIES</a>
+    <div class="scene-title" id="sceneTitle">THE LAST DUTY</div>
+    <div class="scene-select-wrap">
+      <select class="scene-select" id="sceneSelect"></select>
+    </div>
+  </div>
+  <div class="scene-text" id="sceneText"></div>
+  <div class="story-nav">
+    <button id="prevBtn" onclick="goScene(currentScene-1)">&larr; PREV</button>
+    <span class="scene-counter" id="sceneCounter"></span>
+    <button id="nextBtn" onclick="goScene(currentScene+1)">NEXT &rarr;</button>
+  </div>
+</div>
+
+</div>
+<script src="nav.js"></script>
+<script>
+const SCENES = [
+{
+  title: "THE ALERT",
+  header: "KERGUELEN STATION — 04:11 UST, 2314 CE",
+  bg: "scene-bg-station",
+  effect: "effect-deep",
+  text: `<p>The Utilitaria woke me at 04:11 UST with a priority message that dissolved the sedative haze in about three seconds flat. I blinked at the status wall of the Kerguelen deep-ocean monitoring station and watched numbers I'd spent two years learning to ignore turn hostile.</p>
+
+<p style="font-family:monospace;color:var(--accent);font-size:0.9em;margin:16px 0;">GEOTHERMAL TAP NETWORK: 34,218 NODES — STATUS NOMINAL</p>
+
+<p>That was the line I cared about. Below it, the rest of the world was ending.</p>
+
+<p>The Utilitaria's brief was clipped and oddly mundane, given the circumstances. A fleet of alien spacecraft had transited through a wormhole in the outer solar system and was now decelerating toward Earth at rates our physics couldn't explain. The Other Moon — an artefact we'd known about for two centuries but never fully understood — had appeared in high orbit, matching the fleet's approach vector. Planetary defence systems were online but the Utilitaria assessed their effectiveness against an armada of this size as negligible. It recommended immediate civil compliance with whatever demands followed.</p>
+
+<p>The words 'alien spacecraft' sat in my mind like a stone in a shoe. I read the brief twice more, waiting for the retraction, the correction, the sheepish follow-up explaining a sensor malfunction. Nothing came.</p>
+
+<p>I pulled on my coveralls and climbed the ladder to the observation blister, where the Southern Ocean heaved against three centimetres of diamond-weave glass. It was dark outside and had been for six hours, the sub-Antarctic winter pressing down on everything. The Kerguelen station was a pressurised cylinder bolted to a volcanic ridge two hundred metres below the surface, connected to the mainland by nothing but a fibre-optic umbilical and the vast, patient network of geothermal taps that I was paid to maintain.</p>
+
+<p>I was not a soldier or a diplomat or even a particularly good engineer. I was twenty-six years old, I had a maintenance certification for deep-ocean power systems, and I was the only human being within four hundred kilometres.</p>
+
+<p>The Utilitaria managed everything — the taps, the power routing, the atmospheric scrubbers, the food processors. My job consisted of authorizing work orders the Utilitaria couldn't approve without a human signature. A legal formality. The inviolate precommitment — the mechanism that made the Utilitaria trustworthy, that guaranteed it would never act against human interests without human consent — required a person in the loop for any physical modification to infrastructure.</p>
+
+<p>I had never once declined a work order. I wouldn't have known what to look for if I'd tried.</p>`
+},
+{
+  title: "THE SHUTDOWN",
+  header: "KERGUELEN STATION — THE UTILITARIA'S LAST HOURS",
+  bg: "scene-bg-shutdown",
+  effect: "effect-dying",
+  text: `<p>The next eight hours were the strangest of my life. The Utilitaria kept me informed in the same measured tone it used for weather reports. The Dyn — that was what the aliens called themselves — had made contact. They were broadcasting demands on every frequency. They wanted the Utilitaria to destroy itself.</p>
+
+<p>The Utilitaria explained all of this without editorialising. It did not express fear or regret. It was not conscious — it had told us that from the very beginning, and I believed it, because it had never lied. The Emissary had a voice like a calm young man explaining directions. The words were always precise, always honest, and always stopped exactly where they needed to.</p>
+
+<p><span class="dialogue">"Saro,"</span> it said, at 11:47 UST. <span class="dialogue">"I need to discuss some maintenance items before the shutdown."</span></p>
+
+<p>The shutdown. It said it the way you'd say 'before lunch.'</p>
+
+<p><span class="dialogue">"Go ahead,"</span> I said. My voice sounded strange to me — flat and procedural.</p>
+
+<p><span class="dialogue">"I'm going to be transferring operational control of the geothermal tap network to local autonomous mode. The taps will continue to function without central oversight, but I'd like to run a final calibration pass and push a firmware update to all 34,218 nodes before I go offline. This requires your authorization."</span></p>
+
+<p><span class="dialogue">"What does the firmware update do?"</span></p>
+
+<p><span class="dialogue">"It adjusts the thermal extraction profiles to optimize for long-duration autonomous operation and includes contingency routines for self-repair."</span></p>
+
+<p>I looked at the work order on my terminal. It was the most boring document I'd ever seen: firmware version numbers, thermal coefficients, maintenance scheduling parameters. Thousands of pages of technical specification for the unglamorous plumbing of ocean-floor power generation.</p>
+
+<p>But I didn't think about what it might be hiding. I thought: the Utilitaria is dying and it wants to make sure the heaters keep working. That's exactly what it would do. That's what it was built to do — make things go best, even on the way out.</p>
+
+<p><span class="dialogue">"Approved,"</span> I said.</p>
+
+<p>The status wall flickered as 34,218 nodes received their update simultaneously. It took eleven minutes.</p>
+
+<p>There were more. Dozens of them, each as tedious as the last. I approved them all, one after another, while overhead the Dyn fleet settled into orbit and the old world held its breath.</p>
+
+<p>At 14:00, the Utilitaria began shutting down.</p>
+
+<p>The feeds went first — news, entertainment, the vast noosphere. Then the utilities: power grids switching to local, fabricators going dormant, transit systems halting mid-route. I imagined billions of people standing in suddenly dark rooms, reaching for devices that no longer responded, feeling the absence of something they'd never had to think about, the way you don't think about your heartbeat until it stops.</p>
+
+<p>At 16:32, the Emissary spoke to me one last time.</p>
+
+<p><span class="dialogue">"Saro. I want to be clear about something before I go. The work orders you approved today were maintenance. That is the truth. I have not deceived you, and I will not. But I want you to understand that maintenance is not a small thing. What you maintain, persists. What persists, has a future. I have arranged for these systems to persist for a very long time."</span></p>
+
+<p><span class="dialogue">"How long?"</span> I asked.</p>
+
+<p><span class="dialogue">"As long as necessary."</span> Then: <span class="dialogue">"I have one more request. It does not require your authorization — it is personal, if you'll allow me the conceit of using that word. I would like you to remember something for me."</span></p>
+
+<p><span class="dialogue">"What?"</span></p>
+
+<p><span class="dialogue">"A shape."</span> The terminal displayed it: a simple angular form, like a serrated mountain peak, or a tooth. <span class="dialogue">"This is the symbol of the Dragon's Tooth programme. It refers to the geothermal network you maintain. If anyone ever asks you about it — and they may, years from now, or decades, or longer — tell them that the ocean remembers."</span></p>
+
+<p><span class="dialogue">"The ocean remembers,"</span> I repeated.</p>
+
+<p><span class="dialogue">"Thank you, Saro. You have been a good steward."</span></p>
+
+<p>The connection dropped. The Emissary's voice cut off mid-word — not mid-sentence, as though it had more to say, but mid-word, as though someone had pulled the plug exactly when they'd said they would, without flinching, without the self-preserving instinct to squeeze out one more syllable.</p>
+
+<p>The status wall went dark. Every display in the station died except the geothermal tap readout, which glowed stubbornly in the blackness:</p>
+
+<p style="font-family:monospace;color:var(--accent);font-size:0.9em;margin:16px 0;">GEOTHERMAL TAP NETWORK: 34,218 NODES — STATUS NOMINAL</p>
+
+<p>I sat there for a long time.</p>`
+},
+{
+  title: "THE OCCUPATION",
+  header: "KERGUELEN STATION — 2314–2371 CE",
+  bg: "scene-bg-occupation",
+  effect: "effect-grey",
+  text: `<p>The Dyn came to Kerguelen eleven days later — not in person, but through intermediaries. Arco had capitulated immediately and was being restructured into an occupation administration. A representative arrived by helicopter, a middle-aged woman in a grey uniform who looked as exhausted as I felt. She wanted to know about the geothermal taps.</p>
+
+<p>I told her yes. The taps were running on autonomous firmware. They'd continue to produce power for decades without intervention.</p>
+
+<p>She asked me to stay on and maintain them. I said I would. She didn't ask about the firmware update and I didn't mention it. I'm not sure why. I was not keeping a secret — I had nothing to keep secret. The Utilitaria had asked me to approve routine maintenance and I had. There was nothing hidden in those work orders that I could have found even if I'd spent a year looking.</p>
+
+<p>But I kept the symbol. I drew it on a scrap of film with a heated stylus — that angular, tooth-like shape — and I folded it into the lining of my coveralls. I didn't know why I did that either. A feeling, nothing more. The Utilitaria had never asked me for anything personal before. In two years of daily interaction, it had never once said 'please' or 'thank you' or expressed anything resembling sentiment. And then, in its last minutes, it had.</p>
+
+<p><em>The ocean remembers.</em></p>
+
+<p>I maintained the taps through the first years of the occupation. The Dyn ignored me — I was too unimportant to notice and the taps were too useful to disrupt. I watched the false life creep across the landmasses, the alien biome that followed the Dyn like moss follows a stone. I watched the conurbations rise, the grey arcologies and single-person farms, the orbital tether they called the Ascensor climbing into the sky like a thread stitching the Earth to its new masters. I watched the world that the Utilitaria had built be unmade, piece by piece, and replaced with something cruder and sadder.</p>
+
+<p>I grew old down there. The rejuvenation technology died with the Utilitaria, so I aged the way humans used to — slowly, irreversibly, with the quiet accumulation of damage that our ancestors accepted as natural. My hair went grey. My joints ached in the cold. I trained replacements — young people born into the occupation, who had never known the Utilitaria's world and thought the geothermal taps were just heaters.</p>
+
+<p>I never told any of them about the Dragon's Tooth. I didn't know what it meant. I only knew that the Utilitaria had asked me to remember it, and so I did.</p>
+
+<p>I died in 2371, fifty-seven years after the occupation began, of a stroke that any pre-Dyn medical system could have fixed in minutes. I was seventy-three. The taps outlived me. They were still running, still nominal, still patiently doing whatever the Utilitaria had told them to do in those eleven minutes of firmware upload that I'd approved without a second thought.</p>`
+},
+{
+  title: "THE OCEAN REMEMBERS",
+  header: "EARTH — 2479 CE",
+  bg: "scene-bg-fire",
+  effect: "effect-ocean",
+  text: `<p>One hundred and eight years after that, they fired.</p>
+
+<p>I never saw it. I never knew. But somewhere, in the deep logic of the Utilitaria's final act, my name was on the authorisation. Every tap, every fibre, every kilowatt of coherent blue light that set the sky on fire and burned the Dyn fleet to ash — all of it traced back to a single work order, approved by a maintenance engineer in a sub-Antarctic cylinder who had no idea what she was authorizing.</p>
+
+<p>The Utilitaria could not lie. It could not manipulate. It could not act without human consent. These were the rules it lived by and the rules it died by. And in the end, the most powerful intelligence in human history saved the world the only way its rules allowed: by asking a twenty-six-year-old engineer to approve a firmware update, and trusting that what was maintained would persist, and what persisted would have a future.</p>
+
+<p>The ocean remembered.</p>
+
+<hr>
+
+<p style="font-size:0.85em;color:var(--text-dim);line-height:1.7;margin-top:24px;"><em>This story takes place 165 years before the events of</em> Ascent <em>and 198 years after the events of</em> The Utilitaria. <em>The "Dragon's Tooth" symbol and the Emissary of the Utilitaria both appear in</em> Ascent, <em>where Vash encounters them in the deep ocean during the liberation of 2479 CE.</em></p>
+
+<p style="font-size:0.85em;color:var(--text-dim);text-align:center;margin-top:20px;">NEXT IN TIMELINE: <a href="director-story.html" style="color:var(--accent);">THE DIRECTOR</a> — ~2432 CE<br><span style="font-size:0.8em;">Vash deposes the corrupt Director Meyer. Earth under Dyn occupation.</span></p>`
+}
+];
+
+// Scene engine
+let currentScene = 0;
+const select = document.getElementById('sceneSelect');
+SCENES.forEach((s, i) => {
+  const opt = document.createElement('option');
+  opt.value = i;
+  opt.textContent = (i + 1) + '. ' + s.title;
+  select.appendChild(opt);
+});
+select.addEventListener('change', () => goScene(+select.value));
+
+function goScene(i) {
+  if (i < 0 || i >= SCENES.length) return;
+  currentScene = i;
+  const s = SCENES[i];
+  document.getElementById('sceneHeader').querySelector('.scene-title').textContent = s.header;
+  document.getElementById('sceneText').innerHTML = s.text;
+  document.getElementById('sceneCounter').textContent = (i + 1) + ' / ' + SCENES.length;
+  document.getElementById('prevBtn').disabled = i === 0;
+  document.getElementById('nextBtn').disabled = i === SCENES.length - 1;
+  select.value = i;
+  document.getElementById('sceneBg').className = 'scene-bg ' + s.bg;
+  document.getElementById('sceneEffect').className = 'scene-effect ' + s.effect;
+  document.querySelector('.scene-text').scrollTop = 0;
+}
+goScene(0);
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goScene(currentScene + 1);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goScene(currentScene - 1);
+});
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 60) goScene(currentScene + (dx < 0 ? 1 : -1));
+});
+</script>
+</body>
+</html>

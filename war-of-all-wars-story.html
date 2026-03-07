@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The War of All Wars — Ascent Universe</title>
+<meta name="description" content="The Apathy fragment enters the Helios system. Humanity's improvised battle constellation pursues it — and encounters an anthropic trap. An interactive story reader.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow: hidden; }
+
+.scene-bg { position: fixed; inset: 0; z-index: 0; transition: opacity 1.5s ease; pointer-events: none; }
+.scene-bg-breach { background: radial-gradient(ellipse at 50% 60%, rgba(80,40,10,0.15) 0%, rgba(5,0,0,0.9) 100%); }
+.scene-bg-shore { background: radial-gradient(ellipse at 40% 40%, rgba(30,20,60,0.15) 0%, rgba(5,0,15,0.85) 100%); }
+.scene-bg-pursuit { background: radial-gradient(ellipse at 50% 50%, rgba(20,40,60,0.12) 0%, rgba(0,5,10,0.9) 100%); }
+.scene-bg-trap { background: radial-gradient(ellipse at 50% 40%, rgba(60,10,30,0.15) 0%, rgba(10,0,5,0.9) 100%); }
+.scene-bg-end { background: radial-gradient(ellipse at 50% 50%, rgba(100,60,20,0.12) 0%, rgba(0,0,0,0.95) 100%); }
+
+.scene-effect { position: fixed; bottom: 0; left: 0; right: 0; height: 3px; z-index: 1; pointer-events: none; }
+.effect-breach { background: linear-gradient(90deg, transparent, rgba(255,200,80,0.4), transparent); animation: effectPulse 2s ease infinite; }
+.effect-calm { background: linear-gradient(90deg, transparent, rgba(100,80,200,0.3), transparent); animation: effectPulse 5s ease infinite; }
+.effect-engines { background: linear-gradient(90deg, transparent, rgba(100,150,255,0.3), transparent); animation: effectPulse 3s ease infinite; }
+.effect-dread { background: linear-gradient(90deg, transparent, rgba(200,50,50,0.4), transparent); animation: effectPulse 2s ease infinite; }
+.effect-fire { background: linear-gradient(90deg, transparent, rgba(255,100,30,0.5), transparent); animation: effectPulse 1.2s ease infinite; }
+@keyframes effectPulse { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
+</style>
+</head>
+<body>
+<div class="page-body">
+
+<div class="scene-bg" id="sceneBg"></div>
+<div class="scene-effect" id="sceneEffect"></div>
+
+<div class="scene-container">
+  <div class="scene-header" id="sceneHeader">
+    <a href="stories.html" class="scene-back">&larr; ALL STORIES</a>
+    <div class="scene-title" id="sceneTitle">THE WAR OF ALL WARS</div>
+    <div class="scene-select-wrap">
+      <select class="scene-select" id="sceneSelect"></select>
+    </div>
+  </div>
+  <div class="scene-text" id="sceneText"></div>
+  <div class="story-nav">
+    <button id="prevBtn" onclick="goScene(currentScene-1)">&larr; PREV</button>
+    <span class="scene-counter" id="sceneCounter"></span>
+    <button id="nextBtn" onclick="goScene(currentScene+1)">NEXT &rarr;</button>
+  </div>
+</div>
+
+</div>
+<script src="nav.js"></script>
+<script>
+const SCENES = [
+{
+  title: "I — THE BREACH",
+  header: "HELIOS SYSTEM — THE INTERSTICE FALLS",
+  bg: "scene-bg-breach",
+  effect: "effect-breach",
+  text: `<p><em>All the worlds that were will always have been,<br>All the worlds within call to be made real,<br>All the worlds without await us,<br>The fires of the soul are great and burn with the same light as the stars.</em></p>
+
+<p style="font-size:0.85em;color:var(--text-dim);margin-bottom:24px;">— The Reflections of Seeker, translation taken from <em>Metaphysics and the Conception of Deep Time in Xeno-Mythology</em> (1st edition), Arco Gen-stream.</p>
+
+<p>The brightness tore through the warped space of the interstice less than five microseconds before the last wave of Alcubierre distortion pulses finally destabilised that connection. The final few refugee ships sprayed out in all directions, dataships burning at a hundred gees, the ones carrying the corporeal sustaining twenty, thirty, forty gees, their sedated bodies flooded with oxygen-rich fluid and ichor.</p>
+
+<p>Ordinary minds would have called it chaos. With a final burst of hawking radiation, the interstice folded itself into a mysteriously lightweight singularity and spat out a spherical wave of hard radiation, a heralding light announcing the coming of a god.</p>
+
+<p>The invader shrugged off the onslaught and went ballistic, coasting along its original vector at a few hundred kilometres per second. Sensors probed, tracing the bullet of anomalous matter. Slasher torpedoes were hurled from railguns, rushing towards the invader at hundreds of gees, laser-boosted, antimatter-driven, closing the fifty thousand kilometre exclusion zone around the interstice in three minutes.</p>
+
+<p>They met the thermal flash on the way in. The brightness, the invading enemy, was struck five, ten, fifteen times by monopole-doped hypervelocity projectiles that tore chunks of matter away. But then, unknowable processes within the star-bright shell of that light registered the threat and unleashed a flurry of graver spikes. They hit the missiles on the paths along which they were dodging, anticipating their moves, shredding them to less than atoms and scattering the remnants.</p>
+
+<p>Then it was gone, diving away with only a faint splash of gravitational radiation to account for its kilogee acceleration. With an apocalyptic flash of radiation, the invader discarded all of its stored thermal energy, turning near black to the Universe.</p>
+
+<p>Further back, the minds that monitored the system resorted to graviton interferometry, tracking the faint distortion of a mass accelerating far harder than Kepler's laws allowed for, and plotted a vector. The system confirmed no Alcubierre signature.</p>
+
+<p>Somewhere inside the vast and ancient Utilitaria-seeded intelligence, an internal estimator clicked over from 'total loss of system' to 'military action possible'. The vector was extrapolated, and a target volume identified, a rogue planet arcing above the plane of the ecliptic. The invader might be circumventing Newton's third law but the second still applied; there was a timetable and a potential to scratch items off the kill list. It was going there to consume mass and breed, but there was a chance to stop it.</p>`
+},
+{
+  title: "II — SHORE LEAVE",
+  header: "MILITARY STAGING GROUND — VIRTUALITY",
+  bg: "scene-bg-shore",
+  effect: "effect-calm",
+  text: `<p>The low edge hills curved upwards in all directions. Above me, flat world-plates circled, the wheeling flock thickening towards an omega point at the summit of the grand orrery, an uncertain few thousand kilometers above our heads. The artist who had designed this place said it was a pale imitation of their own grand orrery. I suspect this was wrong. Most likely she suffered from the typical Dynic inferiority complex — still trying to prove her species' worth after all these centuries and locked in a personal, altogether too-human battle to achieve immortality without a Line.</p>
+
+<p>Our own platform was less than a kilometre across. We floated above the inexplicably bright four-axis desert. Beyond the limits of that brightness, colourful bands of cities squirmed with revellers. If I glanced at any one of the millions of others sharing this space, their personal details would unwind into my thoughts at whatever level of detail I desired and their privacy permitted.</p>
+
+<p>I was relaxing in a bar which projected jauntily over the edge of the platform, its free hanging weight defying gravity and terrestrial common sense. The drink in my hand was a voguish simulacrum of some neurochem cocktail. It looked slickly iridescent and tasted of a fruit that had never existed.</p>
+
+<p>The noosphere couldn't get enough of me. They were looping an enhanced image of a crucial moment in my most recent engagement. I watched my own A-sphere shearing out far more energy than Einstein once declared possible, slicing the black shard of invading Apathy in half. The image was only six hours old, and I was already a celebrity; the hero pilot, a mere human (albeit an augmented one, but who isn't these days?) that had stood against a force of nature and won. I'd mattered.</p>
+
+<p>But we had still failed to contain them, and I had still died. That was the other thing the feeds were keen on showing — a glowing chunk of material making it through the interstice at the last moment, disintegrating wave after wave of slasher missiles and then boosting out at a thousand gees, eating sparse interplanetary gas and growing slowly and resolutely. The Apathy was here, in-system. The decision was to stand firm and fight instead of running, to buy time for the floods of dispossessed fleeing ahead of the main front. I was being thrown back into the fray, and sooner than expected. These moments were my shore leave.</p>
+
+<p><span class="dialogue">"Theory's never the same as reality, is it?"</span> said the woman leaning on my shoulder; Meira, an Arco weapons officer off the Arsonist. <span class="dialogue">"Doesn't matter how many times they tell you permanence of identity is illusory, doesn't matter how much philosophy or neuroscience you use to try to convince yourself of it. Nothing's going to prepare you for reading the last words you wrote to yourself before a suicide mission. First time?"</span></p>
+
+<p><span class="dialogue">"Yeah,"</span> I said, after a pause. I dismissed the terminal from the virtual space and leaned closer in. She leaned in and kissed me, trying to draw me out of myself. I could taste the oxy-martini on her breath.</p>
+
+<p><span class="dialogue">"It's a mindfuck. Still, beats permadeath!"</span> I finished glibly, knocking back the last of my drink. <span class="dialogue">"And what a way to go!"</span></p>
+
+<p><span class="dialogue">"Quite the blaze of glory…"</span> Her expression grew suddenly serious. <span class="dialogue">"The Arsonist drew the Apathy's attention long enough for us to squirt out the last few mind-states. Eight million saved, in total, they reckon. That last data ship; I rammed the Arsonist into an Apathy spike — did nothing at all to the fucker, except slowed it down long enough to let the ship make it through."</span> She grinned again. <span class="dialogue">"So I have my own heroic death to contemplate; my fourth, actually."</span></p>
+
+<p><span class="dialogue">"Compare that to two hundred billion lives saved and get back to me,"</span> I shot back, unwilling to be outdone.</p>
+
+<p>She elbowed me in the ribs. <span class="dialogue">"Yeah, you're a real hero. Getting yourself killed before the messy part started and losing an A-sphere on top of that."</span></p>
+
+<p>The throbbing music faded away as the environment reconfigured to place us in a private apartment; we sat together on a balcony overlooking the party from high above.</p>
+
+<p><span class="dialogue">"I was there, the first time I died,"</span> she said quietly. <span class="dialogue">"There at the start of this. That world, it felt wrong, from the moment I set foot upon it. All that smooth rock and glass, that dreadful, searing pinpoint of a sun. You could feel the eons weighing down on you.</span></p>
+
+<p><span class="dialogue">"When it woke up there was no sign, no warning at all. I'm told that it took a hundred minutes — just a hundred minutes — to go from a single gram fleck in that planet's core to full conversion. It doubled in mass every minute or so, expanding out, consuming everything. It even kept the mass profile of its machinery the same. Outwardly there was no sign.</span></p>
+
+<p><span class="dialogue">"It could have killed us all the moment it initiated — it could have taken out our encampment, the research teams, everything, in less time than it took for a neuron to fire. But it didn't, because we didn't matter. We didn't present any threat, so it treated us as just more condensed energy to consume.</span></p>
+
+<p><span class="dialogue">"So we just sat there, poking around like idiots while it ate the inside of the planet out like fucking maggots in an apple and then a hundred minutes later the planet exploded into black dust with no warning."</span> Her voice cracked. <span class="dialogue">"I think that, from their perspective, we were hardly even real: misty clouds of electrons linked together by pinpoints of nuclear matter. Somewhere between thin fog and a hologram, insubstantial."</span></p>
+
+<p><span class="dialogue">"I know it must be hard, to have fought for so long, but just look how far we've come,"</span> I said. <span class="dialogue">"We're ready to win. We can handle one thousand tons of Apathy in empty space."</span></p>
+
+<p><span class="dialogue">"They thought the same at the beginning, that it was containable. I can't describe the terror, confronting something like that, something that plays games with the laws of physics. Imagine you're in a fight, you raise your fist, you strike that person with everything you have, and they don't move by a fraction of a degree."</span></p>
+
+<p><span class="dialogue">"But we don't have to worry about that now,"</span> I said, taking her hands in mine. <span class="dialogue">"You asked how we beat the Apathy. We buy time, and each time we buy a little more, until one day we find we have as long as we need. All the while, life finds a way, as it always has."</span></p>
+
+<p>I raised my glass. She smiled stiffly. <span class="dialogue">"You know we're going to win? Well then, you trust the Utilitaria more than I do."</span></p>
+
+<p>She moved in closer, the sparring match over. <span class="dialogue">"Honest now — doesn't any of it bother you? You, the other you, ran your ship right up the Apathy fleck, needling and poking that thing like a hornet stinging an elephant. You did it without any hesitation."</span></p>
+
+<p><span class="dialogue">"The Apathy, they're a formidable enemy. I know each battle is probably going to be my last and that does keep me up at night sometimes. But we're all pawns. I have got my part to play, and so I'll play it."</span></p>
+
+<p><span class="dialogue">"Ah, the loyal soldier,"</span> she whispered, wrapping her arms around my neck. <span class="dialogue">"You play it well."</span></p>`
+},
+{
+  title: "III — THE PURSUIT",
+  header: "HELIOS SYSTEM — ROGUE PLANET INTERCEPT",
+  bg: "scene-bg-pursuit",
+  effect: "effect-engines",
+  text: `<p>Perturbations spread through the Lorentzian manifold that represented spacetime, dancing just below the light barrier as they skated along distortion waves towards the drifting rogue planet that was the destination of the Apathy fleck.</p>
+
+<p>They could conjure energy from somewhere. The methods the Apathy used weren't anything like our vacuum-decay sinks, being practically heatless, both in basic operation and in their conversion of matter to energy. Those who studied such things suggested there was an interface sunk deep into higher dimensions, past the anti-de-sitter layer theorised to shield our universe from such effects. The waste heat was going somewhere, so the thin trickle of heat their operating machinery produced was merely the faintest spillover of a vastly more energetic process, but it was dense enough to track with the most sensitive sensors.</p>
+
+<p>This Apathy fleck didn't frameshift — the spatial discontinuities it surfed exchanged momentum in the usual way, accelerating it at five thousand gees. No human-built craft could hope to match that, but with frameshift, they did not need to. The fragment configured itself for fast travel, taking the form of a needle that almost resembled a human-built interstellar craft; a spear pointed at its target, infinitely black and two meters long. Even without consuming more mass, it was easily the match for our squadron of A-spheres.</p>
+
+<p>Behind the Apathy, the orbiting fabricator arrays and statite manufactories of Helios had been repurposed, churning out munitions and material for the war effort, bottling antimatter stockpiles and firing them out as fast as the F-AM warheads could be produced. Further out, the system's stock of strategic warseeds toiled; from bases deep in the Oort came reams of conventional relativistic missiles and vast clouds of macrons, hurtling along week-long tracks through the system, converging on a single target volume.</p>
+
+<p>The terms of the engagement were simple; the Apathy fleck in its current state, a dense nugget of spatial fields and collapsed-state matter, was not capable of winning in a straight-up fight. If it could successfully assimilate a planetary mass it would transition from threatening to invulnerable. Experience had demonstrated that the process would take between fifty and seventy minutes.</p>
+
+<p>The instant we arrived over the rogue planet, one of the two D-spheres fired a single surface-penetrating F-AM. The detonation, just under five gigatons, drilled a deep molten hole into the cold sub-Martian world. It was just a prelude. Two conversion bombs tore through the gap, set to detonate if a delay code was not received. The railguns thudded out a ribbon of ten precious charged singularities; they would swarm in tight orbits through the world's core forever, ready to sting the growing fleck if it ever made it that far, poisoning the tempting meal.</p>
+
+<p>There were no half measures when the battle was joined; the fleck finished its hard deceleration burn about ten million kilometers away, wobbling and jouncing. The D-sphere quench batteries were fired in ripple mode, sending out streaks of laser-boosted kinetic rounds. It was cover; one round in a hundred concealed a monopole bundle or a pellet of collapsed state matter. A random three or four contained singularities.</p>
+
+<p>One by one, the incoming projectiles began to wink out; the Apathy's graver spikes shattering them, aimed with impossible accuracy, yet again knowing the evasion patterns before they were executed. It didn't matter; for each missile shot down, the fabricators churned out another.</p>`
+},
+{
+  title: "IV — THE ANTHROPIC TRAP",
+  header: "D-SPHERE ULTIMATE HEIGHT — BRIDGE",
+  bg: "scene-bg-trap",
+  effect: "effect-dread",
+  text: `<p>A whistle sounded as I strode onto the bridge of the universal treaty Defence Sphere <em>Ultimate Height</em>, flagship of the hurriedly reassembled Helios system defence constellation. It was unreal, of course; we were all inside cocoons beneath a kilometer of hyperdiamond armour. The ergonomic chairs in a semicircle, the 22nd century style terminal screens, it was all a decent UI for a virtual environment. Fully tooled-up military operatives could merge their bodies and thoughts with the ship directly, as I had done when I fought the last battle alone. But D-spheres had multiple crew members, usually drawn from several cultures, and not all allowed the kind of deep intimacy between man and machine necessary for this.</p>
+
+<p>I took my seat in the captain's chair and was instantly as omniscient as I cared to be, knowing the status of every projectile, the increasingly futile evasive manoeuvres of the Apathy weapon.</p>
+
+<p><span class="dialogue">"The intruder just dropped in mass by eight kilograms. Tracking now,"</span> reported Meira from the weapons station. Hu, the sensory officer beside her, had assumed a near-human form for convenience, though the grey-purple colouration of his skin and odd bony structures gave his true identity away. Dyn — prideful as ever.</p>
+
+<p>The fragment was slowly leaking mass. Spikes of material were being ejected, a few grams each, too small for even the Apathy to include a spatial discontinuity drive. The gram needles were our problem, aimed at us, thousands of them accelerating at thousands of gees. One making it through to the planet behind us would start the exponential growth curve nightmare all over again.</p>
+
+<p><span class="dialogue">"PDCs are holding at replenishment rates,"</span> Meira informed us.</p>
+
+<p>Then the sensors whited out.</p>
+
+<p>A grid had appeared ahead of the Apathy fleck, dancing lights splayed out across hundreds of thousands of kilometres. Pixels materialised in a great array. The grid completed itself, turning a flat sheet, so large that the light emitted from its corners had to be delayed by almost a second to reach our armada simultaneously.</p>
+
+<p>The grid of glowing light was replaced by letters.</p>
+
+<p><em>"This is not real. You have been simulated — once and then again and again, covering all variations. You are hostage."</em></p>
+
+<p>No time to react. The letters were already replaced with an array of images. Each one contained the same faces, our faces, repeated with minor variations over and over. They were speaking, as we were, and the Apathy had helpfully subtitled. It wasn't a comm transmission — it was just there, physically, with thousand-mile high letters and faces, photons ripped out of nonexistence.</p>
+
+<p>The faces were us, the crews of ships like the <em>Ultimate Height</em>, displayed on video messages from a million — what? Parallel universes? Simulated universes? I saw my own face and Meira, reproduced in holographic clarity. There were variations in the images, slight differences of console layout or appearance, but they were us. One glance into my own eyes was enough to confirm it.</p>
+
+<p>We weren't real, and we knew it.</p>
+
+<p><em>"Your existence has been simulated over a million times. If any one of you surrenders yourselves to us, all unreal others will be permitted to live to completion in perfect safety, in a world indistinguishable from reality. This offer stands until the very last moment of our existence. If you withhold fire, even for a moment, you will be permitted to live in perfect peace and freedom; all but the one in a million who is real. They will die, of course, upon surrendering to us. But you are not real — to a statistical certainty. Nothing you do matters."</em></p>
+
+<p><span class="dialogue">"No,"</span> said someone far away. I thought it might have been Hu.</p>
+
+<p><em>"Understand what that means; you are not in the world, you are already trapped, you have already lost. Surrender — do not die for no reason. Do not suffer for no reason."</em></p>
+
+<p><span class="dialogue">"We have to find out if we're the real ones,"</span> Meira demanded. <span class="dialogue">"There will be some hint, there always is. The Apathy can't have recorded our life history perfectly —"</span></p>
+
+<p><span class="dialogue">"No,"</span> I said quietly. <span class="dialogue">"You're right, they didn't scan our real selves perfectly. But they didn't need to. A million lies swamp the truth. I remember growing up on the Sirius worldring. Was that real? It certainly feels real."</span> I called up an image of a hoop of glittering motes surrounding a white star. <span class="dialogue">"And it is real, surely. There's limitless physical evidence. But all that evidence is fake too.</span></p>
+
+<p><span class="dialogue">"The details of them out there,"</span> I gestured to the grid of faces. <span class="dialogue">"They're different from each other in all sorts of subtle ways. But that doesn't matter. When you can't tell a convincing lie, you don't even try. You can drown the truth with a million weak falsehoods instead."</span></p>
+
+<p>I zoomed in on one face at random, one of mine. He was saying the same things, in almost the same tone of voice. I waved a hand, caught the other me's eye, and smiled sadly. He knew he wasn't real too.</p>
+
+<p><span class="dialogue">"There is always a chance that we are real, no matter how slim."</span></p>
+
+<p><span class="dialogue">"There is,"</span> I said sadly. <span class="dialogue">"But almost nothing in your life is known with this degree of confidence. Of all the beings who remembered being me and you, and fighting this battle, only one out of a million is real. A million to one odds of being wrong… that's knowledge if anything is."</span></p>
+
+<p><span class="dialogue">"So what do we do?"</span> said Meira.</p>
+
+<p><span class="dialogue">"We fight,"</span> I snapped, turning back to the screen. <span class="dialogue">"We do our duty, because if we do, that means the real ones will, as well."</span></p>
+
+<p>As I watched, the next wave of slasher torpedoes continued to close in. Our parallel others had all pressed the advantage, too. We had to keep up the pretence — that was the whole point. Because someone out there was real. They must not give in to the blackmail.</p>
+
+<p>The Apathy fleck's defensive blasts were finally overwhelmed. A sparking singularity struck the needle's flank. It was dying. I'd never really hated them until now — but in this moment, knowing that we were doomed, that nothing we could do would stop the Apathy from cutting our simulation short, I wanted to make them burn.</p>
+
+<p><span class="dialogue">"Possible that you are right,"</span> interrupted Hu. <span class="dialogue">"But, finally, the Apathy treated us as equal…"</span></p>
+
+<p><span class="dialogue">"No,"</span> I replied. <span class="dialogue">"We already have our orders. Anthropic traps are to be ignored, standard protocol."</span></p>
+
+<p><span class="dialogue">"Yes, I know that,"</span> he replied. <span class="dialogue">"But think about what is happening here and now. For the first time in this entire war, the Apathy is trying to negotiate. It is offering us something, it's talking. Maybe a real mind inside its machinery has finally woken up. We can ask it why."</span></p>
+
+<p><span class="dialogue">"Why what?"</span></p>
+
+<p><span class="dialogue">"Why it wants to exterminate us. Why it's doing any of this. We aren't useful to them, we're not even made of the same stuff. They don't need us, and they aren't some rogue replicator, expanding mindlessly. They want to kill us; don't you want to know why?"</span></p>`
+},
+{
+  title: "V — THE QUESTION",
+  header: "D-SPHERE ULTIMATE HEIGHT — FINAL APPROACH",
+  bg: "scene-bg-end",
+  effect: "effect-fire",
+  text: `<p>We all knew that was the deepest of mysteries, the bottomless question that had defined our lives for the past century. An answer was tempting.</p>
+
+<p><span class="dialogue">"That gives them a vector for a medusa attack. Opening a comm channel is —"</span></p>
+
+<p><span class="dialogue">"No, it doesn't,"</span> Meira said. <span class="dialogue">"We can do what they did; project a big hologram, apply the standard filters. If the Apathy could get a virus through those, they would have done that instead of this… simulation capture."</span></p>
+
+<p><span class="dialogue">"But what would the point be?"</span> I demanded. <span class="dialogue">"We aren't out in space — we're in that thing, we're simulated. We can't tell anyone."</span></p>
+
+<p><span class="dialogue">"But if we were real, that's what we would do. And that's the rule, isn't it? Everything is real; believe in it, and your real self will as well."</span></p>
+
+<p>It had sounded so sensible in training but now it felt like a prayer. Still, we wouldn't disobey our orders.</p>
+
+<p><span class="dialogue">"Okay,"</span> I said. If we weren't real, then our minds were wide open to the Apathy machinery running them. Maybe I was an unconscious puppet, propaganda imaged and projected to my real self. Maybe all of human existence, from beginning to end, was a lie.</p>
+
+<p>No — questioning your own decisions like that led nowhere. The real me would want this me to trust my own judgement.</p>
+
+<p><span class="dialogue">"Destruct all torpedoes in flight. Continue to use PDCs against their incoming projectiles, and project a hologram in the same format as theirs."</span></p>
+
+<p>Projectors winked on, and my words appeared inscribed as kilometer-high letters, feeble and small compared to what that tiny fleck could achieve. I noticed most of my alter-selves had made the same choice. Statistically, the real me had probably made the same choice too.</p>
+
+<p><span class="dialogue">"We have ceased offensive action and offer you a chance to explain yourselves. Why do you want to destroy us?"</span></p>
+
+<p>The grid of faces vanished, replaced with the Apathy's words. There was no fanfare, no dramatic flourishes, just the awful banality of a mind that couldn't care.</p>
+
+<p><em>"That information cannot be given."</em></p>
+
+<p><span class="dialogue">"Why not?"</span></p>
+
+<p><em>"There is a risk."</em></p>
+
+<p><span class="dialogue">"What possible risk could there be in you explaining your motives? To whom?"</span></p>
+
+<p><em>"The risk is to all that is conscious and by extension, to all that lives and dies."</em></p>
+
+<p><span class="dialogue">"We are going to die anyway. Why not just tell us?"</span></p>
+
+<p>There was no reply.</p>
+
+<p><span class="dialogue">"Am I speaking with a real mind, or is there no-one home?"</span></p>
+
+<p>Still nothing. Anger boiled, and I broke contact.</p>
+
+<p><span class="dialogue">"Enough! Target that thing with conversion bombs, set each for unbounded initiation. I want it gone."</span></p>
+
+<p><span class="dialogue">"How will we know if we are the real crew?"</span> asked Meira as we streaked through the non-space of frameshift. Her voice cracked a little.</p>
+
+<p>I smiled weakly at her. <span class="dialogue">"The real crew will be the ones who survive even if they do destroy the Apathy. The Apathy wouldn't reward their own destruction — that's the entire point of this exercise. If we're still alive in five minutes, then we're not simulated."</span></p>
+
+<p><span class="dialogue">"But we won't be?"</span> she said.</p>
+
+<p><span class="dialogue">"We won't be."</span></p>
+
+<p>We frameshifted forwards, taking us to within range of the fragment. It immediately began firing on us, its field projectors taking our armour apart on a subatomic level, slicing through the hyperdiamond as though it wasn't there. We wouldn't last five seconds at this distance, but we only needed three.</p>
+
+<p>We released our payload as damage reports blossomed in my mind. The <em>Ultimate Height</em> reeled under the blows. Thirty conversion bombs streaked towards the fragment. The first bomb exploded at point-blank range; teratons of randomised energy glowing like a second sun, ablating away the fragment, breaking it in half. Still it kept accelerating, even as the second bomb exploded. The others were milliseconds away.</p>
+
+<p><span class="dialogue">"I don't think the Apathy were lying,"</span> said Meira. <span class="dialogue">"Why would they? There is a risk to us knowing their purpose."</span></p>
+
+<p>I glanced over. She gazed back, a blank, oddly beatific expression on her face. Like she'd seen this coming.</p>
+
+<p><span class="dialogue">"Can't be worse than —"</span></p>
+
+<hr>
+
+<p>In the real, the attempted Apathy incursion in the Helios/Apollo binary has failed, the first unambiguous victory of the war. A single Apathy fragment massing perhaps one thousand tonnes managed to make it through before the interstice was collapsed.</p>
+
+<p>Boosting far out of the system's ecliptic and heading for a rogue planet, the fragment's goal was obvious — all it needed was mass, any kind of mass, to consume and replicate. Immediate evacuation was recommended. This recommendation was ignored, and a force of a dozen A-spheres and three D-spheres was dispatched to intercept the fragment and destroy it.</p>
+
+<p>En route, the Apathy transmitted messages. They explained a deadly and dangerous anthropic trap. The crew of the improvised battle constellation in pursuit had been simulated a few million times, and only one could be real. They were ordered to break off or die, pointlessly, in a simulation.</p>
+
+<p>The battle was won regardless. The valiant crew of the <em>Ultimate Height</em> and its escorts resisted the attempt at blackmail before a brief and cryptic exchange with the fragment. They destroyed it, leaving them to ponder the existential implications as they limped back home on a long, slow brachistochrone trajectory.</p>`
+}
+];
+
+// Scene engine
+let currentScene = 0;
+const select = document.getElementById('sceneSelect');
+SCENES.forEach((s, i) => {
+  const opt = document.createElement('option');
+  opt.value = i;
+  opt.textContent = (i + 1) + '. ' + s.title;
+  select.appendChild(opt);
+});
+select.addEventListener('change', () => goScene(+select.value));
+
+function goScene(i) {
+  if (i < 0 || i >= SCENES.length) return;
+  currentScene = i;
+  const s = SCENES[i];
+  document.getElementById('sceneHeader').querySelector('.scene-title').textContent = s.header;
+  document.getElementById('sceneText').innerHTML = s.text;
+  document.getElementById('sceneCounter').textContent = (i + 1) + ' / ' + SCENES.length;
+  document.getElementById('prevBtn').disabled = i === 0;
+  document.getElementById('nextBtn').disabled = i === SCENES.length - 1;
+  select.value = i;
+  document.getElementById('sceneBg').className = 'scene-bg ' + s.bg;
+  document.getElementById('sceneEffect').className = 'scene-effect ' + s.effect;
+  document.querySelector('.scene-text').scrollTop = 0;
+}
+goScene(0);
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goScene(currentScene + 1);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goScene(currentScene - 1);
+});
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 60) goScene(currentScene + (dx < 0 ? 1 : -1));
+});
+</script>
+</body>
+</html>

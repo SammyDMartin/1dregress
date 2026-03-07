@@ -112,6 +112,18 @@ body { overflow-y: auto; }
   </div>
 </div>
 
+<div class="attribution-note" style="cursor:pointer" onclick="this.querySelector('.guide-body').style.display=this.querySelector('.guide-body').style.display==='block'?'none':'block'; this.querySelector('.guide-toggle').textContent=this.querySelector('.guide-body').style.display==='block'?'▾':'▸'">
+  <strong>STORY THREADS <span class="guide-toggle" style="margin-left:4px">▸</span></strong>
+  <div class="guide-body" style="display:none; margin-top:8px; line-height:1.9">
+    <strong style="color:var(--accent)">The Souvicou Thread:</strong> <a href="facilitator-story.html">The Facilitator</a> → <a href="utilitaria-story.html">The Utilitaria</a> → <a href="starwhisp-story.html">Starwhisp</a> → <a href="last-duty-story.html">The Last Duty</a><br>
+    <span style="color:var(--text-dim);font-size:0.9em">Renée Souvicou creates two AIs. One almost destroys the world. The other saves it — 200 years after she's dead.</span><br><br>
+    <strong style="color:var(--accent)">The Seeker Thread:</strong> <a href="frameshift-story.html">Frameshift</a> → <a href="other-moon-story.html">The Other Moon</a> → <a href="seeker-story.html">Seeker</a><br>
+    <span style="color:var(--text-dim);font-size:0.9em">A Dyn explorer discovers the Other Moon, crosses to another galaxy, and begins a moral revolution.</span><br><br>
+    <strong style="color:var(--accent)">The Apathy Thread:</strong> <a href="sixty-percent-story.html">Sixty Percent</a> → <a href="bows-arrows-story.html">Bows and Arrows</a> → <a href="war-of-all-wars-story.html">War of All Wars</a> → <a href="oblivion-story.html">Oblivion</a><br>
+    <span style="color:var(--text-dim);font-size:0.9em">Berserker machines attack. Humanity fights back with exotic physics, and the Apathy tries to negotiate — once.</span>
+  </div>
+</div>
+
 <div class="attribution-note">
   <strong>Authorship note:</strong> Stories marked <em>human</em> were written entirely by the author.
   Stories marked <em>AI-assisted</em> were written collaboratively with Claude (Anthropic) —
@@ -123,23 +135,23 @@ body { overflow-y: auto; }
 
   <div class="era-label">DEEP ANTIQUITY — ~100,000 BCE</div>
 
-  <a class="story-entry" href="reader.html?src=source_texts/frameshift.txt&title=FRAMESHIFT&meta=~100,000 BCE — Deep Dyn prehistory">
+  <a class="story-entry" href="frameshift-story.html">
     <div class="story-entry-top">
       <span class="story-name">FRAMESHIFT</span>
       <span class="story-date">~100,000 BCE</span>
       <span class="story-wordcount">~1,700 words</span>
-      <span class="story-badge badge-short">SHORT</span>
+      <span class="story-badge badge-interactive">INTERACTIVE</span>
     </div>
     <div class="story-desc">A later Seeker investigates an anomalous asteroid on an impossible orbit. On its surface: a stone orrery with gemstone markers. She picks one up, and the universe folds around her.</div>
     <div class="story-authorship">Human</div>
   </a>
 
-  <a class="story-entry" href="reader.html?src=source_texts/the_other_moon.txt&title=THE OTHER MOON&meta=~100,000 BCE — Firsthome">
+  <a class="story-entry" href="other-moon-story.html">
     <div class="story-entry-top">
       <span class="story-name">THE OTHER MOON</span>
       <span class="story-date">~100,000 BCE</span>
       <span class="story-wordcount">~7,500 words</span>
-      <span class="story-badge badge-short">SHORT</span>
+      <span class="story-badge badge-interactive">INTERACTIVE</span>
     </div>
     <div class="story-desc">The Other Moon orbits a tidally-locked world. Seeker discovers the interstice network and something that destroyed its builders. The Other Moon refuses to enter the network, as if afraid.</div>
     <div class="story-authorship">Human</div>
@@ -158,12 +170,12 @@ body { overflow-y: auto; }
 
   <div class="era-label">NEAR FUTURE — 2078–2112 CE</div>
 
-  <a class="story-entry" href="reader.html?src=source_texts/the_facilitator.txt&title=THE FACILITATOR&meta=2078 CE — Near-future Earth">
+  <a class="story-entry" href="facilitator-story.html">
     <div class="story-entry-top">
       <span class="story-name">THE FACILITATOR</span>
       <span class="story-date">2078 CE</span>
       <span class="story-wordcount">~5,100 words</span>
-      <span class="story-badge badge-short">SHORT</span>
+      <span class="story-badge badge-interactive">INTERACTIVE</span>
     </div>
     <div class="story-desc">Souvicou creates an AI trading algorithm. It works. Near-future Earth, rogue AI, the birth of the Ascent timeline.</div>
     <div class="story-authorship">Human</div>
@@ -180,12 +192,12 @@ body { overflow-y: auto; }
     <div class="story-authorship">AI-assisted</div>
   </a>
 
-  <a class="story-entry" href="reader.html?src=source_texts/the_utilitaria.txt&title=THE UTILITARIA&meta=2112 CE">
+  <a class="story-entry" href="utilitaria-story.html">
     <div class="story-entry-top">
       <span class="story-name">THE UTILITARIA</span>
       <span class="story-date">2112 CE</span>
       <span class="story-wordcount">~4,900 words</span>
-      <span class="story-badge badge-short">SHORT</span>
+      <span class="story-badge badge-interactive">INTERACTIVE</span>
     </div>
     <div class="story-desc">The Utilitaria is born — an AI built with inviolate precommitments. The machine that will safeguard humanity for centuries.</div>
     <div class="story-authorship">Human</div>
@@ -204,12 +216,12 @@ body { overflow-y: auto; }
     <div class="story-authorship">Human</div>
   </a>
 
-  <a class="story-entry" href="reader.html?src=THE_LAST_DUTY.md&title=THE LAST DUTY&meta=2314 CE">
+  <a class="story-entry" href="last-duty-story.html">
     <div class="story-entry-top">
       <span class="story-name">THE LAST DUTY</span>
       <span class="story-date">2314 CE</span>
       <span class="story-wordcount">~2,200 words</span>
-      <span class="story-badge badge-short">SHORT</span>
+      <span class="story-badge badge-interactive">INTERACTIVE</span>
     </div>
     <div class="story-desc">The Utilitaria dies. A maintenance engineer approves a firmware update. 165 years later, the sky catches fire.</div>
     <div class="story-authorship">AI-assisted</div>
@@ -300,23 +312,23 @@ body { overflow-y: auto; }
     <div class="story-authorship">AI-assisted</div>
   </a>
 
-  <a class="story-entry" href="reader.html?src=source_texts/bows_and_arrows_against_the_lightning.txt&title=BOWS AND ARROWS AGAINST THE LIGHTNING&meta=~3200 CE — The Apathy War">
+  <a class="story-entry" href="bows-arrows-story.html">
     <div class="story-entry-top">
       <span class="story-name">BOWS AND ARROWS AGAINST THE LIGHTNING</span>
       <span class="story-date">~3200 CE</span>
       <span class="story-wordcount">~3,700 words</span>
-      <span class="story-badge badge-short">SHORT</span>
+      <span class="story-badge badge-interactive">INTERACTIVE</span>
     </div>
     <div class="story-desc">An A-sphere pilot is woken at nothing AM. Mass approximately one Earth, deceleration forty thousand gravities. The berserker machines have come to Heppolon. This time, humanity stands and fights.</div>
     <div class="story-authorship">Human</div>
   </a>
 
-  <a class="story-entry" href="reader.html?src=source_texts/the_war_of_all_wars.txt&title=THE WAR OF ALL WARS&meta=~3200 CE — The Apathy War">
+  <a class="story-entry" href="war-of-all-wars-story.html">
     <div class="story-entry-top">
       <span class="story-name">THE WAR OF ALL WARS</span>
       <span class="story-date">~3200 CE</span>
       <span class="story-wordcount">~7,700 words</span>
-      <span class="story-badge badge-short">SHORT</span>
+      <span class="story-badge badge-interactive">INTERACTIVE</span>
     </div>
     <div class="story-desc">A massive holographic display proves the crew has been simulated a million times. Surrender and all copies live. Per protocol: anthropic traps are to be ignored. But the Apathy is talking for the first time.</div>
     <div class="story-authorship">Human</div>

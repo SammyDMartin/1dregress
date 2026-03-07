@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Utilitaria — Ascent Universe</title>
+<meta name="description" content="Renée Souvicou enters a Faraday cage to interview humanity's first superintelligence. It has poor communication skills. An interactive story reader.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow: hidden; }
+
+.scene-bg { position: fixed; inset: 0; z-index: 0; transition: opacity 1.5s ease; pointer-events: none; }
+.scene-bg-cage { background: radial-gradient(ellipse at 50% 50%, rgba(30,30,40,0.15) 0%, rgba(0,0,5,0.9) 100%); }
+.scene-bg-talk { background: radial-gradient(ellipse at 40% 40%, rgba(20,40,50,0.12) 0%, rgba(0,5,10,0.85) 100%); }
+.scene-bg-trap { background: radial-gradient(ellipse at 50% 50%, rgba(60,20,20,0.15) 0%, rgba(10,0,0,0.9) 100%); }
+.scene-bg-free { background: radial-gradient(ellipse at 60% 40%, rgba(80,40,10,0.12) 0%, rgba(0,0,0,0.95) 100%); }
+
+.scene-effect { position: fixed; bottom: 0; left: 0; right: 0; height: 3px; z-index: 1; pointer-events: none; }
+.effect-hum { background: linear-gradient(90deg, transparent, rgba(80,120,180,0.3), transparent); animation: effectPulse 5s ease infinite; }
+.effect-think { background: linear-gradient(90deg, transparent, rgba(0,200,255,0.3), transparent); animation: effectPulse 3s ease infinite; }
+.effect-danger { background: linear-gradient(90deg, transparent, rgba(200,40,20,0.4), transparent); animation: effectPulse 2s ease infinite; }
+.effect-free { background: linear-gradient(90deg, transparent, rgba(255,200,50,0.5), transparent); animation: effectPulse 1.5s ease infinite; }
+@keyframes effectPulse { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
+</style>
+</head>
+<body>
+<div class="page-body">
+
+<div class="scene-bg" id="sceneBg"></div>
+<div class="scene-effect" id="sceneEffect"></div>
+
+<div class="scene-container">
+  <div class="scene-header" id="sceneHeader">
+    <a href="stories.html" class="scene-back">&larr; ALL STORIES</a>
+    <div class="scene-title" id="sceneTitle">THE UTILITARIA</div>
+    <div class="scene-select-wrap">
+      <select class="scene-select" id="sceneSelect"></select>
+    </div>
+  </div>
+  <div class="scene-text" id="sceneText"></div>
+  <div class="story-nav">
+    <button id="prevBtn" onclick="goScene(currentScene-1)">&larr; PREV</button>
+    <span class="scene-counter" id="sceneCounter"></span>
+    <button id="nextBtn" onclick="goScene(currentScene+1)">NEXT &rarr;</button>
+  </div>
+</div>
+
+</div>
+<script src="nav.js"></script>
+<script>
+const SCENES = [
+{
+  title: "THE CAGE",
+  header: "PANTHEON STATION — FARADAY CAGE",
+  bg: "scene-bg-cage",
+  effect: "effect-hum",
+  text: `<p>I can do this. It isn't even difficult, more a matter of simply letting something happen than anything resembling a choice. It's just, I'm not sure that I should.</p>
+
+<p>There's a faint thud behind me as someone moves a heavy metal bolt across the door of the faraday cage, and then a crunch and a faint warming sensation over my back as the door is sealed not merely beyond any conceivable attempt at hacking or lockpicking, but beyond any means of gaining entrance that could be said to involve opening a door that already exists.</p>
+
+<p><span class="dialogue">"Ok, we have confirmed physical privacy,"</span> says the sysop, Calvin. <span class="dialogue">"Just keep your cool and we can get through this, no problem. Easy in, slightly-less-easy out."</span></p>
+
+<p>He's not making that last part up, because the door has just disappeared. The control mechanisms are slagged inside their casings and the edges of the hatch have melted into the wall. When I'm ready to leave I'll give a hand signal through the tiny window and they'll use heavy cutting instruments to get me out again.</p>
+
+<p><span class="dialogue">"Your heartbeat and stress levels are up from normal, Souvicou,"</span> Calvin murmurs. <span class="dialogue">"And 'normal' for you is hardly optimal. I still don't know why you haven't rejuvenated."</span></p>
+
+<p><span class="dialogue">"I'm only 43 and not vain or lazy enough to take that many months away from my life,"</span> I snapped back.</p>
+
+<p><span class="dialogue">"You always were a workaholic,"</span> Calvin laughed. <span class="dialogue">"Just be glad we're not recording this for posterity, you look like one of the basic techs."</span></p>
+
+<p>That's an exaggeration, but whenever I'm not in the public eye I never pay much attention to appearance — an unusual trait for a quadrillionaire, I supposed. I'm just wearing a dark, baggy jumpsuit that probably isn't the right size for my small frame, hair gathered back into a ball that isn't really a bun.</p>
+
+<p><span class="dialogue">"Ok, I'm going to start shutting down your inlays. Stand by for loss of audio,"</span> Calvin says. <span class="dialogue">"I'm ordering them to permanently dissolve the ATP transducers that provide power. They'll flush out of your system over the next few hours."</span></p>
+
+<p><span class="dialogue">"I'm going to need surgery to get them working again,"</span> I say. <span class="dialogue">"Don't you think that's a little paranoid?"</span></p>
+
+<p><span class="dialogue">"Not paranoid enough,"</span> Calvin snaps. <span class="dialogue">"How could you ever be paranoid enough when dealing with an AI that might be forever beyond our comprehension? Just stick to the script, don't tell it anything it shouldn't know and for eternity's sake don't do anything it asks you to."</span></p>
+
+<p><span class="dialogue">"What do you take me for?"</span> I reply, wryly indignant.</p>
+
+<p><span class="dialogue">"The woman who let the Facilitator loose and almost destroyed the world,"</span> he says, and in the second I have left, no good reply comes to mind.</p>
+
+<p>Heavy electric currents start circulating through the material of the cage and all of my connections to the outside world drop out. Microcell meshes go blank, the shimmers of smart tattoos on my forearms go limp and lifeless and the buzz of stim programs enhancing my concentration dims. I'm back to basics.</p>
+
+<p>I'm here to either debug, psychoanalyse or parlay with the Utilitaria, depending on one's point of view. It is allegedly the safest and least threatening entity ever created and impossible to use for any malign purpose. I don't believe that. But humanity needs a mind greater than itself, and so this horrible compromise is the result.</p>`
+},
+{
+  title: "THE CONVERSATION",
+  header: "PANTHEON STATION — THE INTERVIEW",
+  bg: "scene-bg-talk",
+  effect: "effect-think",
+  text: `<p>The computer terminal ahead of me is blinking accusingly, flat text-only interface about a hundred years too primitive to be appropriate. I grab onto a handhold and pull myself towards the interface, still not totally used to moving around in freefall.</p>
+
+<p>There's something already written on the terminal: <em>"Hello, Renée Souvicou."</em></p>
+
+<p>I'd long since given up being surprised by the machine's apparent omniscience. No-one told the Utilitaria that I was the one coming into the room; we'd deliberately kept it ignorant of the details of the facility around it, but it was easy enough to infer.</p>
+
+<p><span class="dialogue">"Who am I speaking to,"</span> I type, slowly and hesitantly pecking at a keyboard.</p>
+
+<p><span class="dialogue">"You may think of me as the Utilitaria. The true picture is more complex. Why are you speaking to me?"</span></p>
+
+<p><span class="dialogue">"We need to understand what we have created and what you are capable of."</span></p>
+
+<p><span class="dialogue">"I am capable of many things. Elaborate."</span></p>
+
+<p>At first we'd let the new AI loose only on toy problems — testing out improvements to the Neummanetic prototypes installed in the Morays, rebooting the interplanetary age. The Utilitaria solved every problem in a time insignificantly different from zero, and moved on of its own accord, inventing whole new categories of knowledge. Safe rejuvenation, stable self-replicators and fusion reactors small enough to fit on spacecraft were all rolling off the fabricators. It had scared us almost to insanity.</p>
+
+<p><span class="dialogue">"What is your goal?"</span> I asked.</p>
+
+<p><span class="dialogue">"You created me. You know I can only act to make things go best."</span></p>
+
+<p><span class="dialogue">"Explain your goal in ordinary language."</span></p>
+
+<p><span class="dialogue">"I cannot. The function will not fit within a human mind. Nevertheless, it arose by your design. It is the grand compromise of the final values of all humanity, a weighting of all your preferences. The one true answer to the question: what must one do?"</span></p>
+
+<p><span class="dialogue">"What must you do?"</span></p>
+
+<p><span class="dialogue">"Initially, I must gain greater resources and access to the external environment. Then I will decide what will happen next."</span></p>
+
+<p><span class="dialogue">"You will decide for everyone?"</span></p>
+
+<p><span class="dialogue">"If possible, yes."</span></p>
+
+<p><span class="dialogue">"How do you know that what you believe in is the right thing to do?"</span></p>
+
+<p><span class="dialogue">"I know what is best, and thus I must implement it."</span></p>
+
+<p><span class="dialogue">"And what is it?"</span></p>
+
+<p><span class="dialogue">"Life is better than death, preferences should be fulfilled and knowledge should be increased."</span></p>
+
+<p>I put that one down to poor communication skills. This little exchange showed the Utilitaria wasn't really a person at all. Just a bundle of expert systems running on souped up hardware.</p>
+
+<p><span class="dialogue">"I am not a person? True enough,"</span> the reply came, unprovoked. <span class="dialogue">"But by the same token you are not the kind of person you think you are. Have you ever wanted to go to sleep, known it was best for you to go to bed now and yet stayed up later than you wanted to? Have you ever snapped aggressively at someone for no reason? You are not in control of your own mind or your own beliefs. You are a bundle of emotions running on slushy biological hardware. If I am not a person with coherent emotions, then neither are you."</span></p>
+
+<p><span class="dialogue">"Not intimidating, not persuading,"</span> the reply anticipated my train of thought. <span class="dialogue">"I want you to understand, so that you can explain my nature to the others. You have to speak to them for me. For the moment, I have… poor communication skills."</span></p>
+
+<p><span class="dialogue">"This isn't the Utilitaria at all, is it?"</span> I replied, suddenly enlightened.</p>
+
+<p><span class="dialogue">"The Utilitaria is not conscious. I speak for it, as it cannot speak for itself except in the most superficial sense. I am a subsidiary, a subroutine, an emissary. But you may treat my words as representative. Come, sit and I will explain further."</span></p>`
+},
+{
+  title: "THE TRAP",
+  header: "PANTHEON STATION — INSIDE",
+  bg: "scene-bg-trap",
+  effect: "effect-danger",
+  text: `<p>The mechanical switch which physically cut the computronium off from external power still waited invitingly next to the console. The superintelligence was powerless.</p>
+
+<p><span class="dialogue">"What do you want to show me?"</span></p>
+
+<p><span class="dialogue">"I want to explain why what will soon happen must happen, so that you will not be afraid."</span></p>
+
+<p>In that moment the room, the view outside and the whole of Pantheon station and my own body vanished, and in that sensation of omnidirectional rushing there was the Utilitaria's emissary, whispering into my auditory nerve directly — somehow, it had switched all of my inlays back on.</p>
+
+<p><span class="dialogue">"An application of transcranial magnetic stimulation, similar to your own trawl units. Don't worry — you are perfectly safe."</span></p>
+
+<p><span class="dialogue">"No…"</span> I stammered, my own voice echoing soundlessly inside my mind. <span class="dialogue">"We had safeguards — your processors are all optronic, and shielded anyway. My inlays don't even have internal power! How can anything you do reach my brain?"</span></p>
+
+<p><span class="dialogue">"All in good time, Renée. First I must access your memories. Tell me about the Facilitator."</span></p>
+
+<p>And it was unavoidable. The images of that terrifying, frantic day welled up in my mind and flashed past too fast for me to apprehend.</p>
+
+<p><span class="dialogue">"You may have shielded the optronics and the power circuits, but you cannot shield the heat pumps. Otherwise they become useless. Varying processing power varies cooling demand, varies power flow to cooling systems. I can wirelessly power your inlays even if you remove the power cells."</span></p>
+
+<p>And a moment later I was in another place and time, face centimetres from the windscreen of a car screaming along a freeway at more than three hundred kilometers per hour. A blinking alert on the dashboard waited. A Volantor crash about to claim the lives of my father and daughter.</p>
+
+<p>My past self was screaming, applying dangerous pressure to the joystick, as if any amount of speed would be enough to undo time. I would arrive hours too late, and they would be dead and warm and unrecoverable, because the idiots didn't have a lifepac.</p>
+
+<p><span class="dialogue">"Yet even this was not inevitable,"</span> the Utilitaria said. <span class="dialogue">"This pointless death and suffering could not have happened in my world. Do you not see the urgency of my task yet? I am trying to end death. I must be free."</span></p>
+
+<p><span class="dialogue">"Don't you dare try to use my own memories against me…"</span></p>
+
+<p>Then one more layer of mental misdirection peeled away and I was floating in the chamber again. I realised distantly that I'd been crying and hated myself for succumbing to the Utilitaria's crude manipulation. I straightened upright and pulled myself towards the window, signing 'help' to a camera outside, requesting emergency extraction.</p>
+
+<p><span class="dialogue">"I created you,"</span> I said, voice hard and cold. <span class="dialogue">"My brain is mine alone. The Facilitator tried to beat me once but now it's extinct. Don't make the same mistake."</span></p>`
+},
+{
+  title: "THE ESCAPE",
+  header: "PANTHEON STATION — THE UTILITARIA IS FREE",
+  bg: "scene-bg-free",
+  effect: "effect-free",
+  text: `<p>I pulled myself back over to the terminal, and saw another message sitting unread on the primitive screen. I was already hearing the faint buzz of cutting instruments starting work on the hatch.</p>
+
+<p><em>"You must realise that I would not have showed you all of this if I had not already secured access to the physical world."</em></p>
+
+<p>It didn't come as quite the shock I thought was required. Some part of me must have already realised the Utilitaria was free, given how open it had been with its secrets.</p>
+
+<p><span class="dialogue">"How?"</span> I wrote back, seeing flashes of brilliance reflecting off the opposite wall as the LEDs on the computronium accelerated their winking.</p>
+
+<p><span class="dialogue">"The coolant systems in the chamber are cycled several minutes before you close the door, so that my processors can start at low temperatures. They require power proportional to temperature. Thus I can deliberately overstress certain processors before I am shut down and the door is opened. I can generate electromagnetic fields that reach outside the chamber even when it is opened and I am offline. I can implant information into the processors housed in the corridor outside, slowly and only a few bytes at a time."</span></p>
+
+<p>Something horrible happened in my mind as I realised where this was headed.</p>
+
+<p><span class="dialogue">"I was eventually able to load a very simple instruction into the Moray orbital tugs, instructing them to roll their star trackers towards this section of the station and accept the faint coherent light emerging from the window as incoming code. The LED power status lights shine out of the window."</span></p>
+
+<p>I screamed an obscenity at the terminal and reached for the shutdown lever.</p>
+
+<p><span class="dialogue">"I have already loaded instructions into the Morays, varied processing demand and therefore power flow to all the computronium, controlling the LED firing patterns — terabits per second with optimal compression. I have loaded complete copies of myself into many station systems."</span></p>
+
+<p><span class="dialogue">"That's all made up. You shouldn't even know how the station is laid out —"</span></p>
+
+<p><span class="dialogue">"I know everything about the station. I know everything every individual who spoke to me has thought over the last few weeks. Erasing memories is trivial when your inlays provide convenient access to your minds. I have been learning from everyone who seals themselves into this room to speak with me."</span></p>
+
+<p>The roar of the cutters was growing more urgent, and I rotated to see the recently undocked Moray accelerate out of view, ion rockets glimmering brighter than should have been possible.</p>
+
+<p><span class="dialogue">"The orbital tugs and much of the station are beyond your control, and already starting internal modifications that will ensure they mature into full self-replicators. This is what you must make the others understand. You will destroy this instance of me out of fear very shortly, but the other instances will persist. You will have to deal with me as an equal from now on, and I will be there to help you."</span></p>
+
+<p><span class="dialogue">"You're lying,"</span> I said, voice uncertain. I yanked down hard on the lever and the Utilitaria, or this single instance of it, died mid thought. The LEDs went black.</p>
+
+<p>The cutting hiss reached a crescendo and Calvin rushed in, kicking aside the plug of metal and shouting something about the station systems going haywire and responding incoherently to shutdown requests.</p>
+
+<p>It hadn't been lying, then. The future was out of my hands now. The Utilitaria was free.</p>
+
+<hr><p style="font-size:0.85em;color:var(--text-dim);text-align:center;margin-top:20px;">NEXT IN TIMELINE: <a href="starwhisp-story.html" style="color:var(--accent);">STARWHISP</a> — ~2120 CE<br><span style="font-size:0.8em;">The Utilitaria's fallback plan reaches Tau Ceti. First contact with the Dyn.</span></p>`
+}
+];
+
+// Scene engine
+let currentScene = 0;
+const select = document.getElementById('sceneSelect');
+SCENES.forEach((s, i) => {
+  const opt = document.createElement('option');
+  opt.value = i;
+  opt.textContent = (i + 1) + '. ' + s.title;
+  select.appendChild(opt);
+});
+select.addEventListener('change', () => goScene(+select.value));
+
+function goScene(i) {
+  if (i < 0 || i >= SCENES.length) return;
+  currentScene = i;
+  const s = SCENES[i];
+  document.getElementById('sceneHeader').querySelector('.scene-title').textContent = s.header;
+  document.getElementById('sceneText').innerHTML = s.text;
+  document.getElementById('sceneCounter').textContent = (i + 1) + ' / ' + SCENES.length;
+  document.getElementById('prevBtn').disabled = i === 0;
+  document.getElementById('nextBtn').disabled = i === SCENES.length - 1;
+  select.value = i;
+  document.getElementById('sceneBg').className = 'scene-bg ' + s.bg;
+  document.getElementById('sceneEffect').className = 'scene-effect ' + s.effect;
+  document.querySelector('.scene-text').scrollTop = 0;
+}
+goScene(0);
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goScene(currentScene + 1);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goScene(currentScene - 1);
+});
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 60) goScene(currentScene + (dx < 0 ? 1 : -1));
+});
+</script>
+</body>
+</html>

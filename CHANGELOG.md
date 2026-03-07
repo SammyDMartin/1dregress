@@ -6,7 +6,7 @@ All notable changes to the Ascent Universe companion website.
 
 ## Session 12 (2026-03-07) — Infrastructure, New Content & Story Readers
 
-Major session: infrastructure improvements, new interactive content, and three new story readers.
+Major session: infrastructure improvements, new interactive content, and nine new story readers.
 
 ### New Pages
 - **Occupied Earth** (`occupied-earth.html`) — Interactive text-based walkthrough of Conurbation One during the Dyn occupation (2479 CE). 9 locations: the Hollow Tower, terraces, wasteland, Ascensor base, wastelander camps, resistance, and the liberation sequence. Includes intelligence briefings.
@@ -14,6 +14,17 @@ Major session: infrastructure improvements, new interactive content, and three n
 ### New Story Readers
 - **Starwhisp** (`starwhisp-story.html`) — 5-scene interactive reader for the first contact story. Diary format: Waking, First Contact, Aboard the Dyn Ship, The Revelation, The End.
 - **The Director** (`director-story.html`) — 4-scene interactive reader for the Vash/Meyer coup. The Intruder, The Confrontation, The Gun, The Call.
+- **The Facilitator** (`facilitator-story.html`) — 4-scene interactive reader for the rogue AI story. The Firing, The Morning After, The Rogue, The Rooftop.
+- **Bows and Arrows Against the Lightning** (`bows-arrows-story.html`) — 6-scene interactive reader for the Apathy War battle. Alert through Last Stand with escalating atmospheric effects.
+- **The War of All Wars** (`war-of-all-wars-story.html`) — 5-scene interactive reader following the story's Roman numeral structure. Features the iconic anthropic trap and Apathy communication attempt.
+- **The Other Moon** (`other-moon-story.html`) — 5-scene interactive reader for Seeker's interstellar voyage. Discovery through The Return ambush.
+- **Frameshift** (`frameshift-story.html`) — 4-scene interactive reader for Seeker discovering the Other Moon. The earliest story in the timeline (~100,000 BCE).
+- **The Utilitaria** (`utilitaria-story.html`) — 4-scene interactive reader for Souvicou's Faraday cage interview with the superintelligence. The Cage, The Conversation, The Trap, The Escape.
+- **The Last Duty** (`last-duty-story.html`) — 4-scene interactive reader for the Dragon's Tooth origin story. The Alert, The Shutdown, The Occupation, The Ocean Remembers.
+
+### Navigation & Discoverability
+- Added "Story Threads" expandable section to stories page showing three narrative chains with links
+- Added "Next in Timeline" links to the last scene of 7 interactive story readers, connecting stories into reading chains
 
 ### Infrastructure
 - Added SVG favicon (cyan diamond on dark background) to all 28+ pages
