@@ -111,6 +111,9 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+html {
+  scroll-behavior: smooth;
+}
 html, body {
   width: 100%; min-height: 100%;
   background: var(--bg);
@@ -376,3 +379,18 @@ a:hover { color: #fff; }
 .status-bar .dim { color: var(--text-dim); }
 .status-bar .bright { color: var(--accent); }
 @media (max-width: 600px) { .status-bar { font-size: 7px; letter-spacing: 1px; padding: 0 8px; } }
+
+/* ─── Back to top button (injected by nav.js) ─────────────────────────── */
+.back-to-top {
+  position: fixed; bottom: 32px; right: 16px; z-index: 99;
+  width: 32px; height: 32px; border-radius: 2px;
+  background: var(--panel); border: 1px solid var(--border);
+  color: var(--accent); font-size: 14px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s, transform 0.3s;
+  transform: translateY(8px);
+}
+.back-to-top.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+.back-to-top:hover { background: var(--border); }
+[data-theme="light"] .back-to-top { background: #fff; border-color: var(--border); box-shadow: 0 1px 4px rgba(0,0,0,0.08); }

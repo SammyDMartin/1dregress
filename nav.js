@@ -102,10 +102,23 @@
   bar.className = 'status-bar';
   bar.innerHTML = '<span class="dim">ARCO INTERSTELLAR AGENCY</span><span class="bright" id="nav-clock"></span><span class="dim">CLEARANCE: DELTA</span>';
 
+  // Back to top button
+  const btt = document.createElement('button');
+  btt.className = 'back-to-top';
+  btt.setAttribute('aria-label', 'Back to top');
+  btt.textContent = '▲';
+  btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
   document.addEventListener('DOMContentLoaded', () => {
     document.body.prepend(nav);
     document.body.appendChild(scan);
     document.body.appendChild(bar);
+    document.body.appendChild(btt);
+
+    // Show/hide back-to-top on scroll
+    window.addEventListener('scroll', () => {
+      btt.classList.toggle('visible', window.scrollY > 400);
+    }, { passive: true });
 
     // Clock
     function tick() {
