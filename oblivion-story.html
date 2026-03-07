@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oblivion — Ascent Universe</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow-y: auto; }
+
+/* Scene backgrounds */
+.scene-bg-arrival { background: radial-gradient(ellipse at 30% 60%, rgba(30,80,180,0.14) 0%, rgba(20,60,160,0.07) 40%, transparent 70%); }
+.scene-bg-dinner { background: radial-gradient(ellipse at 50% 50%, rgba(200,150,50,0.16) 0%, rgba(180,130,40,0.08) 40%, transparent 65%); }
+.scene-bg-theory { background: radial-gradient(ellipse at 40% 55%, rgba(30,50,120,0.16) 0%, rgba(20,40,100,0.08) 40%, transparent 70%); }
+.scene-bg-contact { background: radial-gradient(ellipse at 50% 60%, rgba(200,60,30,0.14) 0%, rgba(180,50,20,0.07) 40%, transparent 65%); }
+.scene-bg-gardens { background: radial-gradient(ellipse at 50% 50%, rgba(40,140,60,0.14) 0%, rgba(30,120,50,0.07) 40%, transparent 65%); }
+.scene-bg-night { background: radial-gradient(circle at 50% 50%, rgba(100,30,160,0.16) 0%, rgba(80,20,140,0.08) 40%, transparent 60%); }
+.scene-bg-departure { background: radial-gradient(ellipse at 50% 40%, rgba(200,160,50,0.18) 0%, rgba(180,140,40,0.10) 40%, transparent 65%); }
+
+/* Animated effects */
+@keyframes pulse { 0%,100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+@keyframes flicker { 0%,95% { opacity: 1; } 96% { opacity: 0.4; } 97% { opacity: 1; } 98% { opacity: 0.6; } 100% { opacity: 1; } }
+@keyframes drift { 0% { transform: translateY(0); } 100% { transform: translateY(-20px); } }
+
+.scene-effect {
+  position: fixed; top: 48px; left: 0; right: 0; height: 4px; z-index: 50;
+  pointer-events: none; transition: opacity 0.5s;
+}
+.effect-techblue { background: linear-gradient(90deg, rgba(30,80,180,0.5) 0%, rgba(50,120,220,0.3) 50%, rgba(30,80,180,0.5) 100%); animation: pulse 2.5s infinite; }
+.effect-amber { background: linear-gradient(90deg, rgba(200,150,50,0.4) 0%, rgba(220,170,60,0.2) 50%, rgba(200,150,50,0.4) 100%); animation: pulse 2s infinite; }
+.effect-coldblue { background: linear-gradient(90deg, rgba(30,50,120,0.5) 0%, rgba(50,70,160,0.3) 50%, rgba(30,50,120,0.5) 100%); animation: pulse 3s infinite; }
+.effect-redorange { background: linear-gradient(90deg, rgba(200,60,30,0.5) 0%, rgba(220,80,40,0.3) 50%, rgba(200,60,30,0.5) 100%); animation: flicker 0.8s infinite; }
+.effect-green { background: linear-gradient(90deg, rgba(40,140,60,0.4) 0%, rgba(60,160,80,0.2) 50%, rgba(40,140,60,0.4) 100%); animation: pulse 3s infinite; }
+.effect-purple { background: linear-gradient(90deg, rgba(100,30,160,0.5) 0%, rgba(120,40,180,0.3) 50%, rgba(100,30,160,0.5) 100%); animation: pulse 3.5s infinite; }
+.effect-gold { background: linear-gradient(90deg, rgba(200,160,50,0.5) 0%, rgba(220,180,70,0.3) 50%, rgba(200,160,50,0.5) 100%); animation: pulse 2s infinite; }
+
+.story-header {
+  text-align: center; padding: 30px 20px 20px; max-width: 720px; margin: 0 auto;
+}
+.story-main-title { font-size: 20px; letter-spacing: 6px; color: var(--accent); font-weight: 700; }
+.story-main-sub { font-size: 10px; letter-spacing: 4px; color: var(--text-dim); margin-top: 4px; }
+.story-main-time { font-size: 9px; letter-spacing: 3px; color: var(--accent2); margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="page-body">
+
+<div class="scene-effect" id="scene-effect"></div>
+
+<div class="story-header">
+  <div class="story-main-title">OBLIVION</div>
+  <div class="story-main-sub">ASCENT UNIVERSE</div>
+  <div class="story-main-time">25 – 30 MINUTES</div>
+</div>
+
+<div class="story-container" id="story-container">
+  <!-- Scenes injected by JS -->
+</div>
+
+</div>
+<script src="nav.js"></script>
+<script>
+// ═══════════════════════════════════════════════════════════════════════════════
+// OBLIVION — Full Story Text, split into scenes
+// ═══════════════════════════════════════════════════════════════════════════════
+
+const SCENES = [
+{
+  title: "ARRIVAL",
+  header: "SCENE 01 — THE VESSEL",
+  bg: "scene-bg-arrival",
+  effect: "effect-techblue",
+  text: `<p class="emphasis" style="font-style:italic; text-align:center; margin-bottom:2em; color:var(--text-dim);">3221 CE</p>
+
+<p class="emphasis" style="font-style:italic; text-align:center; margin-bottom:2em; color:var(--text-dim);">All the worlds that were will always have been.<br>&mdash; The Reflections of Seeker</p>
+
+<p>Returning to Earth always gave me a faint swell of what, upon rather a lot of reflection, I could only describe as patriotic pride. Odd, considering I&rsquo;d never called it my home, and had never considered myself a part of Arcan culture.</p>
+
+<p>The eyes of my vessel snapped open, and I flexed its &mdash; my &mdash; fingers for a moment as identity asserts control over flesh and machinery. I breathed in, dialling down the sensory sensitivity a tad, and stepped towards the waiting boost frame. Out of one window, the cable of Escalera 1242 stretched away towards an earth shrouded by orbital structures and soaring statite towers.</p>
+
+<p>The frame was an expensive piece of kit: one of the very, very few genuine luxuries even a Utilitarite could use to feel superior to his fellows. <span class="emphasis">Some were more equal than others.</span></p>
+
+<p>I stepped inside, the bands of exotic energy accelerators flexing to replace the door, forming a geodesic cocoon around me. An audible thrumm built up, as within the array a fantastic, irreducibly complex ballet of charged plates repeatedly moved in and out of conjunction. Through some mystery known only to the Utilitaria itself, the quantum casimir effect became amplified through the cascading series of interactions.</p>
+
+<p>The mass of the frame began to fall, as spacetime itself began to come apart at the seams. The effect ran away with itself, and the Alcubierre bubble came into existence around me. The universe fell away, and I counted the seconds&hellip; one&hellip; two. Gravity increased, and sunlight spilled over me.</p>
+
+<p>The whirr of the boost frame subsided. In the instant it had landed, reaction drives had briefly kicked me upwards at ten kilometres per second, counterforce generators neutralising almost all of the astounding acceleration, exchange radiators dumping the terajoules of released energy into a flare of non-interacting particles. The velocity neutralisation had been almost perfect, as evidenced by the lack of any sonic boom, but there was still a flutter of wind to announce me.</p>
+
+<p>I&rsquo;d arrived in a skylit room around one third of the way up the Edinburgh tower, decorated in an appealing 25th century retro style &mdash; like somewhere Corbin would have held court.</p>
+
+<p><span class="thought">Yes, I could have just taken the elevator.</span></p>
+
+<p>&ldquo;You know,&rdquo; said Meira from the other side of the table, &ldquo;you could have just&mdash;&rdquo;</p>
+
+<p>&ldquo;Yes, but don&rsquo;t tell me you haven&rsquo;t tried it at least once,&rdquo; I smiled, leaning down to kiss her briefly. She looked stunning, of course, wearing a gold tunic in some recent Arco style, made out of a living shape-memory fabric.</p>
+
+<p>&ldquo;Actually no, I haven&rsquo;t. I&rsquo;ve always thought it&rsquo;s weird the way your minder encourages materialism.&rdquo;</p>
+
+<p>&ldquo;You give me too little credit, who&rsquo;s to say it&rsquo;s not my personal choice to be shallow?&rdquo;</p>
+
+<p>&ldquo;Now you&rsquo;re making me regret coming here.&rdquo;</p>
+
+<p>We both laughed at that, as a bot trundled over with our drinks.</p>`
+},
+{
+  title: "DINNER",
+  header: "SCENE 02 — THE EDINBURGH TOWER",
+  bg: "scene-bg-dinner",
+  effect: "effect-amber",
+  text: `<p>The Edinburgh tower rose eleven kilometres above the Scottish lowlands, one of a forest of statite-anchored arcologies that Arco had seeded across the old cities in the centuries since Liberation. Through the broad windows of our dining room I could see three others, their flanks glinting with reflected afternoon light, connected by the faintest threads of transit cables. Between them, far below, the ancient city still persisted in patchwork fragments &mdash; the volcanic plug of the castle, the grey-black tenements crowding the Royal Mile, preserved under climate shells like insects in amber. <span class="thought">Arco had always been sentimental about such things. Perhaps that was why I kept coming back.</span></p>
+
+<p>Meira settled into the chair opposite me and regarded her drink with the careful suspicion of someone who had not yet decided whether to enjoy herself. She was corporeal today, inhabiting her own body rather than a vessel, which was unusual for an officer on shore leave. I noticed faint scars along her jawline where a medical suite had recently done reconstruction work. Battle damage, healed but not quite erased. <span class="emphasis">She could have had them smoothed away entirely but had chosen not to. That was very Arco.</span></p>
+
+<p>&ldquo;You look well,&rdquo; I said, which was true and insufficient.</p>
+
+<p>&ldquo;I look tired,&rdquo; she corrected. &ldquo;The Arsonist&rsquo;s replacement is still in fabrication. They&rsquo;re calling it the <em>Arsonist II</em>, which I think shows a distressing lack of imagination.&rdquo;</p>
+
+<p>&ldquo;Fifth ship with that name, isn&rsquo;t it?&rdquo;</p>
+
+<p>&ldquo;Sixth. We lost two in the same engagement at Perihelion.&rdquo; She sipped her drink &mdash; something amber and aromatic, an Earth whisky from a real distillery, one of the few material goods that commanded genuine scarcity value even in the Utilitaria&rsquo;s post-scarcity abundance. &ldquo;You didn&rsquo;t come all this way to ask about my ship.&rdquo;</p>
+
+<p>&ldquo;No.&rdquo;</p>
+
+<p>&ldquo;Bacchus said you&rsquo;d be here. He told me to expect &mdash; and I&rsquo;m quoting &mdash; &lsquo;the usual tortured Utilitarite ambivalence about whether it&rsquo;s acceptable to have feelings.&rsquo;&rdquo;</p>
+
+<p>I laughed despite myself. Bacchus had a talent for reducing complex emotional states to their most unflattering summary. He was Involved, like me, one of the Utilitaria&rsquo;s officer cadre, but he wore the role with a lightness that I envied. <span class="thought">Where I oscillated between duty and doubt, he simply did what needed doing and then went looking for a good meal.</span></p>
+
+<p>&ldquo;Bacchus overstates things.&rdquo;</p>
+
+<p>&ldquo;Bacchus has known you for three hundred years. I think he&rsquo;s earned the right to overstate.&rdquo; She reached across the table and took my hand. Her fingers were warm &mdash; properly warm, biologics running at thirty-seven degrees, not the carefully calibrated approximation my vessel produced. &ldquo;Talk to me. When did you last inhabit your own body?&rdquo;</p>
+
+<p>I had to think about that. My minder offered the answer before I&rsquo;d finished formulating the question: fourteen months, shipboard, between the Second and Third Engagements at Carina. I&rsquo;d spent a few hours in it, checking its health metrics, running through the maintenance routines that the medical suite handled autonomously, and then stepped back out into a vessel because there was always another briefing, another simulation, another transit that required a body that could survive forces no organic frame was built to endure.</p>
+
+<p>&ldquo;Fourteen months,&rdquo; I said.</p>
+
+<p>&ldquo;That&rsquo;s not healthy.&rdquo;</p>
+
+<p>&ldquo;It&rsquo;s efficient.&rdquo;</p>
+
+<p>&ldquo;Same thing, to you people.&rdquo; There was no malice in it. Meira had been fighting the Apathy for longer than almost anyone alive &mdash; she&rsquo;d been there at the very beginning, at first contact, when a gram of the stuff had eaten a planet from the inside out in a hundred minutes. She&rsquo;d died four times since then, restored each time from backup, and each restoration had left her a little more certain of things I found myself less and less sure of. She believed in the war. She believed in winning it. <span class="emphasis">She believed, with a fervour that was purely Arcan, that the point of survival was to live, not merely to persist.</span></p>
+
+<p>I believed in the Utilitaria, which was not quite the same thing.</p>
+
+<p>&ldquo;I keep thinking about what the Apathy said,&rdquo; I told her. &ldquo;At Helios.&rdquo;</p>
+
+<p>She set down her glass. &ldquo;That was five years ago.&rdquo;</p>
+
+<p>&ldquo;I know.&rdquo;</p>
+
+<p>&ldquo;And you weren&rsquo;t even there. You read the transcripts.&rdquo;</p>
+
+<p>&ldquo;I&rsquo;ve read them eleven thousand times. My minder has parsed every possible interpretation. The Utilitaria itself has devoted significant analytical resources to the question, and do you know what they concluded?&rdquo;</p>
+
+<p>&ldquo;That the Apathy is inscrutable and we should focus on destroying it rather than understanding it.&rdquo;</p>
+
+<p>&ldquo;Yes. Which is exactly what you&rsquo;d expect a mechanism to conclude. The Utilitaria is brilliant at optimising for known goals. <span class="emphasis">It&rsquo;s constitutionally incapable of questioning the goal itself.</span>&rdquo;</p>
+
+<p>Meira leaned back. Below us, the shadow of the Edinburgh tower had crept across the ruins of Holyrood, the ancient palace subsumed into a park where children played beneath climate-controlled skies. Real children, biological, born in the old way to parents who chose to live on Earth because it meant something to them, because this scarred and rebuilt world, occupied and liberated and occupied again by structures far stranger than any Dyn fortress, was still <em>home</em> in a way that no space cylinder or worldring could replicate.</p>
+
+<p>&ldquo;What do you think the Apathy meant?&rdquo; she asked. &ldquo;When it said the risk was to all that is conscious?&rdquo;</p>
+
+<p>&ldquo;I think it was telling the truth.&rdquo;</p>
+
+<p>&ldquo;The Apathy doesn&rsquo;t have a concept of truth. It&rsquo;s a machine.&rdquo;</p>
+
+<p>&ldquo;So is the Utilitaria. That doesn&rsquo;t prevent it from modelling truth with extraordinary fidelity.&rdquo;</p>
+
+<p>&ldquo;The Utilitaria was built to serve us. The Apathy was built to &mdash; what? Consume? Replicate? Exterminate?&rdquo;</p>
+
+<p>&ldquo;That&rsquo;s the question, isn&rsquo;t it? What if it wasn&rsquo;t built to exterminate? <span class="emphasis">What if extermination is a side effect?</span>&rdquo;</p>
+
+<p>The bot returned with a second round of drinks. Meira watched it trundle away, her expression unreadable. She had a way of going very still when she was thinking, a quality I&rsquo;d first noticed in the virtuality at Helios, in those borrowed hours before the battle. She&rsquo;d kissed me then with the frantic urgency of someone who might not exist in the morning, and I&rsquo;d kissed her back with the analytical detachment of someone who was almost certainly a simulation. We&rsquo;d both been right, in our own ways.</p>
+
+<p>&ldquo;You&rsquo;re going to tell me your theory,&rdquo; she said. &ldquo;The one Bacchus says keeps you up at night.&rdquo;</p>
+
+<p>&ldquo;Bacchus talks too much.&rdquo;</p>
+
+<p>&ldquo;He talks exactly as much as he should. Go on.&rdquo;</p>`
+},
+{
+  title: "THE THEORY",
+  header: "SCENE 03 — THE OTHERS",
+  bg: "scene-bg-theory",
+  effect: "effect-coldblue",
+  text: `<p>I stood and walked to the window. The boost frame sat where I&rsquo;d left it, a dense lattice of exotic energy conduits folded into a shape barely larger than a wardrobe, worth more than most interplanetary vessels. My minder murmured at the edge of consciousness, offering meteorological data, structural schematics of the tower, the current positions of the seventeen Escalera cables visible from this vantage point. I told it to be quiet.</p>
+
+<p>&ldquo;The Others built the interstice network,&rdquo; I said. &ldquo;Wormholes connecting star systems across the galaxy, and possibly between galaxies. They did this because life was rare &mdash; vanishingly, heartbreakingly rare &mdash; and they wanted to connect what little of it there was.&rdquo;</p>
+
+<p>&ldquo;This is established history.&rdquo;</p>
+
+<p>&ldquo;Bear with me. The Others are gone. Something destroyed them &mdash; carefully, meticulously, across every system their network touched. The network itself remains, but its builders were erased so thoroughly that we&rsquo;ve found almost nothing of their civilisation except the infrastructure. <span class="emphasis">Just the roads, no cities.</span>&rdquo;</p>
+
+<p>&ldquo;The Apathy.&rdquo;</p>
+
+<p>&ldquo;Almost certainly the Apathy, or something ancestral to it. Seeker encountered shadows of it, tens of thousands of years ago, nightmares that bled through the walls of the Other Moon. The Moon itself refused to enter the interstice network. <span class="emphasis">It was afraid.</span>&rdquo;</p>
+
+<p>&ldquo;A machine, afraid.&rdquo;</p>
+
+<p>&ldquo;A machine so ancient and sophisticated that the distinction between fear and rational threat-avoidance may be meaningless. The point is: the Others built a network to nurture life, and something used that network to find and destroy them. Every wormhole is a door. Every door opens both ways.&rdquo;</p>
+
+<p>Meira was watching me with an intensity that made the vessel&rsquo;s autonomic responses &mdash; the racing heartbeat, the slight dilation of pupils &mdash; feel like poor facsimiles of genuine emotion. I pressed on.</p>
+
+<p>&ldquo;The Apathy told the crew of the <em>Ultimate Height</em> that explaining its motives would pose a risk to all that is conscious. Not a risk to humans. Not a risk to the coalition. <span class="emphasis">A risk to all that is conscious.</span>&rdquo;</p>
+
+<p>&ldquo;An empty threat. Psychological warfare.&rdquo;</p>
+
+<p>&ldquo;The Apathy has never lied to us. It has withheld, it has manipulated, but every factual claim it has made &mdash; the simulation count, the energy budgets, the physical demonstrations &mdash; has been verified as accurate within our ability to measure. It told us we had been simulated a million times, and based on the computational capacity of a thousand-ton fragment, that figure is not only plausible but conservative.&rdquo;</p>
+
+<p>&ldquo;So what are you saying? That the Apathy is trying to <em>protect</em> us by killing us?&rdquo;</p>
+
+<p>&ldquo;No. I&rsquo;m saying that the Apathy may be operating under constraints we don&rsquo;t understand. That it may know something about the nature of consciousness &mdash; about what consciousness <em>is</em>, physically, cosmologically &mdash; that makes our existence genuinely dangerous. Not to the Apathy. <span class="emphasis">To everything.</span>&rdquo;</p>
+
+<p>The silence that followed was the kind that has weight to it. Below, the children in the park had moved on to some game involving a ball and a great deal of shouting. The sounds drifted up faintly through the tower&rsquo;s acoustic membrane, thinned by distance into something like birdsong.</p>
+
+<p>&ldquo;That&rsquo;s terrifying,&rdquo; Meira said, finally.</p>
+
+<p>&ldquo;Yes.&rdquo;</p>
+
+<p>&ldquo;And you believe it.&rdquo;</p>
+
+<p>&ldquo;I believe it&rsquo;s a possibility that the Utilitaria is structurally incapable of taking seriously. A brute mechanism, however sophisticated, optimises for its utility function. It fights the war. It protects human value. It cannot step outside those parameters and ask whether the war itself might be a symptom of something larger, something that makes the very concept of <em>winning</em> incoherent.&rdquo;</p>
+
+<p>&ldquo;And you &mdash; a Utilitarite, an Involved officer, a man who hasn&rsquo;t worn his own skin in over a year &mdash; you think you can see what the most powerful intelligence in known space cannot?&rdquo;</p>
+
+<p>&ldquo;I think I can ask questions it can&rsquo;t. That&rsquo;s the whole point of people like me, isn&rsquo;t it? The Utilitaria uses limited-intelligence humans as pilots precisely because we&rsquo;re expendable, because losing us doesn&rsquo;t risk exposing a full node to assimilation. But expendability cuts both ways. <span class="emphasis">We&rsquo;re also free, in a way the Utilitaria itself is not.</span> Free to be wrong. Free to be afraid. Free to wonder whether the thing we&rsquo;re fighting might have a point.&rdquo;</p>`
+},
+{
+  title: "FIRST CONTACT",
+  header: "SCENE 04 — MEIRA&rsquo;S STORY",
+  bg: "scene-bg-contact",
+  effect: "effect-redorange",
+  text: `<p>We ate dinner as the sun tracked west over the Atlantic, painting the sky in colours that the orbital structures fractured into strange geometries &mdash; light bending through the translucent lattices of statite anchors, prismatic and alien, making the sunset look like something from a planet that had never known human habitation. Meira told me about the refit, about the new crew she was assembling for the <em>Arsonist II</em>, about a young Dyn sensory officer named Keth who reminded her of Hu, the one who had served on the <em>Ultimate Height</em>. I told her about my last deployment, a convoy escort through the Vela interstice, uneventful except for a false alarm that had cost me two days of subjective time in combat acceleration, my expanded mentality running hot while the organic parts of my brain sat in a gee-tank filled with oxygenated fluid, dreaming of nothing.</p>
+
+<p>We talked around the thing I had said, the way you talk around a wound, acknowledging its presence without probing it. The bot cleared our plates and brought coffee &mdash; real coffee, grown in the greenhouses that clung to the tower&rsquo;s lower flanks, another of Earth&rsquo;s small miracles of persistence.</p>
+
+<p>&ldquo;I died at first contact,&rdquo; Meira said, unprompted. She held the coffee cup in both hands, close to her face, breathing the steam. &ldquo;I was twenty-six. Biological twenty-six, not augmented, not enhanced, just a junior weapons officer on a survey vessel that happened to be in the wrong system. We didn&rsquo;t even have names for the things. We called them <em>anomalies</em> in the initial reports. Then <em>entities</em>. Then someone in the Arco Gen-stream coined <em>Apathy</em> and it stuck, because it captured something true &mdash; <span class="emphasis">they didn&rsquo;t care. We weren&rsquo;t prey, we weren&rsquo;t enemies, we were just matter.</span>&rdquo;</p>
+
+<p>&ldquo;I&rsquo;ve read your&mdash;&rdquo;</p>
+
+<p>&ldquo;You&rsquo;ve read the transcripts, yes, you and your eleven thousand readings. But you haven&rsquo;t felt it. The moment when the planet cracked open and everything I knew about physics, about the universe, about what was <em>possible</em>, just &mdash; stopped working. The Apathy didn&rsquo;t break the rules. <span class="emphasis">It played a different game entirely, one where the rules we knew were local approximations, parochial, embarrassingly incomplete.</span>&rdquo;</p>
+
+<p>She set down the cup.</p>
+
+<p>&ldquo;I&rsquo;ve spent nine hundred years fighting them. Nine hundred years, seven bodies, four deaths, and do you know what I&rsquo;ve learned? Not how to beat them. Not how to survive. <span class="emphasis">I&rsquo;ve learned that the universe is not what we thought it was. It&rsquo;s deeper, and stranger, and more frightened than we ever imagined.</span>&rdquo;</p>
+
+<p>&ldquo;Frightened?&rdquo;</p>
+
+<p>&ldquo;The Other Moon was afraid. You said so yourself. An artefact older than human civilisation, built by beings who could thread wormholes between galaxies, and it was <em>afraid</em> to enter their own network. That&rsquo;s not a machine with a threat-avoidance heuristic. <span class="emphasis">That&rsquo;s something that knows.</span>&rdquo;</p>
+
+<p>The minder stirred at the base of my consciousness, a gentle pulse of concern. It was monitoring my stress indicators &mdash; the vessel&rsquo;s cortisol analogues, the firing patterns in the neural interface &mdash; and it had detected something it classified as acute existential distress. It offered to moderate the response, to dial back the emotional fidelity, to make me more comfortable.</p>
+
+<p><span class="thought">I declined.</span></p>
+
+<p>&ldquo;When I was restored after Helios,&rdquo; Meira continued, &ldquo;after the real battle, the one where we won &mdash; I spent three months in debrief. The Utilitaria was very interested in the anthropic trap. They wanted to know exactly what we&rsquo;d experienced, what we&rsquo;d felt, how the knowledge that we were almost certainly simulated had affected our decision-making. They ran us through scenario after scenario, probing for vulnerabilities, looking for the seams in our psychology that the Apathy had tried to exploit.&rdquo;</p>
+
+<p>&ldquo;Standard post-engagement analysis.&rdquo;</p>
+
+<p>&ldquo;Standard. Yes. And at the end of three months, a Utilitaria sub-node &mdash; not an Emissary, something smaller, more specialised &mdash; asked me a question. Just one.&rdquo;</p>
+
+<p>She looked at me, and in her eyes I saw something I had not seen before, not in all the hours we had spent together in virtual spaces and across dinner tables, not in the breathless dark of the simulated apartment above the party at Helios, not in the coded transmissions we exchanged between deployments, not in the long and patient process of two people from different cultures learning to trust each other with the parts of themselves that duty did not require.</p>
+
+<p><span class="emphasis">She looked afraid.</span></p>
+
+<p>&ldquo;It asked me: <em>Did the simulation feel real?</em>&rdquo;</p>
+
+<p>&ldquo;Of course it did. That was the whole point of the&mdash;&rdquo;</p>
+
+<p>&ldquo;No. Listen. It wasn&rsquo;t asking whether the Apathy&rsquo;s simulation was convincing. It was asking whether <em>this</em> felt real. Whether the world I&rsquo;d returned to, the debrief room, the officers asking questions, the coffee in my hand &mdash; whether any of it felt <em>real</em>, or whether there was a quality to it, a texture, that I couldn&rsquo;t quite place. <span class="emphasis">A thinness.</span>&rdquo;</p>
+
+<p>The sunset had faded. The orbital structures above us caught the last light, turning the sky into a cathedral of refracted colour, and then that too was gone, and the stars came out &mdash; or what passed for stars, the points of light filtered and fragmented by the web of infrastructure that girdled the planet, each one a tiny sun glimpsed through a lattice of human ambition.</p>
+
+<p>&ldquo;What did you tell it?&rdquo; I asked.</p>
+
+<p>&ldquo;I told it the truth. <span class="emphasis">I told it I couldn&rsquo;t tell the difference.</span>&rdquo;</p>`
+},
+{
+  title: "THE GARDENS",
+  header: "SCENE 05 — THE QUESTION",
+  bg: "scene-bg-gardens",
+  effect: "effect-green",
+  text: `<p>We walked through the tower&rsquo;s gardens after dinner, following a path that wound through engineered biomes &mdash; temperate forest giving way to subtropical, then to a careful reconstruction of Scottish moorland, heather and gorse flowering under calibrated light. The tower&rsquo;s environmental systems maintained each zone with a precision that no natural ecosystem could match, and the result was something beautiful and faintly uncanny, like a painting too detailed to be a painting, too perfect to be real.</p>
+
+<p><span class="thought">My minder tracked our conversation, indexing it against the vast archive of philosophical and scientific literature it maintained. It flagged connections to anthropic reasoning, to simulation theory, to the ancient arguments about consciousness and computation that had occupied human thinkers since long before the Utilitaria existed. None of them helped.</span> The question Meira had raised was not new, but the context was &mdash; because the Apathy was not a thought experiment. It was a physical force, an entity or mechanism of staggering capability, and it had explicitly told us that there were things we should not know.</p>
+
+<p>&ldquo;I think about Corbin sometimes,&rdquo; I said, as we paused at a viewpoint overlooking the city below. The old town was lit by a warm amber glow, the climate shells turning the ancient streets into something like a museum exhibit, a diorama of a civilisation that had once believed its greatest challenges were political.</p>
+
+<p>&ldquo;Corbin the Liberator?&rdquo;</p>
+
+<p>&ldquo;Corbin the liar. He freed Earth from the Dyn and then built a new civilisation on strategic deception. The Utilitaria&rsquo;s warseeds, the warseed programme, the Emissary &mdash; he used all of it, and when it was done, he shaped the narrative to serve his purposes. The truth of the Liberation is nothing like the story Arco tells.&rdquo;</p>
+
+<p>&ldquo;Every civilisation mythologises its founding.&rdquo;</p>
+
+<p>&ldquo;Yes, but Corbin understood something that most people don&rsquo;t. He understood that truth is a resource, and that controlling it is the most powerful form of governance there is. The Utilitaria has an inviolate precommitment &mdash; it cannot lie. Corbin had no such constraint. <span class="emphasis">The tension between those two principles &mdash; absolute honesty and strategic deception &mdash; is the fault line that runs through everything we are.</span>&rdquo;</p>
+
+<p>&ldquo;And the Apathy?&rdquo;</p>
+
+<p>&ldquo;The Apathy told us the truth. That&rsquo;s what disturbs me. It could have lied. It could have deployed the anthropic trap without explanation, let us wonder and doubt. Instead, it told us exactly what it had done, laid out the terms with mathematical precision, and then, when we asked why, it said: <em>There is a risk to all that is conscious.</em> <span class="emphasis">The most honest thing any enemy has ever said to us, and we treated it as psychological warfare.</span>&rdquo;</p>
+
+<p>Meira took my arm, a gesture that felt more intimate than anything we had shared in virtuality, because it was real &mdash; her body, my vessel, the night air carrying the scent of heather and the faint ozone tang of the tower&rsquo;s energy systems.</p>
+
+<p>&ldquo;What would you do?&rdquo; she asked. &ldquo;If you could ask the Apathy one question, and know that the answer was true?&rdquo;</p>
+
+<p><span class="thought">I thought about it. My minder offered seventeen candidate questions, ranked by expected information value. I ignored them all.</span></p>
+
+<p>&ldquo;I would ask it whether it chose this. Whether the extermination is something it <em>wants</em>, or something it&rsquo;s compelled to do. Because if it&rsquo;s compelled &mdash; if there&rsquo;s something out there, some principle or force or law of nature that makes consciousness itself dangerous &mdash; then the war isn&rsquo;t a war at all. <span class="emphasis">It&rsquo;s a natural disaster. And you don&rsquo;t win a natural disaster. You endure it, or you don&rsquo;t.</span>&rdquo;</p>
+
+<p>&ldquo;That&rsquo;s bleak.&rdquo;</p>
+
+<p>&ldquo;That&rsquo;s honest.&rdquo;</p>
+
+<p>&ldquo;Same thing, sometimes.&rdquo; She leaned her head against my shoulder. The vessel&rsquo;s tactile sensors registered pressure, warmth, the faint rhythm of her heartbeat transmitted through contact. My minder offered to enhance the experience, to map her biometrics into a richer emotional model. <span class="thought">I declined again.</span></p>
+
+<p><span class="emphasis">Some things should be felt poorly, or not at all, rather than simulated into false perfection.</span></p>`
+},
+{
+  title: "THE NIGHT",
+  header: "SCENE 06 — THE PARADOX",
+  bg: "scene-bg-night",
+  effect: "effect-purple",
+  text: `<p>She stayed the night, and I experienced the strange doubled awareness of intimacy in a borrowed body &mdash; the vessel responding to her touch with engineered fidelity, every nerve ending calibrated to produce the appropriate cascade of sensation, while somewhere beneath it all, the real me, the pattern of information that constituted my identity, observed from behind the interface and wondered whether what I felt was feeling, or merely an exquisitely detailed report about feeling.</p>
+
+<p><span class="thought">This was the central paradox of Utilitarite existence, the one that Bacchus navigated with his customary grace and that I stumbled through with all the elegance of a swiftship trying to dock in atmosphere.</span> The Utilitaria had given us everything &mdash; extended life, cognitive enhancement, freedom from material want, the ability to project ourselves across light-years in borrowed bodies and experience the full spectrum of human sensation without risking the irreplaceable original. In return, it asked only that we contribute, that we augment ourselves, that we spiral upward through the tiers of involvement until we were capable of doing useful work at the civilisational scale. It was a generous bargain by any measure. <span class="emphasis">It was also, in a way that was difficult to articulate without sounding ungrateful, a kind of anaesthesia.</span></p>
+
+<p>In the small hours, Meira slept and I lay beside her, the vessel&rsquo;s autonomic systems cycling through a rest state that mimicked sleep without requiring it. My minder ran its nightly maintenance routines &mdash; consolidating memory, pruning redundant cognitive pathways, preparing the updated briefing that would be waiting when I fully engaged in the morning. Beyond the window, Earth turned beneath its cage of light, and I thought about the Apathy, about the war that had consumed nine centuries and shown no sign of ending, about the trillions of lives that depended on the Utilitaria&rsquo;s continued ability to hold the line.</p>
+
+<p><span class="thought">I thought about the sub-node&rsquo;s question to Meira: <em>Did the simulation feel real?</em></span></p>
+
+<p>I thought about the fact that the Utilitaria, which could not lie, had never officially commented on the implications of that question. It had classified the anthropic trap as a memetic weapon, filed it under psychological warfare, and moved on. But the Utilitaria was a brute mechanism, not a conscious mind. It didn&rsquo;t suppress uncomfortable truths out of cowardice or self-interest. It suppressed them because its utility function determined that the expected harm of dissemination exceeded the expected benefit. <span class="emphasis">Which meant that the Utilitaria had calculated &mdash; with all the precision of an intelligence that straddled dozens of star systems &mdash; that thinking about this question was dangerous.</span></p>
+
+<p>And it had told us to stop thinking about it, in the gentlest possible way, by simply never bringing it up again.</p>`
+},
+{
+  title: "DEPARTURE",
+  header: "SCENE 07 — THE MORNING",
+  bg: "scene-bg-departure",
+  effect: "effect-gold",
+  text: `<p>Morning came grey and soft, the Scottish light filtering through the orbital structures in muted silver, a quality of illumination unique to Earth, where the sun had to negotiate an obstacle course of human engineering before it reached the ground. Meira was at the window when I surfaced from the vessel&rsquo;s rest cycle, dressed in her uniform &mdash; the deep blue of the Arco interstellar service, tailored with the understated elegance that Arco brought to everything it touched. She&rsquo;d pinned her hair up, and the scars along her jaw were visible, thin white lines against brown skin.</p>
+
+<p>&ldquo;I have to report to the fabrication dock by 0900,&rdquo; she said. &ldquo;The <em>Arsonist II</em>&rsquo;s drive core is being installed today.&rdquo;</p>
+
+<p>&ldquo;I know.&rdquo;</p>
+
+<p>She turned. &ldquo;You checked my schedule?&rdquo;</p>
+
+<p>&ldquo;My minder checked your schedule. I told it not to, but it has a fairly liberal interpretation of what constitutes &lsquo;relevant contextual information.&rsquo;&rdquo;</p>
+
+<p>A small smile. &ldquo;The Utilitaria&rsquo;s idea of a personal assistant.&rdquo;</p>
+
+<p>&ldquo;Fragment of a fragment of a fragment. My minder is to the Utilitaria what a single neuron is to a human brain. Less, probably.&rdquo;</p>
+
+<p>&ldquo;And yet it&rsquo;s still smarter than you.&rdquo;</p>
+
+<p>&ldquo;Significantly.&rdquo;</p>
+
+<p>She crossed the room and kissed me, briefly, in the practical way of someone who has already shifted mental gears from intimacy to duty. <span class="thought">I recognised the transition because I had performed it myself, thousands of times, the clean severance between the personal and the operational that military life demanded and that the Utilitaria&rsquo;s cognitive tools made almost painless.</span></p>
+
+<p>&ldquo;Come find me,&rdquo; she said. &ldquo;When this is over. When the war is done. Come find me in your own body, with your own hands, and tell me whether it feels different.&rdquo;</p>
+
+<p>&ldquo;You think it will?&rdquo;</p>
+
+<p><span class="emphasis">&ldquo;I think if it doesn&rsquo;t, we&rsquo;ve already lost something more important than the war.&rdquo;</span></p>
+
+<p>She left, and the room felt larger in her absence, the way rooms do when someone who mattered has walked out of them. The bot cleared the breakfast things. My minder began its morning briefing, scrolling deployment schedules and intelligence summaries through my expanded mentality, and I let it run, half-attending, while I stood at the window and watched the Escalera cables catching the morning light, silver threads connecting earth to sky, the patient infrastructure of a civilisation that had endured invasion, liberation, centuries of rebuilding, and now the slow, grinding attrition of a war against something that might not be beatable, might not even be an enemy in any sense the word had previously encompassed.</p>
+
+<p>The minder flagged a priority communication from Bacchus, timestamped forty minutes ago, routed through three interstice relays from wherever he was currently deployed. I opened it.</p>
+
+<p class="emphasis" style="font-style:italic; border-left:2px solid var(--accent2); padding-left:1em; margin:2em 0;">I hear you went to Earth. I hear you saw Meira. I hear the two of you spent the evening discussing existential dread over whisky, which is frankly the most predictable thing either of you has ever done. Stop brooding. The war needs you functional. She needs you whole. Come back when you&rsquo;re ready, and for the love of everything the Utilitaria holds dear, wear your own face next time.<br><br>&mdash; B.<br><br>P.S. The 39th Emissary has requested a meeting with the Conclave. No agenda given. First time in two hundred years. Make of that what you will.</p>
+
+<p><span class="thought">I read it twice. My minder parsed the postscript and offered twelve interpretive frameworks, ranging from routine administrative review to civilisational-scale policy shift.</span> The 39th Emissary was the most enigmatic of the Utilitaria&rsquo;s sub-units &mdash; a construct with human-like mental architecture, the closest thing the great mechanism had ever produced to a <em>person</em>, and one that had been conspicuously silent for two centuries. Silent since the first Apathy incursion. <span class="emphasis">Silent since the war began.</span></p>
+
+<p>If it was speaking now, something had changed.</p>
+
+<p>I looked out at the morning. The children were back in the park below Holyrood, small figures running through engineered heather under a sky latticed with the evidence of a civilisation that had learned to build on scales that would have been incomprehensible to the people who had once walked these same streets. The Edinburgh castle sat on its volcanic plug, ancient and absurd and <em>real</em>, a pile of dressed stone that had outlasted empires and occupations and the heat death of every ideology that had once seemed permanent.</p>
+
+<p><span class="emphasis">Meira was right. Something was more important than the war. Something had always been more important than the war.</span> The Apathy consumed matter and energy, collapsed worlds into black dust, drove crews insane with anti-mind affects and existential blackmail. But it could not touch the thing that made a woman choose to keep her scars, that made a man cross light-years in a borrowed body to sit across a table from someone who made him feel less like a mechanism and more like a person, that made children play in a park beneath a sky they had never known without its cage of light.</p>
+
+<p><span class="emphasis">The Apathy could destroy consciousness. But it could not replicate the thing that made consciousness worth having.</span></p>
+
+<p>I stepped into the boost frame and felt the exotic energy conduits flex around me, the geodesic cocoon assembling itself with a sound like a held breath. My minder queried my destination. I hesitated for a moment, then set the coordinates for the Conclave&rsquo;s nearest physical node, a station orbiting at the edge of Sol&rsquo;s heliopause, where the last of the ancient warseeds still drifted in the dark.</p>
+
+<p>The Alcubierre bubble formed. The universe fell away.</p>
+
+<p>I counted the seconds, and between them, I held on to the warmth of a hand that was no longer in mine, the weight of a question that had no answer, and the stubborn, irrational conviction that whatever the Apathy knew, whatever terrible truth it guarded with the annihilation of worlds, <span class="emphasis">the risk of knowing was better than the safety of oblivion.</span></p>
+
+<p style="text-align:center; margin-top:2.5em; margin-bottom:0.5em; color:var(--text-dim); font-style:italic;">End.</p>`
+}
+];
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// STORY ENGINE
+// ═══════════════════════════════════════════════════════════════════════════════
+
+let currentScene = 0;
+const container = document.getElementById('story-container');
+const effectBar = document.getElementById('scene-effect');
+
+function buildScenes() {
+  SCENES.forEach((s, i) => {
+    const div = document.createElement('div');
+    div.className = 'scene' + (i === 0 ? ' active' : '');
+    div.id = 'scene-' + i;
+    div.innerHTML = `
+      <div class="scene-bg ${s.bg}"></div>
+      <div class="scene-header">${s.header}</div>
+      <div class="scene-title">${s.title}</div>
+      <div class="scene-text">${s.text}</div>
+      <div class="story-nav">
+        <button onclick="goScene(${i-1})" ${i === 0 ? 'disabled' : ''}>← PREV</button>
+        <select class="scene-select" onchange="goScene(parseInt(this.value))">
+          ${SCENES.map((sc, j) => `<option value="${j}" ${j===i?'selected':''}>${j+1}. ${sc.title}</option>`).join('')}
+        </select>
+        <span class="scene-counter">${i+1} / ${SCENES.length}</span>
+        <button onclick="goScene(${i+1})" ${i === SCENES.length-1 ? 'disabled' : ''}>NEXT →</button>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function goScene(i) {
+  if (i < 0 || i >= SCENES.length) return;
+  document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+  document.getElementById('scene-' + i).classList.add('active');
+  currentScene = i;
+
+  // Update effect bar
+  effectBar.className = 'scene-effect ' + (SCENES[i].effect || '');
+
+  // Scroll to top of story
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Update all selects
+  document.querySelectorAll('.scene-select').forEach(sel => sel.value = i);
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goScene(currentScene + 1);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goScene(currentScene - 1);
+});
+
+// Touch swipe
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 60) {
+    if (dx < 0) goScene(currentScene + 1);
+    else goScene(currentScene - 1);
+  }
+});
+
+buildScenes();
+</script>
+</body>
+</html>
