@@ -4,7 +4,7 @@ Sitting there in your armour plated chair, oh yeah
 Metal Guru is it true, Metal Guru is it true
 All alone without a telephone, oh yeah
 T. Rex, ‘Metal Guru’
-Cocooned within a living machine, they’d waited for something new to happen. Hours passed; hours of near-silent travel while the hull slowly de-stressed and their barely suppressed, anxious anticipation built.
+Cocooned within a living machine, they’d waited for something new to happen. Hours passed; hours of near-silent travel while the hull slowly de-stressed, the metal ticking and settling around them, and their barely suppressed, anxious anticipation built.
 There was nothing to do but wait; the bathyscaphe’s own controls were worse than useless with the hull encased in silvery caulk. Smart matter projecting a supercavitating envelope, Aurelie suggested.
 From what they gleaned from those instruments that still functioned, they were able to guess at their heading, and speculation inevitably turned to what they might find when they arrived. Again everyone looked askance at Aurelie - she’d been proven right thus far - but this time she could only shrug.
 Trying to predict what might await them after all these years was futile. You could not apprehend all the options available to a being more intelligent than you were. Vash did not know what was meant to happen next, and that brought excitement as well as fear.
@@ -14,7 +14,7 @@ There was no announcement of their arrival. Vash didn’t even feel the decelera
 ‘Is it safe out there?’ asked Jan. Aurelie ignored him, already straining at the door. Jan’s curiosity got the better of him and soon enough he joined her, crowbar in hand, while Pao lunged against the hatch. Little by little, they forced it open.
 Vash could hardly believe they had made it this far.
 Hardly. Yet some part of Vash had expected this from the beginning, because to a certain kind of intelligence they were as atoms in a gas, individually chaotic but collectively predictable. The Utilitaria had arranged his and Aurelie’s trajectories to bring them here; he had always known this was possible.
-The hatch gave way without warning. Fresh air rushed into the stale, musty cabin and for a moment Vash was blinded as it was flooded with light. The light was warm on his skin, almost like sunlight. No, exactly like sunlight.
+The hatch gave way without warning. Fresh air rushed into the stale, musty cabin — clean, impossibly clean, carrying no scent of salt or decay — and for a moment Vash was blinded as the space was flooded with light. The light was warm on his skin, almost like sunlight. No, exactly like sunlight.
 He blinked. As his eyes adjusted after hours of gloom, Vash was confronted by a vertiginous vista and his mind fell back through time.
 The sun dazzled, illuminating the crescent of Earth. Curls of cloud moved over the blue expanse, and as the sunlight caught them, the glittering arcs of satellites, statites and orbital rings were rendered briefly visible, structures soaring through space, falling along a million choreographed trajectories or sustained second by second against gravity.
 The false perspective looked down on the Horn of Africa as it once had been, restored grassland and tamed desert strung with metropolises and arcologies. Profusions of titanic, active-matter constructs bloomed in the hearts of the greatest cities, the machinery of mind itself.
@@ -29,7 +29,7 @@ The voice was speaking again.
 'One hundred billion neurons give ten quadrillion ops per second gives a state space on the order of ten to the ten quadrillion ops, for each second. It is impossible to exhaustively search, but it can be navigated, if different alternatives are planned for. The critical common routes can be analysed. This is true for human history just as the human mind. The result is unified. You are here and you hear me speak. Understand.'
 'Who are you?'
 'I speak for the Utilitaria. I am their emissary. '
-The voice resolved into a figure; standing on nothing, glowing without illuminating. It looked like a man, or suggested the form of a man, it’s skin an iridescent grey-on-black, it’s eyes blank, omnipercipient spheres. Certainty and solidity flowed from it, the answer to every question he could think to ask right there to be known.
+The voice resolved into a figure; standing on nothing, glowing without illuminating. It looked like a man, or suggested the form of a man, its skin an iridescent grey-on-black, its eyes blank, omnipercipient spheres. Certainty and solidity flowed from it, the answer to every question he could think to ask right there to be known.
 Vash glanced back at Aurelie, seeking what - reassurance? She gave an encouraging nod.
 ‘Why did you bring us here?’
 The Emissary flashed a finely calibrated smile.
@@ -83,7 +83,7 @@ The Emissary emerged from the gloom, unblinking eyes locked on Vash. It strode a
 ‘The thirty-ninth.’
 ‘That’s your name?’
 ‘Call me whatever you wish. It is irrelevant. I am the 39th iteration of the Emissary. Many were initiated, only I survived.’
-‘I am sorry for that,’ said Vash. The nameless emissary inclined it’s head.
+‘I am sorry for that,’ said Vash. The nameless emissary inclined its head.
 ‘That is the past now. We must protect that which can still be protected.’
 ‘What did Aurelie mean, that we never lost?'
 'I will explain.'
@@ -105,7 +105,7 @@ It said Reality instead of Universe. Surely that didn’t imply -
 The worst part was that it meant every word.
 'How do we win?'
 The Emissary smiled, and waved its hand.
-The ocean folded in around them and revealed the warseed’s creation: a spiral of coral-like structures gathered around a tubular core, embedded in the abyss, extending tendrils upwards like an anemone.
+The ocean folded in around them and revealed the warseed’s creation: a spiral of coral-like structures gathered around a tubular core, embedded in the abyss, extending tendrils upwards like an anemone reaching for light that would never come.
 The core contained a web of corridors, including the receiving chamber they had arrived in. The view swam upwards but the perspective twisted, and Vash apprehended the rest of the seabed, all at once and with perfect clarity.
 He saw an array of structures grown from silicon and carbon and calcium shaped into a strange, half-living forest, rooted to the foundations of the Earth. The entire ocean floor was covered in a network of tens of thousands of them. Each one contained a geothermal sink, and the trickle of megawatts they produced were stored, hoarded over the decades in electron-cell stores, rationed and employed to extrude more matter and reproduce. It was slow, methodical, terrifying. The very substance of the ocean and crust, turned to fabrication over the course of nearly two centuries, growing invisibly beneath the Dyn’s gaze. They had been right to fear.
 'What does it do?'
@@ -125,6 +125,6 @@ Vash wanted to say that he had no clue what his final usefulness might be, but a
 'You were not chosen. You and… Aurelie - if that is what she wishes to call herself - have the advantage of perspective. You will need that. Another survivor would have been sufficient, but there is no-one else. I am sorry.'
 'That has been the story of my life. I think, finally, that I’m in the right place.'
 'I think so too.'
-'I’m ready.'
+‘I’m ready.’
 ‘Observe.’
-The Emissary vanished once again, and Vash fell into a nightmare.
+The Emissary vanished once again, and Vash fell into a nightmare that had been waiting for him for two hundred years.

@@ -1,11 +1,11 @@
 Chapter 21: Conspiracy
-Little more than an hour had passed since their arrival, though it was hard to tell in this timeless place. Nevertheless, they’d grown restless. The white-walled chamber gave them all the creeps.
+Little more than an hour had passed since their arrival, though it was hard to tell in this timeless place. Nevertheless, they’d grown restless. The white-walled chamber gave them all the creeps — something about the uniformity of the light, the way it seemed to emanate from everywhere and nowhere, eliminating all shadow.
 While the phantasm calling itself the emissary hadn’t returned, Jan occasionally caught a glimpse of starfields out the corner of his eye. It was worse when he closed his eyelids. He could only assume the others saw the same, although any shared experience remained unacknowledged.
 He understood that this space was interfering with his brain. If what Vash had said was true, machines he couldn’t see were reaching out with electromagnetic fields and making him hallucinate. That might explain why little had happened until they’d opened the hatch.
 Jan had always done his best to be reasonable. He’d taught Eva to never believe in fantasies like ghosts, immortals or demons from beyond the sky. But here he was, trapped beneath the ocean with all three.
 Collectively, they agreed to move the Dyn from the sub. Whatever happened, it seemed reasonable to separate the alien enemy from their only means of escape. In the shadows of the cabin, trussed and bound, it looked genuinely helpless; a listless, pitiful, half-dead thing. They approached it warily at first, in cringing anticipation of one of those long limbs lashing out, but the Dyn remained motionless. It didn’t resist, but it didn’t cooperate either; it barely even reacted as Jan and Pao each shouldered one of its forelimbs.
 ‘Surrounded by godtech and somehow we still get stuck doing manual labour,’ grunted Pao, putting on a brave face. ‘It’s almost reassuring.’
-Jan retched at the Dyn’s oily, inhuman stench. Its skin felt like plastic to the touch, the muscles beneath contorting strangely; just familiar enough to trigger revulsion.
+Jan retched at the Dyn’s oily, inhuman stench — a sharp, chemical reek like overheated resin. Its skin felt like plastic to the touch, the muscles beneath contorting strangely; just familiar enough to trigger revulsion.
 ‘It’ll all be over soon.’
 Even in his own ears the words rang hollow. Pao nodded, heaving the Dyn out of the open hatch. Jan noticed a thin smear of milky fluid where it had brushed him.
 Privately, he worried that the Dyn was dying of exhaustion. Perhaps it had expended its final reserves of strength just getting off the beach? How long could it go without food? How severe were its injuries? For all he knew this was just some perfectly mundane state for the Dyn, like being asleep.
@@ -51,8 +51,8 @@ As the seal thickened, Tuva’s pained cries and Pao’s enraged hammering grew 
 His heart pounding in his chest, Jan leant back against the wall, regarding the Dyn with apprehension. With the bathyscaphe on the other side, his last connection with the world beyond was severed. Just the two of them now. What leverage did he have? The dotbow?
 The Dyn struggled back to its feet. Even hunched on all fours it was still as tall as him. Although its growing exhaustion was readily apparent, Jan knew that it still had reserves of strength to call on. What chance did he stand against it, alone and in such a confined space? He managed a despairing laugh.
 ‘Dad?’
-The word hit him like a punch in the gut.
-The sound was uncanny, stripped of something by the machine, the resonance all wrong as it emanated from within the Dyn’s body. And yet it was her voice, warped, stolen.
+The word hit him like a punch in the gut. His knees nearly buckled.
+The sound was uncanny, stripped of something by the machine, the resonance all wrong as it emanated from within the Dyn’s body. And yet it was her voice — warped, stolen, but unmistakably hers.
 ‘How are you doing that?’
 ‘I remember… ’ said the voice, and it stretched out, breaking up like a bad recording; ‘I remember the day on the hovercraft. I remember you teaching me to swim. I remember playing in the stream by the settlement, the notebook of investigations I used to keep… ’
 ‘I - I never told anybody that - ’
@@ -60,7 +60,7 @@ The sound was uncanny, stripped of something by the machine, the resonance all w
 ‘Stop! Please stop. How do you know those things?’
 The voice could be skillful mimicry, but how could it know? Maybe they had interrogated her, but how would they recognise the significance of such personal memories?
 ‘Not knowing. Remembering. I was there. I felt it.’
-‘No,’ said Jan, blinking back tears. ‘You are not my daughter. Eva is dead.’ Of course, he believed it, and yet the voice felt so real.
+‘No,’ said Jan, blinking back tears, his voice cracking. ‘You are not my daughter. Eva is dead.’ Of course, he believed it, and yet the voice felt so real that belief seemed like the flimsiest of shields.
 There was a shift in the Dyn’s body language. Eva disappeared, slipping beneath the surface, her voice replaced by the rasping, sibilant tone the Dyn had used before.
 ‘Eva lives. For now… ’
 ‘What do you mean by that?’ He breathed deeply, fighting to regain his composure. ‘Stop playing your games. I’ve done what you asked. Now tell me what you know. All of it.’
@@ -75,7 +75,7 @@ There was a shift in the Dyn’s body language. Eva disappeared, slipping beneat
 ‘Believe what you want. Like you say, only impossible until its happened. Your child serves the Liar to Animals, as her… conscience. So that she may understand humanity.’
 The Dyn paused, as though noting Jan’s incomprehension.
 ‘A merger, one corrupting another. Cortical wiring and semantic skeleton generation and correlation, facilitated by cascading deep language models trained on Human-Dyn translation. Human and Dyn minds become one. I shared my mother’s thoughts, and she shares the thoughts of your daughter.’
-Jan rubbed his brow. He thought he understood enough of what the Dyn had said. It made him shudder to think of his daughter plugged into the mind of a monster. How she must have suffered. How she must still be suffering, he corrected himself. But if the Dyn wasn’t lying… if what it had said was true, if she was still alive… Jan felt joy surge through him. Then it dawned on him.
+Jan rubbed his brow, his hand trembling. He thought he understood enough of what the Dyn had said. It made him shudder to think of his daughter plugged into the mind of a monster, her thoughts entangled with something so alien. How she must have suffered. How she must still be suffering, he corrected himself. But if the Dyn wasn’t lying… if what it had said was true, if she was still alive… Jan felt joy surge through him, raw and overwhelming. Then it dawned on him.
 Vash and Aurelie had found what they were looking for, the Dragon’s Tooth. The plan, it seemed, was to empty the sky, to bring it all down, to destroy the Dyn in orbit. All this time he had been working his way towards killing his daughter.
 ‘We have to warn them! We have to warn Vash and Aurelie. There’s still time. We can exchange hostages - you for my daughter. You say Liar to Animals needs you… Maybe she will surrender if -’
 The Dyn laughed. The sound was chilling.

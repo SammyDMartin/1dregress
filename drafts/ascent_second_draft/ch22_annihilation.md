@@ -3,7 +3,7 @@ Vash snapped back into reality, disoriented and reeling from what he’d seen. H
 ‘Aurelie.’
 ‘I’m here,’ she said, resting a hand on his shoulder. ‘You can take a moment to process it. I did.’
 ‘All the centuries I’ve lived wouldn’t be enough,’ Vash replied. ‘I suppose a moment will have to do.’
-He breathed deeply. It felt wrong that he wasn’t incapacitated by grief or shock. There would be time for that later.
+He breathed deeply, feeling the air catch in his lungs. It felt wrong that he wasn’t incapacitated by grief or shock — that his mind still functioned, that he could still form coherent thoughts. There would be time for that later.
 ‘To confirm: you saw the Broadcast. You saw the story of the Dyn as they would tell it.’
 Vash nodded slowly, his gaze fixed on the middle distance.
 ‘Let’s not equivocate; what I saw was a species multiplied across millions of worlds whose very biology compels them to slaughter and enslave one another on a scale that is almost incomprehensible…’ As he spoke the images returned to him, unbidden. He forced himself to continue. ‘Every world they settle is a charnel house. You could excavate entire planets to find the mass graves they’ve dug… Aurelie, I knew of the Broadcast through rumours. I’ve seen isolated, contextless fragments over the years. But to see it like that, in full… ’
@@ -89,7 +89,7 @@ Never again, he thought. There would be other chances, when he was more prepared
 It was all his fault. To think he had believed for a moment that he might trust it. He had wanted so much to believe the Dyn’s intoxicating promise. If only Pao and Tuva hadn’t somehow followed them into the tunnels… He’d tried to stop it, but it had thrown him against the wall like a ragdoll. He had watched as it casually slaughtered Pao and Tuva. Now he was its prisoner, a hostage, a human shield.
 Vash had confirmed it. Eva was alive, with the Dyn, and if the weapons fired she would die. Somewhere else, somewhere that seemed very far away, Vash and Aurelie argued with the Dyn. He barely listened.
 Standing before him he saw Eva.
-She wasn’t as she would appear now - she was still just a young girl, no more than twelve - but her face was clear to him, not blurry with memory. Eva spoke to him, her voice somehow older.
+She wasn’t as she would appear now — she was still just a young girl, no more than twelve — but her face was clear to him, not blurry with memory. Sharp and vivid, as if she were truly there. Eva spoke to him, her voice somehow older.
 You need to let me go, Dad. I may be alive but I’m not Eva. Not any more. I’m half monster, half lost. Let me go.
 Silently, Jan pleaded with her, tears running down his cheeks. He could no more choose to let her die than water could decide to flow uphill. Eva laughed in that light, easy way that meant he was being silly.
 People always have a choice. Keep your promise to Christo. Help defeat the Dyn.
@@ -99,7 +99,7 @@ He blinked away the tears and she was gone. He inhaled as deep as he could despi
 Vash and Aurelie needed a few precious seconds - enough time to summon the Emissary and give it the order.
 The Emissary didn’t need him.
 That was the choice. He could do nothing and maybe she would live, or he could be the one to make her death happen.
-He didn't waste time on hesitation.
+He didn’t waste time on hesitation. He had spent his whole life hesitating, and this was what it had cost him.
 
 Jan leapt for the Dyn’s weapon. Alien digits awkwardly fumbled the trigger and before it could fire he’d knocked the gun from its grasp, narrowly dodging a swipe from its free clawed forelimb. He spun and with every ounce of his strength punched the Dyn in the fleshy underside of its neck.
 It let out a choking wail and stumbled, striking the wall, wrestling Jan down with it in a tangle of limbs.
@@ -117,5 +117,5 @@ The floor shuddered again, throwing him to the ground this time as he lost his b
 The Dyn was almost upon him. But then he was out of the claustrophobic tunnels, stumbling into the expanse of the receiving chamber. He could see the dark bulk of the bathyscaphe ahead, its lock still open, just as they had left it. He risked a glance over his shoulder into the gloom of the tunnel behind, and regretted it instantly as the Dyn rounded the corner.
 Before he could cry out the door flickered shut around the Dyn, severing its tails and mangling a hindlimb. It let out a blood-curdling shriek. Still, the crippled alien dragged itself forwards, driven by malice and desperation, its limping gait still a match for his own.
 Vash didn’t dare turn again in case he stumbled, instead he compelled his exhausted body onward, faster, so close now. He leapt for the lock, diving for it in a last feat, swinging it shut behind him.
-The Dyn’s slavering maw slammed into the porthole moments later, the three gigantic jawbones scraping against the bathyscaphe’s hull.
-As if on cue water exploded into the chamber, and the Dyn was swept away, crushed and broken; a mosquito under an anvil. Vash was thrown back against the wall as the explosive flood of water hit the bathyscaphe and the world went black.
+The Dyn’s slavering maw slammed into the porthole moments later, the three gigantic jawbones scraping against the bathyscaphe’s hull with a sound like knives on glass.
+As if on cue water exploded into the chamber — not a flood but a detonation, the full weight of the ocean reclaiming its domain — and the Dyn was swept away, crushed and broken; a mosquito under an anvil. Vash was thrown back against the wall as the explosive flood of water hit the bathyscaphe and the world went black.

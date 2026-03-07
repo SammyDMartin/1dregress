@@ -1,5 +1,5 @@
 Chapter 18: Abyssal
-He breathed in. The air felt a little less thick in his lungs, the jungle greener than it had been in years. A few birds still sang. Maybe this was just a rose-tinted memory, maybe it was real.
+He breathed in. The air felt a little less thick in his lungs, the jungle greener than it had been in years. A few birds still sang, their calls threading through the canopy like something half-remembered. Maybe this was just a rose-tinted memory, maybe it was real.
 Jan sat on the stump of a felled tree, cleaning his dotbow. Occasionally he would glance up to check Eva hadn’t strayed too far. He watched her for a while, wading in the stream, lost in her investigations. Smiling, he returned to his task.
 Her life hadn’t afforded her many chances to play so freely. Patrols from the settlement covered this ground regularly, removing any of the more virulent outbreaks of false life. They had erected a palisade around the central group of huts, and dammed the stream upriver to provide a reliable supply of power. It was a vast improvement on some places they had stayed over the years.
 Eva came bounding up to him, still at the age where, given the choice, one tends to run everywhere. She was holding what appeared to be a fat, transparent piece of glass. Perhaps it was something old, washed out of the refuse pits upstream. Some kind of lens? He put the dotbow aside.
@@ -31,7 +31,7 @@ They returned to the settlement in the late afternoon, Jan carrying an exhausted
 It was good here. Eva was settled, happier than he remembered her being in a long time. There was a local school and Jan had found steady work so far, repairing damaged motorcycle engines and generators. But how long would it last? How long did it ever last, before this settlement was registered? How long before they were driven out?
 Much later, Jan was woken by the sound of stifled sobbing. He rolled off the sleeping mat and reached for an acetylene lamp, igniting it and bathing their camp in flickering orange light. It was a sweltering night, so they’d brought their mats outside.
 A few other huts and tents were visible against the black silhouette of the palisade wall, and above the wall and the treeline beyond the night sky was strung with stars. The Other Moon was high in the cloudless sky, tracking across the Milky Way like a ship traversing some great river.
-Eva was curled up on her own mat, her small form shuddering. Jan moved quickly and sat beside her, placing a reassuring hand on her shoulder.
+Eva was curled up on her own mat, her small form shuddering beneath the thin blanket. Jan moved quickly and sat beside her, placing a reassuring hand on her shoulder.
 ‘Eva what’s wrong? ’ She turned away from him miserably.
 He scooped her up in his arms, holding her close. Inconsolable, her body convulsed as she sobbed, tears rolling down her cheeks.
 ‘I’m sorry dad.’
@@ -46,7 +46,7 @@ Jan winced at that word. He wondered what he ought to say; he’d always done hi
 ‘If the Dyn come, or Arco, or anyone else, I’ll protect you,’ he said, reaching across and squeezing her hand.
 ‘Not from them. The Shadows. They get you in your dreams. They’re out there, hiding in the spaces inbetween. Waiting for us.’ Jan cupped her anguished face in his hands.
 ‘Eva, look at me,’ he said desperately. ‘I promise that I’ll protect you.’
-The dream ended as it always did, in fire and noise. Jan staggered, injured and dazed from the blow the Arco troopers had struck.
+The dream ended as it always did, in fire and noise. The settlement burning, screams fracturing the air. Jan staggered, injured and dazed from the blow the Arco troopers had struck.
 ‘Eva!’ he cried, over and over, his voice hoarse. In the distance, a big twin-rotor transport helicopter lifted away from a forest clearing, beating clear of the smoke. Despairing, he fell to his knees, the world collapsing in on him.
 
 ‘Jan.’
@@ -61,7 +61,7 @@ He stood, stretched aching muscles and shivered. It was cold. The view outside t
 Christo’s body had been laid out, as much as that was possible whilst leaving room to move about the confines of the bathyscaphe. Even so, Jan was forced to step gingerly over his feet, two scuffed boots protruding from beneath a plastic sheet.
 Crouching by Christo’s side, Jan folded back the pall. In life, Christo had radiated passionate intensity, charisma, self-assurance. Now all Jan could think was how young the man looked. Had their positions been reversed, he had no doubt Christo would have said something meaningful and bittersweet, but the words eluded him.
 ‘I hope he died dreaming of his beautiful future,’ Jan said to no one in particular. Vash smiled sadly.
-Jan recognised this face from the graffiti sprayed on the walls of the settlements he passed through, the same tired exhortations to ‘string up the puppet’ stencilled beneath. Yet Vash didn’t read like a traitor - Jan had had enough contact with the venal and the nakedly self-interested to know the signs.  There was no sign of haughty superiority in those grey eyes, nor the sneering contempt that radiated from the vast screens that adorned the Conurbations, delivering the diktats and veiled threats of those above.
+Jan recognised this face from the graffiti sprayed on the walls of the settlements he passed through, the same tired exhortations to ‘string up the puppet’ stencilled beneath. Yet Vash didn’t read like a traitor — Jan had had enough contact with the venal and the nakedly self-interested to know the signs. There was no sign of haughty superiority in those grey eyes, nor the sneering contempt that radiated from the vast screens that adorned the Conurbations, delivering the diktats and veiled threats of those above. Instead there was something quieter, more worn — the look of a man who had carried too much for too long.
 ‘You dreamt of your daughter?’ Vash asked.
 For a moment Jan bristled, but the quiet compassion in Vash’s voice took it out of him. He nodded.
 ‘How did you know?’
@@ -77,7 +77,7 @@ He was interrupted by a sound like a gunshot that reverberated through the hull.
 ‘How long has that been going on for?’ Jan asked, unnerved. Pao and Tuva glanced over.
 ‘About an hour or so. Turns out the hull was damaged after all,’ Pao shrugged.
 ‘I’m amazed you slept through it,’ said Tuva.
-The hull boomed again, twice in quick succession this time.
+The hull boomed again, twice in quick succession this time, each impact sending a visible tremor through the metal walls.
 ‘Jan, sit down and strap in,’ ordered Aurelie. He didn’t need to be told twice.
 ‘How worried should we be?’
 ‘Don’t worry. Won’t help,’ said Pao. ‘If the hull gives out, there’s nothing we can do.’
@@ -110,7 +110,7 @@ He saw something through the porthole. A glint in the darkness. Had he imagined 
 He made to cry out in warning, bracing himself, but it was already upon them, engulfing the bathyscaphe in a material that flowed like mercury.
 The impact was softer than it should have been, though still enough to knock them back. Jan exhaled in astonishment, too stunned to speak. They were alive!
 He saw Aurelie, vindicated at last, slacken with relief.
-The tortured shuddering and groaning of the stressed hull ceased and the engine stopped. Even the air appeared to be thawing, and the lights switched back on as if they had passed into some new realm, no longer crushed beneath the abyss.
+The tortured shuddering and groaning of the stressed hull ceased and the engine stopped. Even the air appeared to be thawing, warmer somehow, and the lights switched back on as if they had passed into some new realm, no longer crushed beneath the abyss but cradled by it.
 Pao was the first to break the dazed silence.
 ‘Aurelie... you were right,’ he laughed incredulously, rubbing the back of his neck. ‘But what on earth was that?’
 ‘The cavalry,’ Aurelie smiled, turning at last to face them, as they broke out into elated cheers. ‘We’re not alone. We’re not alone…’
@@ -239,4 +239,4 @@ It was hard to listen to, and not just because Vash had to strain to make sense 
 ‘I can’t take this,’ cautioned Vash, pushing it away from him. ‘You’re handing me a death sentence.’
 ‘I’ve already received mine. Take it.’
 Vash left shortly afterwards, rejoining the waiting car and departing the settlement. He imagined vengeful, fearful Dyn staring at him down their scopes. The shanty mixture of improvised huts and housecube stacks gave way to open algae fields, then to a spartan airfield where an Arco-issue short-range aeroshuttle awaited.
-Vash boarded the transport in a daze, barely acknowledging the salutes of the pilot and guard. They climbed quickly, circling away from the nameless settlement, no questions asked. The quiet hum of the compressor jets was almost peaceful. Vash leant back in the small passenger seat and stared out of the window at the dark stratospheric sky. He looked up at the stars, piercingly bright and remote, but only for a moment before he returned his gaze to the papers in front of him.
+Vash boarded the transport in a daze, barely acknowledging the salutes of the pilot and guard. They climbed quickly, circling away from the nameless settlement, no questions asked. The quiet hum of the compressor jets was almost peaceful. Vash leant back in the small passenger seat and stared out of the window at the dark stratospheric sky. He looked up at the stars, piercingly bright and remote — what strange skies indeed — but only for a moment before he returned his gaze to the terminal in his hands, and the questions it contained.
