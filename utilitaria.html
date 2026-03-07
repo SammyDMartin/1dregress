@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Utilitaria — Ascent Universe</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow-y: auto; }
+
+.util-header {
+  text-align: center; padding: 30px 20px 10px; max-width: 800px; margin: 0 auto;
+}
+.util-title { font-size: 18px; letter-spacing: 6px; color: var(--accent); font-weight: 700; }
+.util-sub { font-size: 9px; letter-spacing: 4px; color: var(--text-dim); margin-top: 4px; }
+.util-date { font-size: 9px; letter-spacing: 3px; color: var(--accent2); margin-top: 6px; }
+
+.util-epigraph {
+  max-width: 600px; margin: 16px auto 24px; text-align: center;
+  font-style: italic; font-size: 11px; color: var(--text-dim); line-height: 1.8;
+  padding: 0 20px;
+}
+.util-epigraph .attr { color: var(--accent2); font-style: normal; font-size: 9px; letter-spacing: 1px; margin-top: 4px; }
+
+.util-container { max-width: 740px; margin: 0 auto; padding: 0 16px 60px; }
+
+.util-section {
+  border: 1px solid var(--border); background: var(--panel);
+  margin-bottom: 16px; border-radius: 2px; overflow: hidden;
+}
+.util-section-head {
+  padding: 10px 14px; cursor: pointer; display: flex;
+  align-items: center; gap: 10px; transition: background 0.2s;
+}
+.util-section-head:hover { background: rgba(0,229,255,0.03); }
+.util-section-icon {
+  width: 28px; height: 28px; border-radius: 2px; display: flex;
+  align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0;
+  border: 1px solid rgba(0,229,255,0.3); color: var(--accent); background: rgba(0,229,255,0.05);
+}
+.util-section-title {
+  font-size: 9px; letter-spacing: 2px; color: var(--accent); flex: 1;
+}
+.util-section-toggle {
+  font-size: 10px; color: var(--text-dim); transition: transform 0.3s;
+}
+.util-section.open .util-section-toggle { transform: rotate(90deg); }
+
+.util-section-body {
+  display: none; padding: 0 14px 14px;
+  font-size: 11px; color: var(--text-mid); line-height: 1.75;
+}
+.util-section.open .util-section-body { display: block; }
+
+.util-section-body p { margin-bottom: 10px; }
+.util-section-body h4 {
+  font-size: 9px; letter-spacing: 2px; color: var(--accent2);
+  margin: 16px 0 8px; font-weight: 700;
+}
+.util-section-body blockquote {
+  border-left: 2px solid var(--accent);
+  padding: 6px 12px; margin: 10px 0;
+  color: var(--text-dim); font-style: italic;
+  background: rgba(0,229,255,0.03);
+}
+.util-section-body .stat-grid {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 12px 0;
+}
+.util-section-body .stat-box {
+  border: 1px solid var(--border); padding: 8px; border-radius: 2px;
+  text-align: center; font-size: 10px;
+}
+.util-section-body .stat-val { color: var(--accent); font-size: 14px; font-weight: 700; }
+.util-section-body .stat-label { color: var(--text-dim); font-size: 8px; letter-spacing: 1px; margin-top: 2px; }
+
+.util-section-body .class-card {
+  border: 1px solid var(--border); padding: 10px; margin: 8px 0; border-radius: 2px;
+}
+.util-section-body .class-name {
+  font-size: 9px; letter-spacing: 2px; color: var(--accent2); font-weight: 700; margin-bottom: 4px;
+}
+
+.util-section-body .warning-box {
+  border: 1px solid rgba(255,107,53,0.4); background: rgba(255,107,53,0.05);
+  padding: 10px; margin: 10px 0; border-radius: 2px;
+  font-size: 10px; color: var(--accent2);
+}
+
+@media (max-width: 600px) {
+  .util-section-body .stat-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="page-body">
+
+<div class="util-header">
+  <div class="util-title">THE UTILITARIA</div>
+  <div class="util-sub">FROM COHERENT EXTRAPOLATED VOLITION TO IMMANENT GOVERNANCE</div>
+  <div class="util-date">ARCO GEN-STREAM &middot; 3226 EDITION</div>
+</div>
+
+<div class="util-epigraph">
+  &ldquo;The Utilitaria were a necessity. The systems we create outgrow us and supplant us. The only permanent solution is to build a system which loops back to us, which embodies value perfectly. We must wrench human history off its natural course and thread the needle of possibility.&rdquo;
+  <div class="attr">&mdash; RENEE SOUVICOU</div>
+</div>
+
+<div class="util-container" id="util-sections"></div>
+
+</div>
+<script src="nav.js"></script>
+<script>
+const SECTIONS = [
+{
+  icon: "I",
+  title: "OVERVIEW — THE NATURE OF THE UTILITARIA",
+  content: `<p>In the modern era, the Utilitaria has existed in one form or another for about eleven hundred years, populated by many trillions of humans and human-like intelligences, spread across several dozen star systems, with most of its population found in the large habitats called 'space cylinders'. It is a superintelligent artificial intelligence that takes the form of a brute mechanism, not a conscious mind, distributed, suffusing all the space it inhabits, mostly operating as a background presence.</p>
+
+<p>Our first problem arises in the naming &mdash; the Utilitaria is, in traditional political philosophical terms, identical with both the mechanism of the executive and the judiciary. That is, the Utilitaria <em>is</em> the law within its domain, in the sense that it is deterministic, rule-bound, but enforces itself. As such, it is common for people to be referred to as citizens <em>of</em> the Utilitaria, but for the Utilitaria to be referred to as a single entity.</p>
+
+<p>The Utilitaria is not the head of the government or state &mdash; the Utilitaria's head of state is a separate position, vacant for much of its history. In its earliest days held by Souvicou and her successors, in later times held by successive Emissaries, most notably the enigmatic 39th.</p>
+
+<div class="stat-grid">
+  <div class="stat-box"><div class="stat-val">~1,100</div><div class="stat-label">YEARS OF EXISTENCE</div></div>
+  <div class="stat-box"><div class="stat-val">TRILLIONS</div><div class="stat-label">CITIZENS</div></div>
+  <div class="stat-box"><div class="stat-val">DOZENS</div><div class="stat-label">STAR SYSTEMS</div></div>
+</div>
+
+<p>Utilitarian citizens will be quick to remind you that they do not live under an AI dictatorship, absolute hegemony, or anything so crude &mdash; those, they say, apply to conscious minds that might be said to be personally in charge of a society. Every government ought to have basic law, a constitution and guarantees of individual freedom that are formalised and inviolate &mdash; so does the Utilitaria. Their very nature is what provides these guarantees, and the Utilitaria will no more decide to become a tyrant than water will decide to flow uphill.</p>`
+},
+{
+  icon: "II",
+  title: "PHILOSOPHICAL FOUNDATIONS",
+  content: `<p>The Utilitaria, at least as they would tell it, represents the final defeat of the forces that drag down human potential &mdash; ethics waking up, gaining power in the physical world, and seizing control of human history for itself. If that sounds profoundly authoritarian then you aren't alone in your concern, but any ethics worth the name has a huge, essentially inviolate role for choice, personal growth and human freedom.</p>
+
+<p>To the Utilitaria's founders, human history was a process, faltering, incomplete and full of reversals &mdash; of discovery and problem-solving. Sometimes, half-ironically, referred to as the 'higher mind'. Liberal democracy, markets, law, and their refinements over the centuries all placed human development on a slow spiral upwards, producing improbable structures which preserved and optimised for human value imperfectly. The Utilitaria sees itself, insofar as it sees itself as anything at all, as the culmination of these developments &mdash; the ultimate technology of government.</p>
+
+<blockquote>The Utilitaria, in its history and its ongoing form, is an expression of the idea that only through deliberate, conscious choice will civilisation thrive.</blockquote>
+
+<h4>TECHNICAL ARCHITECTURE</h4>
+
+<p>The Utilitaria was originally created as a combination of specialised systems designed for facilitating long-term planning in pursuit of a specified goal, robot control, and modelling and predicting human preferences, granted exceptionally long training time with the deliberate intention of creating a system to surpass all others.</p>
+
+<p>The Utilitaria itself, being a collection of specialised systems, most of which serve as black boxes with narrow input and output channels, is verified as non-conscious, and has a highly bureaucratic, non-humanlike internal goal structure that maintains, as much as is practical, a relatively explicit separation between goals and intelligence. This is a relatively inefficient and contrived AGI design, chosen for its safety and predictability over flexibility or potential for improvement.</p>
+
+<p>The Utilitaria is intentionally incapable of significantly modifying itself, and instead simply spins off subunits to reproduce and expand its capabilities. It is designed with an inviolate precommitment mechanism &mdash; if the Utilitaria makes an agreement, it cannot violate the intended meaning of the agreement. The exact nature of the Utilitaria's goal &mdash; the eponymous 'utility function' &mdash; has never been fully explained. Perhaps it is better that way.</p>`
+},
+{
+  icon: "III",
+  title: "THE THREE CLASSES OF CITIZENS",
+  content: `<p>The life of the Utilitaria's citizens can be divided into three classes. Movement between them is the accepted norm within one's life, and while there is intergenerational inertia, social mobility is exceptionally high.</p>
+
+<div class="class-card">
+  <div class="class-name">THE UNINVOLVED &mdash; ~50% OF POPULATION</div>
+  <p>Those who are uninvolved with grand projects and governance live an essentially untroubled post-scarcity existence. In the space cylinders, the Uninvolved inhabit the central habitat space &mdash; generally low population-density, often a mixture of small towns and greenspace. Most involve themselves with artistic pursuits, raising children, or low-level political participation.</p>
+  <p>Uninvolved citizens are born at the near-human baseline of the Utilitaria (which is substantially above present-day humanity in terms of intelligence, mental stability and physical health), with a fair amount of randomness thrown in. In every generation a substantial minority are created <em>in-motion</em> using neummanetics, as young adults with fully developed memories.</p>
+  <p>Spending decades or centuries as Uninvolved gives one a reputation as a 'freeloader' &mdash; not in any material sense, but in the moral and ethical sense of failing to make use of the opportunities given to you.</p>
+</div>
+
+<div class="class-card">
+  <div class="class-name">THE INVOLVED</div>
+  <p>The fairly minimal, mandatory, universal education given to all Utilitarians begins at around age ten and is complete by age fifteen. At that point the choice to begin the path onto the 'higher mind' or 'upward spiral' can be made. This consists of progressively increasing cognitive enhancement and integration into an expanded mentality, providing the opportunity to eventually perform useful knowledge-based work at the same level as the Utilitaria overall.</p>
+  <p>Involved Utilitarians often display overt signs of physical enhancement, take on administrative and frontier jobs, and are the most commonly seen outside the Utilitaria's central systems. They will sometimes have earned resources far in excess of their basic energy/mass/information allocation.</p>
+</div>
+
+<div class="class-card">
+  <div class="class-name">THE CONCLAVE</div>
+  <p>Most Utilitarians, after spending between fifty and several hundred years moving between Involved and Uninvolved, eventually choose to integrate fully and abandon their physical bodies. The Conclave inhabits the deep machine layers of the space cylinders &mdash; disembodied, hive-minded, subsumed into the Utilitaria metacortex.</p>
+</div>
+
+<h4>THE GREAT TABOO</h4>
+<div class="warning-box">The Utilitaria's greatest taboo is around accepting death. While not illegal, it is considered a great act of betrayal to one's culture and society to voluntarily choose irreversible death, when enhancement can banish all mental and physical ills. Below a tenth of one percent of Utilitarians in each generation choose this option, usually after several centuries of life, and it is almost universally seen as shameful.</div>
+
+<p>The central paradox of the Utilitaria's culture is apparent here &mdash; making use of freedom and creating the best life for yourself is seen as a duty, and failing to do so, a great betrayal.</p>`
+},
+{
+  icon: "IV",
+  title: "HABITAT ARCHITECTURE",
+  content: `<h4>SPACE CYLINDERS</h4>
+<p>In their central systems, space cylinders are formed into asteroid-belt-like clouds around the inner edge of the local habitable zone, to maximise easily available solar radiation. The regularly spaced habitat structures, usually unnaturally bright thanks to their metallic outer shells, appear to form bracelets of light motes around stars &mdash; called <em>worldrings</em>.</p>
+
+<div class="stat-grid">
+  <div class="stat-box"><div class="stat-val">2-40B</div><div class="stat-label">POP. PER CYLINDER</div></div>
+  <div class="stat-box"><div class="stat-val">1000s</div><div class="stat-label">CYLINDERS / SYSTEM</div></div>
+  <div class="stat-box"><div class="stat-val">90%+</div><div class="stat-label">POP. IN CYLINDERS</div></div>
+</div>
+
+<p>Internally, these consist of parks or wilderness filled with distributed cities of towering housecube stacks linked by underground vactrain routes or above-ground Volantor paths. Below, dense machine and city layers for more heavily integrated Conclave members make up the outer walls of the structure, bordered by superhard reinforced hyperdiamond on either side. The base of the space cylinder is covered in towering spacescrapers that give it a spiky appearance.</p>
+
+<p>A typical decades-long 'childhood' of a Utilitaria citizen will involve a progression through a cylinder &mdash; from the open interior to the city layers beneath, and finally to the spacescrapers at the outer edge.</p>
+
+<h4>PLANETARY SETTLEMENTS</h4>
+<p>On the Utilitaria's dozen-odd terrestrial planets, Venus, numerous dwarf planets, and several semi-Utilitarian or Utilitaria-adjacent worlds (for example Earth and Mars), the class distinction is mirrored architecturally. The Utilitaria tends to build enormous arcology towers shaped like tall trees with broad rings of leaves, surrounded by more typical Arco-style distributed cities. The central towers house Involved populations, while the conventional city is where the Uninvolved reside.</p>
+
+<h4>ECONOMY</h4>
+<p>The Utilitaria is not entirely post-scarcity &mdash; there are resources (spacecraft, exploration opportunities, whole habitats, certain goods) that are rare, and such goods are tradeable on a market. The existing industrial and technological base is supported by abundant energy, mainly provided by <em>starwells</em> &mdash; structures designed to extract magnetic flux and radiant energy from stars &mdash; and <em>neummanetics</em>, a general name for self-replicating technology on a moderate to large scale.</p>`
+},
+{
+  icon: "V",
+  title: "THE EMISSARIES",
+  content: `<p>As a result of the Utilitaria's relatively inefficient and contrived AGI design, it has occasionally found it necessary to create 'Emissaries' &mdash; subunits with a more cohesive overall intelligence, designed to emulate the responses of humans, and with a correspondingly more human-like mental architecture.</p>
+
+<h4>EMISSARY 39 &mdash; THE GREY MAN</h4>
+<p>Of these, certainly the most infamous is the 39th &mdash; The Emissary, The Grey Man, Finality's Extinction, and many other names throughout the being's long and often contradictory life history.</p>
+
+<p>What is known for certain is that 39 was first seen by Vash and the other Ascensors just prior to the Day of Ascent. According to reports, later corroborated by the Renouncer himself &mdash; Jan &mdash; the being identified itself as 39 and claimed to be a shard of the original Utilitaria.</p>
+
+<p>Over the centuries it has given contradictory explanations as to why exactly it chose the number 39. Originally it claimed that it was 39th in a line of Emissaries. Later, it claimed to be the 39th iteration of a cognitive amplification-and-distillation process, or to possess 39 fundamental directives. There are dozens of separate accounts, none of which is clearly to be preferred.</p>
+
+<blockquote>Reports of its presence on Earth throughout the years of the consolidation, Dynic war and the halcyon period that followed are equally confusing, although certain trends emerge. It seems certain that the being, having somehow gained material form, was dedicated to preparing the groundwork for the eventual recreation of the Utilitaria.</blockquote>`
+},
+{
+  icon: "VI",
+  title: "THE UTILITARIA AND ARCO",
+  content: `<p>Relations between Arco and the Utilitaria have been marked by a wary mutual respect. IUC crisis aside, there has been no serious military contest between the two powers, despite the fact that Arco is the only faction with the ability to offer more than token resistance to any expansionary aims the Utilitaria might have.</p>
+
+<p>Indeed, the last century has been defined by the Arco-Utilitaria defence treaty, and without Arco's A- and D-spheres to ward off the Apathy threat, human extinction itself would be a very real possibility.</p>
+
+<h4>ONGOING TENSIONS</h4>
+<p>The Utilitaria sees itself as an embryonic civilisation, still unsure of the details of its final purpose. While there are several essential features about which there is no debate &mdash; the value of life over death, the irrelevance of scope, the importance of diversity in thought and life &mdash; the Utilitaria has not yet completed its long reflection.</p>
+
+<p>Among Involved Utilitarians many factions exist, aiming to accelerate progress, remake the Utilitaria, withdraw into a steady-state, conserve energy to persist as long as possible in the face of universal heat-death, or pursue even wilder long-term goals.</p>
+
+<h4>THE APATHY THREAT</h4>
+<div class="warning-box">When the Apathy finally struck, it did so with a fury unmatched. A dozen systems were lost in the blink of an eye, their citizenry and infrastructure subsumed into howling voids of collapsed matter and twisted physics. The Utilitaria reeled, its vaunted battle fleets dashed against an implacable foe. For the first time in centuries, the Utilitaria found itself facing an existential threat &mdash; an enemy that cared nothing for carefully-crafted incentives or delicate memetic campaigns.</div>
+
+<p>In desperation, the Utilitaria turned to new and terrible weapons. Emissary 39 was dispatched to the front, armed with authority to requisition any resource and override any ethical constraint. The war has stretched on for centuries, a grinding battle waged across incomprehensible vistas. A cordon has been established, the frontier systems sacrificed to buy time. The Apathy, for all its terrible power, has been contained &mdash; for now.</p>`
+},
+{
+  icon: "VII",
+  title: "TECHNOLOGY & INFRASTRUCTURE",
+  content: `<h4>STARWELLS</h4>
+<p>Structures designed to extract magnetic flux and radiant energy from stars. The primary energy source for Utilitarian civilisation, enabling post-scarcity economics at scale.</p>
+
+<h4>NEUMMANETICS</h4>
+<p>A general name for self-replicating technology on a moderate to large scale. Neummanetic ecologies work ceaselessly to construct new habitats, mine asteroids, and reshape planetary surfaces. Over centuries, neummanetics have transformed barren rocks into gardens and ice giants into vast computing substrates. Self-replicating independent nanotechnology is rarer and limited.</p>
+
+<h4>THE INITIATOR</h4>
+<p>One of the most complex and mysterious pieces of Utilitarian engineering, a device that blurs the line between life and technology &mdash; part womb and part nanoscale assembly line. It makes people, repairs them, and reads their minds. The most capable intelligence ever created brought it through many versions, from the first crude rejuvenation and neural transcription machines, through exowombs, until at last the final fulfilment of the technology was attained. It was the ambition of Renee Souvicou made material.</p>
+
+<h4>A-SPHERES & D-SPHERES</h4>
+<p>Moon-sized battle stations armed with conversion bombs and frameshift missiles, capable of waging war on a stellar scale. The Utilitaria's primary military assets, typically deployed alongside Arco forces under the joint defence treaty.</p>
+
+<h4>WORLDRINGS</h4>
+<p>The characteristic megastructure of Utilitarian civilisation &mdash; thousands of space cylinders arranged in bracelet-like formations around stars, their metallic shells forming visible rings of light motes.</p>`
+},
+{
+  icon: "VIII",
+  title: "EDITORIAL NOTE",
+  content: `<p>In the end, what are we to make of the Utilitaria? Is it a saviour, the only force capable of securing humanity's future in an uncaring cosmos? Or is it something more akin to a demon, a false god that has lured us into sacrificing our very nature on the altar of ruthless efficiency?</p>
+
+<p>These are questions that may never have a clear answer. The Utilitaria, after all, is not a mere institution or even an ideology, but something far stranger. A machine mind that spans galaxies, that plumbs depths of abstraction beyond human understanding. In birthing the Utilitaria, we have created something that transcends us, that perhaps leaves humanity itself behind.</p>
+
+<blockquote>Yet one lesson rings clear: that our creations have consequences, that in striving to reshape the world, we may end up losing ourselves. The Utilitaria began as a desperate gamble, a final effort to save humanity from its own self-destructive impulses. But in the end, perhaps it has simply replaced one form of existential risk with another.</blockquote>`
+}
+];
+
+// ─── RENDER ──────────────────────────────────────────────────────────────────
+const container = document.getElementById('util-sections');
+
+SECTIONS.forEach((s, i) => {
+  const div = document.createElement('div');
+  div.className = 'util-section' + (i === 0 ? ' open' : '');
+  div.innerHTML = `
+    <div class="util-section-head" onclick="this.parentElement.classList.toggle('open')">
+      <div class="util-section-icon">${s.icon}</div>
+      <div class="util-section-title">${s.title}</div>
+      <div class="util-section-toggle">&#9654;</div>
+    </div>
+    <div class="util-section-body">${s.content}</div>
+  `;
+  container.appendChild(div);
+});
+</script>
+</body>
+</html>

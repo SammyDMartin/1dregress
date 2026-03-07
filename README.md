@@ -1,80 +1,129 @@
 # Ascent Universe
 
-A companion website for the Ascent Universe — a science fiction setting spanning from deep Dyn prehistory to the far-future Apathy War.
+A companion website for the Ascent Universe — a science fiction setting spanning from deep Dyn prehistory (~100,000 BCE) to the far-future Apathy War (~3200 CE).
+
+## Authorship
+
+The Ascent Universe is a human-authored science fiction project. The original novels and short stories were written by the author over several years. Some newer short stories and editorial work on this site were done collaboratively with Claude (Anthropic).
+
+| Attribution | Meaning |
+|-------------|---------|
+| **Human** | Written entirely by the author |
+| **AI-assisted** | Plotted by the author, drafted/expanded collaboratively with Claude |
+| **AI-edited** | Human-written original, with AI-assisted revision and assembly |
+
+### Stories by attribution
+
+| Story | Date | Attribution |
+|-------|------|-------------|
+| Frameshift | ~100,000 BCE | Human |
+| The Other Moon | ~100,000 BCE | Human |
+| Seeker | ~100,000 BCE | Human |
+| The Facilitator | 2078 CE | Human |
+| **Inheritor** | 2085 CE | **AI-assisted** |
+| The Utilitaria | 2112 CE | Human |
+| Starwhisp | 2310 CE | Human |
+| **The Last Duty** | 2314 CE | **AI-assisted** |
+| The Director | 2432 CE | Human |
+| Ascent (novel) | 2479 CE | Human |
+| **Headhunted** | 2480 CE | **AI-assisted** |
+| **The Worlds Within** | 2736 CE | **AI-assisted** |
+| Threshold | 2909 CE | Human |
+| Eszel & The Listener (novel) | 2909–2937 CE | Human, **AI-edited** |
+| Bows and Arrows Against the Lightning | ~3200 CE | Human |
+| The War of All Wars | ~3200 CE | Human |
+
+The website itself (HTML/CSS/JS, interactive readers, MSD, battle simulation, codex, etc.) was built collaboratively with Claude.
 
 ## Live Site
 
-The site is hosted via GitHub Pages from the root of this repository. All pages are static HTML/CSS/JS with no build step required.
+Hosted via GitHub Pages. All pages are static HTML/CSS/JS with no build step. Two display modes:
+- **Dark mode** — terminal/military-intelligence aesthetic (monospace, cyan/orange)
+- **Light mode** — clean, simple reading mode (system fonts, minimal decoration)
+
+Toggle using the theme button in the nav bar.
 
 ## Pages
 
+### Core Pages
+
 | Page | File | Description |
 |------|------|-------------|
-| **Home** | `index.html` | Hub page with starfield background and navigation cards |
+| **Home** | `index.html` | Hub page with navigation cards |
+| **Stories** | `stories.html` | Chronological index of all fiction with attribution |
+| **Reader** | `reader.html` | Lightweight markdown/text reader for source texts |
+| **Drafts** | `drafts.html` | Draft browser for second-draft manuscripts |
 | **MSD** | `msd.html` | Interactive 3D Master Systems Display for the Annihilator-class warship |
 | **Battle** | `battle.html` | Phase-by-phase animated tactical reconstruction of the Battle of the Interstice |
-| **Threshold** | `story.html` | Full interactive story reader for *Threshold* (the Battle of the Interstice from Hansun's POV) |
-| **Seeker** | `seeker-story.html` | Full interactive story reader for *Seeker* (the Dyn origin story) |
 | **Science** | `science.html` | Science Compendium — real physics behind the fictional technology |
-| **Timeline** | `timeline.html` | Interactive chronology from Deep Antiquity to the Apathy War, filterable by era |
-| **Codex** | `codex.html` | Intelligence dossiers on factions, personnel, vessels, threats, and entities |
+| **Timeline** | `timeline.html` | Interactive chronology from Deep Antiquity to the Apathy War |
+| **Codex** | `codex.html` | Intelligence dossiers on factions, personnel, vessels, and threats |
 | **Worlds** | `worlds.html` | Atmospheric profiles of major settings and epochs |
+| **Threads** | `threads.html` | Character threads across all stories, colour-coded by entity |
+
+### Interactive / AI Pages
+
+| Page | File | Description |
+|------|------|-------------|
+| **Facilitator** | `facilitator.html` | Facilitator canon analysis, comparison to modern AI, interactive chat |
+| **Utilitaria** | `utilitaria.html` | Utilitaria canon analysis and philosophical exploration |
+| **Emissary Chat** | `utilitaria-chat.html` | Interactive diplomatic channel chat with the Utilitaria |
+| **AI Analysis** | `ai-analysis.html` | Comparative analysis of Facilitator vs Utilitaria vs Apathy AI systems |
+| **Anthropic Trap** | `anthropic-trap.html` | Interactive exploration of the Apathy's anthropic trap argument |
+
+### Visualisations
+
+| Page | File | Description |
+|------|------|-------------|
+| **Orrery** | `orrery.html` | Interactive solar system orrery |
+| **Interstice Network** | `interstice-map.html` | 3D canvas visualisation of the wormhole network |
+| **Diamond Duster** | `diamond-duster.html` | Animated weapon firing sequence with HUD telemetry |
+| **Liberation Day** | `liberation.html` | Animated warseed activation sequence from Ascent (2479 CE) |
+
+### In-Universe Documents
+
+| Page | File | Description |
+|------|------|-------------|
+| **Reflections** | `reflections.html` | "The Reflections of Seeker" — Dyn philosophical text |
+
+### Story Readers
+
+| File | Story | Era |
+|------|-------|-----|
+| `seeker-story.html` | Seeker | ~100,000 BCE |
+| `inheritor-story.html` | Inheritor | 2085 CE |
+| `sixty-percent-story.html` | Sixty Percent | — |
+| `worlds-within-story.html` | The Worlds Within | 2736 CE |
+| `headhunted-story.html` | Headhunted | 2480 CE |
+| `oblivion-story.html` | Oblivion | — |
 
 ## Shared Resources
 
-- `style.css` — Shared theme (monospace/terminal/military-intelligence aesthetic)
-- `nav.js` — Injected navigation bar, status bar, and in-universe clock
-
-## Directory Structure
-
-```
-/
-├── index.html              # Hub page
-├── msd.html                # Master Systems Display
-├── battle.html             # Battle reconstruction
-├── story.html              # Threshold story reader
-├── seeker-story.html       # Seeker story reader
-├── science.html            # Science Compendium
-├── timeline.html           # Historical Timeline
-├── codex.html              # Intelligence Codex
-├── worlds.html             # Worlds & Eras
-├── style.css               # Shared stylesheet
-├── nav.js                  # Shared navigation
-├── msd/                    # MSD React/Vite source (separate project)
-├── source_materials/       # Original uploaded files (docx, pdf, txt)
-├── source_texts/           # Extracted plain-text versions of all stories
-├── UNIVERSE_REFERENCE.md   # Comprehensive reference document (all 11 texts)
-├── BRAINSTORMING.md        # Development log, ideas, and notes for future work
-└── README.md               # This file
-```
-
-## Source Texts
-
-The universe is built from 11 source texts:
-
-### Novels
-- **Ascent** (`source_texts/ascent_text.txt`) — The liberation of Earth from Dyn occupation, 2479 CE
-- **The Listener / Eszel** (`source_texts/eszel_text.txt`) — The Kailash expedition and the Battle of Threshold, 2909-2937 CE
-
-### Short Stories (in chronological order)
-1. **Seeker** — Dyn origin story, deep prehistory
-2. **Frameshift** — Discovery of the Other Moon and frameshift travel
-3. **The Other Moon** — Exploration of the galaxy and the interstice network
-4. **The Facilitator** — Near-future Earth, the first rogue AI
-5. **The Utilitaria** — The superintelligent AI escapes
-6. **Starwhisp** — First contact with the Dyn at Tau Ceti
-7. **The Director** — Dyn occupation of Earth, Vash deposes Meyer
-8. **Bows and Arrows Against the Lightning** — The Apathy War
-9. **The War of All Wars** — First victory against the Apathy, the anthropic trap
+- `style.css` — Shared theme with dark and light modes
+- `nav.js` — Injected navigation bar, theme toggle, status bar, and in-universe clock
 
 ## Reference Documents
 
-- **`UNIVERSE_REFERENCE.md`** — Comprehensive reference covering synopses, characters, factions, technology, themes, continuity connections, and analysis across all 11 texts. Start here for any development work.
+- **`UNIVERSE_REFERENCE.md`** — Comprehensive reference: synopses, characters, factions, technology, themes, continuity
+- **`BRAINSTORMING.md`** — Development log and notes
+- **`AI_ADVICE.md`** — Practical advice for AI models working on this project
 
-- **`BRAINSTORMING.md`** — Development log, stream-of-consciousness thoughts on the universe, brainstormed ideas (implemented and unimplemented), and notes for future AI-assisted sessions.
+## AI Collaboration
+
+This project was built collaboratively with Claude Code (Anthropic). The following files guide AI sessions:
+
+- **`CLAUDE.md`** — Project conventions, creative writing guidelines, and git procedures
+- **`AI_ADVICE.md`** — Detailed advice for AI models working on this universe
+- **`insights-report.html`** — Usage analytics and workflow insights from Claude Code sessions
+
+### Key procedures for AI collaborators
+
+1. **Read `AI_ADVICE.md` and `UNIVERSE_REFERENCE.md` before creative work** — canon consistency matters
+2. **Commit after every chapter, page, or section** — never batch to the end
+3. **Creative rewrites: expand, never cut** — preserve texture, atmosphere, and subtext
+4. **Re-read files before editing** — special characters (smart quotes, em dashes) cause mismatches
+5. **Report word counts** before and after any rewrite
 
 ## Development
 
-No build step is needed for the main site — edit HTML files directly and push. The `msd/` directory contains a separate React/Vite project for the MSD component.
-
-The site uses a consistent visual language: monospace font, cyan (`#00e5ff`) and orange (`#ff6b35`) colour scheme, dark backgrounds, scanline overlays, and in-universe framing (clearance stamps, Arco clock, military terminology).
+No build step needed — edit HTML files directly and push. The `msd/` directory contains a separate React/Vite project for the MSD component.

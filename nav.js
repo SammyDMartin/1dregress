@@ -4,17 +4,29 @@
 (function() {
   const pages = [
     { href: 'index.html', label: 'HOME' },
+    { href: 'stories.html', label: 'STORIES' },
     { href: 'msd.html', label: 'MSD' },
     { href: 'battle.html', label: 'BATTLE' },
-    { href: 'story.html', label: 'THRESHOLD' },
-    { href: 'seeker-story.html', label: 'SEEKER' },
     { href: 'science.html', label: 'SCIENCE' },
     { href: 'timeline.html', label: 'TIMELINE' },
     { href: 'codex.html', label: 'CODEX' },
     { href: 'worlds.html', label: 'WORLDS' },
+    { href: 'facilitator.html', label: 'FACILITATOR' },
+    { href: 'anthropic-trap.html', label: 'TRAP' },
+    { href: 'threads.html', label: 'THREADS' },
+    { href: 'utilitaria.html', label: 'UTILITARIA' },
+    { href: 'utilitaria-chat.html', label: 'EMISSARY' },
+    { href: 'orrery.html', label: 'ORRERY' },
+    { href: 'ai-analysis.html', label: 'AI ANALYSIS' },
+    { href: 'interstice-map.html', label: 'NETWORK' },
+    { href: 'reflections.html', label: 'REFLECTIONS' },
+    { href: 'diamond-duster.html', label: 'DUSTER' },
+    { href: 'liberation.html', label: 'LIBERATION' },
+    { href: 'drafts.html', label: 'DRAFTS' },
   ];
 
   const current = location.pathname.split('/').pop() || 'index.html';
+  const storyPages = ['reader.html','story.html','seeker-story.html','worlds-within-story.html','headhunted-story.html','inheritor-story.html','oblivion-story.html','sixty-percent-story.html','threshold-story.html'];
 
   const nav = document.createElement('nav');
   nav.id = 'site-nav';
@@ -23,6 +35,29 @@
   brand.className = 'nav-brand';
   brand.innerHTML = '<span class="diamond"></span>ASCENT UNIVERSE';
   nav.appendChild(brand);
+
+  // Theme toggle
+  const themeBtn = document.createElement('button');
+  themeBtn.className = 'theme-toggle';
+  themeBtn.setAttribute('aria-label', 'Toggle light/dark mode');
+  const saved = localStorage.getItem('au-theme');
+  if (saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  function updateThemeIcon() {
+    themeBtn.textContent = document.documentElement.getAttribute('data-theme') === 'light' ? '◐' : '◑';
+  }
+  updateThemeIcon();
+  themeBtn.addEventListener('click', () => {
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    if (isLight) {
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.setItem('au-theme', 'dark');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+      localStorage.setItem('au-theme', 'light');
+    }
+    updateThemeIcon();
+  });
+  nav.appendChild(themeBtn);
 
   const hamburger = document.createElement('button');
   hamburger.className = 'hamburger';
@@ -39,7 +74,8 @@
     const a = document.createElement('a');
     a.href = p.href;
     a.textContent = p.label;
-    if (current === p.href || (current === '' && p.href === 'index.html')) {
+    if (current === p.href || (current === '' && p.href === 'index.html') ||
+        (p.href === 'stories.html' && storyPages.includes(current))) {
       a.className = 'active';
     }
     a.addEventListener('click', () => links.classList.remove('open'));

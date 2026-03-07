@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Headhunted — Ascent Universe</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow-y: auto; }
+
+/* Scene backgrounds */
+.scene-bg-raid { background: radial-gradient(ellipse at 40% 50%, rgba(220,120,30,0.15) 0%, rgba(200,80,10,0.08) 40%, transparent 65%); }
+.scene-bg-headhunters { background: radial-gradient(ellipse at 50% 40%, rgba(200,30,30,0.18) 0%, rgba(180,20,20,0.10) 40%, transparent 65%); }
+.scene-bg-rooftop { background: radial-gradient(circle at 50% 40%, rgba(10,20,80,0.18) 0%, rgba(0,40,120,0.08) 40%, transparent 60%); }
+.scene-bg-meeting { background: radial-gradient(ellipse at 50% 50%, rgba(120,120,130,0.14) 0%, rgba(100,100,110,0.07) 40%, transparent 65%); }
+.scene-bg-argument { background: radial-gradient(ellipse at 40% 60%, rgba(200,160,50,0.14) 0%, rgba(180,140,30,0.07) 40%, transparent 65%); }
+.scene-bg-puppet { background: radial-gradient(circle at 50% 50%, rgba(140,160,180,0.16) 0%, rgba(100,120,140,0.08) 40%, transparent 60%); }
+
+/* Animated effects */
+@keyframes pulse { 0%,100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+@keyframes flicker { 0%,95% { opacity: 1; } 96% { opacity: 0.4; } 97% { opacity: 1; } 98% { opacity: 0.6; } 100% { opacity: 1; } }
+@keyframes drift { 0% { transform: translateY(0); } 100% { transform: translateY(-20px); } }
+
+.scene-effect {
+  position: fixed; top: 48px; left: 0; right: 0; height: 4px; z-index: 50;
+  pointer-events: none; transition: opacity 0.5s;
+}
+.effect-combat { background: linear-gradient(90deg, rgba(220,120,30,0.5) 0%, rgba(255,160,50,0.3) 50%, rgba(220,120,30,0.5) 100%); animation: flicker 0.8s infinite; }
+.effect-alert { background: linear-gradient(90deg, rgba(200,30,30,0.6) 0%, rgba(255,60,40,0.3) 50%, rgba(200,30,30,0.6) 100%); animation: flicker 0.5s infinite; }
+.effect-night { background: linear-gradient(90deg, transparent 0%, rgba(80,120,220,0.5) 50%, transparent 100%); animation: pulse 3s infinite; }
+.effect-fog { background: linear-gradient(90deg, rgba(120,120,130,0.3) 0%, rgba(150,150,160,0.15) 50%, rgba(120,120,130,0.3) 100%); animation: pulse 4s infinite; }
+.effect-tension { background: linear-gradient(90deg, rgba(200,160,50,0.4) 0%, rgba(220,180,60,0.2) 50%, rgba(200,160,50,0.4) 100%); animation: pulse 2s infinite; }
+.effect-stark { background: linear-gradient(90deg, rgba(140,160,180,0.4) 0%, rgba(180,200,220,0.6) 50%, rgba(140,160,180,0.4) 100%); animation: pulse 1.5s infinite; }
+
+.story-header {
+  text-align: center; padding: 30px 20px 20px; max-width: 720px; margin: 0 auto;
+}
+.story-main-title { font-size: 20px; letter-spacing: 6px; color: var(--accent); font-weight: 700; }
+.story-main-sub { font-size: 10px; letter-spacing: 4px; color: var(--text-dim); margin-top: 4px; }
+.story-main-time { font-size: 9px; letter-spacing: 3px; color: var(--accent2); margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="page-body">
+
+<div class="scene-effect" id="scene-effect"></div>
+
+<div class="story-header">
+  <div class="story-main-title">HEADHUNTED</div>
+  <div class="story-main-sub">ASCENT UNIVERSE</div>
+  <div class="story-main-time">20 – 25 MINUTES</div>
+</div>
+
+<div class="story-container" id="story-container">
+  <!-- Scenes injected by JS -->
+</div>
+
+</div>
+<script src="nav.js"></script>
+<script>
+// ═══════════════════════════════════════════════════════════════════════════════
+// HEADHUNTED — Full Story Text, split into scenes
+// ═══════════════════════════════════════════════════════════════════════════════
+
+const SCENES = [
+{
+  title: "THE RAID",
+  header: "SCENE 01 — THE RAID",
+  bg: "scene-bg-raid",
+  effect: "effect-combat",
+  text: `<p>Khurram Singh was jerked awake by the wail of the air raid siren. Before conscious thought had time to percolate through fully he was already half-dressed, pulling on a faded uniform and dashing for the door.</p>
+
+<p>There was a flash of light from the corridor window, the lights flickered, went out and then returned, and Khurram automatically began counting. On <span class="dialogue">"ten,"</span> he reached the other end of the corridor and flung the door open, and the concussion arrived. Seven kilometres away &mdash; probably low-yield nuclear. It could be an EMP device.</p>
+
+<p>The situation room was in disarray &mdash; officers and civilian techs rushing to their stations, crowding round the chart table or fiddling with antique display terminals. Another shudder reached them, another flash visible through the blacked-out windows. Then a series of them, lower yield devices landing closer.</p>
+
+<p><span class="dialogue">"Report,"</span> he snapped, reaching the table, scattering a couple of junior advisors in the process.</p>
+
+<p><span class="dialogue">"The raid started five minutes ago, sir. Hundred-fifty aircraft, coming in low and fast,"</span> said someone &mdash; a civilian technical advisor, he vaguely recalled. Khurram pointed at her, clicking his finger to cut through the chatter.</p>
+
+<p><span class="dialogue">"Composition of their forces?"</span></p>
+
+<p><span class="dialogue">"Overlord-class drones, we think. Fast, but a small payload capacity."</span></p>
+
+<p>Red markers were crowding in from the East, moving too fast to be manned aircraft &mdash; drones and missiles, and thousands of long-range artillery rounds. There was something off about that &mdash; the imperialist bastards didn't want to seize a smoking ruin of a city, so why the gun rounds?</p>
+
+<p><span class="dialogue">"Where's our air cover?"</span> Khurram demanded. Someone, Khurram thought he'd been a conurbation director's attache in a previous life, pointed to a grey smear on the map.</p>
+
+<p><span class="dialogue">"Sir. They hit one of our concealed bases with something, don't know what&mdash;"</span></p>
+
+<p><span class="dialogue">"Probably a laser weapon bounced off an orbital mirror,"</span> said the technical advisor. Khurram kept his sigh of despair inward. <span class="thought">If Arco had reactivated the Ascent weaponry, they weren't going to win.</span></p>
+
+<p><span class="dialogue">"Then bring in forces from further afield."</span></p>
+
+<p>Another shudder, this time it felt like an airburst, very close. They were finding their range.</p>
+
+<p><span class="dialogue">"We're doing so now, sir,"</span> the officer scrolled the display screen, the green tick marks of friendly aircraft moving in, crawling closer at barely more than the speed of sound. Too late. <span class="thought">Think of something, or die &mdash; that was the stark choice.</span></p>
+
+<p>Then it got worse.</p>`
+},
+{
+  title: "HEADHUNTERS",
+  header: "SCENE 02 — HEADHUNTERS",
+  bg: "scene-bg-headhunters",
+  effect: "effect-alert",
+  text: `<p>Someone near the back of the room snatched up a landline phone, exchanging a few panicked words with the commander on the other end, one of the local defence brigades. Khurram caught a few scattered words, which didn't make a lick of sense. Something about headhunters.</p>
+
+<p><span class="dialogue">"Headhunter drones,"</span> said the advisor, the woman who'd spoken up before. <span class="dialogue">"Sir, I know what was in those artillery shells, and you need to see this."</span></p>
+
+<p>She was pointing at one of the screens, a helmet-cam view from one of the defenders. The camera jerked left and right, and Khurram caught a glimpse of defence troopers in the faded grey armour of tactical enforcers, Arco insignia scratched off their helmets. Tall, ancient brick buildings rose up on all sides, lit by floodlights that threw threatening shadows over the gloom.</p>
+
+<p>The view jerked up and down, revealing the flickering firefly lights of high-altitude drones, and the confetti bursts of what looked like flak shells exploding above the rooftops. They weren't flak shells. The confetti rained down over the buildings and seemed to aim for the helmeted troopers. There were bangs, flashes of chemical fire, and men and women began to die, soldiers collapsing where they stood, helmets holed by tiny explosive rounds, needling in from seemingly random angles. There were gasps of shock. The view smeared briefly as the soldier began to run. A man in front of the camera's view waved his hands, trying to swat at something the camera couldn't see. Then there was a flash, and he fell, legs giving way in a moment. Then there was a second flash, and the camera collapsed.</p>
+
+<p><span class="dialogue">"I see,"</span> said Khurram. <span class="dialogue">"Headhunters."</span></p>
+
+<p>He exchanged a grim look with the officers grouped around the table.</p>
+
+<p><span class="dialogue">"Options. Focus. I need countermeasures."</span></p>
+
+<p>Green dots were winking out, as his soldiers died where they stood, with no ability to resist a death that approached with more speed and surety than a bomb or bullet.</p>
+
+<p><span class="dialogue">"The weapons don't seem to be targeting civilians,"</span> said someone. <span class="dialogue">"Guess is that they're simple pattern-recognition, designed to home in on anyone holding a gun."</span></p>
+
+<p><span class="dialogue">"But how are they finding the troop concentrations in the first place?"</span> someone said.</p>
+
+<p><span class="dialogue">"So we throw away our guns?"</span> said Khurram. <span class="dialogue">"Don't you see that's exactly what the bastard wants us to do. Lie down in abject surrender, and then Arco's great and wise leader will plaster the newsfeed with satellite footage of us lying down in the dirt, having given up the conurbation without a fight."</span></p>
+
+<p><span class="dialogue">"These are precision guided weapons, and small. No room for shielding mass &mdash; disrupt their comms or guidance,"</span> said the advisor.</p>
+
+<p>A good idea, but what did he have at his disposal?</p>
+
+<p>There were antiair emplacements throughout the city, old-style autocannons, missiles and a few modern stager-type weapons. Khurram watched as a few desultory ground-to-air missiles rose, diving right through the swarms of headhunters to little effect. Too small to trigger the active radar proximity fuses.</p>
+
+<p><span class="thought">If only they'd had lasers.</span></p>
+
+<p>He paused for a moment, as the chatter of other officers exchanging ideas, arguing and frantically searching for options, rose in volume. Someone was shouting over the din, demanding orders.</p>
+
+<p><span class="dialogue">"Zoom out, display the airspace up to max altitude."</span></p>
+
+<p>There was something there to notice, a few red markers loitering far above the battlespace.</p>
+
+<p><span class="thought">Why were the heavier drones there? They weren't firing, just circling idly at high altitudes,</span> Khurram saw. They'd delivered their softening barrage, but since then hadn't withdrawn from range.</p>
+
+<p><span class="dialogue">"Are those spotters? Seems like one would be good enough for that."</span></p>
+
+<p>As he watched, one caught a missile and fell out of the sky. He realised, then.</p>
+
+<p><span class="dialogue">"Issue the following to all air defences,"</span> Khurram snapped. <span class="dialogue">"Launch everything at those drones &mdash; Overlords, you called them."</span></p>
+
+<p>One or two of the staff officers looked like they might be about to disagree, that they were leaving soldiers on the ground undefended, but the orders went out. Khurram met the eyes of the civilian advisor, and she nodded slightly.</p>
+
+<p>Tense minutes passed as missiles rose and detonated. The Arco drones weren't as agile as he'd feared, and they began to fall from the sky one by one.</p>
+
+<p>More helmet-cam footage came in of troopers left without even their patchy air cover, helplessly picked off by Arco's vile new weapon. And then it was over. With a few drones still left in the sky, some critical threshold was breached. The headhunter bots died, and they dropped from the sky like hailstones, bouncing and glancing off the city streets.</p>
+
+<p>Khurram sagged, raising a hand to wipe the sweat from his brow, as the cheering began.</p>`
+},
+{
+  title: "THE ROOFTOP",
+  header: "SCENE 03 — THE ROOFTOP",
+  bg: "scene-bg-rooftop",
+  effect: "effect-night",
+  text: `<p>The housecube stack that was the headquarters of the Northern Democratic Coalition had seen better days. A tower of blocky units that was only a little taller than its surroundings, it was as anonymous a building as General Khurram Singh could locate in the old city, and so far had been spared in the raids. It wasn't good fortune. <span class="thought">Corbin needed someone alive who could surrender when this was all over.</span></p>
+
+<p>He sat on the roof, alone and heedless of the mostly-hypothetical threat of snipers. Fires burned in the distance, the jagged columns of housecube stacks haphazardly mixed in with the brick-and-mortar buildings of a past age.</p>
+
+<p>Nearly all the damage to the city had been from crashes, not direct strikes.</p>
+
+<p>Ground-effect transports moved from street to rubble-strewn street, collecting the dead &mdash; soldiers, mostly volunteers, who believed humanity deserved better than subjection to yet another tyranny. Khurram's eyes rested on one soldier, a young man lying sprawled in the street, temple holed by a perfectly aimed shaped charge.</p>
+
+<p><span class="emphasis">Zero civilian casualties.</span> That was what Arco's media puppets would be broadcasting, and it would be pretty close to true. The Director of Arco was particular in his barbarisms.</p>
+
+<p><span class="dialogue">"May you get what you deserve,"</span> Khurram murmured, raising a glass to the sky in mock salute. He downed the drink and tried to relax.</p>
+
+<p>The civilians and officers could handle things themselves for the next few hours &mdash; a simple clean-up job, accounting for losses incurred. Easy, and routine by this point. More guns could be churned out of the overworked factories, more missiles and jamming equipment brought in to disrupt the delicate communication links the headhunters used. <span class="thought">Arco would have to think of something better next time.</span></p>
+
+<p><span class="thought">What about the time after that? They would just have to keep improvising, keep waiting for a miracle.</span> Khurram knew that miracles were possible.</p>
+
+<p>He remembered the day of Ascent, a decade gone by now &mdash; how the sky had exploded with otherworldly fire and the Dyn had vanished. How Corbin, the man with no past and seemingly no dreams beyond power, had made the ludicrous claim to have brought it about, seized Arco and declared his plans to reunite humanity. Many had defied him, out of naked self-interest as often as a desire for freedom. They had all fallen, leaving only him &mdash; General Khurram Singh, former conurbation director, current resistance leader.</p>
+
+<p>He looked up at the night sky &mdash; the winter air was clear, even through the harsh streetlight he could make out the motes of light that were the titanic orbital constructs Arco had seized or assembled, the flakes of debris left over from the Day of Ascent, the brighter flashing spark of a spaceship &mdash; no, a starship &mdash; flexing its muscles of diamond and magnetism.</p>
+
+<p>Surface-to-orbit traffic came and went almost constantly &mdash; increasing numbers of Arco spaceplanes joining the ranks of captured Dyn landers. A part of Khurram's heart, one he didn't much like, swelled. <span class="thought">We did this.</span> He wanted to feel pride in it, in how far they'd come just a decade after the Dyn had been wiped out in a singular miracle. But he couldn't. It wasn't right, not when weighed against the prospect of an invincible dictatorship. <span class="thought">Because if we make the wrong choice now, we make it for all time. Arco has no human rivals, no checks on what it might become.</span></p>
+
+<p>He became aware of a presence. The advisor stood behind him.</p>
+
+<p><span class="dialogue">"How long have you been standing there?"</span> said Khurram.</p>
+
+<p><span class="dialogue">"Just a couple of minutes. I'm unable to sleep,"</span> she said.</p>
+
+<p><span class="dialogue">"Your name has slipped my mind..."</span></p>
+
+<p><span class="dialogue">"Aurelie."</span></p>
+
+<p><span class="dialogue">"You did well back there. Quick thinking. Don't know if I would have realised the drones were networked together like that without you."</span></p>
+
+<p><span class="thought">You know damn well you wouldn't have,</span> Khurram thought.</p>
+
+<p><span class="dialogue">"Thank you."</span> She gave a birdlike nod and pulled up a chair next to him.</p>
+
+<p>Khurram saw that her face was tired and gaunt, pale like all the blood had been drained from her. He supposed he didn't look much better, his beard and moustache now badly overgrown, uniform askew after the hours-long debriefing.</p>
+
+<p><span class="dialogue">"It will be dawn soon,"</span> she said. <span class="dialogue">"You should try to get some sleep before then. You need to be functional tomorrow."</span></p>
+
+<p><span class="dialogue">"As should you,"</span> Khurram remarked. Neither of them said anything for a moment.</p>
+
+<p><span class="dialogue">"You're thinking about Arco's power, how they seem unassailable,"</span> she said.</p>
+
+<p><span class="dialogue">"Of course I am, dammit. How could I not? It's like the Dyn all over again &mdash; lights in the sky endlessly circling, and all we can do is sit and wait on their judgement. Minds we don't understand, outsiders, in control of everything &mdash; life and death. It is intolerable."</span></p>
+
+<p><span class="dialogue">"They're not so different from us."</span></p>
+
+<p><span class="dialogue">"I know that. I was Arco, as were you, as were we all."</span></p>
+
+<p><span class="dialogue">"I meant the Dyn."</span></p>
+
+<p>There was a pause, during which Khurram tried to think of something to say. Truthfully, he barely thought about the Dyn these days &mdash; even before the world had flipped on its head they'd been a distant abstraction, irrelevant to everyday life, like the stars themselves.</p>
+
+<p>Aurelie spoke up.</p>
+
+<p><span class="dialogue">"I did not come up here to stargaze."</span></p>
+
+<p>Khurram wasn't surprised.</p>
+
+<p><span class="dialogue">"I've received a message &mdash; something I thought was best to present to you personally to offset certain risks. A representative of Arco, someone I have reason to expect is trustworthy, wishes to meet with us."</span></p>`
+},
+{
+  title: "THE MEETING",
+  header: "SCENE 04 — THE MEETING",
+  bg: "scene-bg-meeting",
+  effect: "effect-fog",
+  text: `<p>The motorcade wound its way through the city centre, dodging the heaps of rubble and the burned-out husks of armoured vehicles, killed where they'd been positioned by heavier variants of the headhunter drones. <span class="thought">Lasers were the answer, Khurram knew &mdash; jamming and electromagnetic irradiation would wreck their electronics, force Arco to come down to their level, confront them on equal terms, aircraft against aircraft, soldier against soldier.</span></p>
+
+<p><span class="thought">So what &mdash; we can die with dignity?</span> Khurram thought. <span class="thought">Was that all that kept them going now, some arcane concept of honour?</span></p>
+
+<p>The message Aurelie had showed them was simple &mdash; it named a time and a place, a warehouse in a burned-out sector of the city near where the old Dyn-era conurbation had stood.</p>
+
+<p><span class="dialogue">"And Arco's envoy will just be there, in the middle of the city, alone?"</span> Khurram asked. Aurelie just nodded, smiling faintly.</p>
+
+<p>The convoy approached a square of blasted terrain. It looked like the ground zero of a sub-yield nuclear strike &mdash; around a hundred metres of ground had been glassed and excavated, ringed on one side by the deserted tombstone towers of Conurbation 3125, and the other by the low-rise sprawl of the city. There was a figure in the centre of the devastation, a pallid grey shape almost indistinguishable against the foggy sky.</p>
+
+<p>The man from Arco had indeed come alone. He didn't appear to be armed and stepped forward unhurriedly, arms raised. Khurram waved a hand and the troop carriers drew to a halt. Soldiers emerged, fanning out quietly and efficiently. Armoured fighting vehicles drew to a halt behind them, autocannons and machine-guns tracking smoothly around. In the distance, Khurram heard the buzz of helicopters. <span class="thought">If this was an ambush, they could at least make things difficult for Arco.</span></p>
+
+<p><span class="dialogue">"Halt,"</span> Khurram commanded, hopping out of the lead vehicle.</p>
+
+<p>There was something wrong about the man, a sense of disquiet Khurram felt that didn't have anything to do with how he looked. There was familiarity, a terrible dawning sense that he recognised the man, and not for anything good. <span class="emphasis">It was him.</span></p>
+
+<p><span class="dialogue">"Should I be honoured?"</span> Khurram murmured, not letting his surprise show.</p>
+
+<p>The man picked it up anyway as he approached. He was short, with blonde hair a little longer than the propaganda posters and a handsome, hawkish face. Though it might just be the dawn light, Khurram thought he looked a little pasty, face drawn, movements overly deliberate.</p>
+
+<p>Khurram stepped down from the vehicle, keeping a wary distance from the man. He felt the tension in the soldiers behind him.</p>
+
+<p><span class="dialogue">"Hello, General Singh. It's good to finally meet you."</span></p>
+
+<p><span class="dialogue">"I wish I could say the same. Should I call you Director?"</span> There was a reflexive, almost unconscious twitch in the men around Khurram. A dozen rifles were raised. You could feel the hatred boiling off them like steam.</p>
+
+<p><span class="dialogue">"Corbin will do fine,"</span> the man said.</p>
+
+<p>Aurelie and a couple of officers stepped out of the transport behind Khurram, forming up in a line. Khurram heard their feet crunching in the dirt, the sound magnified in his mind. He waved them back.</p>
+
+<p><span class="dialogue">"What's to stop us from taking you prisoner right now?"</span> Khurram said, ignoring the dictator's outstretched hand.</p>
+
+<p><span class="dialogue">"Oh, use your imagination, General,"</span> Corbin smiled thinly. <span class="dialogue">"A spaceplane in high orbit, armed with atmospheric-penetration nukes. One of our own warseed lasers and a reflector, or maybe I'm carrying a bomb. Let's cut out the posturing and proceed on the basis of something we both know is true. Your men aren't going to kill or arrest me, and we are both going to resolve this little internecine dispute like adults. Take this as the gesture of trust it's intended as."</span></p>
+
+<p>Then he simply turned around and walked away. Khurram, bemused, made to follow, waving the soldiers back.</p>`
+},
+{
+  title: "THE ARGUMENT",
+  header: "SCENE 05 — THE ARGUMENT",
+  bg: "scene-bg-argument",
+  effect: "effect-tension",
+  text: `<p><span class="dialogue">"You've come to demand my surrender?"</span></p>
+
+<p><span class="dialogue">"Oh, come on! You're smarter than that. I wouldn't have come in person just to ask you to surrender."</span></p>
+
+<p>The shorter man turned to Khurram, that same meaningless half-smile on his face. Khurram considered his words.</p>
+
+<p><span class="thought">Khurram had never met the man, though he'd occasionally been on conference calls with his predecessor. He knew Corbin's reputation &mdash; he had an inflated sense of self, a flair for the dramatic, but above all a shrewd mind. So why had he come here?</span></p>
+
+<p><span class="dialogue">"Are you going to ask me to rejoin Arco?"</span> Khurram said, the words bitten off. Corbin nodded.</p>
+
+<p><span class="dialogue">"After this, after all the death you've inflicted, after what you plan to do, you really expect me to just quietly give up?"</span></p>
+
+<p><span class="dialogue">"Give up?"</span> Corbin seemed almost offended. <span class="dialogue">"I understand that you don't trust me, and believe me, I fully accept that. I'm not asking you to trust me, and I'm certainly not asking you to surrender, believe me. I'm asking you to judge me by my actions. That's what we are, ultimately."</span></p>
+
+<p><span class="dialogue">"Your actions?"</span> Khurram stormed, all thoughts of diplomacy gone. He thought back to the panicked faces of his soldiers, watching their comrades die around them, helmets holed by micro-explosives, unable to do anything except wait to die. <span class="dialogue">"You murdered my men like it was nothing, gave them no chance&mdash;"</span></p>
+
+<p><span class="dialogue">"What did you imagine war would be like, General? Question my aims, if you think you can, but I am perfectly within my rights to kill enemy combatants in a war. Strange that you think worse of me for using a method that resulted in far fewer casualties."</span></p>
+
+<p><span class="dialogue">"You think your demonic weapons are a good thing?"</span> Khurram said, incredulous.</p>
+
+<p><span class="dialogue">"I think they're a necessary thing,"</span> Corbin said. <span class="dialogue">"I think it's a pity you wouldn't do the same. When the greater war comes, we won't have the luxury of being soft on our enemies."</span></p>
+
+<p><span class="dialogue">"So this is just practice?"</span> Khurram said.</p>
+
+<p><span class="dialogue">"This is the real thing. The Dyn cannot be allowed to continue in their current form. There has to be an end."</span></p>
+
+<p><span class="dialogue">"Then you're even madder than I thought,"</span> Khurram said.</p>
+
+<p><span class="dialogue">"Hardly,"</span> Corbin laughed. <span class="dialogue">"But consider it a different way. Suppose I am a madman. I'm clearly going to defeat you eventually, whether by surrender or slow attrition. Shouldn't a madman have someone sane and reasonable by his side?"</span></p>
+
+<p>Khurram sighed.</p>
+
+<p><span class="dialogue">"That's not going to work, I'm afraid. You forget that I was an Arco officer for decades. 'You'll be able to do more good from the inside' &mdash; that was what I told myself every day. I didn't realise then that the whole thing was rotten, that what I said was just a thin excuse."</span></p>
+
+<p>Corbin smiled, shook his head.</p>
+
+<p><span class="dialogue">"I'm not asking you to rejoin the old Arco, General. I'm asking you to help me build a new one. I asked you to judge me by my actions, and yet we somehow skipped right by that. I was too willing to admit the mistake."</span></p>
+
+<p><span class="dialogue">"You think I'm ashamed of what I've done? That I feel guilty about the world I'm helping to build?"</span> Corbin said. <span class="dialogue">"Don't you understand what we've achieved? A decade ago we were facing extinction, and now we're looking to the stars."</span></p>
+
+<p><span class="dialogue">"Under a tyrant."</span></p>
+
+<p><span class="dialogue">"I am who I appear to be, imperfections included! But there's no dark secret, General Singh, no hidden atrocities, nothing beyond the painful work of building humanity up anew. I'm simply a man who's trying &mdash; and succeeding &mdash; at making the world a better place, which is more than I can say for you in your current state."</span></p>
+
+<p>Khurram said nothing at the insult. He would not be goaded.</p>
+
+<p><span class="dialogue">"We're not so different, General,"</span> Corbin said, the smile returning. <span class="dialogue">"We're both men of action, trying to do what we believe is right. The difference is that, currently, you're bad at it."</span></p>
+
+<p><span class="dialogue">"Even if you're right,"</span> Khurram said, <span class="dialogue">"and I don't think you are, can we trust you forever? You're a single point of failure."</span></p>
+
+<p><span class="dialogue">"I wish there were another way,"</span> said Corbin. <span class="dialogue">"I really do, and one day, maybe quite soon, we'll do things the right way. I'm experimenting, you see. Democracy, epistocracy, demarchies, all the systems you could imagine dredged up from our overlong history of experiments in government. I'm trying many right now on small scales. We'll get it right, and we'll build something better than what the world had before. Not just stronger, mind you, but happier and freer, more stable and just. But for now, General, you've got a decision to make."</span></p>
+
+<p><span class="dialogue">"You expect me to believe&mdash;"</span></p>
+
+<p><span class="dialogue">"A constitution, then,"</span> said Corbin. <span class="dialogue">"What about that. Let's say I figure out some power-sharing, democratic and above all accountable setup that takes over on the day I die or step down. We'll enshrine it in law. Would that satisfy you?"</span></p>
+
+<p>Khurram gave that some thought. <span class="thought">At the very least, he could check if those experiments were really taking place, or if there was nothing to this man beyond pure will to power.</span></p>
+
+<p><span class="dialogue">"I'll believe that when I see it."</span></p>
+
+<p><span class="dialogue">"Sure, fine. I'll get on it right away. Something I was planning on doing anyway."</span></p>
+
+<p>Khurram looked at the dictator, replaying the conversation in his mind.</p>
+
+<p><span class="dialogue">"What happens if I say no?"</span></p>
+
+<p><span class="dialogue">"Are you expecting me to say we'll wipe this enclave out?"</span> Corbin said. <span class="dialogue">"You're so eager to paint me as the villain, aren't you? If you don't surrender, we'll continue putting you under pressure until you do. You'll be imprisoned when we win, and you'll lose any chance you might have to affect the future. There's some people who might consider that fate worse than death."</span></p>
+
+<p><span class="dialogue">"People like you,"</span> Khurram said.</p>
+
+<p>Corbin shrugged.</p>
+
+<p><span class="dialogue">"I'm exactly what I appear to be. Call that monstrous if you like, but I think if you met the real monsters you'd reconsider."</span></p>
+
+<p><span class="dialogue">"You mean the Dyn, don't you?"</span></p>
+
+<p>Corbin laughed, a hollow, bitter sound.</p>
+
+<p><span class="dialogue">"Oh General, you have no idea."</span></p>`
+},
+{
+  title: "THE PUPPET",
+  header: "SCENE 06 — THE PUPPET",
+  bg: "scene-bg-puppet",
+  effect: "effect-stark",
+  text: `<p>The two of them turned about, walking back towards the convoy. Khurram pondered the dictator's words, and wondered how many of them were idle threats.</p>
+
+<p>Corbin was saying something, Khurram realised, but he hadn't been listening.</p>
+
+<p><span class="dialogue">"What's that?"</span></p>
+
+<p><span class="dialogue">"I said, 'thank you,' General,"</span> Corbin said, shaking his head. <span class="dialogue">"You've given me a lot to think about. I used to have someone who would question me like this. He wasn't always right, but he was honest, and a better man than I could ever be. You're not him, but you remind me of him."</span></p>
+
+<p>After a pause:</p>
+
+<p><span class="dialogue">"Though I'm hoping you won't be as miserable as he was."</span></p>
+
+<p>Khurram said nothing, wondering again. <span class="thought">Was this flattery?</span> He looked at Corbin, and saw nothing but the same open, half-smiling expression.</p>
+
+<p><span class="dialogue">"I'll consider your offer,"</span> Khurram said as they rejoined the convoy, feeling shaken. This was more of a concession than he'd expected, offered freely.</p>
+
+<p>They arrived at the convoy, returning to the ranks of soldiers.</p>
+
+<p>What happened next was too sudden for Khurram to respond to. Aurelie drew her sidearm from a hip holster and fired, aiming for Corbin's thigh.</p>
+
+<p>The shot echoed through the air and Khurram sprang back, shocked, as Corbin collapsed to the ground, blood spraying from his leg wound. No &mdash; not blood &mdash; <span class="emphasis">black ichor like oil, and strands of grey fibre like&hellip;</span></p>
+
+<p>Corbin laughed, apparently in no pain, his face briefly contorting.</p>
+
+<p><span class="dialogue">"Ah, I should have guessed. Caught out."</span></p>
+
+<p>Khurram gaped at Aurelie, who had dropped her weapon. Several soldiers aimed at her.</p>
+
+<p><span class="dialogue">"I apologise, but I was reasonably certain what this thing was,"</span> she said, unconcerned.</p>
+
+<p>Corbin &mdash; but it wasn't Corbin really &mdash; kept laughing from his position on the dirt.</p>
+
+<p><span class="dialogue">"You didn't really think I'd just walk into an enemy stronghold, did you?"</span> said not-Corbin.</p>
+
+<p><span class="dialogue">"My gesture of trust was a little bit of theatre. Puppetry, to be precise. I've enjoyed speaking with you, Khurram Singh, and I know we'll see each other soon."</span></p>
+
+<p>And with that, the eyes of the puppet-thing went blank, the face relaxing like a wax mannequin.</p>`
+}
+];
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// STORY ENGINE
+// ═══════════════════════════════════════════════════════════════════════════════
+
+let currentScene = 0;
+const container = document.getElementById('story-container');
+const effectBar = document.getElementById('scene-effect');
+
+function buildScenes() {
+  SCENES.forEach((s, i) => {
+    const div = document.createElement('div');
+    div.className = 'scene' + (i === 0 ? ' active' : '');
+    div.id = 'scene-' + i;
+    div.innerHTML = `
+      <div class="scene-bg ${s.bg}"></div>
+      <div class="scene-header">${s.header}</div>
+      <div class="scene-title">${s.title}</div>
+      <div class="scene-text">${s.text}</div>
+      <div class="story-nav">
+        <button onclick="goScene(${i-1})" ${i === 0 ? 'disabled' : ''}>← PREV</button>
+        <select class="scene-select" onchange="goScene(parseInt(this.value))">
+          ${SCENES.map((sc, j) => `<option value="${j}" ${j===i?'selected':''}>${j+1}. ${sc.title}</option>`).join('')}
+        </select>
+        <span class="scene-counter">${i+1} / ${SCENES.length}</span>
+        <button onclick="goScene(${i+1})" ${i === SCENES.length-1 ? 'disabled' : ''}>NEXT →</button>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function goScene(i) {
+  if (i < 0 || i >= SCENES.length) return;
+  document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+  document.getElementById('scene-' + i).classList.add('active');
+  currentScene = i;
+
+  // Update effect bar
+  effectBar.className = 'scene-effect ' + (SCENES[i].effect || '');
+
+  // Scroll to top of story
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Update all selects
+  document.querySelectorAll('.scene-select').forEach(sel => sel.value = i);
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goScene(currentScene + 1);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goScene(currentScene - 1);
+});
+
+// Touch swipe
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 60) {
+    if (dx < 0) goScene(currentScene + 1);
+    else goScene(currentScene - 1);
+  }
+});
+
+buildScenes();
+</script>
+</body>
+</html>

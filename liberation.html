@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liberation Day — Ascent Universe</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow: hidden; background: #000; }
+
+canvas { display: block; width: 100%; height: 100%; }
+
+.lib-header {
+  position: fixed; top: 56px; left: 50%; transform: translateX(-50%);
+  text-align: center; z-index: 20; pointer-events: none;
+  transition: opacity 1s;
+}
+.lib-title { font-size: 14px; letter-spacing: 6px; color: var(--accent2); font-weight: 700; }
+.lib-sub { font-size: 7px; letter-spacing: 3px; color: var(--text-dim); margin-top: 2px; }
+
+.lib-countdown {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  text-align: center; z-index: 25; pointer-events: none;
+  transition: opacity 0.5s;
+}
+.lib-countdown-val {
+  font-size: 48px; letter-spacing: 12px; color: var(--accent2);
+  font-weight: 700; font-family: var(--mono);
+}
+.lib-countdown-label {
+  font-size: 8px; letter-spacing: 4px; color: var(--text-dim); margin-top: 4px;
+}
+
+.lib-status {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+  text-align: center; z-index: 20; pointer-events: none;
+  max-width: 500px; width: calc(100% - 40px);
+}
+.lib-status-line {
+  font-size: 9px; letter-spacing: 2px; margin-bottom: 4px;
+  transition: opacity 0.5s, color 0.5s;
+}
+
+.lib-quote {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  text-align: center; z-index: 25; pointer-events: none;
+  max-width: 500px; opacity: 0; transition: opacity 2s;
+}
+.lib-quote-text {
+  font-size: 12px; line-height: 2; color: var(--text-mid);
+  font-style: italic; letter-spacing: 1px;
+}
+.lib-quote-attr {
+  font-size: 8px; letter-spacing: 3px; color: var(--text-dim); margin-top: 12px;
+}
+
+.lib-controls {
+  position: fixed; bottom: 20px; right: 16px; z-index: 30;
+  display: flex; gap: 6px;
+}
+.lib-btn {
+  border: 1px solid var(--border); background: rgba(10,10,15,0.8);
+  color: var(--text-dim); font-size: 8px; letter-spacing: 2px;
+  padding: 6px 12px; cursor: pointer; border-radius: 2px;
+  font-family: var(--mono); transition: all 0.2s;
+}
+.lib-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+@media (max-width: 600px) {
+  .lib-countdown-val { font-size: 32px; }
+}
+</style>
+</head>
+<body>
+<div class="page-body">
+
+<canvas id="lib-canvas"></canvas>
+
+<div class="lib-header" id="lib-header">
+  <div class="lib-title">LIBERATION DAY</div>
+  <div class="lib-sub">2479 CE &middot; WARSEED ACTIVATION SEQUENCE</div>
+</div>
+
+<div class="lib-countdown" id="lib-countdown">
+  <div class="lib-countdown-val" id="countdown-val">10</div>
+  <div class="lib-countdown-label">SECONDS TO ACTIVATION</div>
+</div>
+
+<div class="lib-status" id="lib-status">
+  <div class="lib-status-line" id="status-1" style="color:var(--text-dim);">GEOTHERMAL HUBS: STANDBY</div>
+  <div class="lib-status-line" id="status-2" style="color:var(--text-dim);">OPTICAL FIBRE NETWORK: DORMANT</div>
+  <div class="lib-status-line" id="status-3" style="color:var(--text-dim);">COHERENT LIGHT ARRAY: OFFLINE</div>
+</div>
+
+<div class="lib-quote" id="lib-quote">
+  <div class="lib-quote-text">Tens of thousands of geothermal-powered hubs across the ocean floor unspooled hyperdiamond optical fibres to the surface, each delivering 100kW of coherent blue light. The Dynic fleet was annihilated in orbit.</div>
+  <div class="lib-quote-attr">&mdash; ASCENT, 2479 CE</div>
+</div>
+
+<div class="lib-controls">
+  <button class="lib-btn" onclick="resetSequence()">RESET</button>
+</div>
+
+</div>
+<script src="nav.js"></script>
+<script>
+const canvas = document.getElementById('lib-canvas');
+const ctx = canvas.getContext('2d');
+let W, H;
+
+function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+window.addEventListener('resize', resize);
+resize();
+
+// State
+let time = 0;
+let phase = 0; // 0=countdown, 1=activation, 2=beams, 3=aftermath
+const COUNTDOWN_DURATION = 10;
+const ACTIVATION_TIME = 10;
+const BEAM_TIME = 14;
+const AFTERMATH_TIME = 22;
+
+// Ocean floor hubs
+const hubs = [];
+for (let i = 0; i < 40; i++) {
+  hubs.push({
+    x: Math.random() * W,
+    baseY: H * 0.85 + Math.random() * H * 0.1,
+    fibreProgress: 0,
+    active: false,
+    activateTime: ACTIVATION_TIME + Math.random() * 2,
+    fibreX: 0,
+    intensity: 0.5 + Math.random() * 0.5
+  });
+  hubs[i].fibreX = hubs[i].x + (Math.random() - 0.5) * 30;
+}
+
+// Dyn fleet
+const dynShips = [];
+for (let i = 0; i < 25; i++) {
+  dynShips.push({
+    x: W * 0.15 + Math.random() * W * 0.7,
+    y: H * 0.05 + Math.random() * H * 0.15,
+    size: 2 + Math.random() * 3,
+    alive: true,
+    deathTime: 0
+  });
+}
+
+// Stars
+const stars = Array.from({length: 200}, () => ({
+  x: Math.random() * W,
+  y: Math.random() * H * 0.3,
+  b: Math.random() * 0.3 + 0.05,
+  s: Math.random() + 0.3
+}));
+
+function draw() {
+  time += 0.016;
+
+  // Phase transitions
+  if (time >= AFTERMATH_TIME) phase = 3;
+  else if (time >= BEAM_TIME) phase = 2;
+  else if (time >= ACTIVATION_TIME) phase = 1;
+  else phase = 0;
+
+  // Clear
+  ctx.fillStyle = '#030308';
+  ctx.fillRect(0, 0, W, H);
+
+  // Stars (above ocean)
+  for (const s of stars) {
+    ctx.fillStyle = `rgba(200,220,255,${s.b})`;
+    ctx.fillRect(s.x, s.y, s.s, s.s);
+  }
+
+  // Ocean surface
+  const oceanY = H * 0.55;
+  const oceanGrad = ctx.createLinearGradient(0, oceanY, 0, H);
+  oceanGrad.addColorStop(0, 'rgba(10,30,60,0.4)');
+  oceanGrad.addColorStop(0.3, 'rgba(5,15,40,0.7)');
+  oceanGrad.addColorStop(1, 'rgba(2,5,15,0.95)');
+  ctx.fillStyle = oceanGrad;
+  ctx.fillRect(0, oceanY, W, H - oceanY);
+
+  // Ocean surface shimmer
+  ctx.strokeStyle = `rgba(30,80,150,${0.1 + Math.sin(time * 0.5) * 0.05})`;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  for (let x = 0; x < W; x += 3) {
+    ctx.lineTo(x, oceanY + Math.sin(x * 0.02 + time) * 2);
+  }
+  ctx.stroke();
+
+  // Earth curvature hint
+  const earthGrad = ctx.createRadialGradient(W/2, H + 200, 0, W/2, H + 200, 500);
+  earthGrad.addColorStop(0, 'rgba(20,40,80,0.2)');
+  earthGrad.addColorStop(1, 'transparent');
+  ctx.fillStyle = earthGrad;
+  ctx.beginPath();
+  ctx.arc(W/2, H + 200, 500, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Hubs on ocean floor
+  for (const hub of hubs) {
+    // Hub glow
+    const hubActive = time >= hub.activateTime;
+    const hubColor = hubActive ? `rgba(100,180,255,${0.5 + Math.sin(time * 4 + hub.x) * 0.2})` : 'rgba(50,60,80,0.3)';
+    ctx.fillStyle = hubColor;
+    ctx.beginPath();
+    ctx.arc(hub.x, hub.baseY, hubActive ? 4 : 2, 0, Math.PI * 2);
+    ctx.fill();
+
+    if (hubActive) {
+      // Hub glow ring
+      const grd = ctx.createRadialGradient(hub.x, hub.baseY, 0, hub.x, hub.baseY, 15);
+      grd.addColorStop(0, `rgba(50,120,255,0.3)`);
+      grd.addColorStop(1, 'transparent');
+      ctx.fillStyle = grd;
+      ctx.beginPath();
+      ctx.arc(hub.x, hub.baseY, 15, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Fibre rising
+      const fibreTime = time - hub.activateTime;
+      const fibreProgress = Math.min(1, fibreTime / 3);
+      const fibreTopY = hub.baseY - (hub.baseY - oceanY) * fibreProgress;
+
+      if (fibreProgress > 0) {
+        ctx.strokeStyle = `rgba(80,150,255,${0.4 * hub.intensity})`;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(hub.x, hub.baseY);
+        ctx.quadraticCurveTo(hub.fibreX, (hub.baseY + fibreTopY) / 2, hub.x + (Math.random() - 0.5) * 2, fibreTopY);
+        ctx.stroke();
+      }
+
+      // Beam above surface (once fibre reaches top)
+      if (fibreProgress >= 1 && phase >= 2) {
+        const beamTime = time - Math.max(BEAM_TIME, hub.activateTime + 3);
+        if (beamTime > 0) {
+          const beamAlpha = Math.min(0.6, beamTime * 0.2) * hub.intensity;
+          // Beam of coherent blue light shooting upward
+          ctx.strokeStyle = `rgba(80,160,255,${beamAlpha})`;
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.moveTo(hub.x, oceanY);
+          ctx.lineTo(hub.x + (Math.random() - 0.5) * 0.5, 0);
+          ctx.stroke();
+
+          // Beam glow
+          const beamGlow = ctx.createLinearGradient(hub.x - 8, 0, hub.x + 8, 0);
+          beamGlow.addColorStop(0, 'transparent');
+          beamGlow.addColorStop(0.5, `rgba(80,160,255,${beamAlpha * 0.15})`);
+          beamGlow.addColorStop(1, 'transparent');
+          ctx.fillStyle = beamGlow;
+          ctx.fillRect(hub.x - 8, 0, 16, oceanY);
+        }
+      }
+    }
+  }
+
+  // Dyn fleet
+  for (const ship of dynShips) {
+    if (ship.alive) {
+      if (phase >= 2 && time > BEAM_TIME + 1 + Math.random() * 0.1) {
+        ship.alive = false;
+        ship.deathTime = time;
+      }
+      ctx.fillStyle = 'rgba(150,80,50,0.6)';
+      ctx.fillRect(ship.x - ship.size/2, ship.y - ship.size, ship.size, ship.size * 2);
+      // Engine
+      ctx.fillStyle = 'rgba(200,100,50,0.3)';
+      ctx.fillRect(ship.x - 1, ship.y + ship.size, 2, 2);
+    } else {
+      const dt = time - ship.deathTime;
+      if (dt < 4) {
+        const r = dt * 10;
+        const alpha = Math.max(0, 1 - dt / 4);
+        const grd = ctx.createRadialGradient(ship.x, ship.y, 0, ship.x, ship.y, r);
+        grd.addColorStop(0, `rgba(255,200,100,${alpha})`);
+        grd.addColorStop(0.4, `rgba(255,100,30,${alpha * 0.5})`);
+        grd.addColorStop(1, 'transparent');
+        ctx.fillStyle = grd;
+        ctx.beginPath();
+        ctx.arc(ship.x, ship.y, r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+  }
+
+  // Overall blue glow during beam phase
+  if (phase >= 2) {
+    const glowAlpha = Math.min(0.08, (time - BEAM_TIME) * 0.02);
+    ctx.fillStyle = `rgba(50,100,255,${glowAlpha})`;
+    ctx.fillRect(0, 0, W, H);
+  }
+
+  // UI updates
+  const countdownEl = document.getElementById('lib-countdown');
+  const statusEl = document.getElementById('lib-status');
+  const quoteEl = document.getElementById('lib-quote');
+
+  if (phase === 0) {
+    const remaining = Math.max(0, ACTIVATION_TIME - time);
+    document.getElementById('countdown-val').textContent = Math.ceil(remaining);
+    countdownEl.style.opacity = '1';
+    statusEl.style.opacity = '1';
+    quoteEl.style.opacity = '0';
+  } else if (phase === 1) {
+    countdownEl.style.opacity = '0';
+    document.getElementById('status-1').textContent = 'GEOTHERMAL HUBS: ACTIVE';
+    document.getElementById('status-1').style.color = 'var(--accent)';
+    document.getElementById('status-2').textContent = 'OPTICAL FIBRE NETWORK: UNSPOOLING';
+    document.getElementById('status-2').style.color = 'var(--accent)';
+  } else if (phase === 2) {
+    document.getElementById('status-2').textContent = 'OPTICAL FIBRE NETWORK: DEPLOYED';
+    document.getElementById('status-3').textContent = 'COHERENT LIGHT ARRAY: FIRING';
+    document.getElementById('status-3').style.color = 'var(--accent2)';
+    statusEl.style.opacity = time < BEAM_TIME + 4 ? '1' : '0';
+  } else {
+    statusEl.style.opacity = '0';
+    quoteEl.style.opacity = '1';
+  }
+
+  requestAnimationFrame(draw);
+}
+
+function resetSequence() {
+  time = 0;
+  phase = 0;
+  dynShips.forEach(s => { s.alive = true; s.deathTime = 0; });
+  document.getElementById('status-1').textContent = 'GEOTHERMAL HUBS: STANDBY';
+  document.getElementById('status-1').style.color = 'var(--text-dim)';
+  document.getElementById('status-2').textContent = 'OPTICAL FIBRE NETWORK: DORMANT';
+  document.getElementById('status-2').style.color = 'var(--text-dim)';
+  document.getElementById('status-3').textContent = 'COHERENT LIGHT ARRAY: OFFLINE';
+  document.getElementById('status-3').style.color = 'var(--text-dim)';
+}
+
+draw();
+</script>
+</body>
+</html>

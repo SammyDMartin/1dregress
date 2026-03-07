@@ -18,6 +18,96 @@
   --mono: 'Courier New', Consolas, monospace;
 }
 
+/* ─── Light / Reader Mode ────────────────────────────────────────────── */
+/* Design philosophy: an advanced-civilization terminal. Hundreds of years
+   of superintelligent AI refining interfaces. The result is radical
+   simplicity — clear, readable, nothing to prove. Think Culture ship
+   display, TNG LCARS at its most restrained, or gwern.net. */
+[data-theme="light"] {
+  --accent: #2b5a83;
+  --accent2: #8b3a2a;
+  --warn: #7a6520;
+  --green: #2a6e45;
+  --red: #a02828;
+  --bg: #faf9f7;
+  --panel: #f2f1ee;
+  --border: #ddd9d2;
+  --text: #1a1a1a;
+  --text-mid: #3d3d3d;
+  --text-dim: #6b6b6b;
+  --text-faint: #eae8e4;
+  --light-font: system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --light-serif: Georgia, 'Times New Roman', serif;
+  --mono: 'SF Mono', 'Consolas', 'Liberation Mono', monospace;
+}
+[data-theme="light"] html, [data-theme="light"] body {
+  font-family: var(--light-font);
+}
+[data-theme="light"] button, [data-theme="light"] a { font-family: inherit; }
+[data-theme="light"] .scanlines { display: none; }
+[data-theme="light"] .starfield { display: none; }
+[data-theme="light"] #site-nav {
+  background: var(--bg); border-bottom: 1px solid var(--border);
+  backdrop-filter: none;
+}
+[data-theme="light"] #site-nav a {
+  font-size: 11px; letter-spacing: 0.3px; color: #6b6b6b;
+  text-transform: none;
+}
+[data-theme="light"] #site-nav a:hover { color: #2b5a83; border-color: #c5c0b8; }
+[data-theme="light"] #site-nav a.active { color: #2b5a83; border-color: #2b5a83; background: rgba(43,90,131,0.06); }
+[data-theme="light"] #site-nav .nav-brand {
+  font-size: 11px; letter-spacing: 1.5px; color: #1a1a1a; font-weight: 600;
+}
+[data-theme="light"] #site-nav .nav-brand .diamond { background: #2b5a83; }
+[data-theme="light"] .status-bar {
+  background: var(--bg); border-top: 1px solid var(--border);
+}
+[data-theme="light"] .status-bar .dim { color: #999; }
+[data-theme="light"] .status-bar .bright { color: #2b5a83; }
+[data-theme="light"] .scene-text {
+  color: #2a2a2a; font-family: var(--light-serif);
+  font-size: 17px; line-height: 1.85;
+}
+[data-theme="light"] .scene-text .dialogue { color: #1a1a1a; font-style: normal; }
+[data-theme="light"] .scene-text .thought { color: #5a6a5a; font-style: italic; }
+[data-theme="light"] .scene-text .emphasis { color: #8b3a2a; }
+[data-theme="light"] .scene-header {
+  color: #999; border-bottom-color: var(--border);
+}
+[data-theme="light"] .scene-title {
+  color: #2b5a83; font-weight: 600; letter-spacing: 1px;
+}
+[data-theme="light"] .tech-section-text { color: #3d3d3d; }
+[data-theme="light"] a { color: #2b5a83; text-decoration: underline; text-decoration-color: rgba(43,90,131,0.3); text-underline-offset: 2px; }
+[data-theme="light"] a:hover { color: #1a3d5c; text-decoration-color: #1a3d5c; }
+[data-theme="light"] ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); }
+[data-theme="light"] .nav-card {
+  background: var(--bg); border: 1px solid var(--border);
+  box-shadow: none;
+}
+[data-theme="light"] .nav-card:hover { box-shadow: 0 2px 8px rgba(43,90,131,0.08); border-color: #2b5a83; }
+[data-theme="light"] .nav-card .card-title {
+  color: #2b5a83; letter-spacing: 1px; font-weight: 600;
+}
+[data-theme="light"] .nav-card .card-desc {
+  font-size: 13px; color: #5a5a5a; letter-spacing: 0; line-height: 1.5;
+}
+[data-theme="light"] .data-row .sub { color: #aaa; }
+[data-theme="light"] .panel { background: var(--panel); border-color: var(--border); backdrop-filter: none; }
+[data-theme="light"] .panel-header .title {
+  letter-spacing: 1.5px; font-weight: 600; color: #2b5a83;
+}
+[data-theme="light"] .story-nav button {
+  background: var(--panel); border-color: var(--border); color: #6b6b6b;
+}
+[data-theme="light"] .story-nav button:hover { border-color: #2b5a83; color: #2b5a83; }
+[data-theme="light"] .scene-select {
+  background: var(--bg); border-color: var(--border); color: #3d3d3d;
+}
+[data-theme="light"] .scene-bg { display: none; }
+[data-theme="light"] .scene-effect { display: none; }
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 html, body {
@@ -70,6 +160,13 @@ a:hover { color: #fff; }
 #site-nav a:hover { color: var(--accent); border-color: var(--border); }
 #site-nav a.active { color: var(--accent); border-color: var(--accent); background: rgba(0,229,255,0.08); }
 #site-nav .nav-links { display: flex; gap: 2px; overflow-x: auto; flex: 1; }
+#site-nav .theme-toggle {
+  background: none; border: 1px solid var(--border);
+  color: var(--text-dim); font-size: 14px; padding: 2px 8px; cursor: pointer;
+  border-radius: 2px; margin-left: auto; margin-right: 4px;
+  transition: all 0.2s ease;
+}
+#site-nav .theme-toggle:hover { color: var(--accent); border-color: var(--accent); }
 #site-nav .hamburger {
   display: none; background: none; border: 1px solid var(--border);
   color: var(--accent); font-size: 16px; padding: 4px 8px; cursor: pointer;
@@ -79,6 +176,7 @@ a:hover { color: #fff; }
 @media (max-width: 600px) {
   #site-nav { flex-wrap: wrap; height: auto; padding: 6px 10px; }
   #site-nav .nav-brand { flex: 1; font-size: 9px; }
+  #site-nav .theme-toggle { margin-left: auto; margin-right: 6px; font-size: 12px; padding: 2px 6px; }
   #site-nav .hamburger { display: block; }
   #site-nav .nav-links {
     display: none; flex-direction: column; width: 100%;
@@ -189,13 +287,13 @@ a:hover { color: #fff; }
   margin-bottom: 20px; font-weight: 700;
 }
 .scene-text {
-  font-size: 13px; line-height: 1.8; color: rgba(200, 220, 230, 0.85);
-  letter-spacing: 0.3px;
+  font-size: 14px; line-height: 1.85; color: rgba(210, 225, 235, 0.9);
+  letter-spacing: 0.2px;
 }
-.scene-text p { margin-bottom: 14px; text-indent: 0; }
-.scene-text .dialogue { color: rgba(0, 229, 255, 0.7); }
+.scene-text p { margin-bottom: 16px; text-indent: 0; }
+.scene-text .dialogue { color: rgba(160, 220, 235, 0.85); }
 .scene-text .emphasis { color: var(--accent2); font-style: italic; }
-.scene-text .thought { color: rgba(0, 229, 255, 0.5); font-style: italic; }
+.scene-text .thought { color: rgba(140, 200, 220, 0.65); font-style: italic; }
 
 .story-nav {
   display: flex; justify-content: space-between; align-items: center;

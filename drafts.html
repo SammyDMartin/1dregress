@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ascent Universe — Draft File Browser</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow-y: auto; }
+
+.browser-container {
+  max-width: 900px; margin: 0 auto; padding: 20px;
+  min-height: calc(100vh - 72px);
+}
+
+.browser-header {
+  margin-bottom: 24px;
+}
+.browser-title {
+  font-size: 16px; letter-spacing: 4px; color: var(--accent); margin-bottom: 4px;
+}
+.browser-subtitle {
+  font-size: 10px; letter-spacing: 2px; color: var(--text-dim);
+}
+
+.file-tree {
+  margin-bottom: 24px;
+}
+
+.folder-header {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11px; letter-spacing: 3px; color: var(--accent2);
+  padding: 8px 0; border-bottom: 1px solid rgba(255,107,53,0.2);
+  cursor: pointer; user-select: none;
+}
+.folder-header:hover { color: var(--accent); }
+.folder-header .folder-icon { transition: transform 0.2s; }
+.folder-header.open .folder-icon { transform: rotate(90deg); }
+
+.file-list {
+  display: none; padding: 4px 0;
+}
+.file-list.open { display: block; }
+
+.file-entry {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 12px; border: 1px solid transparent;
+  border-bottom: 1px solid var(--text-faint);
+  cursor: pointer; transition: all 0.2s;
+}
+.file-entry:hover {
+  background: rgba(0,229,255,0.04); border-color: var(--border);
+}
+.file-entry.active {
+  background: rgba(0,229,255,0.08); border-color: var(--accent);
+}
+.file-name {
+  font-size: 11px; letter-spacing: 1px; color: var(--text-mid);
+}
+.file-entry.active .file-name { color: var(--accent); }
+.file-meta {
+  font-size: 9px; color: var(--text-dim); letter-spacing: 1px;
+}
+
+.file-viewer {
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: 2px; min-height: 300px;
+}
+.viewer-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 14px; border-bottom: 1px solid var(--border);
+}
+.viewer-filename {
+  font-size: 11px; letter-spacing: 2px; color: var(--accent);
+}
+.viewer-wordcount {
+  font-size: 9px; letter-spacing: 2px; color: var(--text-dim);
+}
+.viewer-body {
+  padding: 16px 20px; font-size: 13px; line-height: 1.85;
+  color: rgba(210, 225, 235, 0.9); white-space: pre-wrap;
+  max-height: 70vh; overflow-y: auto;
+}
+.viewer-empty {
+  padding: 40px; text-align: center;
+  font-size: 11px; letter-spacing: 2px; color: var(--text-dim);
+}
+
+/* Light mode adjustments */
+[data-theme="light"] .file-name { color: #333; }
+[data-theme="light"] .file-entry.active .file-name { color: #111; }
+[data-theme="light"] .file-entry:hover { background: rgba(0,0,0,0.02); }
+[data-theme="light"] .file-entry.active { background: rgba(0,0,0,0.04); border-color: #999; }
+[data-theme="light"] .viewer-body { color: #1a1a1a; }
+</style>
+</head>
+<body>
+<div class="page-body">
+  <div class="browser-container">
+    <div class="browser-header">
+      <div class="browser-title">DRAFT FILE BROWSER</div>
+      <div class="browser-subtitle">ASCENT UNIVERSE — ALL DRAFTS & EDITORIAL</div>
+    </div>
+
+    <div class="file-tree" id="file-tree"></div>
+
+    <div class="file-viewer" id="file-viewer">
+      <div class="viewer-empty">SELECT A FILE TO VIEW</div>
+    </div>
+  </div>
+</div>
+
+<script src="nav.js"></script>
+<script>
+const FILES = {
+  'drafts/second_draft': {
+    label: 'ESZEL — SECOND DRAFT',
+    files: [
+      { name: 'ch00_the_whole.md', label: 'Ch 0 — The Whole' },
+      { name: 'ch01_the_crater.md', label: 'Ch 1 — The Crater' },
+      { name: 'ch02_interrogation_childhood.md', label: 'Ch 2 — Interrogation / Childhood' },
+      { name: 'ch03_voyage_elevator.md', label: 'Ch 3 — Voyage / Elevator' },
+      { name: 'ch04_arrival_baselife.md', label: 'Ch 4 — Arrival / Base Life' },
+      { name: 'ch05_first_contact.md', label: 'Ch 5 — First Contact' },
+      { name: 'ch06_the_choice.md', label: 'Ch 6 — The Choice' },
+      { name: 'ch07_departure_disaster.md', label: 'Ch 7 — Departure / Disaster' },
+      { name: 'ch08_the_trek.md', label: 'Ch 8 — The Trek' },
+      { name: 'ch09_the_listener.md', label: 'Ch 9 — The Listener' },
+      { name: 'ch10_epilogue.md', label: 'Ch 10 — Epilogue' },
+    ]
+  },
+  'drafts/ascent_second_draft': {
+    label: 'ASCENT — SECOND DRAFT',
+    files: [
+      { name: 'ch01_necessity.md', label: 'Ch 1 — Necessity' },
+      { name: 'ch02_contingency.md', label: 'Ch 2 — Contingency' },
+      { name: 'ch03_complicity.md', label: 'Ch 3 — Complicity' },
+      { name: 'ch04_revolution.md', label: 'Ch 4 — Revolution' },
+      { name: 'ch05_justice.md', label: 'Ch 5 — Justice' },
+      { name: 'ch06_contact.md', label: 'Ch 6 — Contact' },
+      { name: 'ch07_memory.md', label: 'Ch 7 — Memory' },
+      { name: 'ch08_deterrence.md', label: 'Ch 8 — Deterrence' },
+      { name: 'ch09_diplomacy.md', label: 'Ch 9 — Diplomacy' },
+      { name: 'ch10_dominance.md', label: 'Ch 10 — Dominance' },
+      { name: 'ch11_dissonance.md', label: 'Ch 11 — Dissonance' },
+      { name: 'ch12_beachhead.md', label: 'Ch 12 — Beachhead' },
+      { name: 'ch13_rendezvous.md', label: 'Ch 13 — Rendezvous' },
+      { name: 'ch14_convergence.md', label: 'Ch 14 — Convergence' },
+      { name: 'ch15_succession.md', label: 'Ch 15 — Succession' },
+      { name: 'ch16_submersion.md', label: 'Ch 16 — Submersion' },
+      { name: 'ch17_revelation.md', label: 'Ch 17 — Revelation' },
+      { name: 'ch18_abyssal.md', label: 'Ch 18 — Abyssal' },
+      { name: 'ch19_consequentialism.md', label: 'Ch 19 — Consequentialism' },
+      { name: 'ch20_determination.md', label: 'Ch 20 — Determination' },
+      { name: 'ch21_conspiracy.md', label: 'Ch 21 — Conspiracy' },
+      { name: 'ch22_annihilation.md', label: 'Ch 22 — Annihilation' },
+      { name: 'ch23_finality.md', label: 'Ch 23 — Finality' },
+      { name: 'ch24_culmination.md', label: 'Ch 24 — Culmination' },
+    ]
+  },
+  'editorial': {
+    label: 'ESZEL — EDITORIAL',
+    files: [
+      { name: 'revision_guide.md', label: 'Revision Guide' },
+      { name: 'structural_analysis.md', label: 'Structural Analysis' },
+      { name: 'chapter_by_chapter.md', label: 'Chapter by Chapter' },
+      { name: 'character_eszel.md', label: 'Character — Eszel' },
+      { name: 'character_hansun.md', label: 'Character — Hansun' },
+      { name: 'character_aumonier.md', label: 'Character — Aumonier' },
+      { name: 'character_minor.md', label: 'Character — Minor' },
+      { name: 'dialogue_notes.md', label: 'Dialogue Notes' },
+    ]
+  },
+  'editorial/ascent': {
+    label: 'ASCENT — EDITORIAL',
+    files: [
+      { name: 'revision_guide.md', label: 'Revision Guide' },
+      { name: 'structural_analysis.md', label: 'Structural Analysis' },
+      { name: 'chapter_by_chapter.md', label: 'Chapter by Chapter' },
+      { name: 'themes_and_worldbuilding.md', label: 'Themes & Worldbuilding' },
+      { name: 'character_vash.md', label: 'Character — Vash' },
+      { name: 'character_corbin.md', label: 'Character — Corbin' },
+      { name: 'character_jan.md', label: 'Character — Jan' },
+      { name: 'character_minor.md', label: 'Character — Minor' },
+    ]
+  }
+};
+
+const treeEl = document.getElementById('file-tree');
+const viewerEl = document.getElementById('file-viewer');
+
+// Build tree
+Object.entries(FILES).forEach(([folder, data]) => {
+  const section = document.createElement('div');
+
+  const header = document.createElement('div');
+  header.className = 'folder-header open';
+  header.innerHTML = `<span class="folder-icon">&#9656;</span> ${data.label}`;
+
+  const list = document.createElement('div');
+  list.className = 'file-list open';
+
+  header.addEventListener('click', () => {
+    header.classList.toggle('open');
+    list.classList.toggle('open');
+  });
+
+  data.files.forEach(f => {
+    const entry = document.createElement('div');
+    entry.className = 'file-entry';
+    entry.dataset.path = `${folder}/${f.name}`;
+    entry.innerHTML = `<span class="file-name">${f.label}</span><span class="file-meta">${f.name}</span>`;
+    entry.addEventListener('click', () => loadFile(folder, f.name, f.label, entry));
+    list.appendChild(entry);
+  });
+
+  section.appendChild(header);
+  section.appendChild(list);
+  treeEl.appendChild(section);
+});
+
+async function loadFile(folder, name, label, entryEl) {
+  // Update active state
+  document.querySelectorAll('.file-entry').forEach(e => e.classList.remove('active'));
+  entryEl.classList.add('active');
+
+  viewerEl.innerHTML = '<div class="viewer-empty">LOADING...</div>';
+
+  try {
+    const resp = await fetch(`${folder}/${name}`);
+    if (!resp.ok) throw new Error(`${resp.status}`);
+    const text = await resp.text();
+    const words = text.trim().split(/\s+/).filter(w => w.length > 0).length;
+
+    viewerEl.innerHTML = `
+      <div class="viewer-header">
+        <span class="viewer-filename">${label}</span>
+        <span class="viewer-wordcount">${words.toLocaleString()} WORDS</span>
+      </div>
+      <div class="viewer-body">${escapeHtml(text)}</div>
+    `;
+  } catch (err) {
+    viewerEl.innerHTML = `<div class="viewer-empty">FAILED TO LOAD: ${escapeHtml(err.message)}</div>`;
+  }
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+</script>
+</body>
+</html>

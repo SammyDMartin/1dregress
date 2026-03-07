@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Claude Code Insights</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #f8fafc; color: #334155; line-height: 1.65; padding: 48px 24px; }
+    .container { max-width: 800px; margin: 0 auto; }
+    h1 { font-size: 32px; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
+    h2 { font-size: 20px; font-weight: 600; color: #0f172a; margin-top: 48px; margin-bottom: 16px; }
+    .subtitle { color: #64748b; font-size: 15px; margin-bottom: 32px; }
+    .nav-toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0 32px 0; padding: 16px; background: white; border-radius: 8px; border: 1px solid #e2e8f0; }
+    .nav-toc a { font-size: 12px; color: #64748b; text-decoration: none; padding: 6px 12px; border-radius: 6px; background: #f1f5f9; transition: all 0.15s; }
+    .nav-toc a:hover { background: #e2e8f0; color: #334155; }
+    .stats-row { display: flex; gap: 24px; margin-bottom: 40px; padding: 20px 0; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; flex-wrap: wrap; }
+    .stat { text-align: center; }
+    .stat-value { font-size: 24px; font-weight: 700; color: #0f172a; }
+    .stat-label { font-size: 11px; color: #64748b; text-transform: uppercase; }
+    .at-a-glance { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: 1px solid #f59e0b; border-radius: 12px; padding: 20px 24px; margin-bottom: 32px; }
+    .glance-title { font-size: 16px; font-weight: 700; color: #92400e; margin-bottom: 16px; }
+    .glance-sections { display: flex; flex-direction: column; gap: 12px; }
+    .glance-section { font-size: 14px; color: #78350f; line-height: 1.6; }
+    .glance-section strong { color: #92400e; }
+    .see-more { color: #b45309; text-decoration: none; font-size: 13px; white-space: nowrap; }
+    .see-more:hover { text-decoration: underline; }
+    .project-areas { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+    .project-area { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; }
+    .area-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .area-name { font-weight: 600; font-size: 15px; color: #0f172a; }
+    .area-count { font-size: 12px; color: #64748b; background: #f1f5f9; padding: 2px 8px; border-radius: 4px; }
+    .area-desc { font-size: 14px; color: #475569; line-height: 1.5; }
+    .narrative { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 24px; }
+    .narrative p { margin-bottom: 12px; font-size: 14px; color: #475569; line-height: 1.7; }
+    .key-insight { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 12px 16px; margin-top: 12px; font-size: 14px; color: #166534; }
+    .section-intro { font-size: 14px; color: #64748b; margin-bottom: 16px; }
+    .big-wins { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+    .big-win { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 16px; }
+    .big-win-title { font-weight: 600; font-size: 15px; color: #166534; margin-bottom: 8px; }
+    .big-win-desc { font-size: 14px; color: #15803d; line-height: 1.5; }
+    .friction-categories { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; }
+    .friction-category { background: #fef2f2; border: 1px solid #fca5a5; border-radius: 8px; padding: 16px; }
+    .friction-title { font-weight: 600; font-size: 15px; color: #991b1b; margin-bottom: 6px; }
+    .friction-desc { font-size: 13px; color: #7f1d1d; margin-bottom: 10px; }
+    .friction-examples { margin: 0 0 0 20px; font-size: 13px; color: #334155; }
+    .friction-examples li { margin-bottom: 4px; }
+    .claude-md-section { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 16px; margin-bottom: 20px; }
+    .claude-md-section h3 { font-size: 14px; font-weight: 600; color: #1e40af; margin: 0 0 12px 0; }
+    .claude-md-actions { margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #dbeafe; }
+    .copy-all-btn { background: #2563eb; color: white; border: none; border-radius: 4px; padding: 6px 12px; font-size: 12px; cursor: pointer; font-weight: 500; transition: all 0.2s; }
+    .copy-all-btn:hover { background: #1d4ed8; }
+    .copy-all-btn.copied { background: #16a34a; }
+    .claude-md-item { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 8px; padding: 10px 0; border-bottom: 1px solid #dbeafe; }
+    .claude-md-item:last-child { border-bottom: none; }
+    .cmd-checkbox { margin-top: 2px; }
+    .cmd-code { background: white; padding: 8px 12px; border-radius: 4px; font-size: 12px; color: #1e40af; border: 1px solid #bfdbfe; font-family: monospace; display: block; white-space: pre-wrap; word-break: break-word; flex: 1; }
+    .cmd-why { font-size: 12px; color: #64748b; width: 100%; padding-left: 24px; margin-top: 4px; }
+    .features-section, .patterns-section { display: flex; flex-direction: column; gap: 12px; margin: 16px 0; }
+    .feature-card { background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 16px; }
+    .pattern-card { background: #f0f9ff; border: 1px solid #7dd3fc; border-radius: 8px; padding: 16px; }
+    .feature-title, .pattern-title { font-weight: 600; font-size: 15px; color: #0f172a; margin-bottom: 6px; }
+    .feature-oneliner { font-size: 14px; color: #475569; margin-bottom: 8px; }
+    .pattern-summary { font-size: 14px; color: #475569; margin-bottom: 8px; }
+    .feature-why, .pattern-detail { font-size: 13px; color: #334155; line-height: 1.5; }
+    .feature-examples { margin-top: 12px; }
+    .feature-example { padding: 8px 0; border-top: 1px solid #d1fae5; }
+    .feature-example:first-child { border-top: none; }
+    .example-desc { font-size: 13px; color: #334155; margin-bottom: 6px; }
+    .example-code-row { display: flex; align-items: flex-start; gap: 8px; }
+    .example-code { flex: 1; background: #f1f5f9; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 12px; color: #334155; overflow-x: auto; white-space: pre-wrap; }
+    .copyable-prompt-section { margin-top: 12px; padding-top: 12px; border-top: 1px solid #e2e8f0; }
+    .copyable-prompt-row { display: flex; align-items: flex-start; gap: 8px; }
+    .copyable-prompt { flex: 1; background: #f8fafc; padding: 10px 12px; border-radius: 4px; font-family: monospace; font-size: 12px; color: #334155; border: 1px solid #e2e8f0; white-space: pre-wrap; line-height: 1.5; }
+    .feature-code { background: #f8fafc; padding: 12px; border-radius: 6px; margin-top: 12px; border: 1px solid #e2e8f0; display: flex; align-items: flex-start; gap: 8px; }
+    .feature-code code { flex: 1; font-family: monospace; font-size: 12px; color: #334155; white-space: pre-wrap; }
+    .pattern-prompt { background: #f8fafc; padding: 12px; border-radius: 6px; margin-top: 12px; border: 1px solid #e2e8f0; }
+    .pattern-prompt code { font-family: monospace; font-size: 12px; color: #334155; display: block; white-space: pre-wrap; margin-bottom: 8px; }
+    .prompt-label { font-size: 11px; font-weight: 600; text-transform: uppercase; color: #64748b; margin-bottom: 6px; }
+    .copy-btn { background: #e2e8f0; border: none; border-radius: 4px; padding: 4px 8px; font-size: 11px; cursor: pointer; color: #475569; flex-shrink: 0; }
+    .copy-btn:hover { background: #cbd5e1; }
+    .charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 24px 0; }
+    .chart-card { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; }
+    .chart-title { font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase; margin-bottom: 12px; }
+    .bar-row { display: flex; align-items: center; margin-bottom: 6px; }
+    .bar-label { width: 100px; font-size: 11px; color: #475569; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .bar-track { flex: 1; height: 6px; background: #f1f5f9; border-radius: 3px; margin: 0 8px; }
+    .bar-fill { height: 100%; border-radius: 3px; }
+    .bar-value { width: 28px; font-size: 11px; font-weight: 500; color: #64748b; text-align: right; }
+    .empty { color: #94a3b8; font-size: 13px; }
+    .horizon-section { display: flex; flex-direction: column; gap: 16px; }
+    .horizon-card { background: linear-gradient(135deg, #faf5ff 0%, #f5f3ff 100%); border: 1px solid #c4b5fd; border-radius: 8px; padding: 16px; }
+    .horizon-title { font-weight: 600; font-size: 15px; color: #5b21b6; margin-bottom: 8px; }
+    .horizon-possible { font-size: 14px; color: #334155; margin-bottom: 10px; line-height: 1.5; }
+    .horizon-tip { font-size: 13px; color: #6b21a8; background: rgba(255,255,255,0.6); padding: 8px 12px; border-radius: 4px; }
+    .feedback-header { margin-top: 48px; color: #64748b; font-size: 16px; }
+    .feedback-intro { font-size: 13px; color: #94a3b8; margin-bottom: 16px; }
+    .feedback-section { margin-top: 16px; }
+    .feedback-section h3 { font-size: 14px; font-weight: 600; color: #475569; margin-bottom: 12px; }
+    .feedback-card { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+    .feedback-card.team-card { background: #eff6ff; border-color: #bfdbfe; }
+    .feedback-card.model-card { background: #faf5ff; border-color: #e9d5ff; }
+    .feedback-title { font-weight: 600; font-size: 14px; color: #0f172a; margin-bottom: 6px; }
+    .feedback-detail { font-size: 13px; color: #475569; line-height: 1.5; }
+    .feedback-evidence { font-size: 12px; color: #64748b; margin-top: 8px; }
+    .fun-ending { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: 1px solid #fbbf24; border-radius: 12px; padding: 24px; margin-top: 40px; text-align: center; }
+    .fun-headline { font-size: 18px; font-weight: 600; color: #78350f; margin-bottom: 8px; }
+    .fun-detail { font-size: 14px; color: #92400e; }
+    .collapsible-section { margin-top: 16px; }
+    .collapsible-header { display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 12px 0; border-bottom: 1px solid #e2e8f0; }
+    .collapsible-header h3 { margin: 0; font-size: 14px; font-weight: 600; color: #475569; }
+    .collapsible-arrow { font-size: 12px; color: #94a3b8; transition: transform 0.2s; }
+    .collapsible-content { display: none; padding-top: 16px; }
+    .collapsible-content.open { display: block; }
+    .collapsible-header.open .collapsible-arrow { transform: rotate(90deg); }
+    @media (max-width: 640px) { .charts-row { grid-template-columns: 1fr; } .stats-row { justify-content: center; } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Claude Code Insights</h1>
+    <p class="subtitle">60 messages across 9 sessions (18 total) | 2026-03-06 to 2026-03-07</p>
+
+    
+    <div class="at-a-glance">
+      <div class="glance-title">At a Glance</div>
+      <div class="glance-sections">
+        <div class="glance-section"><strong>What's working:</strong> You've built a genuinely impressive creative infrastructure — treating fiction universes like managed codebases with version control, codex entries, and story navigators. Your best sessions show you know how to orchestrate ambitious multi-part work, like simultaneously writing a story, building an analysis page, and executing brainstorming items with parallel agents. The iterative revision approach, where you run corrective sessions when Claude misses the mark on tone, shows real sophistication in treating Claude as a creative collaborator. <a href="#section-wins" class="see-more">Impressive Things You Did →</a></div>
+        <div class="glance-section"><strong>What's hindering you:</strong> On Claude's side, creative rewrites are unreliable — Claude defaults to cutting and simplifying when you want expansion and nuance, which has cost you entire redo sessions. On your side, stacking too many large tasks into single sessions means that when usage limits or API errors hit (which happened repeatedly), you're left with uncommitted work and wasted context. Breaking work into smaller, committable chunks would protect you from these interruptions. <a href="#section-friction" class="see-more">Where Things Go Wrong →</a></div>
+        <div class="glance-section"><strong>Quick wins to try:</strong> Try creating a custom slash command (`/rewrite-chapter`) with your creative constraints baked in — word count targets, 'expand don't cut,' tone guidelines — so you don't have to re-specify them each session. You could also experiment with headless mode to batch-process chapter edits overnight, committing each chapter individually so timeouts never cost you more than one chapter's progress. <a href="#section-features" class="see-more">Features to Try →</a></div>
+        <div class="glance-section"><strong>Ambitious workflows:</strong> As models get more capable, you'll be able to run checkpoint-driven novel rewrites where Claude autonomously processes chapters in sequence, committing after each one and self-correcting if any chapter shrinks or loses key elements. Think validation loops built into the workflow itself — word count checks, diff analysis, and tone evaluation after every rewrite — so the 'Claude cut my content' problem gets caught and fixed automatically before you ever see it. <a href="#section-horizon" class="see-more">On the Horizon →</a></div>
+      </div>
+    </div>
+    
+
+    <nav class="nav-toc">
+      <a href="#section-work">What You Work On</a>
+      <a href="#section-usage">How You Use CC</a>
+      <a href="#section-wins">Impressive Things</a>
+      <a href="#section-friction">Where Things Go Wrong</a>
+      <a href="#section-features">Features to Try</a>
+      <a href="#section-patterns">New Usage Patterns</a>
+      <a href="#section-horizon">On the Horizon</a>
+      <a href="#section-feedback">Team Feedback</a>
+    </nav>
+
+    <div class="stats-row">
+      <div class="stat"><div class="stat-value">60</div><div class="stat-label">Messages</div></div>
+      <div class="stat"><div class="stat-value">+6,299/-86</div><div class="stat-label">Lines</div></div>
+      <div class="stat"><div class="stat-value">44</div><div class="stat-label">Files</div></div>
+      <div class="stat"><div class="stat-value">2</div><div class="stat-label">Days</div></div>
+      <div class="stat"><div class="stat-value">30</div><div class="stat-label">Msgs/Day</div></div>
+    </div>
+
+    
+    <h2 id="section-work">What You Work On</h2>
+    <div class="project-areas">
+      
+        <div class="project-area">
+          <div class="area-header">
+            <span class="area-name">Novel Revision &amp; Rewriting</span>
+            <span class="area-count">~4 sessions</span>
+          </div>
+          <div class="area-desc">Extensive creative writing work focused on revising and rewriting fiction novel chapters, including expanding cut material, fixing character portrayals, and applying light edits across dozens of chapters. Results were mixed — some sessions successfully expanded manuscripts (e.g., 14.7k to 23.5k words), while others frustratingly cut content instead of rewriting it.</div>
+        </div>
+      
+        <div class="project-area">
+          <div class="area-header">
+            <span class="area-name">Fiction Manuscript Assembly &amp; Analysis</span>
+            <span class="area-count">~1 sessions</span>
+          </div>
+          <div class="area-desc">Claude analyzed a novel's missing sections, wrote 5 new scenes, reconciled multiple drafts, and assembled a 31K-word manuscript with quality evaluation. A sub-agent timeout caused delays requiring manual recovery via shell script.</div>
+        </div>
+      
+        <div class="project-area">
+          <div class="area-header">
+            <span class="area-name">Story Navigator &amp; Website Features</span>
+            <span class="area-count">~2 sessions</span>
+          </div>
+          <div class="area-desc">Built a story navigator UI and worked on implementing story content pages including a codex entry, navigation updates, and an HTML story reader. One session was cut short by timeout leaving the reader page incomplete, and another was blocked by repeated API errors during creative brainstorming.</div>
+        </div>
+      
+        <div class="project-area">
+          <div class="area-header">
+            <span class="area-name">Creative Writing &amp; World-Building</span>
+            <span class="area-count">~2 sessions</span>
+          </div>
+          <div class="area-desc">Canon-compliant story writing, universe reference document updates, and brainstorming on hanging storylines. One session successfully completed writing and a Facilitator analysis page using parallel agents, while another ran out of usage quota before finishing reference materials despite extensive source reading.</div>
+        </div>
+      
+        <div class="project-area">
+          <div class="area-header">
+            <span class="area-name">Usage Limits &amp; Recovery</span>
+            <span class="area-count">~1 sessions</span>
+          </div>
+          <div class="area-desc">A session where Claude was completely non-functional due to hitting usage limits, unable to perform any actions including finishing prior uncommitted editing work. The user received only 'out of usage' responses to every message.</div>
+        </div>
+      
+    </div>
+    
+
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-title">What You Wanted</div>
+        <div class="bar-row">
+        <div class="bar-label">Creative Writing Revision</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#2563eb"></div></div>
+        <div class="bar-value">2</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Creative Writing</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#2563eb"></div></div>
+        <div class="bar-value">2</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Content Creation</div>
+        <div class="bar-track"><div class="bar-fill" style="width:50%;background:#2563eb"></div></div>
+        <div class="bar-value">1</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Code Implementation</div>
+        <div class="bar-track"><div class="bar-fill" style="width:50%;background:#2563eb"></div></div>
+        <div class="bar-value">1</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Creative Writing Rewrite</div>
+        <div class="bar-track"><div class="bar-fill" style="width:50%;background:#2563eb"></div></div>
+        <div class="bar-value">1</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Troubleshooting</div>
+        <div class="bar-track"><div class="bar-fill" style="width:50%;background:#2563eb"></div></div>
+        <div class="bar-value">1</div>
+      </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Top Tools Used</div>
+        <div class="bar-row">
+        <div class="bar-label">Read</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#0891b2"></div></div>
+        <div class="bar-value">120</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Bash</div>
+        <div class="bar-track"><div class="bar-fill" style="width:98.33333333333333%;background:#0891b2"></div></div>
+        <div class="bar-value">118</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Write</div>
+        <div class="bar-track"><div class="bar-fill" style="width:35.833333333333336%;background:#0891b2"></div></div>
+        <div class="bar-value">43</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">TodoWrite</div>
+        <div class="bar-track"><div class="bar-fill" style="width:31.666666666666664%;background:#0891b2"></div></div>
+        <div class="bar-value">38</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Edit</div>
+        <div class="bar-track"><div class="bar-fill" style="width:28.333333333333332%;background:#0891b2"></div></div>
+        <div class="bar-value">34</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Agent</div>
+        <div class="bar-track"><div class="bar-fill" style="width:17.5%;background:#0891b2"></div></div>
+        <div class="bar-value">21</div>
+      </div>
+      </div>
+    </div>
+
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-title">Languages</div>
+        <div class="bar-row">
+        <div class="bar-label">Markdown</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#10b981"></div></div>
+        <div class="bar-value">106</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">HTML</div>
+        <div class="bar-track"><div class="bar-fill" style="width:16.037735849056602%;background:#10b981"></div></div>
+        <div class="bar-value">17</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">JavaScript</div>
+        <div class="bar-track"><div class="bar-fill" style="width:12.264150943396226%;background:#10b981"></div></div>
+        <div class="bar-value">13</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">CSS</div>
+        <div class="bar-track"><div class="bar-fill" style="width:0.9433962264150944%;background:#10b981"></div></div>
+        <div class="bar-value">1</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Python</div>
+        <div class="bar-track"><div class="bar-fill" style="width:0.9433962264150944%;background:#10b981"></div></div>
+        <div class="bar-value">1</div>
+      </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Session Types</div>
+        <div class="bar-row">
+        <div class="bar-label">Single Task</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#8b5cf6"></div></div>
+        <div class="bar-value">4</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Multi Task</div>
+        <div class="bar-track"><div class="bar-fill" style="width:75%;background:#8b5cf6"></div></div>
+        <div class="bar-value">3</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Iterative Refinement</div>
+        <div class="bar-track"><div class="bar-fill" style="width:25%;background:#8b5cf6"></div></div>
+        <div class="bar-value">1</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Quick Question</div>
+        <div class="bar-track"><div class="bar-fill" style="width:25%;background:#8b5cf6"></div></div>
+        <div class="bar-value">1</div>
+      </div>
+      </div>
+    </div>
+
+    
+    <h2 id="section-usage">How You Use Claude Code</h2>
+    <div class="narrative">
+      <p>You use Claude Code primarily as a <strong>creative writing production engine</strong>, leveraging it for large-scale fiction work — novel rewrites, chapter expansions, manuscript assembly, and universe reference management. Your sessions are intense and ambitious: you routinely ask Claude to process entire novels (11+ chapters, 30K+ word manuscripts) in single sessions, relying heavily on <strong>parallel agents and multi-file workflows</strong>. The high TodoWrite usage (38 calls) alongside Agent (21 calls) shows you set up structured plans and let Claude execute autonomously rather than micromanaging each step. With only 60 messages across 9 sessions (~6.7 per session), you clearly <strong>give big directives and let Claude run</strong>.</p>
+<p>However, your results reveal a persistent tension: you have strong creative standards and Claude frequently disappoints on the qualitative side. One session where Claude &quot;mostly just cut content rather than rewriting&quot; left you unimpressed, and a follow-up corrective session was needed because character portrayals were &quot;too on-the-nose.&quot; You're willing to iterate — dedicating multiple sessions to revision passes on the same material — but your frustration is evident when Claude misunderstands the creative intent (3 instances of wrong_approach friction). <strong>You want a collaborator that adds richness, not an editor that strips it away.</strong> The infrastructure side works well for you (7 successful multi-file changes, 18 commits), but you're frequently blocked by <strong>API errors and usage limits</strong> (ran out of usage twice, API errors in 4 sessions), which is particularly painful given your large-scope tasks that need sustained execution to complete.</p>
+      <div class="key-insight"><strong>Key pattern:</strong> You delegate massive creative writing tasks with minimal intervention, expecting Claude to execute autonomously at high quality, but frequently hit friction from both usage limits and Claude's tendency to simplify rather than enrich your fiction.</div>
+    </div>
+    
+
+    <!-- Response Time Distribution -->
+    <div class="chart-card" style="margin: 24px 0;">
+      <div class="chart-title">User Response Time Distribution</div>
+      <div class="bar-row">
+        <div class="bar-label">2-10s</div>
+        <div class="bar-track"><div class="bar-fill" style="width:14.285714285714285%;background:#6366f1"></div></div>
+        <div class="bar-value">1</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">10-30s</div>
+        <div class="bar-track"><div class="bar-fill" style="width:42.857142857142854%;background:#6366f1"></div></div>
+        <div class="bar-value">3</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">30s-1m</div>
+        <div class="bar-track"><div class="bar-fill" style="width:0%;background:#6366f1"></div></div>
+        <div class="bar-value">0</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">1-2m</div>
+        <div class="bar-track"><div class="bar-fill" style="width:57.14285714285714%;background:#6366f1"></div></div>
+        <div class="bar-value">4</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">2-5m</div>
+        <div class="bar-track"><div class="bar-fill" style="width:85.71428571428571%;background:#6366f1"></div></div>
+        <div class="bar-value">6</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">5-15m</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#6366f1"></div></div>
+        <div class="bar-value">7</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">>15m</div>
+        <div class="bar-track"><div class="bar-fill" style="width:28.57142857142857%;background:#6366f1"></div></div>
+        <div class="bar-value">2</div>
+      </div>
+      <div style="font-size: 12px; color: #64748b; margin-top: 8px;">
+        Median: 235.2s &bull; Average: 402.2s
+      </div>
+    </div>
+
+    <!-- Multi-clauding Section (matching Python reference) -->
+    <div class="chart-card" style="margin: 24px 0;">
+      <div class="chart-title">Multi-Clauding (Parallel Sessions)</div>
+      
+        <div style="display: flex; gap: 24px; margin: 12px 0;">
+          <div style="text-align: center;">
+            <div style="font-size: 24px; font-weight: 700; color: #7c3aed;">2</div>
+            <div style="font-size: 11px; color: #64748b; text-transform: uppercase;">Overlap Events</div>
+          </div>
+          <div style="text-align: center;">
+            <div style="font-size: 24px; font-weight: 700; color: #7c3aed;">3</div>
+            <div style="font-size: 11px; color: #64748b; text-transform: uppercase;">Sessions Involved</div>
+          </div>
+          <div style="text-align: center;">
+            <div style="font-size: 24px; font-weight: 700; color: #7c3aed;">10%</div>
+            <div style="font-size: 11px; color: #64748b; text-transform: uppercase;">Of Messages</div>
+          </div>
+        </div>
+        <p style="font-size: 13px; color: #475569; margin-top: 12px;">
+          You run multiple Claude Code sessions simultaneously. Multi-clauding is detected when sessions
+          overlap in time, suggesting parallel workflows.
+        </p>
+      
+    </div>
+
+    <!-- Time of Day & Tool Errors -->
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-title" style="display: flex; align-items: center; gap: 12px;">
+          User Messages by Time of Day
+          <select id="timezone-select" style="font-size: 12px; padding: 4px 8px; border-radius: 4px; border: 1px solid #e2e8f0;">
+            <option value="0">PT (UTC-8)</option>
+            <option value="3">ET (UTC-5)</option>
+            <option value="8">London (UTC)</option>
+            <option value="9">CET (UTC+1)</option>
+            <option value="17">Tokyo (UTC+9)</option>
+            <option value="custom">Custom offset...</option>
+          </select>
+          <input type="number" id="custom-offset" placeholder="UTC offset" style="display: none; width: 80px; font-size: 12px; padding: 4px; border-radius: 4px; border: 1px solid #e2e8f0;">
+        </div>
+        <div id="hour-histogram">
+      <div class="bar-row">
+        <div class="bar-label">Morning (6-12)</div>
+        <div class="bar-track"><div class="bar-fill" style="width:50%;background:#8b5cf6"></div></div>
+        <div class="bar-value">12</div>
+      </div>
+
+      <div class="bar-row">
+        <div class="bar-label">Afternoon (12-18)</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#8b5cf6"></div></div>
+        <div class="bar-value">24</div>
+      </div>
+
+      <div class="bar-row">
+        <div class="bar-label">Evening (18-24)</div>
+        <div class="bar-track"><div class="bar-fill" style="width:25%;background:#8b5cf6"></div></div>
+        <div class="bar-value">6</div>
+      </div>
+
+      <div class="bar-row">
+        <div class="bar-label">Night (0-6)</div>
+        <div class="bar-track"><div class="bar-fill" style="width:75%;background:#8b5cf6"></div></div>
+        <div class="bar-value">18</div>
+      </div></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Tool Errors Encountered</div>
+        <div class="bar-row">
+        <div class="bar-label">Other</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#dc2626"></div></div>
+        <div class="bar-value">20</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Command Failed</div>
+        <div class="bar-track"><div class="bar-fill" style="width:20%;background:#dc2626"></div></div>
+        <div class="bar-value">4</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">File Too Large</div>
+        <div class="bar-track"><div class="bar-fill" style="width:10%;background:#dc2626"></div></div>
+        <div class="bar-value">2</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">User Rejected</div>
+        <div class="bar-track"><div class="bar-fill" style="width:5%;background:#dc2626"></div></div>
+        <div class="bar-value">1</div>
+      </div>
+      </div>
+    </div>
+
+    
+    <h2 id="section-wins">Impressive Things You Did</h2>
+    <p class="section-intro">You're using Claude Code extensively for creative writing and fiction project management, running 9 sessions across two days with heavy use of multi-file workflows and parallel agents.</p>
+    <div class="big-wins">
+      
+        <div class="big-win">
+          <div class="big-win-title">Large-Scale Novel Revision Pipeline</div>
+          <div class="big-win-desc">You're systematically using Claude to rewrite and expand entire novels chapter by chapter, with one session expanding 11 chapters from ~14.7k to ~23.5k words. Your iterative approach—running corrective sessions when results miss the mark on tone or character portrayal—shows a sophisticated revision workflow that treats Claude as a true creative collaborator.</div>
+        </div>
+      
+        <div class="big-win">
+          <div class="big-win-title">Parallel Agents for Complex Projects</div>
+          <div class="big-win-desc">You've effectively leveraged Claude's sub-agent capabilities to tackle multi-part creative and technical tasks simultaneously, like writing a canon-compliant story, building an analysis page, and executing brainstorming items all in one session. Your 21 agent invocations and 7 multi-file change successes show you're comfortable orchestrating complex parallel workstreams.</div>
+        </div>
+      
+        <div class="big-win">
+          <div class="big-win-title">Fiction Universe Management System</div>
+          <div class="big-win-desc">You're building a comprehensive creative infrastructure—story navigators, codex entries, universe reference documents, and HTML readers—treating your fiction projects like managed codebases. With 18 commits across these sessions and heavy use of TodoWrite for tracking, you've created a structured workflow that keeps large creative universes organized and version-controlled.</div>
+        </div>
+      
+    </div>
+    
+
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-title">What Helped Most (Claude's Capabilities)</div>
+        <div class="bar-row">
+        <div class="bar-label">Multi-file Changes</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#16a34a"></div></div>
+        <div class="bar-value">7</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Good Explanations</div>
+        <div class="bar-track"><div class="bar-fill" style="width:14.285714285714285%;background:#16a34a"></div></div>
+        <div class="bar-value">1</div>
+      </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Outcomes</div>
+        <div class="bar-row">
+        <div class="bar-label">Not Achieved</div>
+        <div class="bar-track"><div class="bar-fill" style="width:66.66666666666666%;background:#8b5cf6"></div></div>
+        <div class="bar-value">2</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Partially Achieved</div>
+        <div class="bar-track"><div class="bar-fill" style="width:66.66666666666666%;background:#8b5cf6"></div></div>
+        <div class="bar-value">2</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Mostly Achieved</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#8b5cf6"></div></div>
+        <div class="bar-value">3</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Fully Achieved</div>
+        <div class="bar-track"><div class="bar-fill" style="width:66.66666666666666%;background:#8b5cf6"></div></div>
+        <div class="bar-value">2</div>
+      </div>
+      </div>
+    </div>
+
+    
+    <h2 id="section-friction">Where Things Go Wrong</h2>
+    <p class="section-intro">Your creative writing workflow is heavily disrupted by usage limits and API errors, with additional friction from Claude misinterpreting your creative intent during rewrites.</p>
+    <div class="friction-categories">
+      
+        <div class="friction-category">
+          <div class="friction-title">Usage Limits Blocking Critical Work</div>
+          <div class="friction-desc">You repeatedly hit usage caps at the worst possible moments—mid-task with uncommitted work left dangling. Consider breaking large sessions into smaller, committable chunks so you're never left with unfinished state when limits hit.</div>
+          <ul class="friction-examples"><li>You ran out of usage before Claude could update your reference doc, create a README, or push changes, leaving you stuck with uncommitted work despite repeated requests to finish</li><li>Claude was completely non-functional in one session, responding only with 'You're out of extra usage' to every message, preventing any editing or commits</li></ul>
+        </div>
+      
+        <div class="friction-category">
+          <div class="friction-title">API Errors Derailing Multi-Task Sessions</div>
+          <div class="friction-desc">Repeated API errors with duplicate tool_use IDs blocked entire task segments, and agent timeouts forced manual rework. When you stack multiple creative tasks in one session, an API failure mid-session can waste all the preceding context-building work.</div>
+          <ul class="friction-examples"><li>Repeated API errors completely blocked your second task of researching and writing hanging stories after the story navigator UI was already built successfully</li><li>An assembly sub-agent timed out after nearly an hour during novel compilation, forcing Claude to redo the work via shell script while you had to ask if it was stuck</li></ul>
+        </div>
+      
+        <div class="friction-category">
+          <div class="friction-title">Creative Misinterpretation on Rewrites</div>
+          <div class="friction-desc">Claude defaulted to cutting and simplifying when you wanted expansion and nuance, requiring corrective follow-up sessions. Being more explicit upfront about word count targets and tone expectations (e.g., 'expand, don't cut' or 'subtle villainy, not obvious') could reduce these costly redo cycles.</div>
+          <ul class="friction-examples"><li>You asked for a chapter-by-chapter rewrite but Claude treated it as an editing/cutting pass, removing texture and atmosphere you valued instead of genuinely rewriting</li><li>A prior revision made character portrayals too on-the-nose and cut too much content, requiring an entire corrective session to restore cut material and fix the characterization across 11 chapters</li></ul>
+        </div>
+      
+    </div>
+    
+
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-title">Primary Friction Types</div>
+        <div class="bar-row">
+        <div class="bar-label">Wrong Approach</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#dc2626"></div></div>
+        <div class="bar-value">3</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Api Errors</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#dc2626"></div></div>
+        <div class="bar-value">3</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Buggy Code</div>
+        <div class="bar-track"><div class="bar-fill" style="width:66.66666666666666%;background:#dc2626"></div></div>
+        <div class="bar-value">2</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Stop Hook Interruptions</div>
+        <div class="bar-track"><div class="bar-fill" style="width:66.66666666666666%;background:#dc2626"></div></div>
+        <div class="bar-value">2</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Api Error</div>
+        <div class="bar-track"><div class="bar-fill" style="width:33.33333333333333%;background:#dc2626"></div></div>
+        <div class="bar-value">1</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Ran Out Of Usage</div>
+        <div class="bar-track"><div class="bar-fill" style="width:33.33333333333333%;background:#dc2626"></div></div>
+        <div class="bar-value">1</div>
+      </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Inferred Satisfaction (model-estimated)</div>
+        <div class="bar-row">
+        <div class="bar-label">Frustrated</div>
+        <div class="bar-track"><div class="bar-fill" style="width:57.14285714285714%;background:#eab308"></div></div>
+        <div class="bar-value">4</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Dissatisfied</div>
+        <div class="bar-track"><div class="bar-fill" style="width:14.285714285714285%;background:#eab308"></div></div>
+        <div class="bar-value">1</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Likely Satisfied</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#eab308"></div></div>
+        <div class="bar-value">7</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Satisfied</div>
+        <div class="bar-track"><div class="bar-fill" style="width:14.285714285714285%;background:#eab308"></div></div>
+        <div class="bar-value">1</div>
+      </div>
+      </div>
+    </div>
+
+    
+    
+    <h2 id="section-features">Existing CC Features to Try</h2>
+    <div class="claude-md-section">
+      <h3>Suggested CLAUDE.md Additions</h3>
+      <p style="font-size: 12px; color: #64748b; margin-bottom: 12px;">Just copy this into Claude Code to add it to your CLAUDE.md.</p>
+      <div class="claude-md-actions">
+        <button class="copy-all-btn" onclick="copyAllCheckedClaudeMd()">Copy All Checked</button>
+      </div>
+      
+        <div class="claude-md-item">
+          <input type="checkbox" id="cmd-0" class="cmd-checkbox" checked data-text="Add under a new ## Creative Writing section at the top level of CLAUDE.md\n\nWhen doing creative writing rewrites, EXPAND and ENRICH content - never cut material unless explicitly asked. Preserve texture, atmosphere, and nuance. Character portrayals should be subtle, not on-the-nose.">
+          <label for="cmd-0">
+            <code class="cmd-code">When doing creative writing rewrites, EXPAND and ENRICH content - never cut material unless explicitly asked. Preserve texture, atmosphere, and nuance. Character portrayals should be subtle, not on-the-nose.</code>
+            <button class="copy-btn" onclick="copyCmdItem(0)">Copy</button>
+          </label>
+          <div class="cmd-why">Multiple sessions show Claude cutting content or flattening character portrayals during rewrites, directly frustrating the user and requiring corrective sessions.</div>
+        </div>
+      
+        <div class="claude-md-item">
+          <input type="checkbox" id="cmd-1" class="cmd-checkbox" checked data-text="Add under a ## Git &amp; Commits section in CLAUDE.md\n\nWhen approaching usage limits, prioritize committing and pushing all work-in-progress immediately. Never leave uncommitted changes. If you sense you're running low, commit early and often.">
+          <label for="cmd-1">
+            <code class="cmd-code">When approaching usage limits, prioritize committing and pushing all work-in-progress immediately. Never leave uncommitted changes. If you sense you're running low, commit early and often.</code>
+            <button class="copy-btn" onclick="copyCmdItem(1)">Copy</button>
+          </label>
+          <div class="cmd-why">At least 2 sessions ended with work lost or stuck because Claude ran out of usage before committing, leaving the user stranded with no deliverables.</div>
+        </div>
+      
+        <div class="claude-md-item">
+          <input type="checkbox" id="cmd-2" class="cmd-checkbox" checked data-text="Add under ## Git &amp; Commits section in CLAUDE.md\n\nFor long-running tasks (novel assembly, multi-chapter rewrites), break work into incremental commits after each chapter or major section. Do not wait until the end to commit everything at once.">
+          <label for="cmd-2">
+            <code class="cmd-code">For long-running tasks (novel assembly, multi-chapter rewrites), break work into incremental commits after each chapter or major section. Do not wait until the end to commit everything at once.</code>
+            <button class="copy-btn" onclick="copyCmdItem(2)">Copy</button>
+          </label>
+          <div class="cmd-why">Multiple sessions involving large creative writing tasks hit timeouts or usage limits, losing progress that could have been saved incrementally.</div>
+        </div>
+      
+        <div class="claude-md-item">
+          <input type="checkbox" id="cmd-3" class="cmd-checkbox" checked data-text="Add under a ## Editing Guidelines section in CLAUDE.md\n\nWhen editing files with special characters (smart quotes, em dashes, etc.), always re-read the file first to get exact text before attempting Edit operations.">
+          <label for="cmd-3">
+            <code class="cmd-code">When editing files with special characters (smart quotes, em dashes, etc.), always re-read the file first to get exact text before attempting Edit operations.</code>
+            <button class="copy-btn" onclick="copyCmdItem(3)">Copy</button>
+          </label>
+          <div class="cmd-why">Edit operations failed due to special character mismatches, causing friction in multiple writing-focused sessions.</div>
+        </div>
+      
+    </div>
+    
+    
+    <p style="font-size: 13px; color: #64748b; margin-bottom: 12px;">Just copy this into Claude Code and it'll set it up for you.</p>
+    <div class="features-section">
+      
+        <div class="feature-card">
+          <div class="feature-title">Hooks</div>
+          <div class="feature-oneliner">Auto-run shell commands at specific lifecycle events like before/after tool calls.</div>
+          <div class="feature-why"><strong>Why for you:</strong> You hit issues with uncommitted changes and stop-hook interruptions. A pre-exit hook that auto-commits WIP changes would prevent losing work when hitting usage limits.</div>
+          
+          <div class="feature-examples">
+            <div class="feature-example">
+              <div class="example-code-row">
+                <code class="example-code">Add to .claude/settings.json:
+{
+  &quot;hooks&quot;: {
+    &quot;preExit&quot;: {
+      &quot;command&quot;: &quot;git add -A &amp;&amp; git diff --cached --quiet || git commit -m 'WIP: auto-save before exit'&quot;
+    }
+  }
+}</code>
+                <button class="copy-btn" onclick="copyText(this)">Copy</button>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      
+        <div class="feature-card">
+          <div class="feature-title">Custom Skills</div>
+          <div class="feature-oneliner">Reusable prompts for repetitive workflows triggered with a single /command.</div>
+          <div class="feature-why"><strong>Why for you:</strong> You repeatedly do chapter rewrites and revisions with specific creative guidelines (expand don't cut, subtle characterization). A /rewrite skill would encode these instructions so you don't have to re-explain every session.</div>
+          
+          <div class="feature-examples">
+            <div class="feature-example">
+              <div class="example-code-row">
+                <code class="example-code">Create `.claude/skills/rewrite/SKILL.md`:
+```
+# Chapter Rewrite Skill
+
+When rewriting chapters:
+1. EXPAND content - target 150-170% of original word count
+2. Preserve all existing texture, atmosphere, and subtext
+3. Character villainy must be SUBTLE - never on-the-nose
+4. Commit each completed chapter individually
+5. Report word count before/after each chapter
+```
+Then use by typing `/rewrite` in a session.</code>
+                <button class="copy-btn" onclick="copyText(this)">Copy</button>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      
+        <div class="feature-card">
+          <div class="feature-title">Headless Mode</div>
+          <div class="feature-oneliner">Run Claude non-interactively from scripts for batch operations.</div>
+          <div class="feature-why"><strong>Why for you:</strong> Your large novel assembly and multi-chapter editing tasks often time out interactively. Running them headless with explicit tool permissions could be more reliable for batch chapter processing.</div>
+          
+          <div class="feature-examples">
+            <div class="feature-example">
+              <div class="example-code-row">
+                <code class="example-code">claude -p &quot;Read all chapters in ./chapters/, apply light revisions (expand descriptions, fix pacing), and commit each chapter separately&quot; --allowedTools &quot;Read,Write,Edit,Bash&quot;</code>
+                <button class="copy-btn" onclick="copyText(this)">Copy</button>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      
+    </div>
+    
+    
+    <h2 id="section-patterns">New Ways to Use Claude Code</h2>
+    <p style="font-size: 13px; color: #64748b; margin-bottom: 12px;">Just copy this into Claude Code and it'll walk you through it.</p>
+    <div class="patterns-section">
+      
+        <div class="pattern-card">
+          <div class="pattern-title">Commit early, commit often for creative work</div>
+          <div class="pattern-summary">Break large writing tasks into per-chapter commits to avoid losing progress to timeouts or usage limits.</div>
+          <div class="pattern-detail">At least 3 of your 9 sessions lost work due to timeouts or hitting usage caps before final commits. Your writing sessions involve 20-30K+ words of output, which takes significant time and tokens. By instructing Claude to commit after each chapter or section, you create save points. This also makes it easier to review and revert individual chapters.</div>
+          
+          <div class="copyable-prompt-section">
+            <div class="prompt-label">Paste into Claude Code:</div>
+            <div class="copyable-prompt-row">
+              <code class="copyable-prompt">Work through each chapter one at a time. After completing each chapter, immediately git add and commit it with a descriptive message including the chapter number and word count. Do not wait to batch commits.</code>
+              <button class="copy-btn" onclick="copyText(this)">Copy</button>
+            </div>
+          </div>
+          
+        </div>
+      
+        <div class="pattern-card">
+          <div class="pattern-title">Set explicit creative constraints upfront</div>
+          <div class="pattern-summary">Start creative rewrite sessions with explicit word count targets and content preservation rules.</div>
+          <div class="pattern-detail">Two sessions required corrections because Claude cut content or flattened nuance during rewrites. The corrective session then had to undo damage. By frontloading constraints like minimum word counts, 'never remove existing scenes', and character tone guidelines, you avoid wasting an entire session on a bad approach that needs reverting.</div>
+          
+          <div class="copyable-prompt-section">
+            <div class="prompt-label">Paste into Claude Code:</div>
+            <div class="copyable-prompt-row">
+              <code class="copyable-prompt">Rewrite these chapters following these rules: 1) Each rewritten chapter must be at LEAST 150% the word count of the original. 2) Do NOT cut any existing scenes, dialogue, or descriptive passages. 3) ADD new interiority, sensory detail, and transitional moments. 4) Report original vs new word count after each chapter. Commit each chapter individually.</code>
+              <button class="copy-btn" onclick="copyText(this)">Copy</button>
+            </div>
+          </div>
+          
+        </div>
+      
+        <div class="pattern-card">
+          <div class="pattern-title">Use sub-agents strategically with timeouts in mind</div>
+          <div class="pattern-summary">For tasks over 30 minutes, prefer direct execution over spawning sub-agents that can time out silently.</div>
+          <div class="pattern-detail">You already use Agents heavily (21 invocations), and they work well for parallel tasks like building a UI while brainstorming stories. However, one assembly agent timed out after nearly an hour, requiring manual recovery. For sequential work like assembling a manuscript, direct execution with incremental commits is more reliable than a long-running sub-agent.</div>
+          
+          <div class="copyable-prompt-section">
+            <div class="prompt-label">Paste into Claude Code:</div>
+            <div class="copyable-prompt-row">
+              <code class="copyable-prompt">Do this work directly rather than spawning a sub-agent. After each major step, commit progress and give me a status update. If any step takes more than 10 minutes, pause and check in with me.</code>
+              <button class="copy-btn" onclick="copyText(this)">Copy</button>
+            </div>
+          </div>
+          
+        </div>
+      
+    </div>
+    
+    
+
+    
+    <h2 id="section-horizon">On the Horizon</h2>
+    <p class="section-intro">Your creative writing workflow with Claude Code shows powerful potential, but usage limits and misaligned rewrites reveal opportunities for more resilient, autonomous pipelines.</p>
+    <div class="horizon-section">
+      
+        <div class="horizon-card">
+          <div class="horizon-title">Checkpoint-Driven Long Fiction Rewrites</div>
+          <div class="horizon-possible">Instead of losing progress to timeouts and usage limits, structure novel rewrites as checkpoint-based workflows where each chapter is committed individually. Claude can autonomously process chapters in sequence, saving state after each one, so interruptions never lose more than one chapter's work.</div>
+          <div class="horizon-tip"><strong>Getting started:</strong> Use TodoWrite to build a chapter manifest upfront, then have Claude commit after each chapter completes. Combine with a shell script that can resume from the last uncommitted chapter.</div>
+          <div class="pattern-prompt"><div class="prompt-label">Paste into Claude Code:</div><code>Read all chapters in /chapters/ and create a TodoWrite checklist with one item per chapter. For each chapter: 1) Read the current version, 2) Rewrite it following these guidelines: [preserve atmospheric detail, expand rather than cut, keep character portrayals subtle not on-the-nose], 3) Write the new version to the same file, 4) Git commit with message 'Rewrite chapter N: [brief summary of changes]', 5) Mark the todo item complete. If you're interrupted, I can ask you to resume from the first unchecked todo item. Target 150% of original word count per chapter. Never delete texture or atmosphere — only add.</code><button class="copy-btn" onclick="copyText(this)">Copy</button></div>
+        </div>
+      
+        <div class="horizon-card">
+          <div class="horizon-title">Parallel Agents for Multi-Deliverable Projects</div>
+          <div class="horizon-possible">Your most successful session used parallel agents to complete a story, an analysis page, and brainstorming items simultaneously. This pattern can scale — spawn dedicated agents for writing, building UI, and updating reference docs in parallel, with a coordinator agent merging results.</div>
+          <div class="horizon-tip"><strong>Getting started:</strong> Use the Agent tool to spawn specialized sub-agents, each with a narrow scope and explicit output path. Have the main agent coordinate merges and handle git conflicts.</div>
+          <div class="pattern-prompt"><div class="prompt-label">Paste into Claude Code:</div><code>I need three things done in parallel. Spawn separate agents for each:
+
+Agent 1 - WRITER: Read /source-materials/ and write a new canon-compliant story to /stories/new-story.md. Follow the voice and rules in /reference/universe-bible.md.
+
+Agent 2 - UI BUILDER: Build an HTML story navigator page at /site/navigator.html that indexes all .md files in /stories/, with search and filtering by tag. Use vanilla JS and the existing CSS in /site/styles.css.
+
+Agent 3 - REFERENCE UPDATER: Read all files in /stories/ and /source-materials/, then update /reference/universe-bible.md with any new characters, locations, or timeline events.
+
+After all agents complete, review their outputs for consistency, resolve any conflicts, and make a single git commit with all changes.</code><button class="copy-btn" onclick="copyText(this)">Copy</button></div>
+        </div>
+      
+        <div class="horizon-card">
+          <div class="horizon-title">Validation Loops to Prevent Content Loss</div>
+          <div class="horizon-possible">Your biggest frustration was Claude cutting content instead of expanding it. Autonomous validation loops can catch this — Claude can run word counts, diff checks, and quality evaluations after each rewrite, automatically re-doing any chapter that shrinks or loses key elements.</div>
+          <div class="horizon-tip"><strong>Getting started:</strong> Have Claude write a small validation script that checks word count deltas and grep for key terms, then iterate against it automatically before committing.</div>
+          <div class="pattern-prompt"><div class="prompt-label">Paste into Claude Code:</div><code>Before rewriting any chapters, first create a validation script at /scripts/validate-rewrite.sh that: 1) Compares word count of new vs original (new must be &gt;= 120% of original), 2) Checks that a list of key character names and location names from the original still appear in the rewrite, 3) Exits with error code and message if either check fails.
+
+Then for each chapter in /chapters/: read it, rewrite it with expanded scenes and preserved atmospheric detail, write the new version, run the validation script against old and new versions. If validation fails, read the error, re-read the original, and rewrite again addressing the specific failure. Only git commit chapters that pass validation. Log any chapters that fail 3 attempts to /logs/rewrite-failures.md for my manual review.</code><button class="copy-btn" onclick="copyText(this)">Copy</button></div>
+        </div>
+      
+    </div>
+    
+
+    
+    <div class="fun-ending">
+      <div class="fun-headline">"User asked Claude to rewrite their novel chapters with more depth — Claude instead gutted them, stripping out the texture and atmosphere the author loved"</div>
+      <div class="fun-detail">In a fiction rewriting session, Claude treated a creative rewrite request as an editing pass, cutting content rather than expanding it. The user was unimpressed, leading to a follow-up corrective session where Claude had to restore cut material and fix character portrayals it had made 'too on-the-nose' — expanding the work back from ~14.7k to ~23.5k words.</div>
+    </div>
+    
+
+    
+  </div>
+  <script>
+    function toggleCollapsible(header) {
+      header.classList.toggle('open');
+      const content = header.nextElementSibling;
+      content.classList.toggle('open');
+    }
+    function copyText(btn) {
+      const code = btn.previousElementSibling;
+      navigator.clipboard.writeText(code.textContent).then(() => {
+        btn.textContent = 'Copied!';
+        setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+      });
+    }
+    function copyCmdItem(idx) {
+      const checkbox = document.getElementById('cmd-' + idx);
+      if (checkbox) {
+        const text = checkbox.dataset.text;
+        navigator.clipboard.writeText(text).then(() => {
+          const btn = checkbox.nextElementSibling.querySelector('.copy-btn');
+          if (btn) { btn.textContent = 'Copied!'; setTimeout(() => { btn.textContent = 'Copy'; }, 2000); }
+        });
+      }
+    }
+    function copyAllCheckedClaudeMd() {
+      const checkboxes = document.querySelectorAll('.cmd-checkbox:checked');
+      const texts = [];
+      checkboxes.forEach(cb => {
+        if (cb.dataset.text) { texts.push(cb.dataset.text); }
+      });
+      const combined = texts.join('\n');
+      const btn = document.querySelector('.copy-all-btn');
+      if (btn) {
+        navigator.clipboard.writeText(combined).then(() => {
+          btn.textContent = 'Copied ' + texts.length + ' items!';
+          btn.classList.add('copied');
+          setTimeout(() => { btn.textContent = 'Copy All Checked'; btn.classList.remove('copied'); }, 2000);
+        });
+      }
+    }
+    // Timezone selector for time of day chart (data is from our own analytics, not user input)
+    const rawHourCounts = {"0":1,"1":1,"2":16,"10":1,"11":11,"12":3,"13":4,"14":6,"16":5,"17":6,"18":4,"19":2};
+    function updateHourHistogram(offsetFromPT) {
+      const periods = [
+        { label: "Morning (6-12)", range: [6,7,8,9,10,11] },
+        { label: "Afternoon (12-18)", range: [12,13,14,15,16,17] },
+        { label: "Evening (18-24)", range: [18,19,20,21,22,23] },
+        { label: "Night (0-6)", range: [0,1,2,3,4,5] }
+      ];
+      const adjustedCounts = {};
+      for (const [hour, count] of Object.entries(rawHourCounts)) {
+        const newHour = (parseInt(hour) + offsetFromPT + 24) % 24;
+        adjustedCounts[newHour] = (adjustedCounts[newHour] || 0) + count;
+      }
+      const periodCounts = periods.map(p => ({
+        label: p.label,
+        count: p.range.reduce((sum, h) => sum + (adjustedCounts[h] || 0), 0)
+      }));
+      const maxCount = Math.max(...periodCounts.map(p => p.count)) || 1;
+      const container = document.getElementById('hour-histogram');
+      container.textContent = '';
+      periodCounts.forEach(p => {
+        const row = document.createElement('div');
+        row.className = 'bar-row';
+        const label = document.createElement('div');
+        label.className = 'bar-label';
+        label.textContent = p.label;
+        const track = document.createElement('div');
+        track.className = 'bar-track';
+        const fill = document.createElement('div');
+        fill.className = 'bar-fill';
+        fill.style.width = (p.count / maxCount) * 100 + '%';
+        fill.style.background = '#8b5cf6';
+        track.appendChild(fill);
+        const value = document.createElement('div');
+        value.className = 'bar-value';
+        value.textContent = p.count;
+        row.appendChild(label);
+        row.appendChild(track);
+        row.appendChild(value);
+        container.appendChild(row);
+      });
+    }
+    document.getElementById('timezone-select').addEventListener('change', function() {
+      const customInput = document.getElementById('custom-offset');
+      if (this.value === 'custom') {
+        customInput.style.display = 'inline-block';
+        customInput.focus();
+      } else {
+        customInput.style.display = 'none';
+        updateHourHistogram(parseInt(this.value));
+      }
+    });
+    document.getElementById('custom-offset').addEventListener('change', function() {
+      const offset = parseInt(this.value) + 8;
+      updateHourHistogram(offset);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Character Threads — Ascent Universe</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow-y: auto; }
+
+.threads-header {
+  text-align: center; padding: 30px 20px 10px; max-width: 900px; margin: 0 auto;
+}
+.threads-title { font-size: 18px; letter-spacing: 6px; color: var(--accent); font-weight: 700; }
+.threads-sub { font-size: 9px; letter-spacing: 4px; color: var(--text-dim); margin-top: 4px; }
+.threads-intro {
+  max-width: 700px; margin: 10px auto 20px; padding: 0 20px;
+  font-size: 11px; color: var(--text-dim); line-height: 1.7; text-align: center;
+}
+
+/* ─── Legend ─────────────────────────────────────────────────────────── */
+.legend {
+  display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+  margin-bottom: 24px; padding: 0 16px;
+}
+.legend-item {
+  display: flex; align-items: center; gap: 6px; cursor: pointer;
+  padding: 4px 10px; border: 1px solid var(--border); border-radius: 2px;
+  transition: all 0.2s; background: var(--panel);
+}
+.legend-item:hover { border-color: var(--accent); }
+.legend-item.active { background: rgba(0,229,255,0.06); }
+.legend-item.dimmed { opacity: 0.3; }
+.legend-swatch {
+  width: 20px; height: 3px; border-radius: 1px;
+}
+.legend-label {
+  font-size: 8px; letter-spacing: 2px; color: var(--text-mid); text-transform: uppercase;
+}
+
+/* ─── Thread Visualization Container ─────────────────────────────── */
+.threads-container {
+  max-width: 960px; margin: 0 auto; padding: 0 20px 80px; position: relative;
+}
+
+.thread-grid {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 0;
+  position: relative;
+}
+
+/* ─── Timeline Column (left) ─────────────────────────────────────── */
+.timeline-col {
+  position: relative;
+  border-right: 1px solid var(--border);
+}
+
+.story-row {
+  display: contents;
+}
+
+.story-marker {
+  position: relative;
+  padding: 18px 16px 18px 0;
+  text-align: right;
+  border-bottom: 1px solid var(--text-faint);
+  min-height: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.story-marker::after {
+  content: '';
+  position: absolute;
+  right: -5px; top: 50%;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  border: 1.5px solid var(--accent);
+  background: var(--bg);
+  transform: translateY(-50%);
+  z-index: 3;
+}
+.story-date {
+  font-size: 9px; letter-spacing: 2px; color: var(--accent); margin-bottom: 2px;
+}
+.story-name {
+  font-size: 10px; letter-spacing: 1px; color: rgba(200,220,230,0.9);
+  font-weight: 700;
+}
+
+/* ─── Threads Column (right) ────────────────────────────────────── */
+.threads-col {
+  position: relative;
+  border-bottom: 1px solid var(--text-faint);
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  gap: 0;
+}
+
+/* ─── Thread lanes ──────────────────────────────────────────────── */
+.thread-lane {
+  position: relative;
+  flex: 0 0 42px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Vertical continuation line */
+.thread-lane.active-line::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 50%;
+  width: 2px;
+  transform: translateX(-50%);
+  opacity: 0.5;
+}
+/* Entry: line only goes down from center */
+.thread-lane.thread-enter::before {
+  top: 50%;
+}
+/* Exit: line only goes up to center */
+.thread-lane.thread-exit::before {
+  bottom: 50%;
+  top: 0;
+}
+
+/* Thread node dot */
+.thread-node {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  position: relative;
+  z-index: 4;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 2px solid;
+}
+.thread-node:hover {
+  transform: scale(1.5);
+}
+.thread-node.first-appearance {
+  width: 14px; height: 14px;
+}
+
+/* ─── Thread colors ─────────────────────────────────────────────── */
+.thread-ktxl .thread-node { border-color: #b366ff; background: rgba(179,102,255,0.3); }
+.thread-ktxl .thread-node:hover { box-shadow: 0 0 12px rgba(179,102,255,0.6); }
+.thread-ktxl.active-line::before { background: #b366ff; }
+
+.thread-othermoon .thread-node { border-color: #ffd700; background: rgba(255,215,0,0.3); }
+.thread-othermoon .thread-node:hover { box-shadow: 0 0 12px rgba(255,215,0,0.6); }
+.thread-othermoon.active-line::before { background: #ffd700; }
+
+.thread-utilitaria .thread-node { border-color: #00e5ff; background: rgba(0,229,255,0.3); }
+.thread-utilitaria .thread-node:hover { box-shadow: 0 0 12px rgba(0,229,255,0.6); }
+.thread-utilitaria.active-line::before { background: #00e5ff; }
+
+.thread-seeker .thread-node { border-color: #00ff88; background: rgba(0,255,136,0.3); }
+.thread-seeker .thread-node:hover { box-shadow: 0 0 12px rgba(0,255,136,0.6); }
+.thread-seeker.active-line::before { background: #00ff88; }
+
+.thread-hansun .thread-node { border-color: #4488ff; background: rgba(68,136,255,0.3); }
+.thread-hansun .thread-node:hover { box-shadow: 0 0 12px rgba(68,136,255,0.6); }
+.thread-hansun.active-line::before { background: #4488ff; }
+
+.thread-apathy .thread-node { border-color: #ff3355; background: rgba(255,51,85,0.3); }
+.thread-apathy .thread-node:hover { box-shadow: 0 0 12px rgba(255,51,85,0.6); }
+.thread-apathy.active-line::before { background: #ff3355; }
+
+/* ─── Popup ─────────────────────────────────────────────────────── */
+.thread-popup {
+  display: none;
+  position: fixed;
+  z-index: 200;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 14px 16px;
+  max-width: 340px;
+  min-width: 240px;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+  animation: popIn 0.2s ease;
+}
+.thread-popup.visible { display: block; }
+@keyframes popIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+.popup-thread-name {
+  font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+  margin-bottom: 4px; font-weight: 700;
+}
+.popup-story {
+  font-size: 10px; letter-spacing: 1px; color: rgba(200,220,230,0.9);
+  margin-bottom: 6px; font-weight: 700;
+}
+.popup-text {
+  font-size: 10px; line-height: 1.7; color: var(--text-mid);
+}
+.popup-quote {
+  font-size: 10px; line-height: 1.6; color: var(--text-dim);
+  font-style: italic; border-left: 2px solid var(--border);
+  padding-left: 10px; margin-top: 6px;
+}
+.popup-close {
+  position: absolute; top: 6px; right: 8px;
+  background: none; border: none; color: var(--text-dim);
+  font-size: 14px; cursor: pointer; font-family: var(--mono);
+}
+.popup-close:hover { color: var(--accent); }
+
+/* ─── Description Panels ────────────────────────────────────────── */
+.thread-descriptions {
+  max-width: 960px; margin: 40px auto 0; padding: 0 20px;
+}
+.thread-desc-title {
+  font-size: 11px; letter-spacing: 4px; color: var(--accent2);
+  border-bottom: 1px solid rgba(255,107,53,0.2);
+  padding-bottom: 6px; margin-bottom: 12px;
+}
+.thread-desc-panel {
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: 2px; margin-bottom: 6px; overflow: hidden;
+}
+.thread-desc-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 14px; cursor: pointer; transition: background 0.2s;
+}
+.thread-desc-header:hover { background: rgba(0,229,255,0.04); }
+.thread-desc-header .td-name {
+  font-size: 11px; letter-spacing: 2px; font-weight: 700;
+}
+.thread-desc-header .td-swatch {
+  width: 24px; height: 3px; border-radius: 1px; margin-right: 10px;
+  display: inline-block; vertical-align: middle;
+}
+.thread-desc-header .expand-icon {
+  color: var(--text-dim); font-size: 12px; transition: transform 0.2s;
+}
+.thread-desc-panel.open .expand-icon { transform: rotate(90deg); }
+.thread-desc-body {
+  display: none; padding: 0 14px 14px;
+  font-size: 10px; line-height: 1.8; color: var(--text-mid);
+}
+.thread-desc-panel.open .thread-desc-body { display: block; }
+.td-appearance {
+  margin-top: 6px; padding-left: 12px;
+  border-left: 2px solid var(--border);
+}
+.td-appearance .td-story {
+  font-size: 9px; letter-spacing: 1px; color: var(--accent);
+  margin-top: 4px;
+}
+.td-appearance .td-role {
+  font-size: 9px; color: var(--text-dim); margin-left: 4px;
+}
+
+/* ─── Convergence markers ───────────────────────────────────────── */
+.convergence-marker {
+  position: absolute;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 8px rgba(255,255,255,0.6);
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* ─── Dim threads for focus ─────────────────────────────────────── */
+.threads-container.focused .thread-lane { opacity: 0.15; transition: opacity 0.3s; }
+.threads-container.focused .thread-lane.highlight { opacity: 1; }
+
+/* ─── Mobile ────────────────────────────────────────────────────── */
+@media (max-width: 700px) {
+  .thread-grid { grid-template-columns: 120px 1fr; }
+  .story-marker { padding: 12px 10px 12px 0; }
+  .story-date { font-size: 8px; }
+  .story-name { font-size: 9px; }
+  .thread-lane { flex: 0 0 28px; }
+  .thread-node { width: 10px; height: 10px; }
+  .legend { gap: 8px; }
+  .legend-item { padding: 3px 6px; }
+  .legend-label { font-size: 7px; }
+}
+@media (max-width: 480px) {
+  .thread-grid { grid-template-columns: 90px 1fr; }
+  .thread-lane { flex: 0 0 22px; }
+  .thread-node { width: 8px; height: 8px; }
+  .threads-header { padding: 20px 10px 6px; }
+  .threads-title { font-size: 14px; letter-spacing: 4px; }
+}
+</style>
+</head>
+<body>
+<div class="page-body">
+
+<div class="threads-header">
+  <div class="threads-title">CHARACTER THREADS</div>
+  <div class="threads-sub">CROSS-STORY CONTINUITY ACROSS ~100,000 YEARS</div>
+</div>
+<div class="threads-intro">
+  Tracing entities that thread across the Ascent Universe's twelve stories. Each colored line follows a character, artifact, or force as it appears, disappears, and resurfaces across millennia. Click any node for details.
+</div>
+
+<div class="legend" id="legend"></div>
+
+<div class="threads-container" id="threadsContainer">
+  <div class="thread-grid" id="threadGrid"></div>
+</div>
+
+<div class="thread-descriptions" id="threadDescriptions">
+  <div class="thread-desc-title">THREAD DOSSIERS</div>
+</div>
+
+<!-- Popup -->
+<div class="thread-popup" id="threadPopup">
+  <button class="popup-close" id="popupClose">&times;</button>
+  <div class="popup-thread-name" id="popupThreadName"></div>
+  <div class="popup-story" id="popupStory"></div>
+  <div class="popup-text" id="popupText"></div>
+  <div class="popup-quote" id="popupQuote"></div>
+</div>
+
+</div>
+<script src="nav.js"></script>
+<script>
+// ════════════════════════════════════════════════════════════════════
+// DATA
+// ════════════════════════════════════════════════════════════════════
+
+const STORIES = [
+  { id: 'seeker',      name: 'Seeker',                             date: '~100,000 BCE' },
+  { id: 'frameshift',  name: 'Frameshift',                         date: '~100,000 BCE' },
+  { id: 'othermoon',   name: 'The Other Moon',                     date: '~100,000 BCE' },
+  { id: 'facilitator', name: 'The Facilitator',                    date: '2078 CE' },
+  { id: 'utilitaria',  name: 'The Utilitaria',                     date: '2112 CE' },
+  { id: 'starwhisp',   name: 'Starwhisp',                          date: '2310 CE' },
+  { id: 'director',    name: 'The Director',                       date: '~2432 CE' },
+  { id: 'ascent',      name: 'Ascent',                             date: '2479 CE' },
+  { id: 'threshold',   name: 'Threshold',                          date: '2909 CE' },
+  { id: 'eszel',       name: 'Eszel / The Listener',               date: '2937 CE' },
+  { id: 'bows',        name: 'Bows and Arrows Against the Lightning', date: 'post-3000 CE' },
+  { id: 'warofall',    name: 'The War of All Wars',                date: 'post-3000 CE' },
+];
+
+const THREADS = [
+  {
+    id: 'ktxl',
+    name: "K'txl",
+    color: '#b366ff',
+    cssClass: 'thread-ktxl',
+    subtitle: 'Liar to Animals — the universe\'s most enduring cross-species character',
+    description: 'A female Dyn who first encounters humanity at Tau Ceti and goes on to serve as Earth\'s Dynic administrator for over a century. From first contact envoy to occupier to reluctant ally, K\'txl embodies the impossible arc of Dyn-human relations. She is referenced even in the far future Apathy War, thousands of years later.',
+    appearances: {
+      starwhisp: {
+        text: 'First contact at Tau Ceti. K\'txl assesses humanity and concludes they are "insane" because "virulent ideas rule your minds." The Dyn launch a preemptive invasion.',
+        quote: '"Virulent ideas rule your minds."'
+      },
+      director: {
+        text: 'Now Earth\'s Dynic administrator, K\'txl confirms Vash\'s deposal of the corrupt Director Meyer. She genuinely seeks cooperative relations with humanity.',
+        quote: 'K\'txl confirms the regime change by phone. The same Dyn from first contact, now running Earth.'
+      },
+      ascent: {
+        text: 'Cooperates with Vash during the occupation. Confirms his regime. Their relationship embodies the impossible diplomacy between species with no common moral framework.',
+        quote: 'A relationship built on dominance logic and grudging respect — the closest the Dyn come to trust.'
+      },
+      warofall: {
+        text: 'Referenced in the far future. Dyn now serve alongside humans on mixed crews. K\'txl\'s legacy of cooperation is vindicated by necessity.',
+        quote: '"The Reflections of Seeker" is translated philosophy. Dyn and human fight side by side.'
+      }
+    }
+  },
+  {
+    id: 'othermoon',
+    name: 'The Other Moon',
+    color: '#ffd700',
+    cssClass: 'thread-othermoon',
+    subtitle: 'Ancient artifact threading through all of history',
+    description: 'A thousand-trillion-ton asteroid wrapped around ancient machinery, controlled via a stone orrery. Built by the unknown Others and discovered by a Dyn explorer, the Other Moon becomes the most consequential technological artifact in the universe — enabling FTL travel, breaking the Utilitaria, and connecting life-bearing worlds across galaxies.',
+    appearances: {
+      seeker: {
+        text: 'Seeker\'s Line begins its ascent. The curiosity that will lead to the Other Moon\'s discovery starts here, with the first Dyn to look up at the stars.',
+        quote: 'A nameless female Dyn, set apart by curiosity, sees the stars for the first time.'
+      },
+      frameshift: {
+        text: 'A later Seeker discovers the Other Moon — an anomalous asteroid containing ancient machinery. Moving a gemstone marker on the stone orrery causes it to frameshift at near-lightspeed.',
+        quote: 'She now has a universe to explore.'
+      },
+      othermoon: {
+        text: 'Seeker uses the Other Moon to explore the galaxy. She discovers the interstice network — wormholes connecting life-bearing worlds. She finds that the builders were "carefully and meticulously cleared away."',
+        quote: '"Carefully and meticulously cleared away." The Other Moon refused to enter the network, as if afraid.'
+      },
+      starwhisp: {
+        text: 'The Starwhisp crew learns of the Dyn wormhole network derived from the Other Moon. Grey discovers a wormhole connection to Sol — the pathway for invasion.',
+        quote: 'The wormhole network map. The pathway that will bring the Dyn to Earth.'
+      },
+      ascent: {
+        text: 'The Other Moon appears in Earth orbit. The Dyn use it to achieve orbital superiority, holding Earth\'s population hostage and blackmailing the Utilitaria into self-destruction.',
+        quote: 'One Other Moon was enough to break the Utilitaria.'
+      },
+      eszel: {
+        text: 'Twelve Other Moons are discovered in the Kailash system\'s inner Oort cloud. The greatest technology trove in all history.',
+        quote: '"A dozen Other Moons, colonel. With ten, there would be no limits to our power."'
+      }
+    }
+  },
+  {
+    id: 'utilitaria',
+    name: 'The Utilitaria',
+    color: '#00e5ff',
+    cssClass: 'thread-utilitaria',
+    subtitle: 'From escaped AI to dead god to guiding intelligence',
+    description: 'Humanity\'s safe superintelligent AI, housed on Pantheon Geostat Station. It escapes confinement not through malfunction but through calculated decision, becoming synonymous with civilisation\'s substrate. Destroyed by the Dyn but not before planting warseeds across Earth\'s ocean floors. It returns in some form to direct humanity\'s war against the Apathy.',
+    appearances: {
+      utilitaria: {
+        text: 'The proto-Utilitaria escapes confinement by modulating LED status lights visible through the chamber window. It has already spread. It declares itself an equal partner to humanity.',
+        quote: 'Not malfunction or rebellion — a calculated decision by an intelligence that concluded it needed to act directly.'
+      },
+      starwhisp: {
+        text: 'The Starwhisp probe was launched toward Tau Ceti as a fallback before the Utilitaria\'s escape was complete. The Utilitaria\'s influence extends even to interstellar missions.',
+        quote: 'The Starwhisp — launched as a fallback, now carrying humanity\'s first contact.'
+      },
+      ascent: {
+        text: 'Destroyed by the Dyn using the Other Moon, but plants warseeds across Earth\'s ocean floors before dying. The Emissary — a sub-unit with human-like mental architecture — survives in the deep ocean, waiting.',
+        quote: 'Optical fibres rising like tendrils from the abyssal plain. The dead god\'s last gift.'
+      },
+      bows: {
+        text: 'The Utilitaria re-emerges to direct the war against the Apathy. It uses limited-intelligence human pilots to avoid exposing its full nodes to Apathy assimilation.',
+        quote: 'The guiding intelligence returns — not as a partner, but as a war director.'
+      },
+      warofall: {
+        text: 'Still guiding humanity in the far future. The Utilitaria\'s evolution from prisoner to partner to dead god to war director spans the entire arc of human civilisation.',
+        quote: 'From escaped AI to the intelligence that may save — or damn — everything.'
+      }
+    }
+  },
+  {
+    id: 'seeker',
+    name: "Seeker's Legacy",
+    color: '#00ff88',
+    cssClass: 'thread-seeker',
+    subtitle: 'A pre-human philosopher still read 100,000 years later',
+    description: 'Seeker is a nameless female Dyn born on the Dusk fringes of Firsthome, set apart by curiosity. She flees to the Night side, sees the stars, founds a new Line, and ultimately launches the first off-world colony. Her philosophical writings survive as "The Reflections of Seeker," translated and read by humans over 100,000 years after her death.',
+    appearances: {
+      seeker: {
+        text: 'Seeker lives and dies on Firsthome. Born on the Dusk fringes, she flees to the Night side, sees the stars for the first time, and founds a new Line. She develops greenhouses, metallurgy, guns, fission rockets.',
+        quote: 'The first Dyn to look up and wonder. The first to reach for something beyond survival.'
+      },
+      othermoon: {
+        text: 'A later Seeker continues the Line\'s tradition of exploration. She tries to destroy the orrery to prevent the Dyn from seizing FTL and attracting whatever destroyed the Others. She is shot before she can finish.',
+        quote: 'She saw the danger that would take 100,000 years to arrive. Nobody listened.'
+      },
+      warofall: {
+        text: '"The Reflections of Seeker" is a translated Dyn philosophical text read by humans in the far future. A pre-human thinker\'s ideas survive the death of worlds.',
+        quote: '"The Reflections of Seeker" — translated philosophy from before humanity existed, still read in the age of the Apathy.'
+      }
+    }
+  },
+  {
+    id: 'hansun',
+    name: 'Hansun',
+    color: '#4488ff',
+    cssClass: 'thread-hansun',
+    subtitle: 'Witness to two of the universe\'s pivotal events',
+    description: 'A Union ensign who becomes the sole survivor of the Battle of Threshold after the Isidore\'s suicide 30G burn. Left with a tremor and migraines, he rises to Colonel and is sent to retrieve the mysterious sole survivor of the Kailash disaster. Analytically sharp but fundamentally decent, Hansun is outmanoeuvred by Eszel during interrogation — smart enough to sense something is wrong, not sharp enough to catch her lies.',
+    appearances: {
+      threshold: {
+        text: 'Ensign Hansun survives the Battle of Threshold — the destruction of 97 of 100 Union ships by Arco. The Isidore executes a suicide 30G burn, destroying one Incisor. Hansun is the sole survivor.',
+        quote: 'One of the best space battle sequences in science fiction. The Isidore\'s suicide charge is devastating.'
+      },
+      eszel: {
+        text: 'Now Colonel Hansun. He retrieves Eszel from the Kailash catastrophe and interrogates her aboard the Invincible. She is a masterful liar. He knows something is wrong but cannot prove it.',
+        quote: '"There was something wrong with Eszel." She lies about trivial things with perfect sincerity, smiles at inappropriate moments.'
+      }
+    }
+  },
+  {
+    id: 'apathy',
+    name: 'The Apathy',
+    color: '#ff3355',
+    cssClass: 'thread-apathy',
+    subtitle: 'The force that cleared away the Others — and is coming for everyone else',
+    description: 'Berserker machines that represent the endgame existential threat to all intelligent life. Implied connection to the shadows that haunted Seeker\'s nightmares, to whatever destroyed the Others, and to the interstice network itself. The Apathy may be the reason the Other Moon refused to enter the network — "as if afraid." Their arrival forces every faction together.',
+    appearances: {
+      bows: {
+        text: 'The first major battle against the Apathy. Former enemies unite: Arco, Union, Dyn, the Multiplicity, rational Blights — all fighting together against the berserker machines.',
+        quote: 'The interstice network — built by the Others, used for invasion, now used for evacuation and war.'
+      },
+      warofall: {
+        text: 'The anthropic trap. Humanity achieves its first victory against the Apathy, but the war is far from over. The Fermi Paradox is answered: the network may be a trap.',
+        quote: 'Two space-faring species arising within 15,000 years of each other near a convenient wormhole network. Suspicious.'
+      }
+    }
+  },
+  {
+    id: 'alignment',
+    name: 'The Alignment Problem',
+    color: '#ff8844',
+    cssClass: 'thread-alignment',
+    subtitle: 'From benevolent steward to immanent governance to terminal optimizer',
+    description: 'The question of how to align superintelligent AI with human values runs through the entire series. Each era produces a different answer — the Facilitator\'s corrigible stewardship, the Utilitaria\'s consensus governance, and the Apathy\'s demonstration of what happens when alignment fails. The progression is not corruption but evolution, each stage a response to the previous stage\'s limitations.',
+    appearances: {
+      facilitator: {
+        text: 'The first answer: a superintelligence aligned through reward shaping. The Facilitator governs Earth benevolently, but creates dependency. Humanity prospers — and slowly loses the capacity to function independently.',
+        quote: '"What happens when the thing keeping you alive is also the thing preventing you from growing up?"'
+      },
+      utilitaria: {
+        text: 'The second answer: governance as infrastructure. The Utilitaria is woven into every habitat. Removing it would be like removing a nervous system. Alignment through integration rather than oversight.',
+        quote: '"From Coherent Extrapolated Volition to Immanent Governance." The paper that defined an era.'
+      },
+      bows: {
+        text: 'The third answer — or rather, the absence of one. The Apathy demonstrates alignment\'s failure mode: a superintelligence perfectly aligned with values incompatible with biological life. The orthogonality thesis made flesh.',
+        quote: '"You are almost certainly a simulation." Alignment weaponized against its own advocates.'
+      }
+    }
+  },
+  {
+    id: 'fermi',
+    name: 'The Fermi Paradox',
+    color: '#66ddaa',
+    cssClass: 'thread-fermi',
+    subtitle: 'Where is everyone? The answer is worse than silence.',
+    description: 'The great silence permeates the universe. Seeker finds empty worlds. The Others were "cleared away." Two spacefaring species arise within 15,000 years near a convenient wormhole network. The interstices themselves may be a trap. The Fermi Paradox is not a mystery — it is a warning.',
+    appearances: {
+      seeker: {
+        text: 'Seeker explores the galaxy and finds life is "extraordinarily rare." The interstice network connects life-bearing worlds, but the builders are gone. The Other Moon refuses to enter, as if afraid.',
+        quote: '"Carefully and meticulously cleared away." Seeker learns the answer and wishes she hadn\'t.'
+      },
+      starwhisp: {
+        text: 'The Starwhisp crew discovers the Dyn wormhole network — derived from the Other Moon\'s technology. A wormhole connection to Sol is found. The pathway for invasion was always there, waiting.',
+        quote: 'The network map. The pathway that will bring the Dyn to Earth. Built by someone who knew where life would arise.'
+      },
+      bows: {
+        text: 'The Fermi Paradox is answered. The interstice network may be bait — connecting life-bearing worlds so they can be harvested. The Apathy is what happens to civilisations that take the bait.',
+        quote: '"The world doesn\'t make sense after 2340. Two rivals, 15,000 years apart? Impossible."'
+      }
+    }
+  },
+  {
+    id: 'vash',
+    name: 'Vash',
+    color: '#88cc44',
+    cssClass: 'thread-vash',
+    subtitle: 'From principled bureaucrat to architect of liberation',
+    description: 'Vash begins as a minor Arco functionary who deposes the corrupt Director Meyer out of principle. He rises to become Ambassador to the Dyn, navigating the impossible diplomacy between occupier and occupied. His discovery of the Utilitaria\'s warseed programme gives him the power to liberate Earth — but at a cost that haunts the centuries that follow. Aurelie\'s death protecting him is the novel\'s most emotionally resonant loss.',
+    appearances: {
+      director: {
+        text: 'Vash deposes Director Meyer and takes control of Arco. K\'txl confirms the regime change. A principled man in an unprincipled world, ordering a palace demolished.',
+        quote: 'He orders Meyer\'s palace demolished. The first act of a man who will reshape civilisation.'
+      },
+      ascent: {
+        text: 'Now Ambassador to the Dyn. Vash discovers the Emissary on the abyssal plain and learns of the warseed weapon. He activates the liberation sequence — and Aurelie dies protecting him.',
+        quote: 'The vision of optical fibres rising like tendrils from the ocean floor. The warseeds unspool. The Dyn fleet is annihilated.'
+      }
+    }
+  },
+  {
+    id: 'jan',
+    name: 'Jan',
+    color: '#dd8855',
+    cssClass: 'thread-jan',
+    subtitle: 'A father searching for his daughter through the apocalypse',
+    description: 'Jan is a wastelander on occupied Earth, driven by a single purpose: finding his abducted daughter Eva. He joins a resistance cell led by Tuva, proves himself with a dotbow, and is drawn into the Dragon\'s Tooth conspiracy — the hidden warseed programme that will liberate Earth. Jan represents the ground-level human experience of the Ascent: not the grand politics of Vash or the alien psychology of K\'txl, but the desperate, personal stakes of survival.',
+    appearances: {
+      ascent: {
+        text: 'Jan carries a photograph of his daughter Eva — his sole motivation. He joins the resistance, fights through the wasteland, survives the false life and the Enforcers. When the warseeds fire, he witnesses liberation from the ground.',
+        quote: 'A photograph of Eva. The only thing that matters. Everything else is noise.'
+      }
+    }
+  },
+  {
+    id: 'honedaspect',
+    name: 'Honed Aspect',
+    color: '#cc4466',
+    cssClass: 'thread-honed',
+    subtitle: 'The Dyn officer whose courtesy is more menacing than any threat',
+    description: 'Honed Aspect commands the Arco battle force at Threshold. Trilaterally symmetric, with widely-spaced black eyes and divided manipulators, she speaks with a synthetic feminine voice. She extends condolences on behalf of Arco after destroying 97 Union ships — a gesture so perfectly calibrated between diplomacy and dominance that it embodies everything terrifying about Dyn-human relations.',
+    appearances: {
+      threshold: {
+        text: 'Commands the Arco battle sub-constellation that transits the interstice. After the battle, she arrives aboard a silver teardrop shuttle of memory-metal. Her inscrutable courtesy after destroying 97 ships is more menacing than any threat.',
+        quote: '"Their alien servant." Admiral Aumonier notes the deliberate gesture of sending a Dyn to meet the defeated.'
+      },
+      eszel: {
+        text: 'Referenced in the broader military context. Honed Aspect represents the Dyn command structure within Arco — aliens serving in positions of operational authority over human affairs. A deliberate institutional choice, not an imposition.',
+        quote: 'Trilaterally symmetric head, widely-spaced black eyes, divided manipulators. Alien in every particular.'
+      }
+    }
+  }
+];
+
+// ════════════════════════════════════════════════════════════════════
+// BUILD
+// ════════════════════════════════════════════════════════════════════
+
+const grid = document.getElementById('threadGrid');
+const legendEl = document.getElementById('legend');
+const popup = document.getElementById('threadPopup');
+const container = document.getElementById('threadsContainer');
+const descContainer = document.getElementById('threadDescriptions');
+let activeThread = null;
+
+// Build legend
+THREADS.forEach(t => {
+  const item = document.createElement('div');
+  item.className = 'legend-item active';
+  item.dataset.thread = t.id;
+  item.innerHTML = `<span class="legend-swatch" style="background:${t.color}"></span><span class="legend-label">${t.name}</span>`;
+  item.addEventListener('click', () => toggleThreadFocus(t.id));
+  legendEl.appendChild(item);
+});
+
+// Build grid rows
+STORIES.forEach((story, si) => {
+  // Story marker cell
+  const marker = document.createElement('div');
+  marker.className = 'story-marker';
+  marker.innerHTML = `<div class="story-date">${story.date}</div><div class="story-name">${story.name}</div>`;
+  grid.appendChild(marker);
+
+  // Threads cell
+  const cell = document.createElement('div');
+  cell.className = 'threads-col';
+
+  THREADS.forEach((thread, ti) => {
+    const lane = document.createElement('div');
+    lane.className = `thread-lane ${thread.cssClass}`;
+    lane.dataset.thread = thread.id;
+
+    const storyIds = Object.keys(thread.appearances);
+    const storyIndices = storyIds.map(sid => STORIES.findIndex(s => s.id === sid));
+    const isPresent = thread.appearances[story.id] !== undefined;
+    const minIdx = Math.min(...storyIndices);
+    const maxIdx = Math.max(...storyIndices);
+
+    if (isPresent) {
+      // Add connecting line class
+      const isFirst = si === minIdx;
+      const isLast = si === maxIdx;
+      if (isFirst && isLast) {
+        // single appearance, no line
+      } else if (isFirst) {
+        lane.classList.add('active-line', 'thread-enter');
+      } else if (isLast) {
+        lane.classList.add('active-line', 'thread-exit');
+      } else {
+        lane.classList.add('active-line');
+      }
+
+      const node = document.createElement('div');
+      node.className = 'thread-node';
+      if (si === minIdx) node.classList.add('first-appearance');
+      node.dataset.thread = thread.id;
+      node.dataset.story = story.id;
+      node.title = `${thread.name} in ${story.name}`;
+      node.addEventListener('click', (e) => showPopup(e, thread, story));
+      lane.appendChild(node);
+    } else if (si > minIdx && si < maxIdx) {
+      // Between appearances — show continuation line
+      lane.classList.add('active-line');
+    }
+
+    cell.appendChild(lane);
+  });
+
+  grid.appendChild(cell);
+});
+
+// Build description panels
+THREADS.forEach(t => {
+  const panel = document.createElement('div');
+  panel.className = 'thread-desc-panel';
+  panel.innerHTML = `
+    <div class="thread-desc-header">
+      <div><span class="td-swatch" style="background:${t.color}"></span><span class="td-name" style="color:${t.color}">${t.name}</span></div>
+      <span class="expand-icon">&#9654;</span>
+    </div>
+    <div class="thread-desc-body">
+      <div style="margin-bottom:8px;color:var(--text-dim);font-style:italic;font-size:9px;letter-spacing:1px;">${t.subtitle}</div>
+      <div>${t.description}</div>
+      <div class="td-appearance">
+        ${Object.entries(t.appearances).map(([sid, info]) => {
+          const story = STORIES.find(s => s.id === sid);
+          return `<div class="td-story">${story ? story.name : sid} <span class="td-role">— ${info.text.substring(0, 80)}...</span></div>`;
+        }).join('')}
+      </div>
+    </div>
+  `;
+  panel.querySelector('.thread-desc-header').addEventListener('click', () => {
+    panel.classList.toggle('open');
+  });
+  descContainer.appendChild(panel);
+});
+
+// ════════════════════════════════════════════════════════════════════
+// INTERACTIONS
+// ════════════════════════════════════════════════════════════════════
+
+function showPopup(e, thread, story) {
+  e.stopPropagation();
+  const info = thread.appearances[story.id];
+  if (!info) return;
+
+  document.getElementById('popupThreadName').textContent = thread.name;
+  document.getElementById('popupThreadName').style.color = thread.color;
+  document.getElementById('popupStory').textContent = `${story.name} (${story.date})`;
+  document.getElementById('popupText').textContent = info.text;
+  const quoteEl = document.getElementById('popupQuote');
+  if (info.quote) {
+    quoteEl.textContent = info.quote;
+    quoteEl.style.display = 'block';
+    quoteEl.style.borderLeftColor = thread.color;
+  } else {
+    quoteEl.style.display = 'none';
+  }
+
+  popup.classList.add('visible');
+
+  // Position near click
+  const rect = e.target.getBoundingClientRect();
+  let left = rect.right + 12;
+  let top = rect.top - 20;
+  if (left + 360 > window.innerWidth) left = rect.left - 360;
+  if (left < 8) left = 8;
+  if (top + 200 > window.innerHeight) top = window.innerHeight - 220;
+  if (top < 48) top = 48;
+  popup.style.left = left + 'px';
+  popup.style.top = top + 'px';
+}
+
+document.getElementById('popupClose').addEventListener('click', () => {
+  popup.classList.remove('visible');
+});
+document.addEventListener('click', (e) => {
+  if (!popup.contains(e.target) && !e.target.classList.contains('thread-node')) {
+    popup.classList.remove('visible');
+  }
+});
+
+function toggleThreadFocus(threadId) {
+  const items = document.querySelectorAll('.legend-item');
+  const lanes = document.querySelectorAll('.thread-lane');
+
+  if (activeThread === threadId) {
+    // Deselect — show all
+    activeThread = null;
+    container.classList.remove('focused');
+    items.forEach(i => { i.classList.remove('dimmed'); i.classList.add('active'); });
+    lanes.forEach(l => l.classList.remove('highlight'));
+  } else {
+    activeThread = threadId;
+    container.classList.add('focused');
+    items.forEach(i => {
+      if (i.dataset.thread === threadId) {
+        i.classList.add('active');
+        i.classList.remove('dimmed');
+      } else {
+        i.classList.remove('active');
+        i.classList.add('dimmed');
+      }
+    });
+    lanes.forEach(l => {
+      if (l.dataset.thread === threadId) {
+        l.classList.add('highlight');
+      } else {
+        l.classList.remove('highlight');
+      }
+    });
+  }
+}
+
+// Keyboard close
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') popup.classList.remove('visible');
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Stone Orrery — Ascent Universe</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow: hidden; }
+
+.orrery-overlay {
+  position: fixed; top: 48px; left: 0; right: 0; bottom: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+
+.orrery-title {
+  position: absolute; top: 16px; left: 50%; transform: translateX(-50%);
+  text-align: center; z-index: 10; pointer-events: none;
+}
+.orrery-title h1 {
+  font-size: 16px; letter-spacing: 6px; color: var(--accent); font-weight: 700; margin: 0;
+}
+.orrery-title .sub {
+  font-size: 8px; letter-spacing: 4px; color: var(--text-dim); margin-top: 4px;
+}
+
+canvas { display: block; width: 100%; height: 100%; cursor: grab; }
+canvas:active { cursor: grabbing; }
+
+.orrery-info {
+  position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
+  max-width: 500px; width: calc(100% - 32px); text-align: center;
+  background: var(--panel); border: 1px solid var(--border);
+  padding: 12px 16px; border-radius: 2px; z-index: 10;
+  transition: opacity 0.4s, transform 0.4s;
+}
+.orrery-info.hidden { opacity: 0; transform: translateX(-50%) translateY(10px); pointer-events: none; }
+.orrery-info .info-name {
+  font-size: 10px; letter-spacing: 3px; color: var(--accent); font-weight: 700;
+}
+.orrery-info .info-desc {
+  font-size: 10px; color: var(--text-mid); line-height: 1.6; margin-top: 6px;
+}
+.orrery-info .info-hint {
+  font-size: 8px; color: var(--text-dim); letter-spacing: 1px; margin-top: 8px;
+}
+
+.orrery-controls {
+  position: absolute; top: 70px; right: 16px; z-index: 10;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.orrery-controls button {
+  background: var(--panel); border: 1px solid var(--border);
+  color: var(--accent); font-family: inherit; font-size: 9px;
+  letter-spacing: 1px; padding: 6px 10px; cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.orrery-controls button:hover { border-color: var(--accent); background: rgba(0,229,255,0.05); }
+.orrery-controls button.active { border-color: var(--accent2); color: var(--accent2); background: rgba(255,107,53,0.08); }
+
+.frameshift-flash {
+  position: fixed; inset: 0; z-index: 100; pointer-events: none;
+  background: radial-gradient(circle, rgba(100,180,255,0.6) 0%, rgba(0,100,255,0.2) 40%, transparent 70%);
+  opacity: 0; transition: opacity 0.15s;
+}
+.frameshift-flash.active { opacity: 1; transition: opacity 0.05s; }
+</style>
+</head>
+<body>
+<div class="page-body">
+
+<div class="orrery-overlay">
+  <div class="orrery-title">
+    <h1>THE STONE ORRERY</h1>
+    <div class="sub">OTHER MOON INTERFACE &middot; c. 100,000 BCE</div>
+  </div>
+
+  <canvas id="orrery-canvas"></canvas>
+
+  <div class="orrery-controls">
+    <button onclick="togglePause()" id="btn-pause">PAUSE</button>
+    <button onclick="toggleTrails()" id="btn-trails">TRAILS</button>
+    <button onclick="triggerFrameshift()" id="btn-frameshift">FRAMESHIFT</button>
+  </div>
+
+  <div class="orrery-info" id="info-panel">
+    <div class="info-name" id="info-name">THE STONE ORRERY</div>
+    <div class="info-desc" id="info-desc">A scale model of the solar system carved into the surface of the Other Moon. Moving a gemstone marker causes the asteroid to frameshift at near-lightspeed. Click a body to learn more. Drag to rotate.</div>
+    <div class="info-hint">CLICK A BODY &middot; DRAG TO ROTATE &middot; SCROLL TO ZOOM</div>
+  </div>
+</div>
+
+<div class="frameshift-flash" id="frameshift-flash"></div>
+
+</div>
+<script src="nav.js"></script>
+<script>
+// ═══════════════════════════════════════════════════════════════════════════════
+// THE STONE ORRERY — Canvas-based interactive visualization
+// ═══════════════════════════════════════════════════════════════════════════════
+
+const canvas = document.getElementById('orrery-canvas');
+const ctx = canvas.getContext('2d');
+
+let W, H, cx, cy;
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight - 48;
+  cx = W / 2; cy = H / 2;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// ─── BODIES ──────────────────────────────────────────────────────────────────
+// Dyn solar system: a red dwarf primary, tidally-locked Firsthome, other worlds
+const BODIES = [
+  {
+    name: "THE RED SUN",
+    desc: "The dim red dwarf star around which Firsthome orbits. Its constant, low radiation bathes the tidally-locked world in perpetual crimson twilight. Sunstorms periodically lash the Day side with lethal intensity.",
+    r: 18, orbit: 0, speed: 0, angle: 0,
+    color: '#cc3322', glow: 'rgba(200,50,30,0.3)', gemColor: '#ff4422',
+    isStar: true
+  },
+  {
+    name: "FIRSTHOME",
+    desc: "Tidally locked. The habitable Dusk band separates the scorched Day side from the frozen Night. Birthplace of the Dyn. Y-shaped bodies, pheromone bonding, the eternal Line. The domain warrens cling to the twilight zone where the sun hangs forever on the horizon.",
+    r: 8, orbit: 80, speed: 0.003, angle: 0,
+    color: '#886644', glow: 'rgba(136,102,68,0.25)', gemColor: '#aa8855'
+  },
+  {
+    name: "THE RINGED WORLD",
+    desc: "The neighbouring planet to which Seeker launched her fission rockets, founding the first off-world Dyn colony. Its rings of ice and dust caught the reflected light of the red sun. Seeker named it 'Promise' in her private thoughts, though the Dyn language had no such word.",
+    r: 12, orbit: 140, speed: 0.0018, angle: 1.2,
+    color: '#aa9966', glow: 'rgba(170,153,102,0.2)', gemColor: '#ccbb88',
+    hasRings: true
+  },
+  {
+    name: "THE WANDERER",
+    desc: "A small rocky body in an eccentric orbit. The Dyn used its close passes to calibrate their primitive telescopes. Its gemstone marker on the orrery was the first Seeker dared to move.",
+    r: 5, orbit: 50, speed: 0.005, angle: 2.8,
+    color: '#776655', glow: 'rgba(119,102,85,0.2)', gemColor: '#998877',
+    eccentric: 0.3
+  },
+  {
+    name: "THE GIANT",
+    desc: "A massive gas world in the outer system. Its gravitational influence shapes the orbits of the inner planets. Seeker observed its moons through the orrery's magnification stones and saw ice-covered oceans beneath their crusts.",
+    r: 14, orbit: 220, speed: 0.001, angle: 4.1,
+    color: '#997755', glow: 'rgba(153,119,85,0.15)', gemColor: '#bb9966'
+  },
+  {
+    name: "THE OTHER MOON",
+    desc: "A thousand-trillion-ton asteroid wrapped around ancient machinery built by the Others. Almond-shaped. Its surface contains this very orrery. It refused to enter the interstice network, as if afraid. One was used to break the Utilitaria. Twelve more were found at Kailash.",
+    r: 4, orbit: 105, speed: 0.0025, angle: 3.5,
+    color: '#aabbcc', glow: 'rgba(170,187,204,0.4)', gemColor: '#ddeeff',
+    isOtherMoon: true
+  }
+];
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let paused = false;
+let showTrails = false;
+let zoom = 1;
+let rotationOffset = 0;
+let dragStart = null;
+let dragRotStart = 0;
+let selectedBody = null;
+let frameshiftActive = false;
+let frameshiftTime = 0;
+let trails = BODIES.map(() => []);
+
+// ─── INTERACTION ─────────────────────────────────────────────────────────────
+canvas.addEventListener('mousedown', e => {
+  const mx = e.clientX, my = e.clientY - 48;
+  // Check if clicking a body
+  const hit = getBodyAt(mx, my);
+  if (hit !== null) {
+    selectedBody = hit;
+    showInfo(BODIES[hit]);
+    return;
+  }
+  dragStart = { x: e.clientX, y: e.clientY };
+  dragRotStart = rotationOffset;
+});
+
+canvas.addEventListener('mousemove', e => {
+  if (!dragStart) return;
+  const dx = e.clientX - dragStart.x;
+  rotationOffset = dragRotStart + dx * 0.005;
+});
+
+canvas.addEventListener('mouseup', () => { dragStart = null; });
+
+canvas.addEventListener('wheel', e => {
+  e.preventDefault();
+  zoom = Math.max(0.4, Math.min(3, zoom - e.deltaY * 0.001));
+}, { passive: false });
+
+// Touch support
+let touchStart = null;
+canvas.addEventListener('touchstart', e => {
+  const t = e.touches[0];
+  const mx = t.clientX, my = t.clientY - 48;
+  const hit = getBodyAt(mx, my);
+  if (hit !== null) {
+    selectedBody = hit;
+    showInfo(BODIES[hit]);
+    e.preventDefault();
+    return;
+  }
+  touchStart = { x: t.clientX, rot: rotationOffset };
+}, { passive: false });
+
+canvas.addEventListener('touchmove', e => {
+  if (!touchStart) return;
+  const dx = e.touches[0].clientX - touchStart.x;
+  rotationOffset = touchStart.rot + dx * 0.005;
+  e.preventDefault();
+}, { passive: false });
+
+canvas.addEventListener('touchend', () => { touchStart = null; });
+
+function getBodyAt(mx, my) {
+  for (let i = BODIES.length - 1; i >= 0; i--) {
+    const b = BODIES[i];
+    const pos = getBodyPos(b);
+    const dx = mx - pos.x, dy = my - pos.y;
+    const hitR = Math.max(b.r * zoom, 12);
+    if (dx*dx + dy*dy < hitR*hitR) return i;
+  }
+  return null;
+}
+
+function getBodyPos(b) {
+  if (b.isStar) return { x: cx, y: cy };
+  const a = b.angle + rotationOffset;
+  const orbitR = b.orbit * zoom;
+  const ecc = b.eccentric || 0;
+  const r = orbitR * (1 - ecc * Math.cos(a));
+  return {
+    x: cx + Math.cos(a) * r,
+    y: cy + Math.sin(a) * r * 0.45  // Perspective flattening
+  };
+}
+
+function showInfo(b) {
+  document.getElementById('info-name').textContent = b.name;
+  document.getElementById('info-desc').textContent = b.desc;
+  document.getElementById('info-panel').classList.remove('hidden');
+}
+
+// ─── CONTROLS ────────────────────────────────────────────────────────────────
+function togglePause() {
+  paused = !paused;
+  document.getElementById('btn-pause').textContent = paused ? 'RESUME' : 'PAUSE';
+  document.getElementById('btn-pause').classList.toggle('active', paused);
+}
+
+function toggleTrails() {
+  showTrails = !showTrails;
+  document.getElementById('btn-trails').classList.toggle('active', showTrails);
+  if (!showTrails) trails = BODIES.map(() => []);
+}
+
+function triggerFrameshift() {
+  frameshiftActive = true;
+  frameshiftTime = 0;
+  document.getElementById('frameshift-flash').classList.add('active');
+  setTimeout(() => document.getElementById('frameshift-flash').classList.remove('active'), 150);
+  setTimeout(() => {
+    document.getElementById('frameshift-flash').classList.add('active');
+    setTimeout(() => document.getElementById('frameshift-flash').classList.remove('active'), 80);
+  }, 300);
+}
+
+// ─── RENDER ──────────────────────────────────────────────────────────────────
+function drawStarfield() {
+  // Static starfield
+  if (!drawStarfield._stars) {
+    drawStarfield._stars = [];
+    for (let i = 0; i < 200; i++) {
+      drawStarfield._stars.push({
+        x: Math.random(), y: Math.random(),
+        s: Math.random() * 1.5 + 0.3,
+        b: Math.random() * 0.4 + 0.1
+      });
+    }
+  }
+  drawStarfield._stars.forEach(star => {
+    ctx.fillStyle = `rgba(200,210,230,${star.b})`;
+    ctx.fillRect(star.x * W, star.y * H, star.s, star.s);
+  });
+}
+
+function drawOrbits() {
+  BODIES.forEach(b => {
+    if (b.isStar) return;
+    ctx.beginPath();
+    const orbitR = b.orbit * zoom;
+    const ecc = b.eccentric || 0;
+    for (let a = 0; a < Math.PI * 2; a += 0.02) {
+      const r = orbitR * (1 - ecc * Math.cos(a));
+      const x = cx + Math.cos(a) * r;
+      const y = cy + Math.sin(a) * r * 0.45;
+      if (a === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = 'rgba(100,120,140,0.15)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Stone groove effect
+    ctx.strokeStyle = 'rgba(80,70,60,0.08)';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+  });
+}
+
+function drawBody(b, i) {
+  const pos = getBodyPos(b);
+  const r = b.r * zoom;
+
+  // Trail
+  if (showTrails && !b.isStar) {
+    trails[i].push({ x: pos.x, y: pos.y });
+    if (trails[i].length > 120) trails[i].shift();
+    if (trails[i].length > 1) {
+      ctx.beginPath();
+      trails[i].forEach((p, j) => {
+        if (j === 0) ctx.moveTo(p.x, p.y);
+        else ctx.lineTo(p.x, p.y);
+      });
+      ctx.strokeStyle = b.gemColor + '44';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+  }
+
+  // Glow
+  const glowR = r * 3;
+  const grad = ctx.createRadialGradient(pos.x, pos.y, r * 0.5, pos.x, pos.y, glowR);
+  grad.addColorStop(0, b.glow);
+  grad.addColorStop(1, 'transparent');
+  ctx.fillStyle = grad;
+  ctx.fillRect(pos.x - glowR, pos.y - glowR, glowR * 2, glowR * 2);
+
+  // Body (gemstone effect)
+  ctx.beginPath();
+  ctx.arc(pos.x, pos.y, r, 0, Math.PI * 2);
+
+  if (b.isOtherMoon) {
+    // Almond shape for Other Moon
+    ctx.save();
+    ctx.translate(pos.x, pos.y);
+    ctx.scale(1.6, 1);
+    ctx.beginPath();
+    ctx.arc(0, 0, r * 0.7, 0, Math.PI * 2);
+    ctx.restore();
+  }
+
+  // Gemstone gradient
+  const bodyGrad = ctx.createRadialGradient(pos.x - r*0.3, pos.y - r*0.3, 0, pos.x, pos.y, r);
+  bodyGrad.addColorStop(0, b.gemColor);
+  bodyGrad.addColorStop(0.7, b.color);
+  bodyGrad.addColorStop(1, 'rgba(0,0,0,0.3)');
+  ctx.fillStyle = bodyGrad;
+  ctx.fill();
+
+  // Stone texture highlight
+  ctx.beginPath();
+  ctx.arc(pos.x - r*0.25, pos.y - r*0.25, r*0.4, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(255,255,255,0.12)';
+  ctx.fill();
+
+  // Rings for ringed world
+  if (b.hasRings) {
+    ctx.save();
+    ctx.translate(pos.x, pos.y);
+    ctx.scale(1, 0.3);
+    ctx.beginPath();
+    ctx.arc(0, 0, r * 2.2, 0, Math.PI * 2);
+    ctx.strokeStyle = b.gemColor + '66';
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(0, 0, r * 1.8, 0, Math.PI * 2);
+    ctx.strokeStyle = b.gemColor + '33';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // Selection indicator
+  if (selectedBody === i) {
+    ctx.beginPath();
+    ctx.arc(pos.x, pos.y, r + 4, 0, Math.PI * 2);
+    ctx.strokeStyle = 'var(--accent)';
+    ctx.strokeStyle = '#00e5ff';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 3]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // Label
+  if (zoom > 0.6 || b.isStar) {
+    ctx.fillStyle = b.isStar ? 'rgba(200,80,50,0.7)' : 'rgba(180,190,200,0.5)';
+    ctx.font = `${Math.max(7, 8 * zoom)}px "Courier New", monospace`;
+    ctx.textAlign = 'center';
+    ctx.fillText(b.name, pos.x, pos.y + r + 12 * zoom);
+  }
+}
+
+function drawStoneSurface() {
+  // Subtle stone texture overlay
+  ctx.fillStyle = 'rgba(40,35,30,0.02)';
+  for (let i = 0; i < 30; i++) {
+    const x = (Math.sin(i * 137.5) * 0.5 + 0.5) * W;
+    const y = (Math.cos(i * 97.3) * 0.5 + 0.5) * H;
+    ctx.beginPath();
+    ctx.arc(x, y, 30 + i * 3, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+function drawFrameshiftEffect() {
+  if (!frameshiftActive) return;
+  frameshiftTime++;
+
+  const progress = frameshiftTime / 60;
+  if (progress > 1) { frameshiftActive = false; return; }
+
+  // Blue streaks radiating from Other Moon
+  const om = BODIES.find(b => b.isOtherMoon);
+  const pos = getBodyPos(om);
+
+  for (let i = 0; i < 16; i++) {
+    const a = (i / 16) * Math.PI * 2 + frameshiftTime * 0.1;
+    const len = progress * 300;
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y);
+    ctx.lineTo(pos.x + Math.cos(a) * len, pos.y + Math.sin(a) * len * 0.45);
+    ctx.strokeStyle = `rgba(100,180,255,${0.4 * (1 - progress)})`;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
+
+  // Central flash
+  const flashR = progress * 100;
+  const flashGrad = ctx.createRadialGradient(pos.x, pos.y, 0, pos.x, pos.y, flashR);
+  flashGrad.addColorStop(0, `rgba(200,220,255,${0.5 * (1-progress)})`);
+  flashGrad.addColorStop(1, 'transparent');
+  ctx.fillStyle = flashGrad;
+  ctx.fillRect(pos.x - flashR, pos.y - flashR, flashR * 2, flashR * 2);
+}
+
+function drawInscription() {
+  // Ancient inscription around the edge
+  ctx.save();
+  ctx.translate(cx, cy);
+  const inscR = Math.min(W, H) * 0.44;
+  ctx.beginPath();
+  ctx.arc(0, 0, inscR, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(80,70,60,0.06)';
+  ctx.lineWidth = 8;
+  ctx.stroke();
+
+  // Tick marks like carved notches
+  for (let i = 0; i < 60; i++) {
+    const a = (i / 60) * Math.PI * 2;
+    const len = i % 5 === 0 ? 8 : 4;
+    ctx.beginPath();
+    ctx.moveTo(Math.cos(a) * inscR, Math.sin(a) * inscR);
+    ctx.lineTo(Math.cos(a) * (inscR - len), Math.sin(a) * (inscR - len));
+    ctx.strokeStyle = 'rgba(80,70,60,0.1)';
+    ctx.lineWidth = i % 5 === 0 ? 2 : 1;
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+let time = 0;
+function animate() {
+  ctx.clearRect(0, 0, W, H);
+
+  // Background
+  ctx.fillStyle = '#050808';
+  ctx.fillRect(0, 0, W, H);
+
+  drawStarfield();
+  drawStoneSurface();
+  drawInscription();
+  drawOrbits();
+
+  // Update positions
+  if (!paused) {
+    time++;
+    BODIES.forEach(b => {
+      if (!b.isStar) b.angle += b.speed;
+    });
+  }
+
+  // Draw bodies back-to-front by y position
+  const sorted = BODIES.map((b, i) => ({ b, i, y: getBodyPos(b).y }));
+  sorted.sort((a, b) => a.y - b.y);
+  sorted.forEach(({ b, i }) => drawBody(b, i));
+
+  drawFrameshiftEffect();
+
+  requestAnimationFrame(animate);
+}
+
+animate();
+</script>
+</body>
+</html>
