@@ -125,6 +125,13 @@ body { overflow-y: auto; }
           document.title = h1[1].replace(/[*_]/g, '') + ' — Ascent Universe';
         }
       }
+      // Show word count and reading time
+      const words = text.trim().split(/\s+/).length;
+      const mins = Math.ceil(words / 230);
+      const metaEl = document.getElementById('reader-meta');
+      const existing = metaEl.textContent;
+      metaEl.textContent = (existing ? existing + ' · ' : '') +
+        words.toLocaleString() + ' words · ~' + mins + ' min read';
     })
     .catch(err => {
       document.getElementById('reader-body').innerHTML =
