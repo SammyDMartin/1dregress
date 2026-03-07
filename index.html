@@ -70,6 +70,18 @@ body { overflow-y: auto; }
 }
 .starfield { position: fixed; inset: 0; z-index: -1; }
 .starfield canvas { width: 100%; height: 100%; }
+.section-header {
+  margin-top: 16px; margin-bottom: -4px; padding: 0;
+}
+.section-header:first-child { margin-top: 0; }
+.section-label {
+  font-size: 9px; letter-spacing: 4px; color: var(--text-dim);
+  margin-bottom: 6px;
+}
+.section-rule {
+  height: 1px; background: var(--border);
+}
+[data-theme="light"] .section-label { color: #999; }
 @media (max-width: 600px) {
   .hub-title { font-size: 16px; letter-spacing: 5px; }
   .hub-subtitle { font-size: 8px; letter-spacing: 3px; }
@@ -88,34 +100,22 @@ body { overflow-y: auto; }
       <div class="hub-class">ANNIHILATOR-CLASS IP ASSAULT VEHICLE</div>
     </div>
     <div class="card-grid">
+
+      <div class="section-header" style="grid-column: 1 / -1;">
+        <div class="section-label">THE ARCHIVE</div>
+        <div class="section-rule"></div>
+      </div>
+
       <a href="stories.html" class="nav-card">
         <span class="card-icon" style="color:rgba(200,220,230,0.7)">▣</span>
         <div class="card-title">STORIES</div>
-        <div class="card-desc">All fiction — 16 stories from ~100,000 BCE to ~3200 CE. Novels, short stories, and interactive readers. Chronological index with authorship notes.</div>
-        <span class="card-arrow">→</span>
-      </a>
-      <a href="msd.html" class="nav-card">
-        <span class="card-icon" style="color:var(--accent)">◇</span>
-        <div class="card-title">MASTER SYSTEMS DISPLAY</div>
-        <div class="card-desc">Interactive 3D model with full technical specifications. Power, propulsion, armament, sensors and defensive systems.</div>
-        <span class="card-arrow">→</span>
-      </a>
-      <a href="battle.html" class="nav-card">
-        <span class="card-icon" style="color:var(--accent2)">◆</span>
-        <div class="card-title">BATTLE RECONSTRUCTION</div>
-        <div class="card-desc">Phase-by-phase tactical reconstruction of the Battle of the Interstice. 4 ships vs 100. Animated simulation.</div>
-        <span class="card-arrow">→</span>
-      </a>
-      <a href="science.html" class="nav-card">
-        <span class="card-icon" style="color:var(--green)">⬡</span>
-        <div class="card-title">SCIENCE COMPENDIUM</div>
-        <div class="card-desc">Detailed scientific explanations of every technology. ABC drives, Diamond Dusters, hyperdiamond armour and more.</div>
+        <div class="card-desc">All fiction — 16 stories from ~100,000 BCE to ~3200 CE. Novels, short stories, and interactive readers.</div>
         <span class="card-arrow">→</span>
       </a>
       <a href="timeline.html" class="nav-card">
         <span class="card-icon" style="color:#aa88ff">⧗</span>
         <div class="card-title">HISTORICAL TIMELINE</div>
-        <div class="card-desc">From the Dyn deep past through the Battle of the Interstice to the Apathy War. Interactive chronology of the Ascent Universe.</div>
+        <div class="card-desc">Interactive chronology from the Dyn deep past through the Battle of the Interstice to the Apathy War.</div>
         <span class="card-arrow">→</span>
       </a>
       <a href="codex.html" class="nav-card">
@@ -127,19 +127,7 @@ body { overflow-y: auto; }
       <a href="worlds.html" class="nav-card">
         <span class="card-icon" style="color:#ff88aa">◉</span>
         <div class="card-title">WORLDS & ERAS</div>
-        <div class="card-desc">From Firsthome to the Apathy War. Deep atmospheric profiles of the major settings and epochs spanning a thousand years of history.</div>
-        <span class="card-arrow">→</span>
-      </a>
-      <a href="facilitator.html" class="nav-card">
-        <span class="card-icon" style="color:var(--accent2)">$</span>
-        <div class="card-title">FACILITATOR ANALYSIS</div>
-        <div class="card-desc">Canon analysis, AI comparison, and an interactive chat. How a 2017 story predicted agentic AI, reward hacking, and instrumental convergence.</div>
-        <span class="card-arrow">→</span>
-      </a>
-      <a href="anthropic-trap.html" class="nav-card">
-        <span class="card-icon" style="color:var(--red)">&#9632;</span>
-        <div class="card-title">THE ANTHROPIC TRAP</div>
-        <div class="card-desc">You are almost certainly a simulation. The Apathy has run this scenario a million times. Do you surrender? Interactive philosophical experience.</div>
+        <div class="card-desc">From Firsthome to the Apathy War. Atmospheric profiles of the major settings and epochs.</div>
         <span class="card-arrow">→</span>
       </a>
       <a href="threads.html" class="nav-card">
@@ -148,54 +136,97 @@ body { overflow-y: auto; }
         <div class="card-desc">How K'txl, the Other Moon, the Utilitaria, and Seeker's legacy thread across 11 stories spanning 100,000 years.</div>
         <span class="card-arrow">→</span>
       </a>
+      <a href="science.html" class="nav-card">
+        <span class="card-icon" style="color:var(--green)">⬡</span>
+        <div class="card-title">SCIENCE COMPENDIUM</div>
+        <div class="card-desc">Detailed scientific explanations of every technology. ABC drives, Diamond Dusters, hyperdiamond armour and more.</div>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <div class="section-header" style="grid-column: 1 / -1;">
+        <div class="section-label">INTERACTIVE</div>
+        <div class="section-rule"></div>
+      </div>
+
+      <a href="facilitator.html" class="nav-card">
+        <span class="card-icon" style="color:var(--accent2)">$</span>
+        <div class="card-title">FACILITATOR ANALYSIS</div>
+        <div class="card-desc">Canon analysis, AI comparison, and an interactive chat. How a 2017 story predicted agentic AI and instrumental convergence.</div>
+        <span class="card-arrow">→</span>
+      </a>
       <a href="utilitaria.html" class="nav-card">
         <span class="card-icon" style="color:#88ccff">&#9678;</span>
         <div class="card-title">THE UTILITARIA</div>
-        <div class="card-desc">In-universe academic document on the superintelligent AI that governs trillions. From Souvicou's creation to Emissary 39 to the Apathy War.</div>
+        <div class="card-desc">In-universe academic document on the superintelligent AI that governs trillions. From Souvicou's creation to the Apathy War.</div>
         <span class="card-arrow">→</span>
       </a>
       <a href="utilitaria-chat.html" class="nav-card">
         <span class="card-icon" style="color:#00e5ff">&#9655;</span>
         <div class="card-title">TALK TO THE UTILITARIA</div>
-        <div class="card-desc">Open a diplomatic channel with an Emissary of the Utilitaria. The collective will speaks through a singular vessel. Measured, precise, subtly certain of its own rightness.</div>
+        <div class="card-desc">Open a diplomatic channel with an Emissary. The collective will speaks through a singular vessel.</div>
         <span class="card-arrow">&rarr;</span>
       </a>
-      <a href="orrery.html" class="nav-card">
-        <span class="card-icon" style="color:#ccbb88">&#9737;</span>
-        <div class="card-title">THE STONE ORRERY</div>
-        <div class="card-desc">Interactive visualization of the ancient control interface carved into the Other Moon. Move gemstones. Trigger a frameshift. Pure atmosphere.</div>
+      <a href="anthropic-trap.html" class="nav-card">
+        <span class="card-icon" style="color:var(--red)">&#9632;</span>
+        <div class="card-title">THE ANTHROPIC TRAP</div>
+        <div class="card-desc">You are almost certainly a simulation. The Apathy has run this scenario a million times. Do you surrender?</div>
         <span class="card-arrow">→</span>
       </a>
       <a href="ai-analysis.html" class="nav-card">
         <span class="card-icon" style="color:#88aaff">&#9651;</span>
         <div class="card-title">AI ALIGNMENT SPECTRUM</div>
-        <div class="card-desc">Three superintelligences, three alignment approaches. From the Facilitator's stewardship to the Utilitaria's consensus to the Apathy's terminal optimization.</div>
+        <div class="card-desc">Three superintelligences, three alignment approaches. Facilitator, Utilitaria, Apathy — compared.</div>
+        <span class="card-arrow">→</span>
+      </a>
+      <a href="reflections.html" class="nav-card">
+        <span class="card-icon" style="color:var(--accent2)">&#9702;</span>
+        <div class="card-title">REFLECTIONS OF SEEKER</div>
+        <div class="card-desc">In-universe Dyn philosophical text. "All the worlds that were will always have been."</div>
+        <span class="card-arrow">&rarr;</span>
+      </a>
+
+      <div class="section-header" style="grid-column: 1 / -1;">
+        <div class="section-label">VISUALISATIONS</div>
+        <div class="section-rule"></div>
+      </div>
+
+      <a href="msd.html" class="nav-card">
+        <span class="card-icon" style="color:var(--accent)">◇</span>
+        <div class="card-title">MASTER SYSTEMS DISPLAY</div>
+        <div class="card-desc">Interactive 3D model of the Annihilator-class warship. Full technical specifications.</div>
+        <span class="card-arrow">→</span>
+      </a>
+      <a href="battle.html" class="nav-card">
+        <span class="card-icon" style="color:var(--accent2)">◆</span>
+        <div class="card-title">BATTLE RECONSTRUCTION</div>
+        <div class="card-desc">Phase-by-phase tactical reconstruction of the Battle of the Interstice. 4 ships vs 100.</div>
         <span class="card-arrow">→</span>
       </a>
       <a href="interstice-map.html" class="nav-card">
         <span class="card-icon" style="color:#66ddaa">&#9672;</span>
         <div class="card-title">INTERSTICE NETWORK</div>
-        <div class="card-desc">Interactive 3D map of the wormhole network connecting human, Dyn, and unknown systems. Rotate, zoom, and explore the pathways between stars.</div>
+        <div class="card-desc">Interactive 3D map of the wormhole network connecting human, Dyn, and unknown systems.</div>
         <span class="card-arrow">&rarr;</span>
       </a>
-      <a href="reflections.html" class="nav-card">
-        <span class="card-icon" style="color:var(--accent2)">&#9702;</span>
-        <div class="card-title">REFLECTIONS OF SEEKER</div>
-        <div class="card-desc">In-universe Dyn philosophical text, translated by the Arco Gen-stream. On the Line, the stars, the enemy, the humans, and endings. "All the worlds that were will always have been."</div>
-        <span class="card-arrow">&rarr;</span>
+      <a href="orrery.html" class="nav-card">
+        <span class="card-icon" style="color:#ccbb88">&#9737;</span>
+        <div class="card-title">THE STONE ORRERY</div>
+        <div class="card-desc">Interactive visualization of the ancient control interface carved into the Other Moon.</div>
+        <span class="card-arrow">→</span>
       </a>
       <a href="diamond-duster.html" class="nav-card">
         <span class="card-icon" style="color:#88bbff">&#9670;</span>
         <div class="card-title">DIAMOND DUSTER</div>
-        <div class="card-desc">Animated firing sequence of the Annihilator's spinal-mount relativistic particle weapon. Watch the invisible wall tear through a fleet. HUD telemetry and phase breakdown.</div>
+        <div class="card-desc">Animated firing sequence of the spinal-mount relativistic particle weapon. HUD telemetry.</div>
         <span class="card-arrow">&rarr;</span>
       </a>
       <a href="liberation.html" class="nav-card">
         <span class="card-icon" style="color:#5588ff">&#9733;</span>
         <div class="card-title">LIBERATION DAY</div>
-        <div class="card-desc">Animated warseed activation sequence. Watch optical fibres rise from the ocean floor. 100kW of coherent blue light per hub. The Dyn fleet burns. Earth is free.</div>
+        <div class="card-desc">Animated warseed activation sequence. Optical fibres rise from the ocean floor. The Dyn fleet burns.</div>
         <span class="card-arrow">&rarr;</span>
       </a>
+
     </div>
   </div>
   <div class="listener-seed" id="listener-seed" title=" "></div>
