@@ -394,3 +394,17 @@ a:hover { color: #fff; }
 .back-to-top.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
 .back-to-top:hover { background: var(--border); }
 [data-theme="light"] .back-to-top { background: #fff; border-color: var(--border); box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+
+/* ─── Print styles ─────────────────────────────────────────────────────── */
+@media print {
+  #site-nav, .status-bar, .scanlines, .back-to-top,
+  .starfield, .scene-bg, .scene-effect, .story-nav,
+  .era-filters, .codex-tabs, .codex-search-wrap,
+  .listener-seed, .listener-overlay { display: none !important; }
+  .page-body { padding-top: 0 !important; }
+  body { background: #fff !important; color: #1a1a1a !important; }
+  * { color: #1a1a1a !important; border-color: #ccc !important; background: transparent !important; }
+  a { text-decoration: underline; }
+  .dossier, .tech-entry, .tl-event, .era-section { break-inside: avoid; }
+  .dossier-body, .tech-entry-body, .util-section-body { display: block !important; }
+}
