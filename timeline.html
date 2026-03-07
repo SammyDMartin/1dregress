@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Timeline — Ascent Universe</title>
+<meta name="description" content="Interactive chronology from the Dyn deep past (~100,000 BCE) through first contact to the Apathy War (~3200 CE).">
+<meta property="og:title" content="Historical Timeline — Ascent Universe">
+<meta property="og:description" content="Interactive chronology spanning 100,000 years of the Ascent Universe.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="style.css">
 <style>
 body { overflow-y: auto; }
@@ -119,9 +123,24 @@ body { overflow-y: auto; }
   .tl-event::after { left: 12px !important; right: auto !important; }
 }
 
+/* Search */
+.tl-search-wrap {
+  max-width: 700px; margin: 0 auto 20px; padding: 0 20px;
+}
+.tl-search {
+  width: 100%; padding: 8px 12px;
+  background: var(--panel); border: 1px solid var(--border); border-radius: 2px;
+  color: var(--text-mid); font-family: var(--mono);
+  font-size: 10px; letter-spacing: 2px;
+  outline: none; transition: border-color 0.2s;
+}
+.tl-search:focus { border-color: var(--accent); }
+.tl-search::placeholder { color: var(--text-dim); }
+
 /* Light mode */
 [data-theme="light"] .tl-event-title { color: var(--text); }
 [data-theme="light"] .era-btn.active { background: rgba(43,90,131,0.06); }
+[data-theme="light"] .tl-search { background: var(--panel); }
 </style>
 </head>
 <body>
@@ -136,6 +155,9 @@ body { overflow-y: auto; }
 </div>
 
 <div class="era-filters" id="eraFilters"></div>
+<div class="tl-search-wrap">
+  <input type="text" id="tlSearch" class="tl-search" placeholder="SEARCH EVENTS..." autocomplete="off">
+</div>
 
 <div class="timeline" id="timeline"></div>
 
@@ -366,7 +388,15 @@ const EVENTS = [
 
 const filtersEl = document.getElementById('eraFilters');
 const timelineEl = document.getElementById('timeline');
+const tlSearchEl = document.getElementById('tlSearch');
 let activeEra = 'all';
+let tlQuery = '';
+
+tlSearchEl.addEventListener('input', () => {
+  tlQuery = tlSearchEl.value.toLowerCase().trim();
+  buildTimeline();
+  setTimeout(observeEvents, 100);
+});
 
 // Build filter buttons
 ERAS.forEach(era => {
@@ -384,7 +414,12 @@ ERAS.forEach(era => {
 
 function buildTimeline() {
   timelineEl.innerHTML = '';
-  const filtered = activeEra === 'all' ? EVENTS : EVENTS.filter(e => e.era === activeEra);
+  let filtered = activeEra === 'all' ? EVENTS : EVENTS.filter(e => e.era === activeEra);
+  if (tlQuery) {
+    filtered = filtered.filter(e =>
+      (e.title + ' ' + e.text + ' ' + e.date).toLowerCase().includes(tlQuery)
+    );
+  }
   let currentEra = '';
   let side = 'left';
 

@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Reflections of Seeker — Ascent Universe</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="style.css">
 <style>
 body { overflow-y: auto; }
@@ -57,6 +58,10 @@ body { overflow-y: auto; }
   border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
   font-style: italic;
 }
+
+/* Light mode */
+[data-theme="light"] .ref-note { background: rgba(43,90,131,0.04); border-color: rgba(43,90,131,0.15); }
+[data-theme="light"] .ref-verse { border-left-color: rgba(43,90,131,0.2); }
 
 @media (max-width: 600px) {
   .ref-title { font-size: 13px; letter-spacing: 5px; }

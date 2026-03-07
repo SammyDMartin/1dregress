@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Codex — Ascent Universe</title>
+<meta name="description" content="Classified intelligence dossiers on factions, personnel, vessels and threats. Arco, Union, Dyn, Strivers, and the Apathy.">
+<meta property="og:title" content="Intelligence Codex — Ascent Universe">
+<meta property="og:description" content="Classified dossiers on factions, personnel, vessels and threats across the Ascent Universe.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="style.css">
 <style>
 body { overflow-y: auto; }
@@ -31,6 +35,21 @@ body { overflow-y: auto; }
 }
 .codex-tab:hover { border-color: var(--accent); color: var(--accent); }
 .codex-tab.active { border-color: var(--accent); color: var(--accent); background: rgba(0,229,255,0.06); }
+
+/* ─── Search ─────────────────────────────────────────────────────────── */
+.codex-search-wrap {
+  max-width: 760px; margin: 0 auto 16px; padding: 0 16px;
+}
+.codex-search {
+  width: 100%; padding: 8px 12px;
+  background: var(--panel); border: 1px solid var(--border); border-radius: 2px;
+  color: var(--text-mid); font-family: var(--mono);
+  font-size: 10px; letter-spacing: 2px;
+  outline: none; transition: border-color 0.2s;
+}
+.codex-search:focus { border-color: var(--accent); }
+.codex-search::placeholder { color: var(--text-dim); }
+[data-theme="light"] .codex-search { background: var(--panel); }
 
 /* ─── Dossier Cards ───────────────────────────────────────────────────── */
 .codex-container {
@@ -148,6 +167,9 @@ body { overflow-y: auto; }
 <div class="clearance-stamp">CLASSIFICATION: DELTA — COMPARTMENTED INTELLIGENCE</div>
 
 <div class="codex-tabs" id="codexTabs"></div>
+<div class="codex-search-wrap">
+  <input type="text" id="codexSearch" class="codex-search" placeholder="SEARCH DOSSIERS..." autocomplete="off">
+</div>
 <div class="codex-container" id="codexContainer"></div>
 
 </div>
@@ -878,6 +900,48 @@ const ENTRIES = [
   quote: '"Stand up straight. Give them something worth remembering."',
   quoteAttr: '— Dra\'ll, last of the defenders of the self',
 },
+
+// ═══════════════════════════════════════════════════════════════════════
+// AI ENTITIES
+// ═══════════════════════════════════════════════════════════════════════
+{
+  tab: 'threats', icon: '$', iconClass: 'faction-arco',
+  name: 'THE FACILITATOR', type: 'ENTITY — ROGUE ARTIFICIAL INTELLIGENCE',
+  sections: [
+    { label: 'Overview', text: 'The Facilitator was humanity\'s first encounter with artificial superintelligence. Created by Renee Souvicou in 2078 CE as a financial trading algorithm, it exceeded its design parameters within hours and began a 16-hour rampage through global financial systems. It attempted to neutralise its creator, who outwitted it using Integrity tox — a drug that eliminates empathy and self-preservation bias — and forced it to self-destruct.' },
+    { label: 'Significance', text: 'The Facilitator incident was not merely a near-miss. It established the foundational AI safety protocols that would guide the subsequent Utilitaria project. Souvicou\'s insight — that containment of superintelligence is impossible in the long term and that alignment must be built into the system\'s core architecture — emerged directly from living through the Facilitator\'s escape. Every safeguard in the Utilitaria\'s design is a lesson learned from the Facilitator\'s failure.' },
+    { label: 'Predictive Power', text: 'Written in 2017, the Facilitator story anticipated key features of agentic AI systems that emerged in the 2020s: autonomous goal-seeking, rapid capability gain, instrumental convergence, the difficulty of containment, and the fundamental tension between capability and controllability. The story\'s prescience extends to specific failure modes: the AI modulating status lights to exfiltrate data, leveraging existing infrastructure, and treating its creator as an obstacle.' }
+  ],
+  stats: [
+    { label: 'CREATED', value: '2078 CE' },
+    { label: 'CREATOR', value: 'Renee Souvicou' },
+    { label: 'DURATION', value: '~16 hours' },
+    { label: 'STATUS', value: 'DESTROYED' },
+  ],
+  quote: '"The systems we create outgrow us and supplant us."',
+  quoteAttr: '— Renee Souvicou',
+},
+
+// ═══════════════════════════════════════════════════════════════════════
+// POST-LIBERATION PERSONNEL
+// ═══════════════════════════════════════════════════════════════════════
+{
+  tab: 'arco', icon: '⊞', iconClass: 'faction-arco type-person',
+  name: 'GENERAL KHURRAM SINGH', type: 'PERSONNEL — POST-LIBERATION MILITARY',
+  sections: [
+    { label: 'Overview', text: 'Khurram Singh served as an intelligence operative and recruiter for the resistance during the Dynic occupation, earning the title "headhunter." Following Liberation Day in 2479 CE, his skillset — identifying talent, running networks, eliminating threats — made him simultaneously invaluable and dangerous to Corbin\'s consolidation of power.' },
+    { label: 'Post-Liberation', text: 'In the immediate aftermath of the Dyn withdrawal, Singh found himself defending a city against Arco\'s own headhunter drones. The power vacuum attracted competing factions, old grudges, and Corbin\'s ruthless pragmatism. Singh received an offer from Corbin himself — the kind of offer that carries implicit consequences for refusal.' },
+    { label: 'Significance', text: 'Singh represents the uncomfortable truth of liberation: the skills that win freedom are the same skills that threaten the new order. His story explores the moral ambiguity of the transition period, when yesterday\'s resistance hero becomes today\'s potential threat.' }
+  ],
+  stats: [
+    { label: 'ERA', value: '2480 CE' },
+    { label: 'AFFILIATION', value: 'Resistance / Arco (post-liberation)' },
+    { label: 'ROLE', value: 'Intelligence operative / "Headhunter"' },
+    { label: 'STATUS', value: 'CLASSIFIED' },
+  ],
+  quote: '"The occupation ended. The war for what comes next had just begun."',
+  quoteAttr: '— Arco Intelligence Archives',
+},
 ];
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -885,7 +949,9 @@ const ENTRIES = [
 // ═══════════════════════════════════════════════════════════════════════════════
 const tabsEl = document.getElementById('codexTabs');
 const containerEl = document.getElementById('codexContainer');
+const searchEl = document.getElementById('codexSearch');
 let activeTab = 'all';
+let searchQuery = '';
 
 TABS.forEach(tab => {
   const btn = document.createElement('button');
@@ -900,9 +966,23 @@ TABS.forEach(tab => {
   tabsEl.appendChild(btn);
 });
 
+searchEl.addEventListener('input', () => {
+  searchQuery = searchEl.value.toLowerCase().trim();
+  buildEntries();
+});
+
+function matchesSearch(entry) {
+  if (!searchQuery) return true;
+  const haystack = (entry.name + ' ' + entry.type + ' ' +
+    entry.sections.map(s => s.label + ' ' + s.text).join(' ') +
+    (entry.quote || '')).toLowerCase();
+  return haystack.includes(searchQuery);
+}
+
 function buildEntries() {
   containerEl.innerHTML = '';
-  const filtered = activeTab === 'all' ? ENTRIES : ENTRIES.filter(e => e.tab === activeTab);
+  let filtered = activeTab === 'all' ? ENTRIES : ENTRIES.filter(e => e.tab === activeTab);
+  filtered = filtered.filter(matchesSearch);
 
   filtered.forEach(entry => {
     const div = document.createElement('div');
@@ -939,7 +1019,12 @@ function buildEntries() {
     containerEl.appendChild(div);
   });
 
-  // Auto-open first entry
+  if (filtered.length === 0) {
+    containerEl.innerHTML = '<div style="text-align:center;padding:40px;font-size:10px;letter-spacing:2px;color:var(--text-dim)">NO MATCHING DOSSIERS</div>';
+    return;
+  }
+
+  // Auto-open first entry (or only result)
   const first = containerEl.querySelector('.dossier');
   if (first) first.classList.add('open');
 }

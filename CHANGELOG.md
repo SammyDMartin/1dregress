@@ -4,6 +4,46 @@ All notable changes to the Ascent Universe companion website.
 
 ---
 
+## Session 12 (2026-03-07) — Infrastructure, New Content & Story Readers
+
+Major session: infrastructure improvements, new interactive content, and three new story readers.
+
+### New Pages
+- **Occupied Earth** (`occupied-earth.html`) — Interactive text-based walkthrough of Conurbation One during the Dyn occupation (2479 CE). 9 locations: the Hollow Tower, terraces, wasteland, Ascensor base, wastelander camps, resistance, and the liberation sequence. Includes intelligence briefings.
+
+### New Story Readers
+- **Starwhisp** (`starwhisp-story.html`) — 5-scene interactive reader for the first contact story. Diary format: Waking, First Contact, Aboard the Dyn Ship, The Revelation, The End.
+- **The Director** (`director-story.html`) — 4-scene interactive reader for the Vash/Meyer coup. The Intruder, The Confrontation, The Gun, The Call.
+
+### Infrastructure
+- Added SVG favicon (cyan diamond on dark background) to all 28+ pages
+- Added meta descriptions and Open Graph tags to 7 key pages for social media sharing
+- Added back-to-top button (injected via nav.js, appears after 400px scroll)
+- Added `scroll-behavior: smooth` globally
+- Added `robots.txt` for search engines
+- Added print styles: hides nav/controls, forces white background, expands collapsed sections
+- Added search functionality to Intelligence Codex (filters across names, types, text, quotes)
+- Added search functionality to Timeline (filters across titles, descriptions, dates)
+- Added "Where to Start" collapsible reading guide to stories page
+- Added word count and estimated reading time to markdown reader
+
+### Content Fixes
+- Fixed story count: front page intro "fourteen" → "sixteen" short stories, card "16" → "18" total
+- Updated science page intro to reflect broader content scope
+- Added Occupied Earth card to front page EXPERIENCE section
+- Added 2 codex entries: The Facilitator (entity), General Khurram Singh (personnel)
+- Enriched 7 thin story descriptions on stories.html with story-specific detail
+- Fixed Threshold story link: pointed to non-existent threshold-story.html, now uses story.html
+- Added 3 missing timeline entries: Inheritor, The Last Duty, Headhunted
+
+### Light Mode Fixes
+- reflections.html: fixed cyan note background and orange verse border
+- utilitaria.html: fixed section hover, icon borders, blockquote background, warning box
+- Back-to-top button styled for both dark and light modes
+- Search inputs styled for light mode on codex and timeline
+
+---
+
 ## Session 11 (2026-03-07) — Visual Polish & Quality Review
 
 Quality pass across the entire site: light mode support, visual consistency, navigation, content gaps, and broken links.
