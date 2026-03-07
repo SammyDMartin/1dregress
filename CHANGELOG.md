@@ -20,6 +20,7 @@ Major session: infrastructure improvements, new interactive content, and nine ne
 - **The Other Moon** (`other-moon-story.html`) — 5-scene interactive reader for Seeker's interstellar voyage. Discovery through The Return ambush.
 - **Frameshift** (`frameshift-story.html`) — 4-scene interactive reader for Seeker discovering the Other Moon. The earliest story in the timeline (~100,000 BCE).
 - **The Utilitaria** (`utilitaria-story.html`) — 4-scene interactive reader for Souvicou's Faraday cage interview with the superintelligence. The Cage, The Conversation, The Trap, The Escape.
+- **The Last Duty** (`last-duty-story.html`) — 4-scene interactive reader for the Dragon's Tooth origin story. The Alert, The Shutdown, The Occupation, The Ocean Remembers.
 
 ### Infrastructure
 - Added SVG favicon (cyan diamond on dark background) to all 28+ pages
