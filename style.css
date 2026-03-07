@@ -161,6 +161,7 @@ a:hover { color: #fff; }
 #site-nav a:hover { color: var(--accent); border-color: var(--border); }
 #site-nav a.active { color: var(--accent); border-color: var(--accent); background: rgba(0,229,255,0.08); }
 #site-nav .nav-links { display: flex; gap: 2px; overflow-x: auto; flex: 1; }
+#site-nav .nav-sep { width: 1px; background: var(--border); margin: 6px 4px; flex-shrink: 0; }
 #site-nav .theme-toggle {
   background: none; border: 1px solid var(--border);
   color: var(--text-dim); font-size: 14px; padding: 2px 8px; cursor: pointer;
@@ -185,6 +186,7 @@ a:hover { color: #fff; }
   }
   #site-nav .nav-links.open { display: flex; }
   #site-nav .nav-links a { padding: 8px 10px; }
+  #site-nav .nav-sep { width: auto; height: 1px; margin: 2px 0; }
 }
 
 /* ─── Page body offset for nav ──────────────────────────────────────────── */
