@@ -22,6 +22,10 @@ Major session: infrastructure improvements, new interactive content, and nine ne
 - **The Utilitaria** (`utilitaria-story.html`) — 4-scene interactive reader for Souvicou's Faraday cage interview with the superintelligence. The Cage, The Conversation, The Trap, The Escape.
 - **The Last Duty** (`last-duty-story.html`) — 4-scene interactive reader for the Dragon's Tooth origin story. The Alert, The Shutdown, The Occupation, The Ocean Remembers.
 
+### Navigation & Discoverability
+- Added "Story Threads" expandable section to stories page showing three narrative chains with links
+- Added "Next in Timeline" links to the last scene of 7 interactive story readers, connecting stories into reading chains
+
 ### Infrastructure
 - Added SVG favicon (cyan diamond on dark background) to all 28+ pages
 - Added meta descriptions and Open Graph tags to 7 key pages for social media sharing
