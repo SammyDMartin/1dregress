@@ -82,11 +82,12 @@
 [data-theme="light"] a { color: #2b5a83; text-decoration: underline; text-decoration-color: rgba(43,90,131,0.3); text-underline-offset: 2px; }
 [data-theme="light"] a:hover { color: #1a3d5c; text-decoration-color: #1a3d5c; }
 [data-theme="light"] ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); }
+[data-theme="light"] * { scrollbar-color: rgba(0,0,0,0.1) transparent; }
 [data-theme="light"] .nav-card {
   background: var(--bg); border: 1px solid var(--border);
   box-shadow: none;
 }
-[data-theme="light"] .nav-card:hover { box-shadow: 0 2px 8px rgba(43,90,131,0.08); border-color: #2b5a83; }
+[data-theme="light"] .nav-card:hover { box-shadow: 0 2px 8px rgba(43,90,131,0.08); border-color: #2b5a83; transform: translateY(-2px); }
 [data-theme="light"] .nav-card .card-title {
   color: #2b5a83; letter-spacing: 1px; font-weight: 600;
 }
@@ -160,6 +161,7 @@ a:hover { color: #fff; }
 #site-nav a:hover { color: var(--accent); border-color: var(--border); }
 #site-nav a.active { color: var(--accent); border-color: var(--accent); background: rgba(0,229,255,0.08); }
 #site-nav .nav-links { display: flex; gap: 2px; overflow-x: auto; flex: 1; }
+#site-nav .nav-sep { width: 1px; background: var(--border); margin: 6px 4px; flex-shrink: 0; }
 #site-nav .theme-toggle {
   background: none; border: 1px solid var(--border);
   color: var(--text-dim); font-size: 14px; padding: 2px 8px; cursor: pointer;
@@ -184,6 +186,7 @@ a:hover { color: #fff; }
   }
   #site-nav .nav-links.open { display: flex; }
   #site-nav .nav-links a { padding: 8px 10px; }
+  #site-nav .nav-sep { width: auto; height: 1px; margin: 2px 0; }
 }
 
 /* ─── Page body offset for nav ──────────────────────────────────────────── */

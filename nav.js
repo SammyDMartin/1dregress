@@ -4,29 +4,33 @@
 (function() {
   const pages = [
     { href: 'index.html', label: 'HOME' },
+    { sep: true },
     { href: 'stories.html', label: 'STORIES' },
-    { href: 'msd.html', label: 'MSD' },
-    { href: 'battle.html', label: 'BATTLE' },
-    { href: 'science.html', label: 'SCIENCE' },
+    { href: 'drafts.html', label: 'DRAFTS' },
+    { sep: true },
     { href: 'timeline.html', label: 'TIMELINE' },
     { href: 'codex.html', label: 'CODEX' },
     { href: 'worlds.html', label: 'WORLDS' },
-    { href: 'facilitator.html', label: 'FACILITATOR' },
-    { href: 'anthropic-trap.html', label: 'TRAP' },
     { href: 'threads.html', label: 'THREADS' },
+    { href: 'science.html', label: 'SCIENCE' },
+    { sep: true },
+    { href: 'anthropic-trap.html', label: 'TRAP' },
+    { href: 'facilitator.html', label: 'FACILITATOR' },
     { href: 'utilitaria.html', label: 'UTILITARIA' },
     { href: 'utilitaria-chat.html', label: 'EMISSARY' },
-    { href: 'orrery.html', label: 'ORRERY' },
     { href: 'ai-analysis.html', label: 'AI ANALYSIS' },
-    { href: 'interstice-map.html', label: 'NETWORK' },
     { href: 'reflections.html', label: 'REFLECTIONS' },
+    { sep: true },
+    { href: 'battle.html', label: 'BATTLE' },
+    { href: 'msd.html', label: 'MSD' },
     { href: 'diamond-duster.html', label: 'DUSTER' },
     { href: 'liberation.html', label: 'LIBERATION' },
-    { href: 'drafts.html', label: 'DRAFTS' },
+    { href: 'orrery.html', label: 'ORRERY' },
+    { href: 'interstice-map.html', label: 'NETWORK' },
   ];
 
   const current = location.pathname.split('/').pop() || 'index.html';
-  const storyPages = ['reader.html','story.html','seeker-story.html','worlds-within-story.html','headhunted-story.html','inheritor-story.html','oblivion-story.html','sixty-percent-story.html','threshold-story.html'];
+  const storyPages = ['reader.html','story.html','seeker-story.html','worlds-within-story.html','headhunted-story.html','inheritor-story.html','oblivion-story.html','sixty-percent-story.html'];
 
   const nav = document.createElement('nav');
   nav.id = 'site-nav';
@@ -71,6 +75,12 @@
   const links = document.createElement('div');
   links.className = 'nav-links';
   pages.forEach(p => {
+    if (p.sep) {
+      const sep = document.createElement('span');
+      sep.className = 'nav-sep';
+      links.appendChild(sep);
+      return;
+    }
     const a = document.createElement('a');
     a.href = p.href;
     a.textContent = p.label;

@@ -4,6 +4,34 @@ Lessons learned from multiple AI-assisted development sessions on this project. 
 
 ---
 
+## 0. The Single Biggest Problem: Creative Writing Quality
+
+**Claude's default behaviour when rewriting prose is to cut, simplify, and pare down.** This is exactly wrong for this project. The user wants expansion, enrichment, and texture. Multiple sessions have been wasted because Claude treated creative rewrites as editing passes, stripping out atmospheric detail, compressing dialogue, and flattening character portrayals into on-the-nose exposition.
+
+### The pattern that fails:
+- Claude receives a chapter to rewrite
+- Claude "improves" it by making it shorter, removing what it perceives as redundancy
+- The result is a sanitised, coder-like summary that loses the original's texture and voice
+- Or, when told to write longer, Claude bloats with repetitive meandering over the same emotional beats
+
+### The pattern that works:
+- Read the original source text carefully BEFORE rewriting
+- Create a Sanderson-style outline: PURPOSE of each scene, what it reveals, what it establishes
+- Use the revision guides in `editorial/` as procedure (see `editorial/revision_guide.md` and `editorial/ascent/revision_guide.md` for the proven approach)
+- **Additive, not subtractive**: every revision must be LONGER than the original
+- Character darkness shown through ACTIONS, not exposition (Corbin is charming; Eszel sounds normal; the Listener is warm)
+- Target at least 150% of original word count
+- Report word counts before and after each chapter
+- Commit after each chapter individually
+
+### Key character rule:
+Characters must be **subtle, not on-the-nose**. Don't tell the reader someone is menacing — show them being charming while doing terrible things. This applies to Corbin, Eszel, the Listener, the Dyn, the Apathy.
+
+### The Apathy and the Listener — crucial subtext:
+The Apathy says it's "killing us for our own good." This connects to Azell and the Listener Consciousness, the Whole. The Apathy's nature is not mindless destruction — it may be operating under constraints related to the Others' disappearance and what the interstice network truly is. When writing about the Apathy, preserve this ambiguity. "Anthropic traps are to be ignored" is protocol precisely because the Apathy's argument is genuinely compelling.
+
+---
+
 ## 1. Don't Write Prose From Your Token Budget
 
 **The single biggest waste in prior sessions was generating thousands of words of creative prose directly from the model's context window.** You are not a word processor. The source texts exist in `source_texts/` — use them.
@@ -48,7 +76,8 @@ The Ascent Universe is built from 11 source texts. **Everything on the site shou
 Key files:
 - `source_texts/ascent_text.txt` — *Ascent* novel
 - `source_texts/eszel_text.txt` — *Eszel / The Listener* novel
-- `source_texts/note_stories.txt` — All 9 short stories (single file, no line breaks between stories — use byte offsets or keyword search)
+- `source_texts/` — Individual short story files (frameshift.txt, the_other_moon.txt, seeker.txt, the_facilitator.txt, the_utilitaria.txt, starwhisp.txt, the_director.txt, bows_and_arrows_against_the_lightning.txt, the_war_of_all_wars.txt, plus AI-assisted stories as .md files)
+- `source_materials/Note .txt` — All 9 original short stories in a single file (no line breaks between stories — use byte offsets if needed)
 - `UNIVERSE_REFERENCE.md` — Comprehensive reference across all texts
 - `BRAINSTORMING.md` — Development log and prioritised ideas
 
@@ -89,23 +118,67 @@ Don't introduce new colours, fonts, or design patterns without good reason.
 
 ---
 
-## 7. What's Been Done vs. What's Left
+## 7. Workflow Lessons (from Insights Report)
 
-### Done:
-- Hub page, MSD, battle simulation, science compendium
-- Threshold story reader (full novel adaptation)
-- Seeker story reader (Dyn origin trilogy)
-- Timeline, codex, worlds & eras
-- Eszel complete draft assembly (in `ESZEL_COMPLETE_DRAFT.md` and scene files)
+These lessons come from analysis of 9 prior sessions. They are not optional.
+
+### Commit early, commit often
+- **Commit after every chapter, page, or major section** — never batch to the end
+- Usage limits and API errors WILL interrupt you. If you haven't committed, your work is lost
+- For long tasks (novel revision, multi-page builds), each completed unit should be its own commit
+
+### Don't over-rely on sub-agents
+- Sub-agents work well for short, independent tasks (build a page while researching another topic)
+- Sub-agents FAIL on large sequential tasks — they time out, lose context, and cause cascade errors
+- For sequential work (chapter-by-chapter revision, manuscript assembly), work directly in the main context
+- Never give a sub-agent a task that will require digesting large amounts of text — context gets dropped
+- If you need to read a source text, read it yourself; don't delegate reading to an agent
+
+### Information integration
+- The biggest quality problem is context being lost between agents or between sessions
+- Before writing about any story, character, or event, re-read the relevant source material directly
+- Don't rely on summaries in reference docs alone — they may be out of date or miss crucial subtext
+- The connections BETWEEN stories (K'txl across four stories, Seeker's legacy, the Other Moon's journey) are the universe's greatest structural achievement and the easiest thing to miss
+
+### When approaching usage limits
+- Prioritise committing and pushing all work-in-progress immediately
+- Update reference files (this file, CLAUDE.md, BRAINSTORMING.md) so the next session can pick up
+- Write a brief status note about what's done and what's next
+
+---
+
+## 8. What's Been Done vs. What's Left
+
+### Done (as of Session 10):
+- Hub page, MSD, battle simulation, science compendium (expanded with warseeds, A/D-spheres, vacuum drives, etc.)
+- Story readers: Seeker, Inheritor, Headhunted, Worlds Within, Sixty Percent, Oblivion
+- Timeline, codex (extensive entries), worlds & eras (expanded)
+- Eszel complete draft assembly (`ESZEL_COMPLETE_DRAFT.md` and `drafts/second_draft/`)
+- Ascent second draft (24 chapters in `drafts/ascent_second_draft/`)
 - Light mode / reader mode toggle
 - Listener easter egg
+- Facilitator analysis page with interactive chat
+- Utilitaria analysis + Emissary chat page
+- AI Analysis comparison page (Facilitator vs Utilitaria vs Apathy)
+- Anthropic Trap interactive experience
+- Character Threads visualisation
+- Reflections of Seeker (in-universe Dyn text)
+- Diamond Duster firing sequence visualisation
+- Liberation Day warseed activation visualisation
+- Orrery interactive visualisation
+- Interstice Network 3D map
+- Stories index page
+- Drafts browser page
 
-### High-priority remaining work (from BRAINSTORMING.md):
-- Eszel/Listener story reader page (adapt `ESZEL_COMPLETE_DRAFT.md` into the scene reader format)
-- Interactive orrery visualisation
-- Anthropic trap interactive page
-- Interstice network map
-- Remaining short story adaptations (Facilitator, Utilitaria, Starwhisp, etc.)
-- Cross-story connection visualisation
+### Still needed:
+- Front page improvements (intro text, link to original site at ascentuniverse.wordpress.com)
+- Starwhisp story reader
+- Review/audit existing codex, timeline, and world entries for accuracy against source texts
+- Eszel/Listener story reader page (adapt second draft into scene reader format)
+- Remaining short story adaptations
+- General quality review of existing pages
 
-See `BRAINSTORMING.md` for the full ranked list.
+### Original site:
+The Ascent Universe stories are originally published at ascentuniverse.wordpress.com. The companion site should link to this.
+
+See `BRAINSTORMING.md` for the full ranked list of ideas.

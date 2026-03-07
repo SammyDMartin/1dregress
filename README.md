@@ -30,8 +30,10 @@ The Ascent Universe is a human-authored science fiction project. The original no
 | **The Worlds Within** | 2736 CE | **AI-assisted** |
 | Threshold | 2909 CE | Human |
 | Eszel & The Listener (novel) | 2909–2937 CE | Human, **AI-edited** |
+| **The Sixty Percent** | ~3150 CE | **AI-assisted** |
 | Bows and Arrows Against the Lightning | ~3200 CE | Human |
 | The War of All Wars | ~3200 CE | Human |
+| **Oblivion** | 3221 CE | **AI-assisted** |
 
 The website itself (HTML/CSS/JS, interactive readers, MSD, battle simulation, codex, etc.) was built collaboratively with Claude.
 
@@ -92,10 +94,10 @@ Toggle using the theme button in the nav bar.
 |------|-------|-----|
 | `seeker-story.html` | Seeker | ~100,000 BCE |
 | `inheritor-story.html` | Inheritor | 2085 CE |
-| `sixty-percent-story.html` | Sixty Percent | — |
+| `sixty-percent-story.html` | The Sixty Percent | ~3150 CE |
 | `worlds-within-story.html` | The Worlds Within | 2736 CE |
 | `headhunted-story.html` | Headhunted | 2480 CE |
-| `oblivion-story.html` | Oblivion | — |
+| `oblivion-story.html` | Oblivion | 3221 CE |
 
 ## Shared Resources
 

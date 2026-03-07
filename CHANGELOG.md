@@ -4,6 +4,43 @@ All notable changes to the Ascent Universe companion website.
 
 ---
 
+## Session 11 (2026-03-07) — Visual Polish & Quality Review
+
+Quality pass across the entire site: light mode support, visual consistency, navigation, content gaps, and broken links.
+
+### Front Page
+- Removed "ANNIHILATOR-CLASS" subtitle, added "Companion Archive" title
+- Added intro paragraph with link to ascentuniverse.wordpress.com
+- Reorganized cards into 4 sections: READ, EXPLORE, EXPERIENCE, SIMULATE
+
+### Visual Style
+- Fixed light mode across all content pages: codex, timeline, worlds, threads, battle, facilitator, utilitaria-chat, anthropic-trap, ai-analysis
+- Replaced hard-coded `rgba(200,220,230,...)` text colors with CSS variable overrides for light mode
+- Fixed chat input backgrounds (`rgba(0,0,0,0.3)`) for light mode
+- Fixed invisible `rgba(255,255,255,0.03)` borders in ai-analysis
+- Added light mode scrollbar-color override
+- Replaced hard-coded `#00e5ff` card icon colors with `var(--accent)`
+
+### Navigation
+- Reorganized nav bar links to match front page sections (READ / EXPLORE / EXPERIENCE / SIMULATE)
+- Added visual separators between nav sections
+- Mobile: separators become horizontal dividers
+
+### Content Fixes
+- Added 3 missing timeline entries: Inheritor (2085 CE), The Last Duty (2314 CE), Headhunted (2480 CE)
+- Fixed broken Threshold story link (threshold-story.html doesn't exist — now points to reader.html with draft)
+- Removed non-existent threshold-story.html from nav.js storyPages
+- Added The Sixty Percent and Oblivion to README story attribution table
+- Fixed missing era dates in README story readers table
+
+### Reference Updates
+- Updated AI_ADVICE.md with insights report learnings (creative writing quality, workflow lessons, done/remaining work)
+- Added 6 missing AI-assisted stories to UNIVERSE_REFERENCE.md
+- Deduplicated 12 sets of duplicate codex entries (221 lines removed)
+- Updated CHANGELOG.md
+
+---
+
 ## Sessions 7–10 (2026-03-07) — Website Expansion
 
 Massive expansion of the companion site with new interactive pages, codex entries, world sections, character threads, and visualisations.
