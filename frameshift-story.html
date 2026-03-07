@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frameshift — Ascent Universe</title>
+<meta name="description" content="Seeker finds an asteroid on an impossible orbit. On its surface, a stone orrery — a message from vanished builders. The earliest Dyn story in the Ascent timeline.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow: hidden; }
+
+.scene-bg { position: fixed; inset: 0; z-index: 0; transition: opacity 1.5s ease; pointer-events: none; }
+.scene-bg-orbit { background: radial-gradient(ellipse at 40% 50%, rgba(50,30,10,0.15) 0%, rgba(5,2,0,0.9) 100%); }
+.scene-bg-surface { background: radial-gradient(ellipse at 50% 60%, rgba(40,30,15,0.12) 0%, rgba(5,3,0,0.85) 100%); }
+.scene-bg-orrery { background: radial-gradient(ellipse at 50% 40%, rgba(20,40,60,0.15) 0%, rgba(0,5,15,0.9) 100%); }
+.scene-bg-light { background: radial-gradient(ellipse at 50% 50%, rgba(80,60,20,0.15) 0%, rgba(0,0,0,0.95) 100%); }
+
+.scene-effect { position: fixed; bottom: 0; left: 0; right: 0; height: 3px; z-index: 1; pointer-events: none; }
+.effect-engines { background: linear-gradient(90deg, transparent, rgba(200,120,40,0.3), transparent); animation: effectPulse 4s ease infinite; }
+.effect-dust { background: linear-gradient(90deg, transparent, rgba(150,120,80,0.3), transparent); animation: effectPulse 5s ease infinite; }
+.effect-wonder { background: linear-gradient(90deg, transparent, rgba(0,200,255,0.4), transparent); animation: effectPulse 3s ease infinite; }
+.effect-light { background: linear-gradient(90deg, transparent, rgba(255,220,100,0.5), transparent); animation: effectPulse 1.5s ease infinite; }
+@keyframes effectPulse { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
+</style>
+</head>
+<body>
+<div class="page-body">
+
+<div class="scene-bg" id="sceneBg"></div>
+<div class="scene-effect" id="sceneEffect"></div>
+
+<div class="scene-container">
+  <div class="scene-header" id="sceneHeader">
+    <a href="stories.html" class="scene-back">&larr; ALL STORIES</a>
+    <div class="scene-title" id="sceneTitle">FRAMESHIFT</div>
+    <div class="scene-select-wrap">
+      <select class="scene-select" id="sceneSelect"></select>
+    </div>
+  </div>
+  <div class="scene-text" id="sceneText"></div>
+  <div class="story-nav">
+    <button id="prevBtn" onclick="goScene(currentScene-1)">&larr; PREV</button>
+    <span class="scene-counter" id="sceneCounter"></span>
+    <button id="nextBtn" onclick="goScene(currentScene+1)">NEXT &rarr;</button>
+  </div>
+</div>
+
+</div>
+<script src="nav.js"></script>
+<script>
+const SCENES = [
+{
+  title: "THE ANOMALY",
+  header: "THE FIRST SYSTEM — AN IMPOSSIBLE ORBIT",
+  bg: "scene-bg-orbit",
+  effect: "effect-engines",
+  text: `<p>No species reached beyond the air without bringing with them a spark of curiosity, Seeker reflected. Even her own kind, often narrow in their thoughts, had the will and the wit to wonder, to reach for things outside their domain. Curiosity had brought them from the lakes to the forests, coalesced them into Lines, led them to tame fire and fly beyond the air. On Firsthome, she had been the last to see the sky as the limit. She had reached beyond, landed on a new world. That self was long dead, but she had become an heir to a great dynasty, an undivided line. She had triumphed.</p>
+
+<p>Below her, she saw home. It was beautiful; shallow seas, tamed jungle, the regular, rational spirals of settlements, each small branch of the line surrounded by the whorls of barracks, farms and breeding-grounds. This world thrived like no other in her species' history, unified by one mind, stable and safe. Around her, satellites and factories glittered, along with a few experimental habitats where unfavoured children struggled to eke out a life in freefall.</p>
+
+<p>She was leaving it all behind. The next of her line had been shaped and chosen, and her ship had been prepared. The craft was beautiful, as her kind understood beauty — wasp-waisted and radiated outwards at the fore and aft like a flower. Muscle-analogue tubes fed water to the quartz chamber of its fission lightbulb, the jet of plasma pushing it forward at a steady rate.</p>
+
+<p>Her destination was an anonymous asteroid on an anomalous orbit. Its orbital mechanics were wrong. Its surface was wrong. Its existence, in itself, was wrong. The asteroid was moving too fast. It traced out an ordinary solar orbit, one that ought to obey the law of gravity, except for the fact that it completed its year in a fraction of the correct time. It should have been flung out of the system with such a velocity.</p>
+
+<p>To most Dyn, it would have been a source of confusion but little else. Seeker would walk upon it, and discover the truth behind it.</p>
+
+<p>In front of her, two lower-children were hardwired into the ship systems, trained and conditioned to translate her verbal commands into actions almost immediately. Wired up to feeding-tubes and oxygen membranes, they would remain there for the rest of their natural lives. At a gesture from Seeker, they began feeding mass to the great reaction chambers. She felt the pulse of power as her ship's engines ignited, the glittering cataract of plasma pushing her forward.</p>
+
+<p>The burn injected Seeker onto a tight gravity assist with Firsthome, where the earlier steps in her line had once walked. On approach, she looked out of the porthole at a bruised world. The wars were ending as domains and lines consolidated. The environment of the original home slowly recovered as Dyn learned to spread beyond the narrow band of twilight. Progress was being made there too, as Lines asserted rational control over their component Dyn.</p>
+
+<p>Her approach to the asteroid was necessarily fast. Her ships' radiators and drive unfurled for one final spasm of acceleration. Her own orbit was being altered, somehow, as she drew closer. It was as if she were caught in a wake — the closer she drew, the faster she accelerated, yet she felt nothing.</p>
+
+<p>As her ship closed to a mere few hundred meters across the pitted surface, Seeker found herself carried through space along with the anomaly, whipping round the sun in that impossibly fast orbit, feeling no tug of acceleration, seeing no puff of gas or ejection of matter that might explain how she and the massive rock below moved so rapidly.</p>
+
+<p>She had exhausted her fuel, but that didn't matter. Seeker knew that this was where she wanted to be, and her life, severed from the grand progress of her line, no longer mattered. There was only this one, final task left to her.</p>`
+},
+{
+  title: "THE SURFACE",
+  header: "THE ANOMALOUS ASTEROID — EXPLORATION",
+  bg: "scene-bg-surface",
+  effect: "effect-dust",
+  text: `<p>She pulled her spacesuit on. The descent was easy: Dynic ancestors used to swim in streams and lakes, which gave them a natural aptitude for moving in three dimensions, granting them the binocular, all-round vision that led to their early expansion in intelligence.</p>
+
+<p>The pitted surface of the asteroid, brown and grey, looked almost natural, but something was different. By the time Seeker's grip-pads secured her onto the surface, the confusion had entered her consciousness. The asteroid was too young, with a scattering of craters that didn't match with its apparent age. The regolith, jagged beneath her, was natural enough, but it looked as if it had melted and reformed, or been cast from a mould. The gravity was too strong — something beneath her was heavier than it should be.</p>
+
+<p>The pale orange sunlight threw everything into sharp relief, the close horizon of the toy world making it feel unreal. She took a few hesitant steps with her grip-pads, kicking up plumes of dust.</p>
+
+<p>The subsequent hours of exploration turned up more anomalies. The surface was melted in patches that seemed to suggest informational content, spirals and whorls that were both like and unlike her own language. The gravity changed and shifted unevenly beneath her, a tug more appropriate to a small moon than such a tiny chunk of rock.</p>
+
+<p>She understood that the rock was a covering, a thin shell that had collected over some dense, hidden machinery. How long would that take? A million years? A billion?</p>`
+},
+{
+  title: "THE ORRERY",
+  header: "THE ANOMALOUS ASTEROID — THE MESSAGE",
+  bg: "scene-bg-orrery",
+  effect: "effect-wonder",
+  text: `<p>At the end of the first day, Seeker found what she was looking for. In a clearing, cut out of the rock as if a footprint had stamped it flat, was the solar system.</p>
+
+<p>Spheres of featureless rock and metal were laid on the ground in a grand orrery, the size of a small forest clearing. There was a central marble the size of her head, surrounded by small pebbles a few body-lengths away — the sun and its planets. There were trails behind each pebble, as if they'd been dragged in arcs across the ground, but she could not see any of them move. Why would they? Planets don't orbit their stars in mere minutes.</p>
+
+<p>Seeker knew without having to be told that this model would match the real thing, that forces she couldn't see were slowly moving the pebbles in synchrony with the real planets of her home system. She saw two on similar trajectories, of similar sizes, that represented her home and Firsthome.</p>
+
+<p>It was a representation, not an accurate scale model. It was meant to be understood, Seeker realized, as she approached, leaning over the model. As above, so below. The minds that made this — because there was no doubt at all that this asteroid was a made thing — wanted to be comprehended by anyone, no matter how distant in time or space.</p>
+
+<p>She felt a kinship across some indistinct gulf. Who had they been, to leave her something like this?</p>
+
+<p>Seeker sat there for hours as her mind traced through possibilities, just long enough to see a couple of the nearest pebbles shift slightly — the inner worlds keeping pace with their real-life counterparts. If this was a message, then what was its meaning? Was it simply a proof of intelligence?</p>
+
+<p>She spotted a different rock — a gemstone, perhaps, tracing a wide elliptic path that cut across the surface. This place — the asteroid itself, represented in miniature.</p>
+
+<p>Inspiration struck, the same inner fire that had driven her first self to the nightside of Firsthome, the same characteristic that had united her line across generations. She understood in a flash what this was.</p>
+
+<p>Seeker reached out, flesh unfurling, and grasped the gemstone, plucking it from the furrow it had cut. She placed it next to the pebble that represented Firsthome.</p>`
+},
+{
+  title: "THE LIGHT",
+  header: "BETWEEN THE STARS — THE SPEED OF LIGHT",
+  bg: "scene-bg-light",
+  effect: "effect-light",
+  text: `<p>Nothing happened. There was no pulse of power, no secret message from a long-dead mind. She was wrong.</p>
+
+<p>The sunlight shifted.</p>
+
+<p>Seeker glanced up, and saw the sun wheeling against the black sky. No thoughts came to her, because none would be sufficient. She looked up and saw her ship, radiators still unfurled, still waiting undisturbed, caught by the same effect. The sun seemed to brighten and shift in colour, turning blue. The rest of the sky was black.</p>
+
+<p>Seeker wondered what the stars might look like, though they were lost in the glare of the sun.</p>
+
+<p>Seeker didn't doubt what she was seeing — Dyn knew to face reality. She waited, interested, as the universe folded around her. She understood, somehow, that this was motion — though it was too fast to perceive.</p>
+
+<p>Minutes passed, and the distorted light shifted slightly. Then, like some ancient predator springing from a stream, Firsthome appeared before her. The sky snapped back to normality and it was just there, looming large, dark and light and twilit, eternally steady in the sky.</p>
+
+<p>Her suit radio chattered, hundreds of voices challenging, submitting, asking for clarification, wondering at the sudden miracle, an asteroid materialised from nowhere. The whole cacophony of her species, at her mercy once again.</p>
+
+<p>Seeker glanced down at the orrery and the gem that lay beside the pebble. She looked at the sunlit bulk of Firsthome. She glanced up at the stars.</p>
+
+<p>She did a mental calculation. She had moved here at almost exactly the speed of light.</p>
+
+<p>There were new lights, the shimmer of ships boosting out of their orbits to meet her, in confrontation or submission. Seeker wasn't interested — she had a universe to explore.</p>
+
+<p>She reached down, paused for a moment, and picked up the gem.</p>`
+}
+];
+
+// Scene engine
+let currentScene = 0;
+const select = document.getElementById('sceneSelect');
+SCENES.forEach((s, i) => {
+  const opt = document.createElement('option');
+  opt.value = i;
+  opt.textContent = (i + 1) + '. ' + s.title;
+  select.appendChild(opt);
+});
+select.addEventListener('change', () => goScene(+select.value));
+
+function goScene(i) {
+  if (i < 0 || i >= SCENES.length) return;
+  currentScene = i;
+  const s = SCENES[i];
+  document.getElementById('sceneHeader').querySelector('.scene-title').textContent = s.header;
+  document.getElementById('sceneText').innerHTML = s.text;
+  document.getElementById('sceneCounter').textContent = (i + 1) + ' / ' + SCENES.length;
+  document.getElementById('prevBtn').disabled = i === 0;
+  document.getElementById('nextBtn').disabled = i === SCENES.length - 1;
+  select.value = i;
+  document.getElementById('sceneBg').className = 'scene-bg ' + s.bg;
+  document.getElementById('sceneEffect').className = 'scene-effect ' + s.effect;
+  document.querySelector('.scene-text').scrollTop = 0;
+}
+goScene(0);
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goScene(currentScene + 1);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goScene(currentScene - 1);
+});
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 60) goScene(currentScene + (dx < 0 ? 1 : -1));
+});
+</script>
+</body>
+</html>
