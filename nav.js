@@ -26,7 +26,7 @@
   ];
 
   const current = location.pathname.split('/').pop() || 'index.html';
-  const storyPages = ['reader.html','story.html','seeker-story.html','worlds-within-story.html','headhunted-story.html','inheritor-story.html','oblivion-story.html','sixty-percent-story.html'];
+  const storyPages = ['reader.html','story.html','seeker-story.html','worlds-within-story.html','headhunted-story.html','inheritor-story.html','oblivion-story.html','sixty-percent-story.html','threshold-story.html'];
 
   const nav = document.createElement('nav');
   nav.id = 'site-nav';
