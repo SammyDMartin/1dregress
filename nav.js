@@ -14,11 +14,13 @@
     { href: 'facilitator.html', label: 'FACILITATOR' },
     { href: 'anthropic-trap.html', label: 'TRAP' },
     { href: 'threads.html', label: 'THREADS' },
+    { href: 'utilitaria.html', label: 'UTILITARIA' },
+    { href: 'orrery.html', label: 'ORRERY' },
     { href: 'drafts.html', label: 'DRAFTS' },
   ];
 
   const current = location.pathname.split('/').pop() || 'index.html';
-  const storyPages = ['reader.html','story.html','seeker-story.html','worlds-within-story.html','headhunted-story.html','inheritor-story.html'];
+  const storyPages = ['reader.html','story.html','seeker-story.html','worlds-within-story.html','headhunted-story.html','inheritor-story.html','oblivion-story.html','sixty-percent-story.html'];
 
   const nav = document.createElement('nav');
   nav.id = 'site-nav';

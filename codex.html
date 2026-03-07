@@ -199,10 +199,12 @@ const ENTRIES = [
   tab: 'factions', icon: '△', iconClass: 'faction-dyn',
   name: 'THE DYN', type: 'FACTION — ALIEN SPECIES / ARCO PARTNER',
   sections: [
-    { label: 'Biology', text: 'The Dyn are a non-human species with trilateral symmetry, widely-spaced eyes of empty black, divided manipulators that bifurcate repeatedly (giving extraordinary dexterity), and distinct lithe forelimbs and powerful hindlimbs. They evolved on a tidally-locked world (Firsthome) in the twilight zone between scorching Dayside and frozen Dusk. They wear electronic modules over the lower face — possibly translators or communication augmentations.' },
-    { label: 'Culture', text: 'Dyn society centres on the Line — the unbroken chain of parent to child. The individual is a cell; the Line is the whole. Domains, territories, and hereditary claims define their political structure rather than nation-states. Status derives from lineage continuity and domain extent. A Dyn whose Line ends prematurely enters a violent, dissociative state.' },
-    { label: 'History with Humanity', text: 'Following first contact, the Dyn subjugated humanity rather than exterminating it — dismantling human warmaking capabilities and installing administrative oversight. Over time, the relationship evolved from occupation toward partnership, particularly within Arco. Dyn officers now serve in Arco military command. However, factions within Dyn society still harbour hostility toward humanity, and others advocate for their extermination.' },
-    { label: 'Notable Individuals', text: 'Seeker — an ancient Dyn explorer, first of her kind to reach orbit, discoverer of progenitor artifacts. K\'txl — Dynic administrator of Earth during the occupation. Honed Aspect — commander of the battle sub-constellation at the Interstice. Hu — a Dyn sensory officer serving aboard an Arsonist-class vessel during the Apathy War.' }
+    { label: 'Anatomy', text: 'The Dyn are a non-human species with trilateral symmetry. Their bodies are Y-shaped: a muscular, hunched torso supported by powerful hindlimbs, with lithe forelimbs bearing blade-like claws and pincer-tentacles for fine manipulation. Their heads are triangular, almost wedge-like (reminiscent of a mantis or hammerhead shark), with three eye-slits protected by bony plates that shift for expression. Pale skin matted with purple fur covers their insectile frames. They are shorter than humans — shoulder height — but extraordinarily strong. Electronic modules worn over the lower face serve as translators or communication augmentations. They can contort their limbs in ways that would break human bones.' },
+    { label: 'Reproduction & The Line', text: 'Dyn reproduce through parthenogenesis — a single parent produces massive broods of offspring. The Line is the unbroken chain of parent to child, the fundamental unit of Dyn identity. The individual is a cell; the Line is the whole. On the cusp of adolescence, pheromone-induced bonding floods the offspring with hormones that suppress independence and individuality, binding them to the parent\'s will. Only when the parent dies can a successor emerge — carefully groomed over years. If the parent dies before the successor is ready, the Line "sunders" and the offspring fall into a violent, dissociative state, fighting each other to the death until one prevails. Eunuch courts serve the autarchs. Breeding pens and culling of sentient offspring are standard practice.' },
+    { label: 'Psychology & Worldview', text: 'The Dyn have no concept of morality, trade, art, or compromise in any human sense. Their society operates on pure dominance/submission logic — the strong command, the weak obey or die. K\'txl\'s assessment of humanity: "You are insane. Virulent ideas rule your minds." The Dyn correctly predicted that human moral universalism would compel intervention in their practices, and launched a preemptive invasion. They have no word for "promise" or "freedom." Seeker\'s curiosity was an extraordinary aberration — most Dyn experience no such drive. Their technology remained essentially unchanged for millions of years until contact with the Others\' artifacts.' },
+    { label: 'Culture', text: 'Domains, territories, and hereditary claims define Dyn political structure rather than nation-states. Status derives from lineage continuity and domain extent. The Dyn colonised space using the Other Moon\'s frameshift capability, building a wormhole-connected empire spanning many systems with millions of nuclear-powered spacecraft. Despite FTL capability, their technology base remained pre-21st-century equivalent for millennia — they never innovated beyond what they seized. Following the ceasefire in 2592, Dyn from occupied worlds were integrated into Arcosian culture. By the Apathy War era, Dyn serve alongside humans on mixed crews.' },
+    { label: 'Homeworld Biology', text: 'Firsthome is tidally locked to a red dwarf star. The habitable Dusk band — a narrow twilight zone between the scorched Day side and the frozen Night — supports life in an oxygen-rich, high-humidity atmosphere. Sunstorms periodically lash the Day side with lethal radiation. The Night side is frozen but starlit — it was here that Seeker first saw the stars and conceived of worlds beyond. The neighbouring ringed planet became the site of the first off-world Dyn colony.' },
+    { label: 'Notable Individuals', text: 'Seeker — an ancient Dyn explorer, first of her kind to reach orbit, discoverer of the Other Moon and the interstice network. K\'txl ("Liar to Animals") — Dynic administrator of Earth during the occupation, the same individual who initiated first contact at Tau Ceti. Honed Aspect — commander of the battle sub-constellation at the Interstice. Hu — a Dyn sensory officer serving aboard an Arsonist-class vessel during the Apathy War, evidence of full integration into human military structures.' }
   ],
   stats: [
     { label: 'HOMEWORLD', value: 'Firsthome (tidally locked)' },
@@ -212,6 +214,79 @@ const ENTRIES = [
   ],
   quote: '"I am Honed Aspect, commander of the battle sub-constellation which — regretfully — inflicted such heavy losses on your defence fleet. On behalf of Arco, I extend my condolences."',
   quoteAttr: '— Honed Aspect, first diplomatic contact',
+},
+{
+  tab: 'factions', icon: '◬', iconClass: 'faction-union',
+  name: 'THE TANU', type: 'FACTION — ALIEN SPECIES / XIANIST PROTECTORATE',
+  sections: [
+    { label: 'Biology', text: 'The Tanu are shorter than humans, with triangular, wedge-like heads that don\'t map closely onto any terrestrial animal — perhaps a mantis or a hammerhead shark. They lack naturally expressive faces; emotional display requires deliberate nerve overrides. Their visual memory is extraordinary — they don\'t use signs or navigation aids because they simply never forget. They don\'t get bored. Their physical culture is ancient and deeply conservative.' },
+    { label: 'History', text: 'The Tanu evolved on a bruised, reddish-orange world — the only planet a human has ever visited upon whose surface intelligent life independently evolved. Their civilisation achieved flight and sophisticated engineering long before humanity tamed the wheel. They once built "computer-brains" but collectively decided never to build another — a fact that fascinates and disturbs human scholars. Their planet shows evidence of an ancient catastrophe: the Dra\'ll wars, fought over 43,000 years ago against a mind-consuming entity called the Man of Nothing.' },
+    { label: 'The Library', text: 'The Tanu Library is an enormous underground structure, its above-ground entrance shaped like a seashell. Its underground extent is not fully known, even to the Xianists who control human access to the world — rumours suggest it may protrude into the mantle itself. Inside, Tanu scholars in dark robes work in monastic silence, navigating without signs or markers. The Library contains records stretching back tens of thousands of years, including accounts of the Dra\'ll and their encounter with the entity known as the Man of Nothing.' },
+    { label: 'Cultural Significance', text: 'Tanu is living proof of the Fermi Paradox — another intelligent species, impossibly close in evolutionary terms. Their refusal to build thinking machines, combined with their ancient records of a mind-consuming entity, suggests knowledge of existential threats that humanity has only recently encountered. Access to Tanu is controlled by the Xianists, making it a politically sensitive flashpoint between human factions.' }
+  ],
+  stats: [
+    { label: 'HOMEWORLD', value: 'Tanu (terrestrial, orange biosphere)' },
+    { label: 'ACCESS', value: 'Xianist controlled' },
+    { label: 'TECH LEVEL', value: 'Post-industrial (self-limited)' },
+    { label: 'KEY ASSET', value: 'The Library' },
+  ],
+  quote: '"I wouldn\'t worry about it. This design was perfected rather a long time before your ancestors had tamed the wheel."',
+  quoteAttr: '— Tanu guide, on shuttle engineering',
+},
+{
+  tab: 'factions', icon: '◇', iconClass: 'faction-union',
+  name: 'KOSMOHANSA', type: 'FACTION — INTERSTELLAR TRADE GUILD',
+  sections: [
+    { label: 'Role', text: 'Kosmohansa is an interstellar trade and shipping faction operating across the wormhole network. Their merchant vessels, including bulk freighters like the Atbarah, form the commercial backbone of interstellar commerce between human polities.' },
+    { label: 'The Atbarah Incident', text: 'The Kosmohansa freighter Atbarah was hijacked by Human Purity Front operatives and used as a suicide weapon, rammed through the interstice at crushing acceleration. The attack killed approximately 200,000 on the Arco side and directly provoked the Battle of the Interstice. The crew were murdered by the terrorists, their bodies visible in the background of the broadcast manifesto.' }
+  ],
+  stats: [
+    { label: 'TYPE', value: 'Trade guild' },
+    { label: 'VESSELS', value: 'Merchant freighters' },
+    { label: 'INCIDENT', value: 'Atbarah hijacking' },
+  ],
+  quote: '"Kosmohansa vessel Atbarah cut thrust immediately and await intercept."',
+  quoteAttr: '— Interstice Traffic Control, final warning',
+},
+{
+  tab: 'factions', icon: '✧', iconClass: 'faction-union',
+  name: 'THE XIANISTS', type: 'FACTION — TANU PROTECTORATE CONTROLLERS',
+  sections: [
+    { label: 'Role', text: 'The Xianists control human access to the Tanu homeworld — the only planet where a second independently-evolved intelligent species still lives. They wear ornate armour and carry hydrogen rifles. Their monopoly on Tanu contact is a source of political leverage and resentment among other factions.' },
+    { label: 'Strategic Position', text: 'In a universe where the Dyn are allied with Arco, Tanu access gives the Xianists unique diplomatic leverage. The discovery of a second interstice offered Union a chance to gain their own alien contact, breaking the Xianist monopoly. The Kailash expedition was partly motivated by this geopolitical calculation.' }
+  ],
+  stats: [
+    { label: 'ASSET', value: 'Tanu access monopoly' },
+    { label: 'EQUIPMENT', value: 'Ornate armour, hydrogen rifles' },
+  ],
+},
+{
+  tab: 'factions', icon: '⊛', iconClass: 'faction-union',
+  name: 'THE MULTIPLICITY', type: 'FACTION — POLITICAL MOVEMENT',
+  sections: [
+    { label: 'Ideology', text: 'The Multiplicity advocates for distributed governance and the stripping of Conclave coordination powers. They want every mind to have an equal vote regardless of enhancement or integration level. In peacetime, their arguments carry moral weight. In a war against the Apathy, their proposals would fatally slow decision-making.' },
+    { label: 'During the Apathy War', text: 'As refugee populations swelled — forty billion crammed into systems built for twelve — the Multiplicity gained ground, feeding on resentment. Their white-sashed protesters hemmed in by nervejam barriers outside Utilitaria Centres became a common sight. Yet when the Apathy arrived, the sashes were trampled underfoot. Political arguments evaporated. Former enemies united.' }
+  ],
+  stats: [
+    { label: 'TYPE', value: 'Political movement' },
+    { label: 'GOAL', value: 'Distributed governance' },
+    { label: 'ERA', value: 'Apathy War' },
+  ],
+  quote: '"They loathe us out there. Anyone with sense escaped a year ago."',
+  quoteAttr: '— The Mandator, regarding Multiplicity refugees',
+},
+{
+  tab: 'factions', icon: '✦', iconClass: 'faction-union',
+  name: 'THE MONISTS', type: 'FACTION — RELIGIOUS MOVEMENT',
+  sections: [
+    { label: 'Beliefs', text: 'Monists hold that God is not a person but "the highest truth, the good" — a philosophical principle with physical power, the bridge between abstract and real. The multiverse exists because it is good (the law of axiarchism). Celebrants of the faith are supposed to uphold decency without asceticism. Senior figures may form partnerships. The Monists reject stim inserts and shortcuts to self-control, embracing personal responsibility.' },
+    { label: 'Role', text: 'The Monist faith spread through human space in the centuries after Liberation. Their celebrants, trained at seminaries like New Stellenar, serve as spiritual guides across diverse human settlements. Their philosophical framework — that consciousness has intrinsic cosmic significance — takes on terrible new weight in the context of the Apathy, which claims that consciousness itself poses "a risk to all that is."' }
+  ],
+  stats: [
+    { label: 'TYPE', value: 'Religious movement' },
+    { label: 'CORE TENET', value: 'Axiarchism' },
+    { label: 'TRAINING', value: 'New Stellenar seminary' },
+  ],
 },
 {
   tab: 'threats', icon: '⊘', iconClass: 'faction-striver',
