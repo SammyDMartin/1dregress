@@ -38,9 +38,9 @@ A much longer, partially unfinished novel set across two time periods: **2909 CE
 
 The text includes multiple draft versions of certain passages (visible revision iterations), author planning notes, and some incomplete sections. It is clearly a work in progress but substantially written. The file also opens with a chronological timeline of the entire universe.
 
-### The Short Stories (`note_stories.txt` / individual files in `source_texts/`)
+### The Short Stories (`source_texts/`)
 
-Nine short stories from the "Ascent Universe" blog, spanning the full timeline from Dyn prehistory to the far-future Apathy War. These fill critical gaps between the two novels and extend the universe in both directions. Listed in approximate chronological order:
+Nine original short stories from the "Ascent Universe" blog, plus several AI-assisted stories written collaboratively with Claude. Together they span the full timeline from Dyn prehistory to the far-future Apathy War, filling critical gaps between the two novels. Listed in approximate chronological order:
 
 1. **Seeker** (`seeker.txt`) — Origin of the Dyn Line called Seeker. A nameless female Dyn, set apart by curiosity, survives on the Night side of Firsthome, invents technology from greenhouses to fission rockets, and launches to a neighbouring planet, founding the first off-world colony. Establishes core Dyn biology and culture.
 
@@ -59,6 +59,20 @@ Nine short stories from the "Ascent Universe" blog, spanning the full timeline f
 8. **Bows and Arrows Against the Lightning** (`bows_and_arrows_against_the_lightning.txt`) — Far future. An **A-sphere** attack pilot fights the **Apathy** — berserker machines of unknown origin (Earth-mass agglomerations decelerating at 40,000G). Features exotic weapons: slasher torpedoes, conversion bombs, monopole railguns, singularities. The narrator is assimilated but detonates their reactor. Their backup copy is restored.
 
 9. **The War of All Wars** (`the_war_of_all_wars.txt`) — The most complex story. First decisive victory against the Apathy. The Apathy deploys an **anthropic trap**: a holographic proof that it has simulated the human crews millions of times, so they are almost certainly simulated. If they surrender, all copies "live." The crew refuses per protocol. The Apathy cryptically states that explaining its motives would pose "a risk to all that is conscious." Dyn now serve alongside humans.
+
+### AI-Assisted Stories (written collaboratively with Claude)
+
+10. **Inheritor** (`inheritor.md`, 2085 CE) — Sequel to The Facilitator. Renee Souvicou is interrogated by UNSCA after the Facilitator incident. She outwits them, escapes, and begins laying the groundwork for the Utilitaria. Bridges the gap between the rogue AI crisis and humanity's superintelligent guardian. AI-assisted.
+
+11. **The Last Duty** (`THE_LAST_DUTY.md`, 2314 CE) — The Utilitaria's death, told from the POV of a maintenance engineer who approves a firmware update that plants the warseeds. The last act of the dying superintelligence. Bridges Starwhisp and Ascent. AI-assisted.
+
+12. **Headhunted** (`headhunted.md`, 2480 CE) — Post-liberation Earth. General **Khurram Singh** defends a city against Arco's headhunter drones in the immediate aftermath of the Dyn expulsion. Corbin makes an offer — demonstrating the ruthless consolidation of power. AI-assisted.
+
+13. **The Worlds Within** (`the_worlds_within.md`, 2736 CE) — A critical lore story. Opens with a prologue set ~43,578 years ago on the Tanu homeworld, where **Dra'll**, last defender of the self, fights against the **un-people** — beings corrupted by an entity described as "the one who they said was never not listening." This is the earliest depiction of the horror connected to the Listener entity. The Others fought and lost. In the present (2736 CE), a Monist celebrant visits the Tanu library and encounters echoes of this ancient horror. The Sander Reeve epigraph explicitly articulates the Fermi Paradox trap: the wormhole network is too convenient, the Dyn arose too close to humanity in time — "the jaws have already shut." AI-assisted.
+
+14. **The Sixty Percent** (story reader, ~3150 CE) — The Apathy arrives at **Bacchus**, a Utilitaria Centre. Twenty minutes to evacuate. How many can we save? The arithmetic of extinction under the Apathy's advance. AI-assisted.
+
+15. **Oblivion** (story reader, 3221 CE) — A Utilitarite officer returns to Earth in a borrowed body during the Apathy War. Shore leave, Meira, whisky, and the question the Utilitaria cannot ask. AI-assisted.
 
 ---
 

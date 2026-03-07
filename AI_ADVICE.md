@@ -76,7 +76,8 @@ The Ascent Universe is built from 11 source texts. **Everything on the site shou
 Key files:
 - `source_texts/ascent_text.txt` — *Ascent* novel
 - `source_texts/eszel_text.txt` — *Eszel / The Listener* novel
-- `source_texts/note_stories.txt` — All 9 short stories (single file, no line breaks between stories — use byte offsets or keyword search)
+- `source_texts/` — Individual short story files (frameshift.txt, the_other_moon.txt, seeker.txt, the_facilitator.txt, the_utilitaria.txt, starwhisp.txt, the_director.txt, bows_and_arrows_against_the_lightning.txt, the_war_of_all_wars.txt, plus AI-assisted stories as .md files)
+- `source_materials/Note .txt` — All 9 original short stories in a single file (no line breaks between stories — use byte offsets if needed)
 - `UNIVERSE_REFERENCE.md` — Comprehensive reference across all texts
 - `BRAINSTORMING.md` — Development log and prioritised ideas
 
