@@ -108,6 +108,22 @@ Toggle using the theme button in the nav bar.
 - **`BRAINSTORMING.md`** — Development log and notes
 - **`AI_ADVICE.md`** — Practical advice for AI models working on this project
 
+## AI Collaboration
+
+This project was built collaboratively with Claude Code (Anthropic). The following files guide AI sessions:
+
+- **`CLAUDE.md`** — Project conventions, creative writing guidelines, and git procedures
+- **`AI_ADVICE.md`** — Detailed advice for AI models working on this universe
+- **`insights-report.html`** — Usage analytics and workflow insights from Claude Code sessions
+
+### Key procedures for AI collaborators
+
+1. **Read `AI_ADVICE.md` and `UNIVERSE_REFERENCE.md` before creative work** — canon consistency matters
+2. **Commit after every chapter, page, or section** — never batch to the end
+3. **Creative rewrites: expand, never cut** — preserve texture, atmosphere, and subtext
+4. **Re-read files before editing** — special characters (smart quotes, em dashes) cause mismatches
+5. **Report word counts** before and after any rewrite
+
 ## Development
 
 No build step needed — edit HTML files directly and push. The `msd/` directory contains a separate React/Vite project for the MSD component.
