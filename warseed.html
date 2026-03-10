@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Warseed Schematic — Geothermal Weapon System</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow-y: auto; }
+.sim-wrap {
+  max-width: 1000px; margin: 80px auto 40px; padding: 0 20px;
+}
+.page-title {
+  text-align: center; font-size: 18px; letter-spacing: 6px; color: var(--accent);
+}
+.page-sub {
+  text-align: center; font-size: 10px; letter-spacing: 3px;
+  color: var(--text-dim); margin: 6px 0 20px;
+}
+.canvas-wrap {
+  position: relative; border: 1px solid var(--border); border-radius: 4px;
+  overflow: hidden; background: #010408; height: 600px;
+}
+.canvas-wrap canvas { width: 100%; height: 100%; display: block; }
+.controls {
+  display: flex; gap: 12px; margin-top: 16px; align-items: center;
+  flex-wrap: wrap;
+}
+.ctrl-btn {
+  background: var(--panel); border: 1px solid var(--border); border-radius: 4px;
+  color: var(--accent); font-family: var(--mono); font-size: 11px;
+  padding: 8px 16px; cursor: pointer; letter-spacing: 2px;
+  transition: all 0.2s;
+}
+.ctrl-btn:hover { background: rgba(0,229,255,0.1); }
+.ctrl-btn.active { background: rgba(0,229,255,0.15); border-color: var(--accent); }
+.phase-label {
+  font-size: 10px; color: var(--text-dim); letter-spacing: 2px;
+  margin-left: auto; font-family: var(--mono);
+}
+.depth-bar {
+  position: absolute; right: 16px; top: 16px; bottom: 16px; width: 40px;
+  border: 1px solid var(--border); border-radius: 2px; background: rgba(0,0,0,0.5);
+  display: flex; flex-direction: column; justify-content: space-between;
+  padding: 4px 0; font-size: 8px; color: var(--text-dim); text-align: center;
+}
+.info-strip {
+  margin-top: 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+.info-card {
+  border: 1px solid var(--border); border-radius: 4px; padding: 12px;
+  background: var(--panel);
+}
+.info-card h3 {
+  font-size: 9px; letter-spacing: 3px; color: var(--accent);
+  margin: 0 0 8px;
+}
+.info-card p {
+  font-size: 10px; line-height: 1.7; color: var(--text-dim); margin: 0;
+}
+</style>
+</head>
+<body>
+<div class="sim-wrap">
+  <div class="page-title">WARSEED SCHEMATIC</div>
+  <div class="page-sub">GEOTHERMAL WEAPON SYSTEM &mdash; OCEAN FLOOR CROSS-SECTION</div>
+  <div class="canvas-wrap">
+    <canvas id="cv"></canvas>
+  </div>
+  <div class="controls">
+    <button class="ctrl-btn" id="btn-dormant" onclick="setPhase(0)">DORMANT</button>
+    <button class="ctrl-btn" id="btn-charge" onclick="setPhase(1)">CHARGE</button>
+    <button class="ctrl-btn" id="btn-deploy" onclick="setPhase(2)">DEPLOY</button>
+    <button class="ctrl-btn" id="btn-fire" onclick="setPhase(3)">FIRE</button>
+    <button class="ctrl-btn" id="btn-auto" onclick="toggleAuto()">AUTO ▶</button>
+    <div class="phase-label" id="phase-label">PHASE: DORMANT</div>
+  </div>
+  <div class="info-strip">
+    <div class="info-card">
+      <h3>SYSTEM</h3>
+      <p>Geothermal hub tethered to volcanic vent. Converts heat differential to stored energy over decades. Each hub controls ~1,200 hyperdiamond optical fibres delivering 100 kW coherent blue light.</p>
+    </div>
+    <div class="info-card">
+      <h3>DEPLOYMENT</h3>
+      <p>Fibres uncoil from hub spools, rising 4 km through ocean. Hyperdiamond withstands 400 atm pressure. Buoyancy-neutral until activation charge provides positive lift.</p>
+    </div>
+    <div class="info-card">
+      <h3>FIRING</h3>
+      <p>Coherent blue light (450 nm). Each fibre: 100 kW. 1,200 fibres per hub. Tens of thousands of hubs worldwide. Total output: terawatts of directed energy annihilating the Dyn fleet in orbit.</p>
+    </div>
+  </div>
+</div>
+<script>
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+let W, H, phase = 0, phaseT = 0, frame = 0, autoPlay = false, autoTimer = 0;
+const PHASE_NAMES = ['DORMANT', 'CHARGING', 'DEPLOYING', 'FIRING'];
+const PHASE_DURATIONS = [0, 3, 5, 999];
+
+function resize() {
+  const r = window.devicePixelRatio || 1;
+  const rect = cv.parentElement.getBoundingClientRect();
+  W = rect.width; H = rect.height;
+  cv.width = W * r; cv.height = H * r;
+  ctx.setTransform(r, 0, 0, r, 0, 0);
+}
+resize();
+window.addEventListener('resize', resize);
+
+function setPhase(p) {
+  phase = p; phaseT = 0;
+  document.querySelectorAll('.ctrl-btn').forEach((b, i) => {
+    if (i < 4) b.classList.toggle('active', i === p);
+  });
+  document.getElementById('phase-label').textContent = 'PHASE: ' + PHASE_NAMES[p];
+}
+
+function toggleAuto() {
+  autoPlay = !autoPlay;
+  document.getElementById('btn-auto').classList.toggle('active', autoPlay);
+  document.getElementById('btn-auto').textContent = autoPlay ? 'AUTO ⏸' : 'AUTO ▶';
+  if (autoPlay) { setPhase(0); autoTimer = 0; }
+}
+
+// Hub geometry
+const HUB_Y = 0.82;  // Hub position (proportion of canvas height)
+const VENT_Y = 0.95;  // Volcanic vent
+const SURFACE_Y = 0.08; // Ocean surface
+const NUM_FIBRES = 24;
+
+function drawOceanBg() {
+  // Deep ocean gradient
+  const grad = ctx.createLinearGradient(0, 0, 0, H);
+  grad.addColorStop(0, '#010a14');
+  grad.addColorStop(0.1, '#01080f');
+  grad.addColorStop(0.5, '#010508');
+  grad.addColorStop(1, '#020304');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, W, H);
+
+  // Depth markers
+  ctx.fillStyle = 'rgba(0,229,255,0.08)';
+  ctx.font = '9px monospace';
+  ctx.textAlign = 'right';
+  const depths = [0, 500, 1000, 2000, 3000, 4000];
+  depths.forEach(d => {
+    const y = SURFACE_Y * H + (d / 4000) * (VENT_Y - SURFACE_Y) * H;
+    ctx.fillStyle = 'rgba(0,229,255,0.05)';
+    ctx.fillRect(0, y, W, 1);
+    ctx.fillStyle = 'rgba(0,229,255,0.15)';
+    ctx.fillText(d + 'm', W - 8, y - 2);
+  });
+
+  // Surface line
+  ctx.fillStyle = 'rgba(0,229,255,0.12)';
+  ctx.fillRect(0, SURFACE_Y * H - 1, W, 2);
+  ctx.fillStyle = 'rgba(0,229,255,0.2)';
+  ctx.fillText('SURFACE', W - 8, SURFACE_Y * H - 6);
+
+  // Particulate / marine snow
+  for (let i = 0; i < 30; i++) {
+    const px = (i * 137 + frame * 0.1) % W;
+    const py = (i * 97 + frame * 0.3) % H;
+    ctx.fillStyle = `rgba(100,140,160,${0.03 + Math.sin(frame * 0.01 + i) * 0.02})`;
+    ctx.fillRect(px, py, 1, 1);
+  }
+}
+
+function drawVolcanicVent() {
+  const cx = W / 2;
+  const vy = VENT_Y * H;
+
+  // Vent glow
+  const grd = ctx.createRadialGradient(cx, vy, 0, cx, vy, 100);
+  grd.addColorStop(0, 'rgba(255,80,20,0.12)');
+  grd.addColorStop(0.5, 'rgba(255,40,10,0.05)');
+  grd.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = grd;
+  ctx.fillRect(cx - 100, vy - 60, 200, 120);
+
+  // Vent shape
+  ctx.beginPath();
+  ctx.moveTo(cx - 40, H);
+  ctx.lineTo(cx - 25, vy);
+  ctx.lineTo(cx + 25, vy);
+  ctx.lineTo(cx + 40, H);
+  ctx.fillStyle = '#1a0a04';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(255,80,20,0.3)';
+  ctx.stroke();
+
+  // Thermal shimmer
+  for (let i = 0; i < 5; i++) {
+    const sx = cx - 15 + Math.random() * 30;
+    const sy = vy - Math.random() * 30;
+    ctx.beginPath();
+    ctx.arc(sx, sy, 1 + Math.random() * 2, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,${60 + Math.random() * 40},0,${0.1 + Math.random() * 0.1})`;
+    ctx.fill();
+  }
+}
+
+function drawHub() {
+  const cx = W / 2;
+  const hy = HUB_Y * H;
+  const charging = phase >= 1;
+  const glow = charging ? 0.3 + Math.sin(frame * 0.05) * 0.1 : 0.05;
+
+  // Hub body
+  ctx.fillStyle = `rgba(0,229,255,${glow * 0.3})`;
+  ctx.strokeStyle = `rgba(0,229,255,${0.2 + glow})`;
+  ctx.lineWidth = 1.5;
+
+  // Main housing - octagonal
+  ctx.beginPath();
+  const hubR = 35;
+  for (let i = 0; i < 8; i++) {
+    const a = (i / 8) * Math.PI * 2 - Math.PI / 8;
+    const px = cx + Math.cos(a) * hubR;
+    const py = hy + Math.sin(a) * hubR * 0.5;
+    i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+  }
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  // Inner core
+  const coreGlow = charging ? `rgba(0,229,255,${0.3 + Math.sin(frame * 0.08) * 0.2})` : 'rgba(0,229,255,0.08)';
+  ctx.beginPath();
+  ctx.arc(cx, hy, 12, 0, Math.PI * 2);
+  ctx.fillStyle = coreGlow;
+  ctx.fill();
+
+  // Energy level indicator
+  if (charging) {
+    const energyLevel = Math.min(1, phaseT / 3);
+    ctx.fillStyle = `rgba(0,229,255,${0.4 * energyLevel})`;
+    ctx.fillRect(cx - 25, hy + 20, 50 * energyLevel, 3);
+    ctx.strokeStyle = 'rgba(0,229,255,0.2)';
+    ctx.strokeRect(cx - 25, hy + 20, 50, 3);
+  }
+
+  // Connection to vent
+  ctx.beginPath();
+  ctx.moveTo(cx - 5, hy + hubR * 0.5);
+  ctx.lineTo(cx - 8, VENT_Y * H);
+  ctx.moveTo(cx + 5, hy + hubR * 0.5);
+  ctx.lineTo(cx + 8, VENT_Y * H);
+  ctx.strokeStyle = 'rgba(255,80,20,0.15)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.lineWidth = 1;
+
+  // Hub label
+  ctx.fillStyle = 'rgba(0,229,255,0.25)';
+  ctx.font = '8px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('GEOTHERMAL HUB', cx, hy - hubR * 0.5 - 8);
+}
+
+function drawFibres() {
+  const cx = W / 2;
+  const hy = HUB_Y * H;
+  const sy = SURFACE_Y * H;
+  const deploying = phase >= 2;
+  const firing = phase >= 3;
+
+  const deployProgress = deploying ? Math.min(1, phaseT / 4) : 0;
+  const spread = 180;
+
+  for (let i = 0; i < NUM_FIBRES; i++) {
+    const t = i / (NUM_FIBRES - 1);
+    const offsetX = (t - 0.5) * spread;
+    const targetX = cx + offsetX;
+    const targetY = sy;
+
+    // Fibre line from hub to target
+    const fibreLen = deployProgress;
+    const endY = hy - (hy - targetY) * fibreLen;
+    const endX = cx + offsetX * fibreLen;
+
+    // Coiled state (at hub)
+    if (!deploying || deployProgress < 1) {
+      const coilX = cx + Math.cos(i * 0.8 + frame * 0.01) * (15 + i * 0.5);
+      const coilY = hy + Math.sin(i * 1.2 + frame * 0.01) * 8;
+      if (!deploying) {
+        ctx.beginPath();
+        ctx.arc(coilX, coilY, 2, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(0,229,255,0.1)';
+        ctx.fill();
+        return;
+      }
+    }
+
+    // Draw deployed fibre
+    ctx.beginPath();
+    ctx.moveTo(cx + offsetX * 0.1, hy - 15);
+
+    // Bezier curve for natural drape
+    const cpX = cx + offsetX * 0.5;
+    const cpY = (hy + endY) / 2 + Math.sin(frame * 0.02 + i) * 5;
+    ctx.quadraticCurveTo(cpX, cpY, endX, endY);
+
+    if (firing) {
+      // Bright blue beam
+      ctx.strokeStyle = `rgba(80,180,255,${0.4 + Math.sin(frame * 0.1 + i * 0.3) * 0.2})`;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Glow
+      ctx.strokeStyle = `rgba(80,180,255,${0.1 + Math.sin(frame * 0.1 + i * 0.3) * 0.05})`;
+      ctx.lineWidth = 6;
+      ctx.stroke();
+
+      // Beam extends above surface
+      const beamX = targetX;
+      ctx.beginPath();
+      ctx.moveTo(beamX, sy);
+      ctx.lineTo(beamX + (Math.random() - 0.5) * 2, -10);
+      ctx.strokeStyle = `rgba(100,200,255,${0.3 + Math.random() * 0.2})`;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    } else {
+      ctx.strokeStyle = `rgba(0,229,255,${0.15 * deployProgress})`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+  }
+  ctx.lineWidth = 1;
+}
+
+function drawFiringEffects() {
+  if (phase < 3) return;
+  const sy = SURFACE_Y * H;
+
+  // Surface disruption
+  ctx.fillStyle = `rgba(100,200,255,${0.05 + Math.sin(frame * 0.05) * 0.03})`;
+  ctx.fillRect(0, sy - 10, W, 20);
+
+  // Plasma bloom at surface
+  for (let i = 0; i < 6; i++) {
+    const bx = W * 0.2 + Math.random() * W * 0.6;
+    const by = sy + Math.random() * 10 - 5;
+    const br = 3 + Math.random() * 8;
+    const grd = ctx.createRadialGradient(bx, by, 0, bx, by, br);
+    grd.addColorStop(0, 'rgba(200,230,255,0.15)');
+    grd.addColorStop(1, 'rgba(0,100,200,0)');
+    ctx.fillStyle = grd;
+    ctx.beginPath();
+    ctx.arc(bx, by, br, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // "SKY" label above surface
+  ctx.fillStyle = 'rgba(100,200,255,0.15)';
+  ctx.font = '8px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('BEAMS → DYN FLEET (35,786 KM)', W / 2, sy - 20);
+
+  // Status text
+  ctx.fillStyle = 'rgba(0,229,255,0.4)';
+  ctx.font = '10px monospace';
+  ctx.fillText('WARSEEDS ACTIVE — ALL HUBS FIRING', W / 2, H - 20);
+}
+
+function draw() {
+  frame++;
+  phaseT += 1/60;
+
+  // Auto-play progression
+  if (autoPlay) {
+    autoTimer += 1/60;
+    if (phase === 0 && autoTimer > 2) { setPhase(1); autoTimer = 0; }
+    else if (phase === 1 && autoTimer > 3) { setPhase(2); autoTimer = 0; }
+    else if (phase === 2 && autoTimer > 5) { setPhase(3); autoTimer = 0; }
+  }
+
+  ctx.clearRect(0, 0, W, H);
+  drawOceanBg();
+  drawVolcanicVent();
+  drawFibres();
+  drawHub();
+  drawFiringEffects();
+
+  requestAnimationFrame(draw);
+}
+
+setPhase(0);
+draw();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

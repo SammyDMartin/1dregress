@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Threshold Breach — 2909 CE</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow-y: auto; }
+.sim-wrap { max-width: 1000px; margin: 80px auto 40px; padding: 0 20px; }
+.page-title { text-align: center; font-size: 18px; letter-spacing: 6px; color: var(--accent); }
+.page-sub { text-align: center; font-size: 10px; letter-spacing: 3px; color: var(--text-dim); margin: 6px 0 20px; }
+.canvas-wrap {
+  position: relative; border: 1px solid var(--border); border-radius: 4px;
+  overflow: hidden; background: #010408; height: 550px;
+}
+.canvas-wrap canvas { width: 100%; height: 100%; display: block; }
+.hud-overlay {
+  position: absolute; top: 12px; left: 12px; font-family: var(--mono);
+  font-size: 10px; color: var(--text-dim); line-height: 1.8;
+  pointer-events: none;
+}
+.hud-overlay .bright { color: var(--accent); }
+.hud-overlay .warn { color: var(--accent2); }
+.sitrep {
+  position: absolute; bottom: 12px; left: 12px; right: 12px;
+  font-family: var(--mono); font-size: 11px; color: var(--text-mid);
+  line-height: 1.6; pointer-events: none; text-align: center;
+}
+.controls { display: flex; gap: 12px; margin-top: 16px; align-items: center; flex-wrap: wrap; }
+.ctrl-btn {
+  background: var(--panel); border: 1px solid var(--border); border-radius: 4px;
+  color: var(--accent); font-family: var(--mono); font-size: 11px;
+  padding: 8px 16px; cursor: pointer; letter-spacing: 2px; transition: all 0.2s;
+}
+.ctrl-btn:hover { background: rgba(0,229,255,0.1); }
+.ctrl-btn.active { background: rgba(0,229,255,0.15); border-color: var(--accent); }
+.phase-label { font-size: 10px; color: var(--text-dim); letter-spacing: 2px; margin-left: auto; font-family: var(--mono); }
+</style>
+</head>
+<body>
+<div class="sim-wrap">
+  <div class="page-title">THRESHOLD BREACH</div>
+  <div class="page-sub">THE ATBARAH INCIDENT &mdash; INTERSTICE CHOKEPOINT, 2909 CE</div>
+  <div class="canvas-wrap">
+    <canvas id="cv"></canvas>
+    <div class="hud-overlay" id="hud"></div>
+    <div class="sitrep" id="sitrep"></div>
+  </div>
+  <div class="controls">
+    <button class="ctrl-btn" onclick="restart()">RESTART</button>
+    <button class="ctrl-btn" id="btn-pause" onclick="togglePause()">PAUSE</button>
+    <div class="phase-label" id="phase-label">PHASE 1: APPROACH</div>
+  </div>
+</div>
+<script>
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const hudEl = document.getElementById('hud');
+const sitrepEl = document.getElementById('sitrep');
+let W, H, frame = 0, paused = false;
+let time = 0; // seconds of simulation
+
+const PHASES = [
+  { name: 'APPROACH', start: 0, end: 8,
+    sitrep: 'Kosmohansa freighter ATBARAH on standard transit vector. Striver operatives at helm. Union First Fleet — 100 vessels — holds defensive formation at the interstice.' },
+  { name: 'BREACH', start: 8, end: 14,
+    sitrep: 'ATBARAH accelerates to ramming speed. Impact with interstice defence perimeter. ~200,000 casualties on Arco side. The wormhole flares.' },
+  { name: 'EMERGENCE', start: 14, end: 22,
+    sitrep: 'Four Arco warships transit the interstice. Three Incisors. One Annihilator-class. Weapons hot. They open fire immediately.' },
+  { name: 'DEVASTATION', start: 22, end: 35,
+    sitrep: 'Arco fleet engages Union First Fleet. Diamond Dusters, x-ray lasers, exodrone swarms. 97 of 100 Union vessels destroyed. USS Isidore begins suicide 30G burn.' },
+  { name: 'AFTERMATH', start: 35, end: 999,
+    sitrep: 'USS Isidore rams Incisor-3 at 30G. Captain Ngoni KIA. Ensign Hansun sole survivor. Arco sends Dyn officer Honed Aspect for "diplomacy." The universe will never be the same.' }
+];
+
+// Ships
+let atbarah = { x: 0.1, y: 0.5, vx: 0.003, alive: true };
+let interstice = { x: 0.55, y: 0.5, radius: 30, flare: 0 };
+let arcoShips = [];
+let unionFleet = [];
+let debris = [];
+let beams = [];
+let isidore = null;
+
+function resize() {
+  const r = window.devicePixelRatio || 1;
+  const rect = cv.parentElement.getBoundingClientRect();
+  W = rect.width; H = rect.height;
+  cv.width = W * r; cv.height = H * r;
+  ctx.setTransform(r, 0, 0, r, 0, 0);
+}
+resize();
+window.addEventListener('resize', resize);
+
+function initSim() {
+  time = 0; frame = 0;
+  atbarah = { x: 0.1, y: 0.5, vx: 0.003, alive: true };
+  interstice = { x: 0.55, y: 0.5, radius: 30, flare: 0 };
+  arcoShips = [];
+  debris = [];
+  beams = [];
+  isidore = null;
+
+  // Union fleet - 100 ships in formation
+  unionFleet = [];
+  const seed = 42;
+  for (let i = 0; i < 100; i++) {
+    const row = Math.floor(i / 10);
+    const col = i % 10;
+    unionFleet.push({
+      x: 0.3 + col * 0.022,
+      y: 0.2 + row * 0.065,
+      alive: true,
+      deathTime: -1,
+      isIsidore: i === 47
+    });
+  }
+}
+
+function getPhase() {
+  for (let i = PHASES.length - 1; i >= 0; i--) {
+    if (time >= PHASES[i].start) return { ...PHASES[i], index: i };
+  }
+  return { ...PHASES[0], index: 0 };
+}
+
+function drawStarfield() {
+  for (let i = 0; i < 80; i++) {
+    const sx = (i * 137.5 + frame * 0.05) % W;
+    const sy = (i * 97.3) % H;
+    const b = 0.15 + Math.sin(frame * 0.01 + i * 2) * 0.1;
+    ctx.fillStyle = `rgba(255,255,255,${b})`;
+    ctx.fillRect(sx, sy, 1, 1);
+  }
+}
+
+function drawInterstice() {
+  const ix = interstice.x * W;
+  const iy = interstice.y * H;
+  const r = interstice.radius + interstice.flare;
+
+  // Outer glow
+  const grd = ctx.createRadialGradient(ix, iy, r * 0.2, ix, iy, r * 2.5);
+  grd.addColorStop(0, `rgba(120,80,255,${0.15 + interstice.flare * 0.005})`);
+  grd.addColorStop(0.5, `rgba(80,40,200,${0.05 + interstice.flare * 0.003})`);
+  grd.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = grd;
+  ctx.beginPath();
+  ctx.arc(ix, iy, r * 2.5, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Portal ring
+  ctx.beginPath();
+  ctx.arc(ix, iy, r, 0, Math.PI * 2);
+  ctx.strokeStyle = `rgba(140,100,255,${0.4 + Math.sin(frame * 0.03) * 0.1 + interstice.flare * 0.01})`;
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Inner void
+  const inner = ctx.createRadialGradient(ix, iy, 0, ix, iy, r * 0.9);
+  inner.addColorStop(0, 'rgba(20,0,40,0.9)');
+  inner.addColorStop(1, 'rgba(60,20,120,0.3)');
+  ctx.fillStyle = inner;
+  ctx.beginPath();
+  ctx.arc(ix, iy, r * 0.9, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Rotating energy arcs
+  for (let i = 0; i < 4; i++) {
+    const a = frame * 0.02 + i * Math.PI / 2;
+    ctx.beginPath();
+    ctx.arc(ix, iy, r * 0.95, a, a + 0.5);
+    ctx.strokeStyle = `rgba(180,140,255,${0.2 + Math.sin(frame * 0.05 + i) * 0.1})`;
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  }
+  ctx.lineWidth = 1;
+}
+
+function drawShipTriangle(x, y, size, color, rotation) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rotation || 0);
+  ctx.beginPath();
+  ctx.moveTo(size, 0);
+  ctx.lineTo(-size * 0.6, size * 0.4);
+  ctx.lineTo(-size * 0.6, -size * 0.4);
+  ctx.closePath();
+  ctx.fillStyle = color;
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawAtbarah() {
+  if (!atbarah.alive) return;
+  const ax = atbarah.x * W;
+  const ay = atbarah.y * H;
+
+  // Engine glow
+  const eng = ctx.createRadialGradient(ax - 8, ay, 0, ax - 8, ay, 12);
+  eng.addColorStop(0, 'rgba(255,200,100,0.3)');
+  eng.addColorStop(1, 'rgba(255,100,50,0)');
+  ctx.fillStyle = eng;
+  ctx.beginPath();
+  ctx.arc(ax - 8, ay, 12, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Freighter body (larger, boxy)
+  ctx.fillStyle = 'rgba(200,180,150,0.6)';
+  ctx.fillRect(ax - 10, ay - 4, 20, 8);
+  ctx.fillStyle = 'rgba(255,200,100,0.3)';
+  ctx.fillRect(ax - 12, ay - 2, 4, 4);
+
+  // Label
+  ctx.fillStyle = 'rgba(255,200,100,0.3)';
+  ctx.font = '8px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('ATBARAH', ax, ay - 10);
+}
+
+function drawUnionFleet() {
+  unionFleet.forEach(s => {
+    if (!s.alive) return;
+    const sx = s.x * W;
+    const sy = s.y * H;
+    const col = s.isIsidore ? 'rgba(0,229,255,0.7)' : 'rgba(0,180,120,0.4)';
+    drawShipTriangle(sx, sy, 4, col, Math.PI);
+    if (s.isIsidore && time > 22) {
+      ctx.fillStyle = 'rgba(0,229,255,0.3)';
+      ctx.font = '7px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('ISIDORE', sx, sy - 8);
+    }
+  });
+}
+
+function drawArcoShips() {
+  arcoShips.forEach(s => {
+    const sx = s.x * W;
+    const sy = s.y * H;
+    drawShipTriangle(sx, sy, 8, s.isAnnihilator ? 'rgba(255,107,53,0.8)' : 'rgba(255,60,40,0.6)', 0);
+    // Engine flare
+    const eng = ctx.createRadialGradient(sx - 10, sy, 0, sx - 10, sy, 15);
+    eng.addColorStop(0, 'rgba(255,100,50,0.2)');
+    eng.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = eng;
+    ctx.beginPath();
+    ctx.arc(sx - 10, sy, 15, 0, Math.PI * 2);
+    ctx.fill();
+  });
+}
+
+function drawBeams() {
+  beams = beams.filter(b => b.life > 0);
+  beams.forEach(b => {
+    ctx.beginPath();
+    ctx.moveTo(b.x1 * W, b.y1 * H);
+    ctx.lineTo(b.x2 * W, b.y2 * H);
+    ctx.strokeStyle = b.color.replace(')', `,${b.life})`).replace('rgba', 'rgba').replace('rgb(', 'rgba(');
+    ctx.strokeStyle = `rgba(${b.r},${b.g},${b.b},${b.life})`;
+    ctx.lineWidth = b.width || 1;
+    ctx.stroke();
+    b.life -= 0.02;
+  });
+  ctx.lineWidth = 1;
+}
+
+function drawDebris() {
+  debris.forEach(d => {
+    d.x += d.vx;
+    d.y += d.vy;
+    d.life -= 0.008;
+    if (d.life > 0) {
+      ctx.fillStyle = `rgba(${d.r},${d.g},${d.b},${d.life})`;
+      ctx.fillRect(d.x * W, d.y * H, d.size, d.size);
+    }
+  });
+  debris = debris.filter(d => d.life > 0);
+}
+
+function spawnExplosion(x, y, count, r, g, b) {
+  for (let i = 0; i < count; i++) {
+    const a = Math.random() * Math.PI * 2;
+    const v = 0.001 + Math.random() * 0.004;
+    debris.push({
+      x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v,
+      life: 0.5 + Math.random() * 0.5, size: 1 + Math.random() * 2,
+      r, g, b
+    });
+  }
+}
+
+function simulate() {
+  const ph = getPhase();
+
+  // Phase 0: Atbarah approaches
+  if (ph.index === 0) {
+    atbarah.x += atbarah.vx;
+    if (time > 5) atbarah.vx = 0.006; // accelerates
+  }
+
+  // Phase 1: Breach
+  if (ph.index === 1) {
+    if (atbarah.alive) {
+      atbarah.x += 0.012;
+      if (atbarah.x > interstice.x - 0.02) {
+        atbarah.alive = false;
+        interstice.flare = 40;
+        spawnExplosion(interstice.x, interstice.y, 60, 255, 200, 100);
+        // Kill nearby Union ships
+        unionFleet.forEach(s => {
+          const dx = s.x - interstice.x;
+          const dy = s.y - interstice.y;
+          if (Math.sqrt(dx*dx + dy*dy) < 0.12 && Math.random() < 0.5) {
+            s.alive = false;
+            spawnExplosion(s.x, s.y, 10, 0, 180, 120);
+          }
+        });
+      }
+    }
+    interstice.flare = Math.max(0, interstice.flare - 0.3);
+  }
+
+  // Phase 2: Arco ships emerge
+  if (ph.index === 2) {
+    interstice.flare = Math.max(0, interstice.flare - 0.1);
+    const localT = time - ph.start;
+    if (arcoShips.length === 0 && localT > 1) {
+      const positions = [
+        { x: interstice.x + 0.03, y: 0.4, isAnnihilator: false },
+        { x: interstice.x + 0.03, y: 0.5, isAnnihilator: true },
+        { x: interstice.x + 0.03, y: 0.6, isAnnihilator: false },
+      ];
+      positions.forEach(p => arcoShips.push({ ...p }));
+      interstice.flare = 25;
+    }
+    if (arcoShips.length === 3 && localT > 3) {
+      arcoShips.push({ x: interstice.x + 0.03, y: 0.35, isAnnihilator: false });
+      interstice.flare = 15;
+    }
+    // Ships move forward
+    arcoShips.forEach(s => { s.x += 0.002; });
+  }
+
+  // Phase 3: Devastation
+  if (ph.index === 3) {
+    arcoShips.forEach(s => { s.x = Math.min(s.x + 0.001, 0.75); });
+
+    // Fire beams at Union ships
+    if (frame % 8 === 0) {
+      const aliveTargets = unionFleet.filter(s => s.alive && !s.isIsidore);
+      if (aliveTargets.length > 0 && arcoShips.length > 0) {
+        const target = aliveTargets[Math.floor(Math.random() * aliveTargets.length)];
+        const shooter = arcoShips[Math.floor(Math.random() * arcoShips.length)];
+        beams.push({
+          x1: shooter.x, y1: shooter.y, x2: target.x, y2: target.y,
+          r: 255, g: 80, b: 40, life: 0.8, width: 1.5
+        });
+        // Destroy target
+        if (Math.random() < 0.3) {
+          target.alive = false;
+          spawnExplosion(target.x, target.y, 15, 0, 200, 120);
+        }
+      }
+    }
+
+    // Isidore suicide run (late in phase)
+    const localT = time - ph.start;
+    if (localT > 8 && !isidore) {
+      const iso = unionFleet.find(s => s.isIsidore);
+      if (iso && iso.alive) {
+        isidore = iso;
+      }
+    }
+    if (isidore && isidore.alive) {
+      isidore.x += 0.008;
+      isidore.y += (arcoShips[3] ? arcoShips[3].y - isidore.y : 0) * 0.02;
+      // Check collision with Arco ship
+      if (arcoShips.length >= 4) {
+        const target = arcoShips[3];
+        const dx = isidore.x - target.x;
+        const dy = isidore.y - target.y;
+        if (Math.sqrt(dx*dx + dy*dy) < 0.02) {
+          isidore.alive = false;
+          arcoShips.splice(3, 1);
+          spawnExplosion(isidore.x, isidore.y, 80, 200, 220, 255);
+          spawnExplosion(isidore.x, isidore.y, 40, 255, 100, 50);
+        }
+      }
+    }
+  }
+
+  // Phase 4: Aftermath - everything settles
+  if (ph.index === 4) {
+    // Kill remaining non-Isidore Union ships
+    unionFleet.forEach(s => { if (s.alive && !s.isIsidore) { s.alive = false; } });
+  }
+}
+
+function updateHud() {
+  const ph = getPhase();
+  const alive = unionFleet.filter(s => s.alive).length;
+  const arcoCount = arcoShips.length;
+  let html = `<span class="bright">T+${time.toFixed(1)}s</span><br>`;
+  html += `UNION FLEET: <span class="${alive < 50 ? 'warn' : 'bright'}">${alive}/100</span><br>`;
+  html += `ARCO SHIPS: <span class="warn">${arcoCount}</span><br>`;
+  html += `INTERSTICE: <span class="bright">${interstice.flare > 5 ? 'DISRUPTED' : 'STABLE'}</span>`;
+  hudEl.innerHTML = html;
+  sitrepEl.textContent = ph.sitrep;
+  document.getElementById('phase-label').textContent = `PHASE ${ph.index + 1}: ${ph.name}`;
+}
+
+function draw() {
+  if (!paused) {
+    frame++;
+    time += 1/60;
+    simulate();
+  }
+
+  ctx.fillStyle = '#010408';
+  ctx.fillRect(0, 0, W, H);
+  drawStarfield();
+  drawInterstice();
+  drawUnionFleet();
+  drawAtbarah();
+  drawArcoShips();
+  drawBeams();
+  drawDebris();
+  updateHud();
+
+  requestAnimationFrame(draw);
+}
+
+function restart() { initSim(); }
+function togglePause() {
+  paused = !paused;
+  document.getElementById('btn-pause').textContent = paused ? 'PLAY' : 'PAUSE';
+  document.getElementById('btn-pause').classList.toggle('active', paused);
+}
+
+initSim();
+draw();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

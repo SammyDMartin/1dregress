@@ -82,6 +82,11 @@ Toggle using the theme button in the nav bar.
 | **Interstice Network** | `interstice-map.html` | 3D canvas visualisation of the wormhole network |
 | **Diamond Duster** | `diamond-duster.html` | Animated weapon firing sequence with HUD telemetry |
 | **Liberation Day** | `liberation.html` | Animated warseed activation sequence from Ascent (2479 CE) |
+| **Ascensor** | `ascensor.html` | Interactive orbital tether cross-section, surface to Dyn firmament |
+| **Warseed Schematic** | `warseed.html` | Ocean floor weapon system cutaway with activation sequence |
+| **Threshold Breach** | `threshold-breach.html` | Animated 2909 CE interstice breach and fleet engagement |
+| **A-Sphere Cockpit** | `asphere-combat.html` | Interactive combat HUD — pilot an A-sphere against Apathy targets |
+| **Apathy Approach** | `apathy-approach.html` | Long-range sensor display tracking an approaching berserker machine |
 
 ### In-Universe Documents
 
