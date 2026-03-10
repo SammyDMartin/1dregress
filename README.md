@@ -55,7 +55,8 @@ Toggle using the theme button in the nav bar.
 | **Stories** | `stories.html` | Chronological index of all fiction with attribution |
 | **Reader** | `reader.html` | Lightweight markdown/text reader for source texts |
 | **Drafts** | `drafts.html` | Draft browser for second-draft manuscripts |
-| **MSD** | `msd.html` | Interactive 3D Master Systems Display for the Annihilator-class warship |
+| **MSD (Annihilator)** | `msd.html` | Interactive 3D MSD for the Annihilator-class IP Assault Vehicle |
+| **MSD (D-Sphere)** | `msd-dsphere.html` | Interactive 3D MSD for the Ultimate Height-class Defence Sphere |
 | **Battle** | `battle.html` | Phase-by-phase animated tactical reconstruction of the Battle of the Interstice |
 | **Science** | `science.html` | Science Compendium — real physics behind the fictional technology |
 | **Timeline** | `timeline.html` | Interactive chronology from Deep Antiquity to the Apathy War |

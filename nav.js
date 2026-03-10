@@ -39,6 +39,7 @@
     { href: 'wasteland-crawler.html', label: 'WASTELAND' },
     { href: 'utilitaria-escape.html', label: 'ESCAPE' },
     { href: 'bridge-tactical.html', label: 'BRIDGE' },
+    { href: 'msd-dsphere.html', label: 'D-SPHERE' },
   ];
 
   const current = location.pathname.split('/').pop() || 'index.html';
