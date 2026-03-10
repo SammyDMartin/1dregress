@@ -72,6 +72,7 @@ Toggle using the theme button in the nav bar.
 | **Emissary Chat** | `utilitaria-chat.html` | Interactive diplomatic channel chat with the Utilitaria |
 | **AI Analysis** | `ai-analysis.html` | Comparative analysis of Facilitator vs Utilitaria vs Apathy AI systems |
 | **Anthropic Trap** | `anthropic-trap.html` | Interactive exploration of the Apathy's anthropic trap argument |
+| **Insights** | `insights-report.html` | Claude Code usage analytics and workflow insights (standalone, not themed) |
 
 ### Visualisations
 
