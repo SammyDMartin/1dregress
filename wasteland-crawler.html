@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wasteland Traverse — Occupied Earth</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow: hidden; margin: 0; }
+.canvas-full { position: fixed; inset: 0; z-index: 1; }
+.canvas-full canvas { width: 100%; height: 100%; display: block; }
+.overlay {
+  position: fixed; inset: 0; z-index: 2; pointer-events: none;
+  display: flex; flex-direction: column; justify-content: space-between;
+  padding: 80px 24px 24px;
+}
+.top-hud { font-family: var(--mono); font-size: 10px; color: var(--text-dim); line-height: 2; }
+.top-hud .bright { color: var(--accent); }
+.top-hud .warn { color: #ff6b35; }
+.bottom-text {
+  text-align: center; font-family: var(--mono); font-size: 11px;
+  color: var(--text-mid); line-height: 1.8; max-width: 600px;
+  margin: 0 auto;
+}
+.bottom-text .quote { font-style: italic; color: var(--text-dim); font-size: 10px; }
+.controls {
+  position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+  z-index: 3; display: flex; gap: 12px;
+}
+.ctrl-btn {
+  background: var(--panel); border: 1px solid var(--border); border-radius: 4px;
+  color: var(--accent); font-family: var(--mono); font-size: 11px;
+  padding: 8px 16px; cursor: pointer; letter-spacing: 2px; transition: all 0.2s;
+  pointer-events: all;
+}
+.ctrl-btn:hover { background: rgba(0,229,255,0.1); }
+</style>
+</head>
+<body>
+<div class="canvas-full"><canvas id="cv"></canvas></div>
+<div class="overlay">
+  <div class="top-hud" id="hud"></div>
+  <div class="bottom-text" id="narration"></div>
+</div>
+<div class="controls">
+  <button class="ctrl-btn" onclick="restart()">RESTART</button>
+</div>
+<script>
+var cv = document.getElementById('cv');
+var ctx = cv.getContext('2d');
+var hudEl = document.getElementById('hud');
+var narrEl = document.getElementById('narration');
+var W, H, frame = 0, time = 0;
+
+var NARRATIONS = [
+  { t: 0, text: 'Departing Conurbation Seven. The wasteland stretches ahead &mdash; 400 kilometres of alien jungle. The crawler lurches forward on its treads.<br><span class="quote">"Between the conurbations: a hostile alien jungle. False life."</span>' },
+  { t: 0.15, text: 'The canopy closes overhead. Strange bioluminescent growths pulse in the undergrowth. The air outside is toxic &mdash; a Dyn atmosphere.<br><span class="quote">"Plant-animal hybrids with clicking fauna."</span>' },
+  { t: 0.3, text: 'Clicking sounds on the hull. The fauna are investigating. Spiny creatures with too many legs, glowing faintly green, testing the crawler\'s armour.<br><span class="quote">"False life &mdash; alien biology replacing everything native to Earth."</span>' },
+  { t: 0.5, text: 'The Pitchfork rises above the canopy. A kilometre-tall alien structure, swaying like kelp in an invisible current. Its shadow falls across the crawler.<br><span class="quote">"The Pitchfork sways. Massive crawlers are the only safe transit."</span>' },
+  { t: 0.7, text: 'Deeper now. The growths are denser. Tendrils brush the viewport. Something large moves through the canopy &mdash; too large. The crawler does not slow.<br><span class="quote">"165 years of occupation. Earth remade in the Dyn image."</span>' },
+  { t: 0.88, text: 'Lights ahead. The dome of Conurbation One materialises through the alien haze. The wasteland is behind you. For now.<br><span class="quote">"The conurbations were all that remained of human civilisation."</span>' },
+];
+
+function resize() {
+  var r = window.devicePixelRatio || 1;
+  W = window.innerWidth; H = window.innerHeight;
+  cv.width = W * r; cv.height = H * r;
+  ctx.setTransform(r, 0, 0, r, 0, 0);
+}
+resize();
+window.addEventListener('resize', resize);
+
+// Parallax layers of alien vegetation
+var plants = [];
+for (var i = 0; i < 80; i++) {
+  plants.push({
+    x: Math.random() * 3000,
+    depth: 0.2 + Math.random() * 0.8,
+    height: 30 + Math.random() * 200,
+    width: 5 + Math.random() * 15,
+    type: Math.floor(Math.random() * 4),
+    glow: Math.random() * 0.4,
+    sway: Math.random() * 2 + 1,
+    hue: Math.random() > 0.6 ? 120 + Math.random() * 40 : 200 + Math.random() * 60
+  });
+}
+
+// Floating spores
+var spores = [];
+for (var i = 0; i < 60; i++) {
+  spores.push({
+    x: Math.random() * W * 2,
+    y: Math.random() * H,
+    size: 1 + Math.random() * 3,
+    speed: 0.2 + Math.random() * 0.5,
+    drift: Math.random() * Math.PI * 2,
+    alpha: 0.1 + Math.random() * 0.3
+  });
+}
+
+// Clicking creatures
+var creatures = [];
+for (var i = 0; i < 12; i++) {
+  creatures.push({
+    x: Math.random() * 2000,
+    y: H * 0.6 + Math.random() * H * 0.25,
+    size: 3 + Math.random() * 6,
+    speed: 0.5 + Math.random() * 2,
+    legs: 4 + Math.floor(Math.random() * 6),
+    phase: Math.random() * Math.PI * 2
+  });
+}
+
+function drawSky(progress) {
+  // Oppressive alien sky - greenish-brown haze
+  var skyGrd = ctx.createLinearGradient(0, 0, 0, H * 0.5);
+  var hazeDensity = 0.6 + Math.sin(progress * Math.PI) * 0.2;
+  skyGrd.addColorStop(0, 'rgb(' + Math.round(15 + hazeDensity * 10) + ',' + Math.round(25 + hazeDensity * 15) + ',' + Math.round(10 + hazeDensity * 5) + ')');
+  skyGrd.addColorStop(1, 'rgb(8,15,8)');
+  ctx.fillStyle = skyGrd;
+  ctx.fillRect(0, 0, W, H * 0.5);
+}
+
+function drawGround() {
+  // Ground - dark organic matter
+  var grdG = ctx.createLinearGradient(0, H * 0.7, 0, H);
+  grdG.addColorStop(0, '#0a1508');
+  grdG.addColorStop(1, '#060d04');
+  ctx.fillStyle = grdG;
+  ctx.fillRect(0, H * 0.65, W, H * 0.35);
+}
+
+function drawPitchfork(progress) {
+  if (progress < 0.35 || progress > 0.7) return;
+  var visibility = progress < 0.45 ? (progress - 0.35) / 0.1 : progress > 0.6 ? 1 - (progress - 0.6) / 0.1 : 1;
+  var sway = Math.sin(frame * 0.005) * 15;
+
+  // Massive structure in background
+  var baseX = W * 0.7 + sway;
+  var baseY = H * 0.65;
+  var tipY = H * 0.05;
+
+  ctx.save();
+  ctx.globalAlpha = visibility * 0.4;
+
+  // Main trunk
+  ctx.strokeStyle = '#1a3010';
+  ctx.lineWidth = 8;
+  ctx.beginPath();
+  ctx.moveTo(baseX, baseY);
+  ctx.quadraticCurveTo(baseX + sway * 2, (baseY + tipY) / 2, baseX + sway * 3, tipY);
+  ctx.stroke();
+
+  // Fork prongs at top
+  for (var i = -2; i <= 2; i++) {
+    ctx.strokeStyle = 'rgba(30,60,20,' + (0.3 + Math.abs(i) * 0.1) + ')';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(baseX + sway * 3, tipY + 30);
+    ctx.quadraticCurveTo(baseX + sway * 3 + i * 30, tipY - 20, baseX + sway * 3 + i * 60, tipY - 40);
+    ctx.stroke();
+  }
+
+  // Faint bioluminescent glow
+  var glowGrd = ctx.createRadialGradient(baseX + sway * 2, H * 0.3, 0, baseX + sway * 2, H * 0.3, 100);
+  glowGrd.addColorStop(0, 'rgba(100,200,60,0.05)');
+  glowGrd.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = glowGrd;
+  ctx.fillRect(baseX - 100, H * 0.1, 300, H * 0.5);
+
+  ctx.restore();
+}
+
+function drawVegetation(progress) {
+  var scrollX = progress * 2000;
+
+  plants.forEach(function(p) {
+    var screenX = ((p.x - scrollX * p.depth) % (W * 1.5));
+    if (screenX < -50) screenX += W * 1.5 + 100;
+    var baseY = H * (0.5 + p.depth * 0.2);
+    var sway = Math.sin(frame * 0.01 * p.sway + p.x) * (5 + p.height * 0.03);
+
+    ctx.save();
+    ctx.globalAlpha = 0.3 + p.depth * 0.5;
+
+    // Trunk/stem
+    ctx.strokeStyle = 'hsl(' + p.hue + ', 40%, ' + (10 + p.depth * 10) + '%)';
+    ctx.lineWidth = p.width * 0.3;
+    ctx.beginPath();
+    ctx.moveTo(screenX, baseY);
+    ctx.quadraticCurveTo(screenX + sway * 0.5, baseY - p.height * 0.5, screenX + sway, baseY - p.height);
+    ctx.stroke();
+
+    // Canopy/growth
+    if (p.type === 0) {
+      // Bulbous growth
+      var glowAlpha = 0.1 + Math.sin(frame * 0.02 + p.x) * 0.05;
+      ctx.fillStyle = 'hsla(' + p.hue + ', 60%, 25%, ' + glowAlpha + ')';
+      ctx.beginPath();
+      ctx.arc(screenX + sway, baseY - p.height, p.width * 2, 0, Math.PI * 2);
+      ctx.fill();
+      if (p.glow > 0.2) {
+        ctx.fillStyle = 'hsla(' + p.hue + ', 80%, 50%, ' + (p.glow * 0.2 * (0.5 + Math.sin(frame * 0.03 + p.x) * 0.5)) + ')';
+        ctx.beginPath();
+        ctx.arc(screenX + sway, baseY - p.height, p.width, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    } else if (p.type === 1) {
+      // Tendril cluster
+      for (var t = 0; t < 5; t++) {
+        var ta = (t / 5) * Math.PI - Math.PI / 2;
+        var tlen = p.width * 3;
+        ctx.strokeStyle = 'hsla(' + p.hue + ', 50%, 20%, 0.3)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(screenX + sway, baseY - p.height);
+        ctx.lineTo(screenX + sway + Math.cos(ta + frame * 0.005) * tlen, baseY - p.height + Math.sin(ta) * tlen);
+        ctx.stroke();
+      }
+    } else if (p.type === 2) {
+      // Spore pod
+      ctx.fillStyle = 'hsla(' + (p.hue + 30) + ', 40%, 15%, 0.4)';
+      ctx.beginPath();
+      ctx.ellipse(screenX + sway, baseY - p.height, p.width * 1.5, p.width * 2.5, 0, 0, Math.PI * 2);
+      ctx.fill();
+    } else {
+      // Flat canopy
+      ctx.fillStyle = 'hsla(' + p.hue + ', 30%, 12%, 0.4)';
+      ctx.beginPath();
+      ctx.ellipse(screenX + sway, baseY - p.height, p.width * 4, p.width, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.restore();
+  });
+}
+
+function drawSpores() {
+  spores.forEach(function(s) {
+    s.x -= s.speed;
+    s.y += Math.sin(frame * 0.01 + s.drift) * 0.3;
+    if (s.x < -10) { s.x = W + 10; s.y = Math.random() * H * 0.7; }
+    var pulse = 0.5 + Math.sin(frame * 0.03 + s.drift) * 0.5;
+    ctx.fillStyle = 'rgba(120,200,80,' + (s.alpha * pulse) + ')';
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+    ctx.fill();
+  });
+}
+
+function drawCreatures(progress) {
+  if (progress < 0.15 || progress > 0.85) return;
+  var scrollX = progress * 2000;
+
+  creatures.forEach(function(c) {
+    var screenX = ((c.x - scrollX * 0.5) % (W + 200));
+    if (screenX < -20) screenX += W + 200;
+
+    // Body
+    ctx.fillStyle = 'rgba(60,120,40,0.5)';
+    ctx.beginPath();
+    ctx.ellipse(screenX, c.y, c.size * 2, c.size, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Legs
+    for (var l = 0; l < c.legs; l++) {
+      var legAngle = (l / c.legs) * Math.PI + Math.PI / 2;
+      var legPhase = Math.sin(frame * 0.1 * c.speed + l * 0.5 + c.phase) * 3;
+      ctx.strokeStyle = 'rgba(80,140,50,0.4)';
+      ctx.lineWidth = 0.5;
+      ctx.beginPath();
+      ctx.moveTo(screenX + Math.cos(legAngle) * c.size * 2, c.y + Math.sin(legAngle) * c.size);
+      ctx.lineTo(screenX + Math.cos(legAngle) * (c.size * 2 + 6), c.y + c.size + 4 + legPhase);
+      ctx.stroke();
+    }
+
+    // Faint eye glow
+    ctx.fillStyle = 'rgba(150,255,80,0.3)';
+    ctx.beginPath();
+    ctx.arc(screenX + c.size, c.y - 1, 1, 0, Math.PI * 2);
+    ctx.fill();
+  });
+}
+
+function drawViewportFrame() {
+  // Crawler viewport frame
+  ctx.strokeStyle = 'rgba(60,80,60,0.4)';
+  ctx.lineWidth = 3;
+
+  // Top frame
+  ctx.beginPath();
+  ctx.moveTo(W * 0.05, H * 0.15);
+  ctx.lineTo(W * 0.15, H * 0.08);
+  ctx.lineTo(W * 0.85, H * 0.08);
+  ctx.lineTo(W * 0.95, H * 0.15);
+  ctx.stroke();
+
+  // Bottom frame
+  ctx.beginPath();
+  ctx.moveTo(W * 0.02, H * 0.85);
+  ctx.lineTo(W * 0.1, H * 0.9);
+  ctx.lineTo(W * 0.9, H * 0.9);
+  ctx.lineTo(W * 0.98, H * 0.85);
+  ctx.stroke();
+
+  // Side frames
+  ctx.beginPath();
+  ctx.moveTo(W * 0.05, H * 0.15);
+  ctx.lineTo(W * 0.02, H * 0.85);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(W * 0.95, H * 0.15);
+  ctx.lineTo(W * 0.98, H * 0.85);
+  ctx.stroke();
+
+  // Rivets
+  var rivets = [[W*0.05,H*0.15],[W*0.95,H*0.15],[W*0.02,H*0.85],[W*0.98,H*0.85]];
+  rivets.forEach(function(r) {
+    ctx.fillStyle = 'rgba(100,120,100,0.3)';
+    ctx.beginPath();
+    ctx.arc(r[0], r[1], 3, 0, Math.PI * 2);
+    ctx.fill();
+  });
+}
+
+function drawConurbation(progress) {
+  if (progress < 0.82) return;
+  var appear = (progress - 0.82) / 0.18;
+  var cx = W * 0.5, cy = H * 0.4;
+
+  // Dome glow in distance
+  var grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, 80 + appear * 120);
+  grd.addColorStop(0, 'rgba(200,220,180,' + (appear * 0.15) + ')');
+  grd.addColorStop(0.5, 'rgba(150,180,120,' + (appear * 0.05) + ')');
+  grd.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = grd;
+  ctx.beginPath();
+  ctx.arc(cx, cy, 80 + appear * 120, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Dome outline
+  ctx.strokeStyle = 'rgba(180,200,150,' + (appear * 0.3) + ')';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.arc(cx, cy + 30, 60 + appear * 40, Math.PI, 0);
+  ctx.stroke();
+}
+
+function updateHud() {
+  var dist = (400 * (1 - time)).toFixed(0);
+  var atmos = time < 0.88 ? 'TOXIC' : 'FILTERED';
+  var temp = (35 + Math.sin(time * Math.PI) * 8).toFixed(1);
+  hudEl.innerHTML = '<span class="bright">CRAWLER TX-7 — WASTELAND TRAVERSE</span><br>' +
+    'DEST: CONURBATION ONE &middot; RANGE: ' + dist + ' KM<br>' +
+    'EXT ATMOS: <span class="warn">' + atmos + '</span> &middot; EXT TEMP: ' + temp + '&deg;C<br>' +
+    'O2: 94% &middot; HULL: SEALED &middot; SPEED: 45 KM/H';
+
+  var currentNarr = NARRATIONS[0];
+  for (var i = 0; i < NARRATIONS.length; i++) {
+    if (time >= NARRATIONS[i].t) currentNarr = NARRATIONS[i];
+  }
+  narrEl.innerHTML = currentNarr.text;
+}
+
+function draw() {
+  frame++;
+  time = Math.min(1, time + 0.0003);
+
+  ctx.fillStyle = '#040a04';
+  ctx.fillRect(0, 0, W, H);
+
+  drawSky(time);
+  drawPitchfork(time);
+  drawVegetation(time);
+  drawGround();
+  drawCreatures(time);
+  drawSpores();
+  drawConurbation(time);
+  drawViewportFrame();
+  updateHud();
+
+  // Green-tinted vignette
+  var grd = ctx.createRadialGradient(W/2, H/2, W*0.25, W/2, H/2, W*0.7);
+  grd.addColorStop(0, 'rgba(0,0,0,0)');
+  grd.addColorStop(1, 'rgba(0,10,0,0.3)');
+  ctx.fillStyle = grd;
+  ctx.fillRect(0, 0, W, H);
+
+  requestAnimationFrame(draw);
+}
+
+function restart() { time = 0; frame = 0; }
+draw();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

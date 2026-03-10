@@ -87,6 +87,12 @@ Toggle using the theme button in the nav bar.
 | **Threshold Breach** | `threshold-breach.html` | Animated 2909 CE interstice breach and fleet engagement |
 | **A-Sphere Cockpit** | `asphere-combat.html` | Interactive combat HUD — pilot an A-sphere against Apathy targets |
 | **Apathy Approach** | `apathy-approach.html` | Long-range sensor display tracking an approaching berserker machine |
+| **Simulations Hub** | `simulations.html` | Categorised index of all 17 tactical and interactive simulations |
+| **Interstice Transit** | `interstice-transit.html` | First-person wormhole passage through dodecahedral cage |
+| **Isidore's Charge** | `isidore-charge.html` | CIC simulation of the USS Isidore's 30G suicide charge |
+| **Wasteland Traverse** | `wasteland-crawler.html` | Atmospheric journey through alien wasteland on occupied Earth |
+| **Utilitaria Escape** | `utilitaria-escape.html` | LED modulation breakout from Pantheon geostationary station |
+| **Fleet Bridge** | `bridge-tactical.html` | Virtual CIC of the Ultimate Height during Apathy engagement |
 
 ### In-Universe Documents
 

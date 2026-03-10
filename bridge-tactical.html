@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fleet Bridge — Ultimate Height</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow: hidden; margin: 0; }
+.canvas-full { position: fixed; inset: 0; z-index: 1; }
+.canvas-full canvas { width: 100%; height: 100%; display: block; }
+.overlay {
+  position: fixed; inset: 0; z-index: 2; pointer-events: none;
+  display: flex; flex-direction: column; justify-content: space-between;
+  padding: 80px 24px 24px;
+}
+.top-hud { font-family: var(--mono); font-size: 10px; color: var(--text-dim); line-height: 2; }
+.top-hud .bright { color: var(--accent); }
+.top-hud .warn { color: #ff6b35; }
+.top-hud .crit { color: #ff0000; animation: blink 0.5s infinite; }
+.bottom-text {
+  text-align: center; font-family: var(--mono); font-size: 11px;
+  color: var(--text-mid); line-height: 1.8; max-width: 600px;
+  margin: 0 auto;
+}
+.bottom-text .quote { font-style: italic; color: var(--text-dim); font-size: 10px; }
+.controls {
+  position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+  z-index: 3; display: flex; gap: 12px;
+}
+.ctrl-btn {
+  background: var(--panel); border: 1px solid var(--border); border-radius: 4px;
+  color: var(--accent); font-family: var(--mono); font-size: 11px;
+  padding: 8px 16px; cursor: pointer; letter-spacing: 2px; transition: all 0.2s;
+  pointer-events: all;
+}
+.ctrl-btn:hover { background: rgba(0,229,255,0.1); }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+</style>
+</head>
+<body>
+<div class="canvas-full"><canvas id="cv"></canvas></div>
+<div class="overlay">
+  <div class="top-hud" id="hud"></div>
+  <div class="bottom-text" id="narration"></div>
+</div>
+<div class="controls">
+  <button class="ctrl-btn" onclick="restart()">RESTART</button>
+</div>
+<script>
+var cv = document.getElementById('cv');
+var ctx = cv.getContext('2d');
+var hudEl = document.getElementById('hud');
+var narrEl = document.getElementById('narration');
+var W, H, frame = 0, time = 0;
+
+var NARRATIONS = [
+  { t: 0, text: 'Defence Sphere Ultimate Height. Cocoons beneath a kilometre of hyperdiamond. The bridge is virtual &mdash; a pseudo-hologram unfolding in the mind.<br><span class="quote">"A pseudo-hologram unfolding in the mind."</span>' },
+  { t: 0.12, text: 'Long-range sensors detect the Apathy. An Earth-mass agglomeration, decelerating at 40,000G. Fleet disposition nominal. All weapons on standby.<br><span class="quote">"Earth-mass agglomeration decelerating at 40,000G."</span>' },
+  { t: 0.25, text: 'PDC screen deployed. Monopole rounds form a defensive barrier. A-sphere wings launch from their bays. Graver cannons charge.<br><span class="quote">"Monopole PDCs, graver cannons, conversion bombs."</span>' },
+  { t: 0.4, text: 'Graver barrage commences. Gravitational distortion weapons fire in sequence. The Apathy does not slow. Anti-mind effects begin at the edges of perception.<br><span class="quote">"Anti-mind affects detected."</span>' },
+  { t: 0.55, text: 'Sensors degrade. The display glitches. Conversion bombs deployed &mdash; matter-antimatter warheads at relativistic velocity. The Apathy absorbs them.<br><span class="quote">"Sensors degrade. Anti-mind affects detected."</span>' },
+  { t: 0.7, text: 'The anthropic trap activates. A philosophical weapon. Crew members question reality. Are you a simulation? You are almost certainly not real.<br><span class="quote">"The anthropic trap deploys. You are almost certainly not real."</span>' },
+  { t: 0.85, text: 'Display corruption total. The Apathy fills all sensors. The Ultimate Height holds position. The fleet does not retreat. It cannot.<br><span class="quote">"Something had to be done about this."</span>' },
+];
+
+function resize() {
+  var r = window.devicePixelRatio || 1;
+  W = window.innerWidth; H = window.innerHeight;
+  cv.width = W * r; cv.height = H * r;
+  ctx.setTransform(r, 0, 0, r, 0, 0);
+}
+resize();
+window.addEventListener('resize', resize);
+
+// Fleet ships
+var fleet = [];
+for (var i = 0; i < 24; i++) {
+  var angle = (i / 24) * Math.PI * 2;
+  var radius = 80 + Math.random() * 60;
+  fleet.push({
+    x: Math.cos(angle) * radius,
+    y: Math.sin(angle) * radius * 0.6,
+    type: i < 4 ? 'capital' : i < 12 ? 'cruiser' : 'asphere',
+    alive: true,
+    glitchOffset: Math.random() * Math.PI * 2
+  });
+}
+
+// Weapon particles
+var weaponParticles = [];
+
+function drawTacticalGrid() {
+  var cx = W / 2, cy = H / 2;
+  var glitch = time > 0.55 ? Math.min(1, (time - 0.55) / 0.3) : 0;
+
+  // Holographic grid effect
+  ctx.save();
+  ctx.globalAlpha = 0.06 - glitch * 0.04;
+
+  // Concentric rings
+  for (var r = 40; r < 300; r += 40) {
+    var distort = glitch * (Math.random() - 0.5) * 8;
+    ctx.strokeStyle = 'rgba(0,229,255,0.15)';
+    ctx.lineWidth = 0.5;
+    ctx.beginPath();
+    ctx.ellipse(cx + distort, cy + distort * 0.5, r, r * 0.6, 0, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+
+  // Radial lines
+  for (var a = 0; a < 12; a++) {
+    var ang = (a / 12) * Math.PI * 2;
+    var distort2 = glitch * (Math.random() - 0.5) * 5;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + Math.cos(ang) * 300 + distort2, cy + Math.sin(ang) * 180 + distort2);
+    ctx.stroke();
+  }
+
+  ctx.restore();
+
+  // Grid labels
+  ctx.font = '7px monospace';
+  ctx.fillStyle = 'rgba(0,229,255,0.3)';
+  ctx.textAlign = 'center';
+  ['10 AU', '20 AU', '50 AU', '100 AU'].forEach(function(label, i) {
+    var r = 60 + i * 50;
+    if (glitch < 0.5 || Math.random() > glitch * 0.5) {
+      ctx.fillText(label, cx + r + 5, cy - 5);
+    }
+  });
+  ctx.textAlign = 'left';
+}
+
+function drawFleet(progress) {
+  var cx = W / 2, cy = H / 2;
+  var glitch = progress > 0.55 ? Math.min(1, (progress - 0.55) / 0.3) : 0;
+
+  fleet.forEach(function(ship, i) {
+    var sx = cx + ship.x + (glitch > 0 ? (Math.random() - 0.5) * glitch * 10 : 0);
+    var sy = cy + ship.y + (glitch > 0 ? (Math.random() - 0.5) * glitch * 6 : 0);
+
+    if (glitch > 0.5 && Math.random() < glitch * 0.1) return; // ships flicker out
+
+    var alpha = 1 - glitch * 0.3;
+    if (ship.type === 'capital') {
+      // Large diamond
+      ctx.fillStyle = 'rgba(0,229,255,' + (alpha * 0.8) + ')';
+      ctx.beginPath();
+      ctx.moveTo(sx, sy - 6);
+      ctx.lineTo(sx - 4, sy);
+      ctx.lineTo(sx, sy + 6);
+      ctx.lineTo(sx + 4, sy);
+      ctx.closePath();
+      ctx.fill();
+    } else if (ship.type === 'cruiser') {
+      ctx.fillStyle = 'rgba(0,200,230,' + (alpha * 0.6) + ')';
+      ctx.fillRect(sx - 2, sy - 2, 4, 4);
+    } else {
+      // A-sphere - tiny dot
+      ctx.fillStyle = 'rgba(0,180,200,' + (alpha * 0.4) + ')';
+      ctx.beginPath();
+      ctx.arc(sx, sy, 1.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  });
+
+  // Ultimate Height label
+  if (glitch < 0.7 || Math.random() > 0.5) {
+    ctx.font = '7px monospace';
+    ctx.fillStyle = 'rgba(0,229,255,' + (0.6 - glitch * 0.4) + ')';
+    ctx.textAlign = 'center';
+    ctx.fillText('ULTIMATE HEIGHT', cx, cy + fleet[0].y + 15);
+    ctx.textAlign = 'left';
+  }
+}
+
+function drawApathy(progress) {
+  if (progress < 0.08) return;
+  var cx = W / 2, cy = H / 2;
+
+  // Apathy approaches from top-right
+  var approachT = Math.min(1, (progress - 0.08) / 0.8);
+  var startX = W * 0.85, startY = H * 0.1;
+  var endX = cx + 40, endY = cy - 20;
+  var ax = startX + (endX - startX) * approachT;
+  var ay = startY + (endY - startY) * approachT;
+  var apathySize = 10 + approachT * 80;
+
+  // The Apathy - an ominous, amorphous mass
+  var glitch = progress > 0.55 ? Math.min(1, (progress - 0.55) / 0.3) : 0;
+
+  // Outer distortion field
+  ctx.save();
+  var distAlpha = 0.05 + approachT * 0.15;
+  for (var ring = 0; ring < 4; ring++) {
+    var ringR = apathySize * (1.5 + ring * 0.5);
+    var ringAlpha = distAlpha * (1 - ring * 0.2);
+    ctx.strokeStyle = 'rgba(100,0,0,' + ringAlpha + ')';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (var a = 0; a < Math.PI * 2; a += 0.1) {
+      var wobble = Math.sin(a * 3 + frame * 0.01 + ring) * (5 + ring * 3);
+      var rx = ax + Math.cos(a) * (ringR + wobble);
+      var ry = ay + Math.sin(a) * (ringR * 0.7 + wobble * 0.7);
+      if (a === 0) ctx.moveTo(rx, ry);
+      else ctx.lineTo(rx, ry);
+    }
+    ctx.closePath();
+    ctx.stroke();
+  }
+  ctx.restore();
+
+  // Core mass
+  var coreGrd = ctx.createRadialGradient(ax, ay, 0, ax, ay, apathySize);
+  coreGrd.addColorStop(0, 'rgba(40,0,0,' + (0.4 + approachT * 0.4) + ')');
+  coreGrd.addColorStop(0.5, 'rgba(20,0,0,' + (0.2 + approachT * 0.2) + ')');
+  coreGrd.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = coreGrd;
+  ctx.beginPath();
+  ctx.arc(ax, ay, apathySize, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Anti-mind effect - subtle red tendrils
+  if (progress > 0.4) {
+    var antiMindAlpha = Math.min(0.3, (progress - 0.4) * 0.5);
+    for (var t = 0; t < 8; t++) {
+      var ta = (t / 8) * Math.PI * 2 + frame * 0.003;
+      var tLen = apathySize + 30 + Math.sin(frame * 0.02 + t) * 20;
+      ctx.strokeStyle = 'rgba(80,0,0,' + antiMindAlpha + ')';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(ax, ay);
+      ctx.quadraticCurveTo(
+        ax + Math.cos(ta + 0.3) * tLen * 0.6,
+        ay + Math.sin(ta + 0.3) * tLen * 0.4,
+        ax + Math.cos(ta) * tLen,
+        ay + Math.sin(ta) * tLen * 0.6
+      );
+      ctx.stroke();
+    }
+  }
+
+  // Label
+  if (glitch < 0.8 || Math.random() > 0.5) {
+    ctx.font = '8px monospace';
+    ctx.fillStyle = 'rgba(255,50,50,' + (0.5 + approachT * 0.3) + ')';
+    ctx.textAlign = 'center';
+    ctx.fillText('APATHY', ax, ay - apathySize - 10);
+    ctx.font = '6px monospace';
+    ctx.fillStyle = 'rgba(255,50,50,' + (0.3 + approachT * 0.2) + ')';
+    ctx.fillText('MASS: 1.0 M⊕  DECEL: 40,000G', ax, ay - apathySize - 2);
+    ctx.textAlign = 'left';
+  }
+}
+
+function drawWeaponEffects(progress) {
+  var cx = W / 2, cy = H / 2;
+
+  // PDC screen (0.25-0.4)
+  if (progress > 0.2 && progress < 0.5) {
+    var pdcAlpha = progress < 0.3 ? (progress - 0.2) / 0.1 : (progress > 0.4 ? 1 - (progress - 0.4) / 0.1 : 1);
+    for (var i = 0; i < 20; i++) {
+      var pa = (i / 20) * Math.PI * 2 + frame * 0.005;
+      var pr = 150 + Math.sin(i * 2 + frame * 0.03) * 20;
+      var px = cx + Math.cos(pa) * pr;
+      var py = cy + Math.sin(pa) * pr * 0.6;
+      ctx.fillStyle = 'rgba(0,229,255,' + (pdcAlpha * 0.3 * (0.5 + Math.sin(frame * 0.1 + i) * 0.5)) + ')';
+      ctx.beginPath();
+      ctx.arc(px, py, 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  // Graver barrage (0.4-0.55)
+  if (progress > 0.35 && progress < 0.6) {
+    var gravAlpha = progress < 0.4 ? (progress - 0.35) / 0.05 : (progress > 0.55 ? 1 - (progress - 0.55) / 0.05 : 1);
+    for (var i = 0; i < 5; i++) {
+      if (Math.sin(frame * 0.05 + i * 1.2) > 0) {
+        var gx = cx + fleet[i % 4].x;
+        var gy = cy + fleet[i % 4].y;
+        var approachT = Math.min(1, (progress - 0.08) / 0.8);
+        var targetX = W * 0.85 + (cx + 40 - W * 0.85) * approachT;
+        var targetY = H * 0.1 + (cy - 20 - H * 0.1) * approachT;
+
+        ctx.strokeStyle = 'rgba(150,100,255,' + (gravAlpha * 0.4) + ')';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(gx, gy);
+        ctx.lineTo(targetX, targetY);
+        ctx.stroke();
+      }
+    }
+  }
+
+  // Conversion bombs (0.55-0.7)
+  if (progress > 0.5 && progress < 0.75) {
+    var bombAlpha = progress < 0.55 ? (progress - 0.5) / 0.05 : (progress > 0.7 ? 1 - (progress - 0.7) / 0.05 : 1);
+    var numBombs = 3;
+    for (var i = 0; i < numBombs; i++) {
+      var bt = ((frame * 0.02 + i * 0.3) % 1);
+      var approachT2 = Math.min(1, (progress - 0.08) / 0.8);
+      var targetX2 = W * 0.85 + (cx + 40 - W * 0.85) * approachT2;
+      var targetY2 = H * 0.1 + (cy - 20 - H * 0.1) * approachT2;
+      var bx = cx + (targetX2 - cx) * bt;
+      var by = cy + (targetY2 - cy) * bt;
+
+      if (bt > 0.9) {
+        // Detonation
+        var detR = (bt - 0.9) * 400;
+        var detGrd = ctx.createRadialGradient(bx, by, 0, bx, by, detR);
+        detGrd.addColorStop(0, 'rgba(255,255,200,' + (bombAlpha * 0.3) + ')');
+        detGrd.addColorStop(1, 'rgba(255,100,0,0)');
+        ctx.fillStyle = detGrd;
+        ctx.beginPath();
+        ctx.arc(bx, by, detR, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        ctx.fillStyle = 'rgba(255,200,100,' + (bombAlpha * 0.8) + ')';
+        ctx.beginPath();
+        ctx.arc(bx, by, 3, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+  }
+}
+
+function drawAnthropicTrap(progress) {
+  if (progress < 0.65) return;
+  var intensity = Math.min(1, (progress - 0.65) / 0.2);
+
+  // Glitch text overlay
+  if (Math.random() < intensity * 0.3) {
+    var texts = [
+      'YOU ARE ALMOST CERTAINLY NOT REAL',
+      'ARE YOU A SIMULATION?',
+      'ANTHROPIC TRAP ACTIVE',
+      'REALITY CONSENSUS: DEGRADED',
+      'PROBABILITY OF EXISTENCE: LOW'
+    ];
+    var text = texts[Math.floor(Math.random() * texts.length)];
+    var tx = Math.random() * W;
+    var ty = Math.random() * H;
+    ctx.font = (8 + Math.random() * 12) + 'px monospace';
+    ctx.fillStyle = 'rgba(255,0,0,' + (intensity * 0.15 * Math.random()) + ')';
+    ctx.fillText(text, tx, ty);
+  }
+
+  // Screen corruption
+  if (intensity > 0.3) {
+    for (var i = 0; i < Math.floor(intensity * 8); i++) {
+      var sx = Math.random() * W;
+      var sy = Math.random() * H;
+      var sw = 20 + Math.random() * 100;
+      var sh = 1 + Math.random() * 3;
+      ctx.fillStyle = 'rgba(' + Math.floor(Math.random()*40) + ',0,0,' + (intensity * 0.2) + ')';
+      ctx.fillRect(sx, sy, sw, sh);
+    }
+  }
+}
+
+function drawFleetStatus(progress) {
+  var x = W - 160, y = 100;
+  var glitch = progress > 0.55 ? Math.min(1, (progress - 0.55) / 0.3) : 0;
+
+  ctx.font = '8px monospace';
+  ctx.fillStyle = 'rgba(0,229,255,' + (0.5 - glitch * 0.3) + ')';
+  ctx.fillText('FLEET DISPOSITION', x, y);
+
+  var categories = [
+    { label: 'CAPITAL SHIPS', count: 4, status: 'ENGAGED' },
+    { label: 'CRUISERS', count: 8, status: progress > 0.6 ? 'DEGRADED' : 'NOMINAL' },
+    { label: 'A-SPHERES', count: 12, status: progress > 0.5 ? 'LAUNCHED' : 'STANDBY' },
+    { label: 'WEAPONS', count: 0, status: progress > 0.55 ? 'INEFFECTIVE' : progress > 0.25 ? 'FIRING' : 'STANDBY' },
+  ];
+
+  categories.forEach(function(cat, i) {
+    if (glitch > 0.5 && Math.random() < glitch * 0.3) return;
+    var cy2 = y + 14 + i * 14;
+    var statusColor = cat.status === 'NOMINAL' || cat.status === 'STANDBY' ? 'rgba(0,255,100,0.5)' :
+                      cat.status === 'ENGAGED' || cat.status === 'LAUNCHED' || cat.status === 'FIRING' ? 'rgba(0,229,255,0.5)' :
+                      'rgba(255,100,50,0.5)';
+    ctx.fillStyle = 'rgba(0,229,255,' + (0.4 - glitch * 0.2) + ')';
+    ctx.fillText(cat.label, x, cy2);
+    ctx.fillStyle = statusColor;
+    ctx.fillText(cat.status, x + 90, cy2);
+  });
+}
+
+function updateHud() {
+  var range = time < 0.08 ? 'N/A' : (200 * (1 - Math.min(1, (time - 0.08) / 0.8))).toFixed(0) + ' AU';
+  var sensorStatus = time < 0.55 ? 'NOMINAL' : time < 0.7 ? 'DEGRADED' : 'CRITICAL';
+  var sensorClass = sensorStatus === 'NOMINAL' ? 'bright' : sensorStatus === 'DEGRADED' ? 'warn' : 'crit';
+  var antiMind = time < 0.4 ? 'NONE' : time < 0.55 ? 'DETECTED' : time < 0.7 ? 'SEVERE' : 'OVERWHELMING';
+  var antiClass = antiMind === 'NONE' ? 'bright' : antiMind === 'DETECTED' ? 'warn' : 'crit';
+
+  hudEl.innerHTML = '<span class="bright">DSS ULTIMATE HEIGHT — FLEET COMMAND</span><br>' +
+    'CONTACT RANGE: ' + range + ' &middot; SENSORS: <span class="' + sensorClass + '">' + sensorStatus + '</span><br>' +
+    'ANTI-MIND: <span class="' + antiClass + '">' + antiMind + '</span> &middot; FLEET: 24 VESSELS<br>' +
+    (time > 0.65 ? '<span class="crit">&#9888; ANTHROPIC TRAP ACTIVE &mdash; REALITY CONSENSUS FAILING</span>' : '');
+
+  var currentNarr = NARRATIONS[0];
+  for (var i = 0; i < NARRATIONS.length; i++) {
+    if (time >= NARRATIONS[i].t) currentNarr = NARRATIONS[i];
+  }
+  narrEl.innerHTML = currentNarr.text;
+}
+
+function draw() {
+  frame++;
+  time = Math.min(1, time + 0.0003);
+
+  // Background with slight holographic tint
+  ctx.fillStyle = '#020306';
+  ctx.fillRect(0, 0, W, H);
+
+  // Holographic depth effect
+  var holoGrd = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, W * 0.4);
+  holoGrd.addColorStop(0, 'rgba(0,20,40,0.1)');
+  holoGrd.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = holoGrd;
+  ctx.fillRect(0, 0, W, H);
+
+  drawTacticalGrid();
+  drawFleet(time);
+  drawApathy(time);
+  drawWeaponEffects(time);
+  drawAnthropicTrap(time);
+  drawFleetStatus(time);
+  updateHud();
+
+  requestAnimationFrame(draw);
+}
+
+function restart() { time = 0; frame = 0; }
+draw();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

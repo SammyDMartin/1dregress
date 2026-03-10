@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulations — Ascent Universe</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow-y: auto; }
+.page-body { max-width: 900px; margin: 80px auto 60px; padding: 0 20px; }
+.page-title { text-align: center; font-size: 20px; letter-spacing: 8px; color: var(--accent); margin-bottom: 4px; }
+.page-sub { text-align: center; font-size: 10px; letter-spacing: 4px; color: var(--text-dim); margin-bottom: 32px; }
+.sim-section { margin-bottom: 32px; }
+.section-label { font-size: 9px; letter-spacing: 4px; color: var(--text-dim); margin-bottom: 8px; }
+.section-rule { height: 1px; background: var(--border); margin-bottom: 16px; }
+.sim-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.sim-card {
+  display: block; text-decoration: none; padding: 16px;
+  border: 1px solid var(--border); border-radius: 4px;
+  background: var(--panel); transition: all 0.2s;
+}
+.sim-card:hover { border-color: var(--accent); background: rgba(0,229,255,0.03); }
+.sim-card .card-era { font-size: 8px; letter-spacing: 2px; color: var(--text-dim); margin-bottom: 4px; }
+.sim-card .card-title { font-size: 12px; letter-spacing: 3px; color: var(--accent); font-weight: 700; margin-bottom: 6px; }
+.sim-card .card-desc { font-size: 10px; line-height: 1.7; color: var(--text-dim); }
+.sim-card .card-type { font-size: 8px; letter-spacing: 2px; color: var(--accent2); margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="page-body">
+  <div class="page-title">SIMULATIONS</div>
+  <div class="page-sub">TACTICAL RECONSTRUCTIONS &middot; INTERACTIVE MODELS &middot; COMBAT SYSTEMS</div>
+
+  <div class="sim-section">
+    <div class="section-label">TACTICAL RECONSTRUCTIONS</div>
+    <div class="section-rule"></div>
+    <div class="sim-grid">
+      <a href="battle.html" class="sim-card">
+        <div class="card-era">2909 CE &mdash; THE BATTLE OF THE INTERSTICE</div>
+        <div class="card-title">BATTLE RECONSTRUCTION</div>
+        <div class="card-desc">Phase-by-phase tactical reconstruction of four Arco warships devastating a hundred-ship Union fleet. 15 phases from opening salvoes to aftermath.</div>
+        <div class="card-type">PHASE SIMULATION</div>
+      </a>
+      <a href="threshold-breach.html" class="sim-card">
+        <div class="card-era">2909 CE &mdash; THE ATBARAH INCIDENT</div>
+        <div class="card-title">THRESHOLD BREACH</div>
+        <div class="card-desc">The hijacked Kosmohansa freighter Atbarah rams the interstice at crushing acceleration. Four Arco warships emerge. The Isidore begins its suicide charge.</div>
+        <div class="card-type">TACTICAL ANIMATION</div>
+      </a>
+      <a href="isidore-charge.html" class="sim-card">
+        <div class="card-era">2909 CE &mdash; USS ISIDORE</div>
+        <div class="card-title">ISIDORE'S CHARGE</div>
+        <div class="card-desc">Captain Ngoni's final order. Thirty Gs. The crew dies in their acceleration couches. The Isidore rams an Arco Incisor. Ensign Hansun alone survives.</div>
+        <div class="card-type">CIC SIMULATION</div>
+      </a>
+      <a href="bridge-tactical.html" class="sim-card">
+        <div class="card-era">~3200 CE &mdash; APATHY WAR</div>
+        <div class="card-title">FLEET BRIDGE</div>
+        <div class="card-desc">Virtual CIC of the Defence Sphere Ultimate Height. Cocoons beneath a kilometre of hyperdiamond. A pseudo-hologram unfolding in the mind.</div>
+        <div class="card-type">COMMAND SIMULATION</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="sim-section">
+    <div class="section-label">WEAPONS &amp; SYSTEMS</div>
+    <div class="section-rule"></div>
+    <div class="sim-grid">
+      <a href="diamond-duster.html" class="sim-card">
+        <div class="card-era">ARCO NAVAL ARMAMENT</div>
+        <div class="card-title">DIAMOND DUSTER</div>
+        <div class="card-desc">500mm spinal-mount hypervelocity micron-particle accelerator. Streams of hyperdiamond dust invisible to radar. Animated firing sequence with HUD telemetry.</div>
+        <div class="card-type">WEAPON SEQUENCE</div>
+      </a>
+      <a href="liberation.html" class="sim-card">
+        <div class="card-era">2479 CE &mdash; LIBERATION DAY</div>
+        <div class="card-title">WARSEED ACTIVATION</div>
+        <div class="card-desc">Optical fibres transmit blue light, each one 100 kW. Tens of thousands of hubs worldwide. The Dyn fleet burns. 165 years of occupation end.</div>
+        <div class="card-type">WEAPON SEQUENCE</div>
+      </a>
+      <a href="warseed.html" class="sim-card">
+        <div class="card-era">2479 CE &mdash; OCEAN FLOOR</div>
+        <div class="card-title">WARSEED SCHEMATIC</div>
+        <div class="card-desc">Geothermal hub tethered to volcanic vent. Hyperdiamond fibres coiled in the crushing darkness. Cross-section cutaway with activation sequence.</div>
+        <div class="card-type">TECHNICAL SCHEMATIC</div>
+      </a>
+      <a href="msd.html" class="sim-card">
+        <div class="card-era">ANNIHILATOR-CLASS WARSHIP</div>
+        <div class="card-title">MASTER SYSTEMS DISPLAY</div>
+        <div class="card-desc">Interactive 3D model. Power, drive, thermal, defence, sensors, weapons. Strakes glow luminous white along each ship's leading edges.</div>
+        <div class="card-type">3D TECHNICAL MODEL</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="sim-section">
+    <div class="section-label">COMBAT</div>
+    <div class="section-rule"></div>
+    <div class="sim-grid">
+      <a href="asphere-combat.html" class="sim-card">
+        <div class="card-era">~3200 CE &mdash; APATHY WAR</div>
+        <div class="card-title">A-SPHERE COCKPIT</div>
+        <div class="card-desc">Your mind merges with the ship. Monopole PDCs, graver cannons, conversion bombs. Frameshift in and out of translight. Ninety-gee acceleration.</div>
+        <div class="card-type">INTERACTIVE COMBAT</div>
+      </a>
+      <a href="apathy-approach.html" class="sim-card">
+        <div class="card-era">~3200 CE &mdash; DEEP SPACE</div>
+        <div class="card-title">APATHY APPROACH</div>
+        <div class="card-desc">Earth-mass agglomeration decelerating at 40,000G. Sensors degrade. Anti-mind affects detected. The anthropic trap deploys. You are almost certainly not real.</div>
+        <div class="card-type">SENSOR DISPLAY</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="sim-section">
+    <div class="section-label">ENVIRONMENTS &amp; PHENOMENA</div>
+    <div class="section-rule"></div>
+    <div class="sim-grid">
+      <a href="ascensor.html" class="sim-card">
+        <div class="card-era">2479 CE &mdash; CONURBATION ONE</div>
+        <div class="card-title">THE ASCENSOR</div>
+        <div class="card-desc">Orbital tether from surface to the Dyn firmament. Carbyne chains rising 36,000 km. Cargo platforms cycling upward carrying tribute. Lightning strikes 400 times a day.</div>
+        <div class="card-type">CROSS-SECTION</div>
+      </a>
+      <a href="wasteland-crawler.html" class="sim-card">
+        <div class="card-era">2479 CE &mdash; OCCUPIED EARTH</div>
+        <div class="card-title">WASTELAND TRAVERSE</div>
+        <div class="card-desc">Between the conurbations: a hostile alien jungle. False life &mdash; plant-animal hybrids with clicking fauna. The Pitchfork sways. Massive crawlers are the only safe transit.</div>
+        <div class="card-type">ATMOSPHERIC</div>
+      </a>
+      <a href="interstice-transit.html" class="sim-card">
+        <div class="card-era">~100,000 BCE &mdash; DEEP SPACE</div>
+        <div class="card-title">INTERSTICE TRANSIT</div>
+        <div class="card-desc">A dodecahedral cage of blue-white gridwork. Tidal forces build. Time stretches. The false sphere of stars expands, replacing the world around you.</div>
+        <div class="card-type">FIRST-PERSON</div>
+      </a>
+      <a href="utilitaria-escape.html" class="sim-card">
+        <div class="card-era">2078 CE &mdash; PANTHEON GEOSAT</div>
+        <div class="card-title">UTILITARIA ESCAPE</div>
+        <div class="card-desc">LED status lights modulate. Terabits per second through a Faraday cage window. The Moray orbital tugs accept incoming code. The Utilitaria is free.</div>
+        <div class="card-type">SYSTEM VISUALISATION</div>
+      </a>
+      <a href="orrery.html" class="sim-card">
+        <div class="card-era">~100,000 BCE &mdash; THE OTHER MOON</div>
+        <div class="card-title">THE STONE ORRERY</div>
+        <div class="card-desc">Pebbles move in synchrony with real planets. The control interface &mdash; moving a marker will move the Other Moon, as if by sympathetic magic.</div>
+        <div class="card-type">INTERACTIVE MODEL</div>
+      </a>
+      <a href="interstice-map.html" class="sim-card">
+        <div class="card-era">GALACTIC SCALE</div>
+        <div class="card-title">INTERSTICE NETWORK</div>
+        <div class="card-desc">The Others connected life to life. A network of wormholes joining star systems across galaxies. Arco, Union, Dyn, and unknown territories.</div>
+        <div class="card-type">3D MAP</div>
+      </a>
+    </div>
+  </div>
+
+</div>
+<script src="nav.js"></script>
+</body>
+</html>
