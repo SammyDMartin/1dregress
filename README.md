@@ -55,7 +55,8 @@ Toggle using the theme button in the nav bar.
 | **Stories** | `stories.html` | Chronological index of all fiction with attribution |
 | **Reader** | `reader.html` | Lightweight markdown/text reader for source texts |
 | **Drafts** | `drafts.html` | Draft browser for second-draft manuscripts |
-| **MSD** | `msd.html` | Interactive 3D Master Systems Display for the Annihilator-class warship |
+| **MSD (Annihilator)** | `msd.html` | Interactive 3D MSD for the Annihilator-class IP Assault Vehicle |
+| **MSD (D-Sphere)** | `msd-dsphere.html` | Interactive 3D MSD for the Ultimate Height-class Defence Sphere |
 | **Battle** | `battle.html` | Phase-by-phase animated tactical reconstruction of the Battle of the Interstice |
 | **Science** | `science.html` | Science Compendium — real physics behind the fictional technology |
 | **Timeline** | `timeline.html` | Interactive chronology from Deep Antiquity to the Apathy War |
@@ -72,6 +73,7 @@ Toggle using the theme button in the nav bar.
 | **Emissary Chat** | `utilitaria-chat.html` | Interactive diplomatic channel chat with the Utilitaria |
 | **AI Analysis** | `ai-analysis.html` | Comparative analysis of Facilitator vs Utilitaria vs Apathy AI systems |
 | **Anthropic Trap** | `anthropic-trap.html` | Interactive exploration of the Apathy's anthropic trap argument |
+| **Insights** | `insights-report.html` | Claude Code usage analytics and workflow insights (standalone, not themed) |
 
 ### Visualisations
 
@@ -81,6 +83,17 @@ Toggle using the theme button in the nav bar.
 | **Interstice Network** | `interstice-map.html` | 3D canvas visualisation of the wormhole network |
 | **Diamond Duster** | `diamond-duster.html` | Animated weapon firing sequence with HUD telemetry |
 | **Liberation Day** | `liberation.html` | Animated warseed activation sequence from Ascent (2479 CE) |
+| **Ascensor** | `ascensor.html` | Interactive orbital tether cross-section, surface to Dyn firmament |
+| **Warseed Schematic** | `warseed.html` | Ocean floor weapon system cutaway with activation sequence |
+| **Threshold Breach** | `threshold-breach.html` | Animated 2909 CE interstice breach and fleet engagement |
+| **A-Sphere Cockpit** | `asphere-combat.html` | Interactive combat HUD — pilot an A-sphere against Apathy targets |
+| **Apathy Approach** | `apathy-approach.html` | Long-range sensor display tracking an approaching berserker machine |
+| **Simulations Hub** | `simulations.html` | Categorised index of all 17 tactical and interactive simulations |
+| **Interstice Transit** | `interstice-transit.html` | First-person wormhole passage through dodecahedral cage |
+| **Isidore's Charge** | `isidore-charge.html` | CIC simulation of the USS Isidore's 30G suicide charge |
+| **Wasteland Traverse** | `wasteland-crawler.html` | Atmospheric journey through alien wasteland on occupied Earth |
+| **Utilitaria Escape** | `utilitaria-escape.html` | LED modulation breakout from Pantheon geostationary station |
+| **Fleet Bridge** | `bridge-tactical.html` | Virtual CIC of the Ultimate Height during Apathy engagement |
 
 ### In-Universe Documents
 

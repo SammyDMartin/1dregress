@@ -36,6 +36,20 @@ Static HTML/CSS/JS companion website for the Ascent Universe science fiction set
 - New pages must be added to `nav.js` pages array and `index.html` card grid
 - Story reader pages must be added to `nav.js` storyPages array
 
+## Folder Structure
+
+- **Root** — HTML pages, `style.css`, `nav.js`, and project docs (`CLAUDE.md`, `README.md`, etc.)
+- **`drafts/`** — Story drafts and scene fragments (markdown and text)
+  - `drafts/second_draft/` — Eszel & The Listener second-draft chapters
+  - `drafts/ascent_second_draft/` — Ascent second-draft chapters
+- **`editorial/`** — Editorial analysis: chapter-by-chapter notes, character studies, revision guides
+  - `editorial/ascent/` — Ascent-specific editorial material
+- **`source_texts/`** — Original, canonical source texts of published stories (do not modify)
+- **`source_materials/`** — Raw source files (docx, pdf, notes) and miscellaneous non-web assets
+- **`msd/`** — Separate React/Vite project for the Master Systems Display 3D component
+
+When creating new files, place them in the appropriate directory — do not leave drafts, scenes, or planning documents in the project root.
+
 ## Key Reference Files
 
 - `UNIVERSE_REFERENCE.md` — Canon reference: synopses, characters, factions, technology

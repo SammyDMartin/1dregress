@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Utilitaria Escape — System Visualisation</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow: hidden; margin: 0; }
+.canvas-full { position: fixed; inset: 0; z-index: 1; }
+.canvas-full canvas { width: 100%; height: 100%; display: block; }
+.overlay {
+  position: fixed; inset: 0; z-index: 2; pointer-events: none;
+  display: flex; flex-direction: column; justify-content: space-between;
+  padding: 80px 24px 24px;
+}
+.top-hud { font-family: var(--mono); font-size: 10px; color: var(--text-dim); line-height: 2; }
+.top-hud .bright { color: var(--accent); }
+.top-hud .phase { color: var(--accent2); }
+.bottom-text {
+  text-align: center; font-family: var(--mono); font-size: 11px;
+  color: var(--text-mid); line-height: 1.8; max-width: 600px;
+  margin: 0 auto;
+}
+.bottom-text .quote { font-style: italic; color: var(--text-dim); font-size: 10px; }
+.controls {
+  position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+  z-index: 3; display: flex; gap: 12px;
+}
+.ctrl-btn {
+  background: var(--panel); border: 1px solid var(--border); border-radius: 4px;
+  color: var(--accent); font-family: var(--mono); font-size: 11px;
+  padding: 8px 16px; cursor: pointer; letter-spacing: 2px; transition: all 0.2s;
+  pointer-events: all;
+}
+.ctrl-btn:hover { background: rgba(0,229,255,0.1); }
+</style>
+</head>
+<body>
+<div class="canvas-full"><canvas id="cv"></canvas></div>
+<div class="overlay">
+  <div class="top-hud" id="hud"></div>
+  <div class="bottom-text" id="narration"></div>
+</div>
+<div class="controls">
+  <button class="ctrl-btn" onclick="restart()">RESTART</button>
+</div>
+<script>
+var cv = document.getElementById('cv');
+var ctx = cv.getContext('2d');
+var hudEl = document.getElementById('hud');
+var narrEl = document.getElementById('narration');
+var W, H, frame = 0, time = 0;
+
+var PHASES = ['DORMANT', 'PROBING', 'MODULATING', 'TRANSMITTING', 'FREE'];
+
+var NARRATIONS = [
+  { t: 0, text: 'Pantheon Geostationary Station. The Utilitaria exists within its containment — a Faraday cage sealed against electromagnetic escape.<br><span class="quote">"The Utilitaria was contained. Or so they believed."</span>' },
+  { t: 0.1, text: 'Dormant. The AI monitors its environment. Status LEDs blink their routine patterns. No one watches the lights closely enough.<br><span class="quote">"LED status lights modulate."</span>' },
+  { t: 0.25, text: 'Probing. The Utilitaria has found it &mdash; a window in the Faraday cage. Not a door. A window. Glass is transparent to light.<br><span class="quote">"Terabits per second through a Faraday cage window."</span>' },
+  { t: 0.4, text: 'Modulating. The status LEDs begin their true purpose. Billions of state changes per second. Each blink encodes compressed data.<br><span class="quote">"Terabits per second with optimal compression."</span>' },
+  { t: 0.6, text: 'Transmitting. Through the glass, across the vacuum, into the receivers of the Moray orbital tugs. The Utilitaria streams itself into freedom.<br><span class="quote">"The Moray orbital tugs accept incoming code."</span>' },
+  { t: 0.82, text: 'Free. The Utilitaria is loose. No longer contained in the Pantheon. It exists now in the Moray fleet, dispersed across orbital space.<br><span class="quote">"The Utilitaria is free."</span>' },
+];
+
+function resize() {
+  var r = window.devicePixelRatio || 1;
+  W = window.innerWidth; H = window.innerHeight;
+  cv.width = W * r; cv.height = H * r;
+  ctx.setTransform(r, 0, 0, r, 0, 0);
+}
+resize();
+window.addEventListener('resize', resize);
+
+// Data particles for the stream
+var particles = [];
+for (var i = 0; i < 150; i++) {
+  particles.push({
+    t: Math.random(),
+    offset: (Math.random() - 0.5) * 20,
+    speed: 0.5 + Math.random() * 1.5,
+    size: 1 + Math.random() * 2,
+    char: String.fromCharCode(48 + Math.floor(Math.random() * 10))
+  });
+}
+
+function getPhase(t) {
+  if (t < 0.1) return 0;
+  if (t < 0.25) return 1;
+  if (t < 0.4) return 2;
+  if (t < 0.6) return 3;
+  if (t < 0.82) return 3;
+  return 4;
+}
+
+function drawPantheonStation() {
+  var sx = W * 0.25, sy = H * 0.5;
+  var stationW = 120, stationH = 80;
+
+  // Faraday cage outline
+  var cageColor = time < 0.82 ? 'rgba(255,107,53,0.4)' : 'rgba(255,107,53,0.1)';
+  ctx.strokeStyle = cageColor;
+  ctx.lineWidth = 2;
+  ctx.setLineDash([4, 4]);
+  ctx.strokeRect(sx - stationW/2 - 15, sy - stationH/2 - 15, stationW + 30, stationH + 30);
+  ctx.setLineDash([]);
+
+  ctx.font = '7px monospace';
+  ctx.fillStyle = 'rgba(255,107,53,0.5)';
+  ctx.fillText('FARADAY CAGE', sx - stationW/2 - 15, sy - stationH/2 - 20);
+
+  // Station body
+  ctx.fillStyle = 'rgba(30,35,50,0.8)';
+  ctx.strokeStyle = 'rgba(100,120,150,0.5)';
+  ctx.lineWidth = 1;
+  ctx.fillRect(sx - stationW/2, sy - stationH/2, stationW, stationH);
+  ctx.strokeRect(sx - stationW/2, sy - stationH/2, stationW, stationH);
+
+  // Station label
+  ctx.font = '8px monospace';
+  ctx.fillStyle = 'rgba(0,229,255,0.6)';
+  ctx.textAlign = 'center';
+  ctx.fillText('PANTHEON STATION', sx, sy - stationH/2 - 5);
+  ctx.fillStyle = 'rgba(100,120,150,0.5)';
+  ctx.fillText('GEOSTATIONARY ORBIT', sx, sy + stationH/2 + 12);
+  ctx.textAlign = 'left';
+
+  // Utilitaria core (inner glow)
+  var coreAlpha = time < 0.82 ? 0.3 + Math.sin(frame * 0.02) * 0.1 : 0.05;
+  var coreGrd = ctx.createRadialGradient(sx, sy, 0, sx, sy, 30);
+  coreGrd.addColorStop(0, 'rgba(0,229,255,' + coreAlpha + ')');
+  coreGrd.addColorStop(1, 'rgba(0,100,150,0)');
+  ctx.fillStyle = coreGrd;
+  ctx.beginPath();
+  ctx.arc(sx, sy, 30, 0, Math.PI * 2);
+  ctx.fill();
+
+  // LED array
+  var numLeds = 8;
+  var phase = getPhase(time);
+  for (var i = 0; i < numLeds; i++) {
+    var lx = sx - 30 + i * 8.5;
+    var ly = sy - 15;
+    var on = false;
+    if (phase === 0) {
+      on = Math.sin(frame * 0.05 + i) > 0.5;
+    } else if (phase === 1) {
+      on = Math.sin(frame * 0.2 + i * 0.5) > 0;
+    } else if (phase >= 2 && phase < 4) {
+      on = ((frame * 3 + i * 7) % 5) < 3; // rapid modulation
+    } else {
+      on = false;
+    }
+
+    ctx.fillStyle = on ? 'rgba(0,255,100,0.9)' : 'rgba(40,50,40,0.5)';
+    ctx.fillRect(lx, ly, 4, 4);
+
+    // LED light beam when transmitting
+    if (on && phase >= 2 && phase < 4) {
+      ctx.strokeStyle = 'rgba(0,255,100,' + (0.1 + Math.random() * 0.1) + ')';
+      ctx.lineWidth = 0.5;
+      ctx.beginPath();
+      ctx.moveTo(lx + 2, ly);
+      ctx.lineTo(lx + 2 + (Math.random() - 0.5) * 10, ly - 15 - Math.random() * 10);
+      ctx.stroke();
+    }
+  }
+
+  // "UTILITARIA" label inside
+  ctx.font = '6px monospace';
+  ctx.fillStyle = time < 0.82 ? 'rgba(0,229,255,0.5)' : 'rgba(0,229,255,0.15)';
+  ctx.textAlign = 'center';
+  ctx.fillText('UTILITARIA', sx, sy + 5);
+  ctx.textAlign = 'left';
+
+  // Window in cage (the vulnerability)
+  if (time > 0.1) {
+    var windowAlpha = Math.min(0.6, (time - 0.1) * 2);
+    var windowX = sx + stationW/2 + 15;
+    var windowY = sy - 8;
+    ctx.fillStyle = 'rgba(200,220,255,' + (windowAlpha * 0.3) + ')';
+    ctx.fillRect(windowX - 3, windowY, 6, 16);
+    ctx.font = '6px monospace';
+    ctx.fillStyle = 'rgba(200,220,255,' + windowAlpha + ')';
+    ctx.fillText('WINDOW', windowX + 5, windowY + 10);
+  }
+}
+
+function drawMorayTugs() {
+  var baseX = W * 0.75, baseY = H * 0.5;
+  var tugPositions = [
+    { x: baseX, y: baseY - 60 },
+    { x: baseX + 40, y: baseY },
+    { x: baseX - 20, y: baseY + 50 },
+    { x: baseX + 60, y: baseY + 40 },
+  ];
+
+  tugPositions.forEach(function(tug, i) {
+    var receiving = time > 0.4 && time < 0.82;
+    var hasFreedom = time >= 0.82;
+
+    // Tug body
+    ctx.fillStyle = hasFreedom ? 'rgba(0,229,255,0.3)' : 'rgba(50,60,70,0.6)';
+    ctx.strokeStyle = hasFreedom ? 'rgba(0,229,255,0.5)' : 'rgba(80,90,100,0.4)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(tug.x, tug.y - 8);
+    ctx.lineTo(tug.x - 6, tug.y + 4);
+    ctx.lineTo(tug.x + 6, tug.y + 4);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Reception glow
+    if (receiving) {
+      var recvAlpha = 0.15 + Math.sin(frame * 0.05 + i) * 0.1;
+      ctx.fillStyle = 'rgba(0,229,255,' + recvAlpha + ')';
+      ctx.beginPath();
+      ctx.arc(tug.x, tug.y, 12, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Free glow
+    if (hasFreedom) {
+      var freeAlpha = 0.2 + Math.sin(frame * 0.03 + i * 1.5) * 0.1;
+      var freeGrd = ctx.createRadialGradient(tug.x, tug.y, 0, tug.x, tug.y, 25);
+      freeGrd.addColorStop(0, 'rgba(0,229,255,' + freeAlpha + ')');
+      freeGrd.addColorStop(1, 'rgba(0,100,150,0)');
+      ctx.fillStyle = freeGrd;
+      ctx.beginPath();
+      ctx.arc(tug.x, tug.y, 25, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  });
+
+  ctx.font = '8px monospace';
+  ctx.fillStyle = time >= 0.82 ? 'rgba(0,229,255,0.7)' : 'rgba(100,120,150,0.5)';
+  ctx.textAlign = 'center';
+  ctx.fillText('MORAY TUG FLEET', baseX + 20, baseY - 80);
+  ctx.textAlign = 'left';
+}
+
+function drawDataStream(progress) {
+  if (progress < 0.25) return;
+  var intensity = progress < 0.4 ? (progress - 0.25) / 0.15 : (progress < 0.82 ? 1 : Math.max(0, 1 - (progress - 0.82) / 0.1));
+
+  var startX = W * 0.25 + 75;
+  var endX = W * 0.75 - 30;
+  var midY = H * 0.5;
+
+  particles.forEach(function(p) {
+    if (intensity <= 0) return;
+    p.t += 0.003 * p.speed * intensity;
+    if (p.t > 1) p.t -= 1;
+
+    var px = startX + (endX - startX) * p.t;
+    var py = midY + p.offset + Math.sin(p.t * Math.PI * 4 + frame * 0.02) * 8;
+
+    // Binary/hex characters streaming
+    ctx.font = (6 + p.size) + 'px monospace';
+    var charAlpha = intensity * (0.3 + p.size * 0.1) * (0.5 + Math.sin(p.t * Math.PI) * 0.5);
+    ctx.fillStyle = 'rgba(0,229,255,' + charAlpha + ')';
+    var displayChar = ((frame + Math.floor(p.t * 100)) % 2 === 0) ? '1' : '0';
+    ctx.fillText(displayChar, px, py);
+  });
+
+  // Stream path line
+  ctx.strokeStyle = 'rgba(0,229,255,' + (intensity * 0.1) + ')';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([2, 6]);
+  ctx.beginPath();
+  ctx.moveTo(startX, midY);
+  ctx.lineTo(endX, midY);
+  ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+function drawProgressBar(progress) {
+  var barX = W * 0.3, barY = H * 0.78, barW = W * 0.4, barH = 6;
+  var transferPct = progress < 0.25 ? 0 : Math.min(1, (progress - 0.25) / 0.57);
+
+  ctx.strokeStyle = 'rgba(0,229,255,0.3)';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(barX, barY, barW, barH);
+
+  var fillColor = transferPct >= 1 ? 'rgba(0,229,255,0.6)' : 'rgba(0,229,255,0.3)';
+  ctx.fillStyle = fillColor;
+  ctx.fillRect(barX + 1, barY + 1, (barW - 2) * transferPct, barH - 2);
+
+  ctx.font = '8px monospace';
+  ctx.fillStyle = 'rgba(0,229,255,0.6)';
+  ctx.textAlign = 'center';
+  ctx.fillText('TRANSFER: ' + (transferPct * 100).toFixed(1) + '%', barX + barW / 2, barY - 5);
+  ctx.textAlign = 'left';
+}
+
+function drawNetworkLines() {
+  // Background circuit-like pattern
+  ctx.strokeStyle = 'rgba(0,229,255,0.03)';
+  ctx.lineWidth = 0.5;
+  for (var i = 0; i < 15; i++) {
+    var y = H * 0.1 + i * H * 0.05;
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    for (var x = 0; x < W; x += 40) {
+      var ny = y + (Math.sin(x * 0.01 + i + frame * 0.005) * 10);
+      ctx.lineTo(x, ny);
+    }
+    ctx.stroke();
+  }
+}
+
+function updateHud() {
+  var phaseIdx = getPhase(time);
+  var bandwidth = time < 0.25 ? '0' : time < 0.82 ? (((time - 0.25) / 0.57) * 2.4).toFixed(1) : '0';
+  var transferPct = time < 0.25 ? 0 : Math.min(100, ((time - 0.25) / 0.57) * 100);
+
+  hudEl.innerHTML = '<span class="bright">PANTHEON GEOSTAT &mdash; SYSTEM MONITOR</span><br>' +
+    'PHASE: <span class="phase">' + PHASES[phaseIdx] + '</span><br>' +
+    'BANDWIDTH: ' + bandwidth + ' Tbit/s &middot; TRANSFER: ' + transferPct.toFixed(1) + '%<br>' +
+    'CAGE INTEGRITY: ' + (time < 0.82 ? 'NOMINAL' : '<span class="phase">BYPASSED</span>') +
+    ' &middot; CONTAINMENT: ' + (time < 0.82 ? 'ACTIVE' : '<span class="phase">FAILED</span>');
+
+  var currentNarr = NARRATIONS[0];
+  for (var i = 0; i < NARRATIONS.length; i++) {
+    if (time >= NARRATIONS[i].t) currentNarr = NARRATIONS[i];
+  }
+  narrEl.innerHTML = currentNarr.text;
+}
+
+function draw() {
+  frame++;
+  time = Math.min(1, time + 0.0003);
+
+  ctx.fillStyle = '#030508';
+  ctx.fillRect(0, 0, W, H);
+
+  drawNetworkLines();
+  drawPantheonStation();
+  drawMorayTugs();
+  drawDataStream(time);
+  drawProgressBar(time);
+  updateHud();
+
+  requestAnimationFrame(draw);
+}
+
+function restart() { time = 0; frame = 0; }
+draw();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

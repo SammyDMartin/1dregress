@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A-Sphere Cockpit — Combat HUD</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow: hidden; }
+.sim-wrap { max-width: 1100px; margin: 70px auto 0; padding: 0 20px; }
+.page-title { text-align: center; font-size: 18px; letter-spacing: 6px; color: var(--accent); }
+.page-sub { text-align: center; font-size: 10px; letter-spacing: 3px; color: var(--text-dim); margin: 6px 0 12px; }
+.cockpit-frame {
+  position: relative; border: 1px solid var(--border); border-radius: 4px;
+  overflow: hidden; background: #010408; height: calc(100vh - 180px);
+  min-height: 400px; cursor: crosshair;
+}
+.cockpit-frame canvas { width: 100%; height: 100%; display: block; }
+.hud-top {
+  position: absolute; top: 10px; left: 10px; right: 10px;
+  display: flex; justify-content: space-between; pointer-events: none;
+  font-family: var(--mono); font-size: 10px;
+}
+.hud-left { color: var(--accent); line-height: 1.8; }
+.hud-right { color: var(--accent2); text-align: right; line-height: 1.8; }
+.hud-center {
+  position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+  color: var(--text-dim); font-family: var(--mono); font-size: 9px;
+  letter-spacing: 2px; pointer-events: none; text-align: center;
+}
+.hud-bottom {
+  position: absolute; bottom: 10px; left: 10px; right: 10px;
+  display: flex; justify-content: space-between; align-items: flex-end;
+  pointer-events: none; font-family: var(--mono); font-size: 9px;
+}
+.bar-group { display: flex; flex-direction: column; gap: 4px; }
+.bar-label { color: var(--text-dim); font-size: 8px; letter-spacing: 1px; }
+.bar-track { width: 100px; height: 4px; background: rgba(0,229,255,0.1); border-radius: 2px; }
+.bar-fill { height: 100%; border-radius: 2px; transition: width 0.3s; }
+.weapons-panel {
+  color: var(--text-dim); font-size: 9px; text-align: right;
+}
+.weapons-panel .active-weapon { color: var(--accent); font-size: 10px; }
+.msg-log {
+  position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%);
+  color: var(--text-mid); font-family: var(--mono); font-size: 11px;
+  pointer-events: none; text-align: center; opacity: 0.8;
+  text-shadow: 0 0 8px rgba(0,229,255,0.3);
+}
+.controls-hint {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  color: var(--text-dim); font-family: var(--mono); font-size: 10px;
+  text-align: center; line-height: 2; pointer-events: none;
+  opacity: 0.6; letter-spacing: 1px;
+}
+</style>
+</head>
+<body>
+<div class="sim-wrap">
+  <div class="page-title">A-SPHERE COCKPIT</div>
+  <div class="page-sub">TRANSLIGHT WARSHIP COMBAT HUD &mdash; APATHY WAR, ~3200 CE</div>
+</div>
+<div class="cockpit-frame" id="cockpit">
+  <canvas id="cv"></canvas>
+  <div class="hud-top">
+    <div class="hud-left" id="hud-left"></div>
+    <div class="hud-right" id="hud-right"></div>
+  </div>
+  <div class="hud-center" id="hud-center">A-SPHERE TACTICAL DISPLAY</div>
+  <div class="hud-bottom">
+    <div class="bar-group" id="bars-left"></div>
+    <div class="weapons-panel" id="weapons"></div>
+  </div>
+  <div class="msg-log" id="msg"></div>
+  <div class="controls-hint" id="hint">
+    CLICK — FIRE WEAPON<br>
+    SPACE — FRAMESHIFT (TELEPORT)<br>
+    1/2/3 — SWITCH WEAPON<br>
+    <br>DESTROY APATHY TARGETS
+  </div>
+</div>
+<script>
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const cockpit = document.getElementById('cockpit');
+let W, H, frame = 0;
+let mouseX = 0.5, mouseY = 0.5;
+let started = false;
+
+// Player state
+let player = {
+  x: 0.5, y: 0.5, heat: 0, hull: 100, ammo: [50, 12, 3],
+  weapon: 0, kills: 0, frameshiftCooldown: 0, score: 0
+};
+const WEAPONS = [
+  { name: 'MONOPOLE PDC', color: [0,229,255], rate: 6, heat: 2, damage: 15, speed: 0.03 },
+  { name: 'GRAVER CANNON', color: [255,107,53], rate: 30, heat: 8, damage: 50, speed: 0.02 },
+  { name: 'CONVERSION BOMB', color: [255,50,50], rate: 90, heat: 15, damage: 200, speed: 0.008 }
+];
+let fireCooldown = 0;
+let projectiles = [];
+let enemies = [];
+let particles = [];
+let messages = [];
+let msgTimer = 0;
+let stars = [];
+let gameOver = false;
+let wave = 1;
+
+function resize() {
+  const r = window.devicePixelRatio || 1;
+  const rect = cv.parentElement.getBoundingClientRect();
+  W = rect.width; H = rect.height;
+  cv.width = W * r; cv.height = H * r;
+  ctx.setTransform(r, 0, 0, r, 0, 0);
+}
+resize();
+window.addEventListener('resize', resize);
+
+// Init stars
+for (let i = 0; i < 150; i++) {
+  stars.push({ x: Math.random(), y: Math.random(), b: 0.1 + Math.random() * 0.4, s: Math.random() * 1.5 });
+}
+
+function spawnWave() {
+  const count = 3 + wave * 2;
+  for (let i = 0; i < count; i++) {
+    const edge = Math.random();
+    let ex, ey;
+    if (edge < 0.25) { ex = Math.random(); ey = -0.05; }
+    else if (edge < 0.5) { ex = Math.random(); ey = 1.05; }
+    else if (edge < 0.75) { ex = -0.05; ey = Math.random(); }
+    else { ex = 1.05; ey = Math.random(); }
+    enemies.push({
+      x: ex, y: ey, hp: 30 + wave * 10, maxHp: 30 + wave * 10,
+      speed: 0.001 + Math.random() * 0.001 + wave * 0.0003,
+      size: 8 + Math.random() * 6, fireTimer: 60 + Math.random() * 120
+    });
+  }
+  addMessage(`WAVE ${wave} — ${count} APATHY TARGETS DETECTED`);
+}
+
+function addMessage(text) {
+  messages.push(text);
+  msgTimer = 120;
+}
+
+function frameshift() {
+  if (player.frameshiftCooldown > 0) return;
+  player.x = 0.2 + Math.random() * 0.6;
+  player.y = 0.2 + Math.random() * 0.6;
+  player.frameshiftCooldown = 180;
+  // Visual burst
+  for (let i = 0; i < 30; i++) {
+    const a = Math.random() * Math.PI * 2;
+    particles.push({
+      x: player.x, y: player.y,
+      vx: Math.cos(a) * 0.01, vy: Math.sin(a) * 0.01,
+      life: 1, r: 140, g: 100, b: 255, size: 2
+    });
+  }
+  addMessage('FRAMESHIFT COMPLETE');
+}
+
+function fire() {
+  if (fireCooldown > 0 || gameOver) return;
+  const w = WEAPONS[player.weapon];
+  if (player.ammo[player.weapon] <= 0 && player.weapon > 0) {
+    addMessage('AMMUNITION DEPLETED');
+    return;
+  }
+  if (player.heat > 90) { addMessage('HEAT CRITICAL — WEAPONS LOCKED'); return; }
+
+  fireCooldown = w.rate;
+  player.heat = Math.min(100, player.heat + w.heat);
+  if (player.weapon > 0) player.ammo[player.weapon]--;
+
+  const dx = mouseX - player.x;
+  const dy = mouseY - player.y;
+  const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+  projectiles.push({
+    x: player.x, y: player.y,
+    vx: (dx / dist) * w.speed, vy: (dy / dist) * w.speed,
+    damage: w.damage, life: 80, weapon: player.weapon,
+    r: w.color[0], g: w.color[1], b: w.color[2]
+  });
+}
+
+function simulate() {
+  frame++;
+  if (fireCooldown > 0) fireCooldown--;
+  player.heat = Math.max(0, player.heat - 0.3);
+  if (player.frameshiftCooldown > 0) player.frameshiftCooldown--;
+  if (msgTimer > 0) msgTimer--;
+
+  // Enemy AI
+  enemies.forEach(e => {
+    const dx = player.x - e.x;
+    const dy = player.y - e.y;
+    const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+    e.x += (dx / dist) * e.speed;
+    e.y += (dy / dist) * e.speed;
+
+    // Enemy fires
+    e.fireTimer--;
+    if (e.fireTimer <= 0) {
+      e.fireTimer = 80 + Math.random() * 60;
+      projectiles.push({
+        x: e.x, y: e.y,
+        vx: (dx / dist) * 0.008, vy: (dy / dist) * 0.008,
+        damage: 10, life: 100, weapon: -1, r: 200, g: 50, b: 50
+      });
+    }
+
+    // Collision with player
+    if (dist < 0.03) {
+      player.hull -= 5;
+      e.hp -= 20;
+    }
+  });
+
+  // Projectiles
+  projectiles.forEach(p => {
+    p.x += p.vx; p.y += p.vy; p.life--;
+
+    if (p.weapon >= 0) {
+      // Player projectile — check enemy hits
+      enemies.forEach(e => {
+        const dx = p.x - e.x;
+        const dy = p.y - e.y;
+        if (Math.sqrt(dx*dx + dy*dy) < 0.025) {
+          e.hp -= p.damage;
+          p.life = 0;
+          // Hit particles
+          for (let i = 0; i < 5; i++) {
+            particles.push({
+              x: e.x, y: e.y,
+              vx: (Math.random()-0.5)*0.005, vy: (Math.random()-0.5)*0.005,
+              life: 0.5, r: p.r, g: p.g, b: p.b, size: 2
+            });
+          }
+        }
+      });
+    } else {
+      // Enemy projectile — check player hit
+      const dx = p.x - player.x;
+      const dy = p.y - player.y;
+      if (Math.sqrt(dx*dx + dy*dy) < 0.02) {
+        player.hull -= p.damage;
+        p.life = 0;
+      }
+    }
+  });
+  projectiles = projectiles.filter(p => p.life > 0 && p.x > -0.1 && p.x < 1.1 && p.y > -0.1 && p.y < 1.1);
+
+  // Kill enemies
+  enemies = enemies.filter(e => {
+    if (e.hp <= 0) {
+      player.kills++;
+      player.score += 100;
+      for (let i = 0; i < 20; i++) {
+        const a = Math.random() * Math.PI * 2;
+        particles.push({
+          x: e.x, y: e.y,
+          vx: Math.cos(a)*0.006, vy: Math.sin(a)*0.006,
+          life: 1, r: 255, g: 80+Math.random()*80, b: 20, size: 2+Math.random()*3
+        });
+      }
+      return false;
+    }
+    return true;
+  });
+
+  // Particles
+  particles.forEach(p => { p.x += p.vx; p.y += p.vy; p.life -= 0.015; });
+  particles = particles.filter(p => p.life > 0);
+
+  // Wave progression
+  if (enemies.length === 0 && started) {
+    wave++;
+    spawnWave();
+  }
+
+  // Game over
+  if (player.hull <= 0 && !gameOver) {
+    gameOver = true;
+    addMessage(`HULL BREACH — A-SPHERE DESTROYED — ${player.kills} KILLS`);
+  }
+}
+
+function drawStarfield() {
+  stars.forEach(s => {
+    ctx.fillStyle = `rgba(255,255,255,${s.b + Math.sin(frame*0.005+s.x*10)*0.05})`;
+    ctx.fillRect(s.x * W, s.y * H, s.s, s.s);
+  });
+}
+
+function drawPlayer() {
+  const px = player.x * W;
+  const py = player.y * H;
+
+  // Ship glow
+  const grd = ctx.createRadialGradient(px, py, 0, px, py, 25);
+  grd.addColorStop(0, 'rgba(0,229,255,0.15)');
+  grd.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = grd;
+  ctx.beginPath();
+  ctx.arc(px, py, 25, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Ship body
+  ctx.beginPath();
+  ctx.arc(px, py, 6, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(0,229,255,0.6)';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(0,229,255,0.8)';
+  ctx.stroke();
+
+  // Targeting line to mouse
+  ctx.beginPath();
+  ctx.moveTo(px, py);
+  ctx.lineTo(mouseX * W, mouseY * H);
+  ctx.strokeStyle = 'rgba(0,229,255,0.08)';
+  ctx.setLineDash([4, 8]);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Crosshair at mouse
+  const mx = mouseX * W, my = mouseY * H;
+  ctx.strokeStyle = 'rgba(0,229,255,0.25)';
+  ctx.beginPath();
+  ctx.arc(mx, my, 12, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(mx - 16, my); ctx.lineTo(mx - 8, my);
+  ctx.moveTo(mx + 8, my); ctx.lineTo(mx + 16, my);
+  ctx.moveTo(mx, my - 16); ctx.lineTo(mx, my - 8);
+  ctx.moveTo(mx, my + 8); ctx.lineTo(mx, my + 16);
+  ctx.stroke();
+}
+
+function drawEnemies() {
+  enemies.forEach(e => {
+    const ex = e.x * W, ey = e.y * H;
+    // Apathy glow
+    const grd = ctx.createRadialGradient(ex, ey, 0, ex, ey, e.size * 2);
+    grd.addColorStop(0, 'rgba(200,50,50,0.2)');
+    grd.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = grd;
+    ctx.beginPath();
+    ctx.arc(ex, ey, e.size * 2, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Body — irregular shape
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) {
+      const a = (i / 6) * Math.PI * 2 + frame * 0.005;
+      const r = e.size * (0.7 + Math.sin(a * 3 + frame * 0.01) * 0.3);
+      const px = ex + Math.cos(a) * r;
+      const py = ey + Math.sin(a) * r;
+      i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+    }
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(120,20,20,0.6)';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(200,50,50,0.5)';
+    ctx.stroke();
+
+    // HP bar
+    ctx.fillStyle = 'rgba(200,50,50,0.3)';
+    ctx.fillRect(ex - e.size, ey - e.size - 6, e.size * 2, 2);
+    ctx.fillStyle = 'rgba(200,50,50,0.7)';
+    ctx.fillRect(ex - e.size, ey - e.size - 6, e.size * 2 * (e.hp / e.maxHp), 2);
+  });
+}
+
+function drawProjectiles() {
+  projectiles.forEach(p => {
+    const px = p.x * W, py = p.y * H;
+    ctx.beginPath();
+    ctx.arc(px, py, p.weapon === 2 ? 4 : 2, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${p.r},${p.g},${p.b},0.8)`;
+    ctx.fill();
+    // Trail
+    ctx.beginPath();
+    ctx.moveTo(px, py);
+    ctx.lineTo(px - p.vx * W * 3, py - p.vy * H * 3);
+    ctx.strokeStyle = `rgba(${p.r},${p.g},${p.b},0.3)`;
+    ctx.stroke();
+  });
+}
+
+function drawParticles() {
+  particles.forEach(p => {
+    ctx.fillStyle = `rgba(${p.r},${p.g},${p.b},${p.life})`;
+    ctx.fillRect(p.x * W, p.y * H, p.size, p.size);
+  });
+}
+
+function updateHud() {
+  const w = WEAPONS[player.weapon];
+  document.getElementById('hud-left').innerHTML =
+    `HULL: <span style="color:${player.hull > 50 ? 'var(--accent)' : 'var(--accent2)'}">${Math.max(0,player.hull)}%</span><br>` +
+    `HEAT: ${player.heat.toFixed(0)}%<br>` +
+    `FRAMESHIFT: ${player.frameshiftCooldown > 0 ? (player.frameshiftCooldown/60).toFixed(1)+'s' : 'READY'}`;
+
+  document.getElementById('hud-right').innerHTML =
+    `WAVE: ${wave}<br>KILLS: ${player.kills}<br>SCORE: ${player.score}`;
+
+  document.getElementById('hud-center').textContent =
+    `A-SPHERE TACTICAL — ${enemies.length} CONTACTS`;
+
+  let whtml = '';
+  WEAPONS.forEach((wp, i) => {
+    const sel = i === player.weapon;
+    const ammoStr = i === 0 ? 'INF' : player.ammo[i];
+    whtml += `<div${sel ? ' class="active-weapon"' : ''} style="color:${sel ? `rgb(${wp.color})` : 'var(--text-dim)'}">` +
+      `${i+1}. ${wp.name} [${ammoStr}]</div>`;
+  });
+  document.getElementById('weapons').innerHTML = whtml;
+
+  // Status bars
+  let bars = '';
+  const heatColor = player.heat > 80 ? 'var(--accent2)' : 'var(--accent)';
+  bars += `<div class="bar-label">HEAT</div><div class="bar-track"><div class="bar-fill" style="width:${player.heat}%;background:${heatColor}"></div></div>`;
+  bars += `<div class="bar-label">HULL</div><div class="bar-track"><div class="bar-fill" style="width:${Math.max(0,player.hull)}%;background:${player.hull>30?'var(--accent)':'var(--red)'}"></div></div>`;
+  bars += `<div class="bar-label">FRAMESHIFT</div><div class="bar-track"><div class="bar-fill" style="width:${Math.max(0,100-player.frameshiftCooldown/1.8)}%;background:rgba(140,100,255,0.6)"></div></div>`;
+  document.getElementById('bars-left').innerHTML = bars;
+
+  // Message
+  const msgEl = document.getElementById('msg');
+  if (msgTimer > 0 && messages.length > 0) {
+    msgEl.textContent = messages[messages.length - 1];
+    msgEl.style.opacity = Math.min(1, msgTimer / 30);
+  } else {
+    msgEl.textContent = '';
+  }
+}
+
+function draw() {
+  if (started && !gameOver) simulate();
+  ctx.fillStyle = '#010408';
+  ctx.fillRect(0, 0, W, H);
+  drawStarfield();
+  if (started) {
+    drawPlayer();
+    drawEnemies();
+    drawProjectiles();
+    drawParticles();
+  }
+  updateHud();
+  requestAnimationFrame(draw);
+}
+
+// Input
+cockpit.addEventListener('mousemove', e => {
+  const rect = cv.getBoundingClientRect();
+  mouseX = (e.clientX - rect.left) / rect.width;
+  mouseY = (e.clientY - rect.top) / rect.height;
+});
+
+cockpit.addEventListener('click', () => {
+  if (!started) {
+    started = true;
+    document.getElementById('hint').style.display = 'none';
+    spawnWave();
+  } else {
+    fire();
+  }
+});
+
+document.addEventListener('keydown', e => {
+  if (e.code === 'Space') { e.preventDefault(); frameshift(); }
+  if (e.key === '1') player.weapon = 0;
+  if (e.key === '2') player.weapon = 1;
+  if (e.key === '3') player.weapon = 2;
+});
+
+draw();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

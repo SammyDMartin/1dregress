@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apathy Approach — Long-Range Sensor Display</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow-y: auto; }
+.sim-wrap { max-width: 1000px; margin: 80px auto 40px; padding: 0 20px; }
+.page-title { text-align: center; font-size: 18px; letter-spacing: 6px; color: var(--accent); }
+.page-sub { text-align: center; font-size: 10px; letter-spacing: 3px; color: var(--text-dim); margin: 6px 0 20px; }
+.sensor-display {
+  position: relative; border: 1px solid var(--border); border-radius: 4px;
+  overflow: hidden; background: #010408; height: 600px;
+}
+.sensor-display canvas { width: 100%; height: 100%; display: block; }
+.telemetry-overlay {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none; font-family: var(--mono);
+}
+.telem-top {
+  position: absolute; top: 12px; left: 12px; right: 12px;
+  display: flex; justify-content: space-between;
+  font-size: 10px; color: var(--accent);
+}
+.telem-left { line-height: 2; }
+.telem-right { text-align: right; line-height: 2; }
+.telem-center {
+  position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+  text-align: center; font-size: 9px; letter-spacing: 3px; color: var(--text-dim);
+}
+.alert-bar {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 10px 16px; font-size: 11px; text-align: center;
+  font-family: var(--mono); color: var(--accent2);
+  background: rgba(255,107,53,0.05); border-top: 1px solid rgba(255,107,53,0.2);
+}
+.mass-readout {
+  position: absolute; bottom: 50px; right: 16px;
+  font-size: 9px; color: var(--text-dim); text-align: right;
+  line-height: 1.8; font-family: var(--mono);
+}
+.controls { display: flex; gap: 12px; margin-top: 16px; align-items: center; flex-wrap: wrap; }
+.ctrl-btn {
+  background: var(--panel); border: 1px solid var(--border); border-radius: 4px;
+  color: var(--accent); font-family: var(--mono); font-size: 11px;
+  padding: 8px 16px; cursor: pointer; letter-spacing: 2px; transition: all 0.2s;
+}
+.ctrl-btn:hover { background: rgba(0,229,255,0.1); }
+.ctrl-btn.active { background: rgba(0,229,255,0.15); border-color: var(--accent); }
+.time-label { font-size: 10px; color: var(--text-dim); letter-spacing: 2px; margin-left: auto; font-family: var(--mono); }
+.lore-strip {
+  margin-top: 20px; border: 1px solid var(--border); border-radius: 4px;
+  padding: 16px; background: var(--panel); font-size: 10px;
+  line-height: 1.8; color: var(--text-dim);
+}
+.lore-strip .highlight { color: var(--text); }
+.lore-strip .warn { color: var(--accent2); }
+</style>
+</head>
+<body>
+<div class="sim-wrap">
+  <div class="page-title">APATHY APPROACH</div>
+  <div class="page-sub">LONG-RANGE SENSOR DISPLAY &mdash; BERSERKER INTERCEPT, ~3200 CE</div>
+  <div class="sensor-display">
+    <canvas id="cv"></canvas>
+    <div class="telemetry-overlay">
+      <div class="telem-top">
+        <div class="telem-left" id="telem-left"></div>
+        <div class="telem-right" id="telem-right"></div>
+      </div>
+      <div class="telem-center" id="telem-center">DEEP SPACE EARLY WARNING ARRAY</div>
+      <div class="mass-readout" id="mass-readout"></div>
+      <div class="alert-bar" id="alert-bar"></div>
+    </div>
+  </div>
+  <div class="controls">
+    <button class="ctrl-btn" onclick="restart()">RESTART</button>
+    <button class="ctrl-btn" id="btn-speed" onclick="cycleSpeed()">SPEED: 1x</button>
+    <button class="ctrl-btn" id="btn-pause" onclick="togglePause()">PAUSE</button>
+    <div class="time-label" id="time-label">T-0:00</div>
+  </div>
+  <div class="lore-strip">
+    <span class="highlight">APATHY BERSERKER MACHINES.</span> Origin unknown. Composition unknown.
+    <span class="warn">Earth-mass agglomerations</span> decelerating at 40,000G.
+    Replicate by consuming mass. Practically indestructible.
+    Project anti-mind affects that drive crews insane. Deploy the
+    <span class="highlight">anthropic trap</span> — proving through simulation that defending crews
+    are almost certainly not real. Their only statement:
+    <span class="warn">"Explaining our motives would pose a risk to all that is conscious."</span>
+  </div>
+</div>
+<script>
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+let W, H, frame = 0, paused = false, speed = 1;
+let simTime = 0; // 0 to 1 (approach progress)
+
+// Sensor degradation increases as Apathy gets closer
+function sensorQuality() { return Math.max(0.05, 1 - simTime * 1.2); }
+
+function resize() {
+  const r = window.devicePixelRatio || 1;
+  const rect = cv.parentElement.getBoundingClientRect();
+  W = rect.width; H = rect.height;
+  cv.width = W * r; cv.height = H * r;
+  ctx.setTransform(r, 0, 0, r, 0, 0);
+}
+resize();
+window.addEventListener('resize', resize);
+
+// Stars
+const stars = [];
+for (let i = 0; i < 120; i++) {
+  stars.push({ x: Math.random(), y: Math.random(), b: 0.1 + Math.random() * 0.3, s: Math.random() });
+}
+
+function drawStarfield() {
+  const q = sensorQuality();
+  stars.forEach(s => {
+    const jx = q < 0.5 ? (Math.random() - 0.5) * (1 - q) * 4 : 0;
+    const jy = q < 0.5 ? (Math.random() - 0.5) * (1 - q) * 4 : 0;
+    ctx.fillStyle = `rgba(255,255,255,${s.b * q})`;
+    ctx.fillRect(s.x * W + jx, s.y * H + jy, 1, 1);
+  });
+}
+
+function drawScanlines() {
+  const q = sensorQuality();
+  if (q > 0.7) return;
+  const intensity = (1 - q) * 0.08;
+  for (let y = 0; y < H; y += 3) {
+    ctx.fillStyle = `rgba(0,229,255,${intensity * (0.5 + Math.sin(y * 0.1 + frame * 0.05) * 0.5)})`;
+    ctx.fillRect(0, y, W, 1);
+  }
+}
+
+function drawSensorNoise() {
+  const q = sensorQuality();
+  if (q > 0.5) return;
+  const noiseLevel = (1 - q) * 200;
+  for (let i = 0; i < noiseLevel; i++) {
+    const nx = Math.random() * W;
+    const ny = Math.random() * H;
+    ctx.fillStyle = `rgba(${Math.random() > 0.5 ? '200,50,50' : '0,229,255'},${(1-q) * 0.15 * Math.random()})`;
+    ctx.fillRect(nx, ny, 1 + Math.random() * 2, 1);
+  }
+}
+
+function drawRadarSweep() {
+  const cx = W / 2, cy = H / 2;
+  const maxR = Math.min(W, H) * 0.42;
+
+  // Range rings
+  for (let i = 1; i <= 4; i++) {
+    const r = maxR * i / 4;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.strokeStyle = `rgba(0,229,255,${0.06 + (i === 4 ? 0.04 : 0)})`;
+    ctx.stroke();
+  }
+
+  // Cross lines
+  ctx.strokeStyle = 'rgba(0,229,255,0.04)';
+  ctx.beginPath();
+  ctx.moveTo(cx - maxR, cy); ctx.lineTo(cx + maxR, cy);
+  ctx.moveTo(cx, cy - maxR); ctx.lineTo(cx, cy + maxR);
+  ctx.stroke();
+
+  // Sweep line
+  const sweepAngle = frame * 0.015;
+  ctx.beginPath();
+  ctx.moveTo(cx, cy);
+  ctx.lineTo(cx + Math.cos(sweepAngle) * maxR, cy + Math.sin(sweepAngle) * maxR);
+  ctx.strokeStyle = 'rgba(0,229,255,0.15)';
+  ctx.stroke();
+
+  // Sweep trail
+  const trailGrad = ctx.createConicGradient(sweepAngle - 0.5, cx, cy);
+  trailGrad.addColorStop(0, 'rgba(0,229,255,0)');
+  trailGrad.addColorStop(0.08, 'rgba(0,229,255,0.04)');
+  trailGrad.addColorStop(0.1, 'rgba(0,229,255,0)');
+  ctx.fillStyle = trailGrad;
+  ctx.beginPath();
+  ctx.arc(cx, cy, maxR, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Range labels
+  ctx.fillStyle = 'rgba(0,229,255,0.15)';
+  ctx.font = '8px monospace';
+  ctx.textAlign = 'left';
+  for (let i = 1; i <= 4; i++) {
+    const dist = (5 - i) * (1 - simTime) * 0.5;
+    ctx.fillText(`${dist.toFixed(1)} AU`, cx + maxR * i / 4 + 4, cy - 4);
+  }
+
+  // Center marker (our fleet)
+  ctx.beginPath();
+  ctx.arc(cx, cy, 4, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(0,229,255,0.5)';
+  ctx.fill();
+  ctx.fillStyle = 'rgba(0,229,255,0.2)';
+  ctx.font = '7px monospace';
+  ctx.fillText('FLEET', cx + 8, cy + 3);
+
+  return { cx, cy, maxR };
+}
+
+function drawApathy(cx, cy, maxR) {
+  // Apathy position — approaches from top-right
+  const approachDist = Math.max(0.02, 1 - simTime);
+  const ax = cx + maxR * approachDist * 0.6;
+  const ay = cy - maxR * approachDist * 0.5;
+
+  // Size grows as it approaches
+  const size = 3 + simTime * 25;
+  const q = sensorQuality();
+
+  // Apathy glow — red, ominous
+  const grd = ctx.createRadialGradient(ax, ay, 0, ax, ay, size * 3);
+  grd.addColorStop(0, `rgba(200,30,30,${0.3 * (1 + Math.sin(frame * 0.03) * 0.3)})`);
+  grd.addColorStop(0.5, 'rgba(150,20,20,0.1)');
+  grd.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = grd;
+  ctx.beginPath();
+  ctx.arc(ax, ay, size * 3, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Body — irregular, shifting
+  if (q > 0.2) {
+    ctx.beginPath();
+    for (let i = 0; i < 8; i++) {
+      const a = (i / 8) * Math.PI * 2;
+      const r = size * (0.6 + Math.sin(a * 3 + frame * 0.02) * 0.4);
+      const jx = q < 0.5 ? (Math.random() - 0.5) * (1 - q) * 6 : 0;
+      const jy = q < 0.5 ? (Math.random() - 0.5) * (1 - q) * 6 : 0;
+      const px = ax + Math.cos(a) * r + jx;
+      const py = ay + Math.sin(a) * r + jy;
+      i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+    }
+    ctx.closePath();
+    ctx.fillStyle = `rgba(80,10,10,${0.6 * q})`;
+    ctx.fill();
+    ctx.strokeStyle = `rgba(200,40,40,${0.4 * q})`;
+    ctx.stroke();
+  }
+
+  // At high approach, anti-mind effect
+  if (simTime > 0.7) {
+    const intensity = (simTime - 0.7) / 0.3;
+    // Distortion waves emanating from Apathy
+    for (let i = 0; i < 3; i++) {
+      const waveR = (frame * 0.5 + i * 40) % 150;
+      ctx.beginPath();
+      ctx.arc(ax, ay, waveR, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(200,50,50,${0.08 * intensity * (1 - waveR / 150)})`;
+      ctx.stroke();
+    }
+  }
+
+  // At very high approach, the grid of light
+  if (simTime > 0.85) {
+    const gridIntensity = (simTime - 0.85) / 0.15;
+    // Grid pattern
+    const gridSpacing = 30;
+    ctx.strokeStyle = `rgba(200,180,255,${0.03 * gridIntensity})`;
+    for (let gx = 0; gx < W; gx += gridSpacing) {
+      ctx.beginPath();
+      ctx.moveTo(gx + Math.sin(frame * 0.01 + gx * 0.01) * 2, 0);
+      ctx.lineTo(gx + Math.sin(frame * 0.01 + gx * 0.01) * 2, H);
+      ctx.stroke();
+    }
+    for (let gy = 0; gy < H; gy += gridSpacing) {
+      ctx.beginPath();
+      ctx.moveTo(0, gy + Math.cos(frame * 0.01 + gy * 0.01) * 2);
+      ctx.lineTo(W, gy + Math.cos(frame * 0.01 + gy * 0.01) * 2);
+      ctx.stroke();
+    }
+  }
+
+  // Targeting bracket
+  ctx.strokeStyle = `rgba(255,60,40,${0.3 + Math.sin(frame * 0.05) * 0.15})`;
+  const bs = size + 8;
+  ctx.beginPath();
+  ctx.moveTo(ax - bs, ay - bs + 5); ctx.lineTo(ax - bs, ay - bs); ctx.lineTo(ax - bs + 5, ay - bs);
+  ctx.moveTo(ax + bs - 5, ay - bs); ctx.lineTo(ax + bs, ay - bs); ctx.lineTo(ax + bs, ay - bs + 5);
+  ctx.moveTo(ax + bs, ay + bs - 5); ctx.lineTo(ax + bs, ay + bs); ctx.lineTo(ax + bs - 5, ay + bs);
+  ctx.moveTo(ax - bs + 5, ay + bs); ctx.lineTo(ax - bs, ay + bs); ctx.lineTo(ax - bs, ay + bs - 5);
+  ctx.stroke();
+
+  // Label
+  ctx.fillStyle = 'rgba(255,60,40,0.4)';
+  ctx.font = '8px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('CONTACT ALPHA', ax, ay - bs - 8);
+  ctx.fillText('CLASS: BERSERKER', ax, ay - bs - 0);
+}
+
+function updateTelemetry() {
+  const q = sensorQuality();
+  const distAU = Math.max(0.001, (1 - simTime) * 2).toFixed(3);
+  const mass = (simTime > 0.3 ? '5.97 x 10²⁴ kg' : (q > 0.5 ? 'ESTIMATING...' : '???'));
+  const decel = simTime > 0.2 ? '40,000 G' : 'CALCULATING...';
+  const vel = (0.1 * (1 - simTime)).toFixed(4) + 'c';
+
+  const glitch = q < 0.4 ? ' [DEGRADED]' : '';
+
+  document.getElementById('telem-left').innerHTML =
+    `RANGE: <span style="color:${simTime > 0.6 ? 'var(--accent2)' : 'var(--accent)'}">${distAU} AU</span>${glitch}<br>` +
+    `VELOCITY: ${vel}<br>` +
+    `DECEL: ${decel}`;
+
+  document.getElementById('telem-right').innerHTML =
+    `SENSOR QUALITY: <span style="color:${q < 0.3 ? 'var(--red)' : q < 0.6 ? 'var(--accent2)' : 'var(--accent)'}">${(q*100).toFixed(0)}%</span><br>` +
+    `CONTACTS: 1<br>` +
+    `THREAT: <span style="color:var(--red)">MAXIMUM</span>`;
+
+  document.getElementById('mass-readout').innerHTML =
+    `MASS: ${mass}<br>` +
+    `COMPOSITION: UNKNOWN<br>` +
+    `ORIGIN: UNKNOWN<br>` +
+    (simTime > 0.5 ? `ANTI-MIND: <span style="color:var(--red)">DETECTED</span><br>` : '') +
+    (simTime > 0.85 ? `<span style="color:var(--accent2)">ANTHROPIC TRAP DEPLOYING</span>` : '');
+
+  // Alert bar
+  const alerts = [
+    { t: 0, msg: 'DEEP SPACE ARRAY — MONITORING' },
+    { t: 0.15, msg: 'ANOMALOUS CONTACT DETECTED — BEARING 034 MARK 12' },
+    { t: 0.3, msg: 'MASS ESTIMATE: EARTH-EQUIVALENT — THIS IS NOT A DRILL' },
+    { t: 0.45, msg: 'DECELERATION PROFILE CONFIRMED: 40,000G — BERSERKER CLASSIFICATION' },
+    { t: 0.55, msg: 'ALL FLEET ELEMENTS TO COMBAT STATIONS — PRIORITY ALPHA' },
+    { t: 0.65, msg: 'WARNING: SENSOR DEGRADATION DETECTED — ANTI-MIND COUNTERMEASURES ACTIVE' },
+    { t: 0.75, msg: 'CREW PSYCHOLOGICAL INTEGRITY MONITORS ACTIVE — REPORT ANY ANOMALIES' },
+    { t: 0.85, msg: 'ANTHROPIC TRAP DEPLOYMENT IN PROGRESS — DO NOT ENGAGE WITH HOSTILE COMMUNICATIONS' },
+    { t: 0.92, msg: '"EXPLAINING OUR MOTIVES WOULD POSE A RISK TO ALL THAT IS CONSCIOUS"' },
+    { t: 0.97, msg: 'WEAPONS FREE — ALL BATTERIES FIRE AT WILL' }
+  ];
+  let currentAlert = alerts[0].msg;
+  for (const a of alerts) {
+    if (simTime >= a.t) currentAlert = a.msg;
+  }
+  const alertBar = document.getElementById('alert-bar');
+  alertBar.textContent = currentAlert;
+  alertBar.style.color = simTime > 0.85 ? 'var(--red)' : 'var(--accent2)';
+
+  // Time label
+  const minsLeft = Math.max(0, (1 - simTime) * 120);
+  const mins = Math.floor(minsLeft);
+  const secs = Math.floor((minsLeft - mins) * 60);
+  document.getElementById('time-label').textContent =
+    `T-${mins}:${String(secs).padStart(2, '0')} TO ENGAGEMENT`;
+}
+
+function draw() {
+  if (!paused) {
+    frame++;
+    simTime = Math.min(1, simTime + 0.0002 * speed);
+  }
+
+  ctx.fillStyle = '#010408';
+  ctx.fillRect(0, 0, W, H);
+
+  drawStarfield();
+  const { cx, cy, maxR } = drawRadarSweep();
+  drawApathy(cx, cy, maxR);
+  drawScanlines();
+  drawSensorNoise();
+  updateTelemetry();
+
+  requestAnimationFrame(draw);
+}
+
+function restart() { simTime = 0; frame = 0; }
+function togglePause() {
+  paused = !paused;
+  document.getElementById('btn-pause').textContent = paused ? 'PLAY' : 'PAUSE';
+  document.getElementById('btn-pause').classList.toggle('active', paused);
+}
+function cycleSpeed() {
+  const speeds = [1, 2, 4, 8];
+  const idx = (speeds.indexOf(speed) + 1) % speeds.length;
+  speed = speeds[idx];
+  document.getElementById('btn-speed').textContent = `SPEED: ${speed}x`;
+}
+
+draw();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

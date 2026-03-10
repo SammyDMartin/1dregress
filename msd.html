@@ -240,6 +240,7 @@ body { overflow: hidden; }
     <button data-tab="defence"><span class="tab-icon">◈</span>DEFENCE</button>
     <button data-tab="sensors"><span class="tab-icon">◎</span>SENSORS</button>
     <button data-tab="weapons"><span class="tab-icon">✦</span>WEAPONS</button>
+    <button data-tab="specs"><span class="tab-icon">▤</span>SPECS</button>
   </div>
 
   <!-- 3D Viewport -->
@@ -291,6 +292,7 @@ body { overflow: hidden; }
         <div class="data-row"><span class="label">DISPLACEMENT (WET)</span><span class="value">4,000 t</span></div>
         <div class="data-row"><span class="label">COMPLEMENT</span><span class="value">11 crew (285 max)</span></div>
       </div>
+      <a href="msd-dsphere.html" style="display:block;text-align:center;padding:8px;font-size:8px;letter-spacing:2px;color:var(--text-dim);border-top:1px solid var(--border);text-decoration:none;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">VIEW D-SPHERE MSD &rarr;</a>
     </div>
 
     <!-- POWER Tab -->
@@ -564,6 +566,95 @@ body { overflow: hidden; }
           </div>
           <span class="w-count">32×</span>
         </div>
+      </div>
+    </div>
+
+    <!-- SPECS Tab -->
+    <div class="tab-content" id="tab-specs">
+      <div class="panel">
+        <div class="panel-header">
+          <span class="title">RAW TECHNICAL SPECIFICATIONS</span>
+          <span class="badge badge-nominal">CLASSIFIED</span>
+        </div>
+        <div class="section-label">CLASS OVERVIEW</div>
+        <div class="data-row"><span class="label">NAME</span><span class="value">Annihilator-Class IP Assault Vehicle</span></div>
+        <div class="data-row"><span class="label">BUILDERS</span><span class="value">Arco Cooperative Holdings, Inner Halo, Mercury</span></div>
+        <div class="data-row"><span class="label">OPERATORS</span><span class="value">Arco Interstellar Agency, Union Human Defence Fleet</span></div>
+        <div class="data-row"><span class="label">PRECEDED BY</span><span class="value">Arsonist-Class IP Assault Vehicle</span></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="title">GENERAL CHARACTERISTICS</span></div>
+        <div class="data-row"><span class="label">TYPE</span><span class="value">SC3 Interplanetary Assault Ship</span></div>
+        <div class="data-row"><span class="label">DISPLACEMENT</span><span class="value">2,000 t (dry) / 4,000 t (wet)</span></div>
+        <div class="data-row"><span class="label">LENGTH</span><span class="value accent2">200 m</span></div>
+        <div class="data-row"><span class="label">COMPLEMENT</span><span class="value">11 (accommodation for up to 285)</span></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="title">INSTALLED POWER</span></div>
+        <div class="data-row"><span class="label">CONTINUOUS</span><span class="value accent2">1,000 GW</span></div>
+        <div class="data-row"><span class="label">PRIMARY</span><span class="value">1× 2740-model drive linked MHD column (1,000 GW)</span></div>
+        <div class="data-row"><span class="label">SECONDARY</span><span class="value">2× Aneutronic spheromak reactors (500 GW each)</span></div>
+        <div class="data-row"><span class="label">STORED ENERGY</span><span class="value accent2">4 TJ</span></div>
+        <div class="data-row"><span class="label">ECELL ARRAY</span><span class="value">100,000× 1 kg ECell (4 TJ total)</span></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="title">THERMAL CONTROL</span></div>
+        <div class="data-row"><span class="label">SYSTEM</span><span class="value">Carbon nanofluid centralised thermal dispersion</span></div>
+        <div class="data-row"><span class="label">RESERVOIR</span><span class="value">ECell-linked thermal recovery (100,000 kg)</span></div>
+        <div class="data-row"><span class="label">RADIATORS</span><span class="value">4× extensible 1 km² graphene strake</span></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="title">PROPULSION</span></div>
+        <div class="data-row"><span class="label">PRIMARY</span><span class="value">1× 2740-model External-matrix doped-beam ABC drive</span></div>
+        <div class="data-row"><span class="label">UPGRADE</span><span class="value">1× 2785-model Monopole-implosion Vacuum (MIV) drive</span></div>
+        <div class="data-row"><span class="label">MANOEUVRING</span><span class="value">4× gimballed electrothermal plasma rockets</span></div>
+        <div class="data-row"><span class="label">RCS</span><span class="value">64× electrothermal RCS nozzles (16×4 clusters)</span></div>
+        <div class="section-label">CRUISE PROFILE</div>
+        <div class="data-row"><span class="label">DELTA-V</span><span class="value accent2">6,931 kps</span></div>
+        <div class="data-row"><span class="label">ACCEL / POWER / Ve</span><span class="value">4 m/s² / 72,600 GW / 10,000 kps</span></div>
+        <div class="section-label">PEAK PROFILE</div>
+        <div class="data-row"><span class="label">DELTA-V</span><span class="value accent2">347 kps</span></div>
+        <div class="data-row"><span class="label">ACCEL / POWER / Ve</span><span class="value">200 m/s² / 181,000 GW / 500 kps</span></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="title">ARMOUR</span></div>
+        <div class="data-row"><span class="label">FORE</span><span class="value accent2">750 mm Hyperdiamond Whipple shield</span></div>
+        <div class="data-row"><span class="label">FLANKS</span><span class="value accent2">200 mm Hyperdiamond w. dispersive layer</span></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="title">SENSORS &amp; PROCESSING</span></div>
+        <div class="data-row"><span class="label">PASSIVE</span><span class="value">Single-photon hull skein</span></div>
+        <div class="data-row"><span class="label">OPTICAL</span><span class="value">Triply redundant telescope array (1–1000 Å)</span></div>
+        <div class="data-row"><span class="label">ACTIVE</span><span class="value">1–1000 Å LIDAR and phased-array hull radar</span></div>
+        <div class="data-row"><span class="label">PARTICLE</span><span class="value">Particle multiplier imager tubes</span></div>
+        <div class="data-row"><span class="label">REFIT</span><span class="value">Monomatrix fleck neutrino camera, GW detector</span></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="title">ELECTRONIC WARFARE</span></div>
+        <div class="data-row"><span class="label">BURNPULSE</span><span class="value">8× 2710-model 200 MW multipurpose transmitters</span></div>
+        <div class="data-row"><span class="label">NOTE</span><span class="value">Laser weapons can be repurposed as EW systems</span></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="title">ENERGY WEAPONS</span></div>
+        <div class="data-row"><span class="label">UV LASER</span><span class="value">32× 2710-model Class 1 continuous UV (5 GW each)</span></div>
+        <div class="data-row"><span class="label">X-RAY LASER</span><span class="value">4× 2712-model Class 2 burst X-ray (100 GW each)</span></div>
+        <div class="data-row"><span class="label">— OR —</span><span class="value"></span></div>
+        <div class="data-row"><span class="label">NEUTRALISER</span><span class="value">1× 2707-model burst proton beam (1 TJ/shot)</span></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="title">GUIDED WEAPONS</span></div>
+        <div class="data-row"><span class="label">MICRO RAILS</span><span class="value">16× low-impulse 30 mm launch rails</span></div>
+        <div class="data-row"><span class="label">— MUNITIONS</span><span class="value">EBolt frag micromissiles, 0.5 Kt F-AM micromissiles</span></div>
+        <div class="data-row"><span class="label">HEAVY RAILS</span><span class="value">4× low-impulse 250 mm rails w/ rapid reloaders</span></div>
+        <div class="data-row"><span class="label">— EXODRONE</span><span class="value">ACH 2705-model: ABC drive, 2–4 payloads (Laser, F-AM, Beam, Flechette, EW, Coilgun, Fusion, AP-AM)</span></div>
+        <div class="data-row"><span class="label">— TORPEDO</span><span class="value">ACH 2703-model: ABC drive, warheads up to 30 Gt F-AM</span></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="title">KINETIC WEAPONS</span></div>
+        <div class="data-row"><span class="label">SPINAL</span><span class="value accent2">1× ACH 500 mm burst Diamond Duster hypervelocity mass projector</span></div>
+        <div class="data-row"><span class="label">— OR —</span><span class="value"></span></div>
+        <div class="data-row"><span class="label">TURRETS</span><span class="value">4× ACH 100 mm burst high energy ballistic turret</span></div>
+        <div class="data-row"><span class="label">CIWS</span><span class="value">32× ACH 2 mm continuous low-energy ballistic turret</span></div>
       </div>
     </div>
 

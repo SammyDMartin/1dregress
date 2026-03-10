@@ -28,6 +28,18 @@
     { href: 'liberation.html', label: 'LIBERATION' },
     { href: 'orrery.html', label: 'ORRERY' },
     { href: 'interstice-map.html', label: 'NETWORK' },
+    { href: 'ascensor.html', label: 'ASCENSOR' },
+    { href: 'warseed.html', label: 'WARSEED' },
+    { href: 'threshold-breach.html', label: 'THRESHOLD' },
+    { href: 'asphere-combat.html', label: 'A-SPHERE' },
+    { href: 'apathy-approach.html', label: 'APATHY' },
+    { href: 'simulations.html', label: 'SIMS' },
+    { href: 'interstice-transit.html', label: 'TRANSIT' },
+    { href: 'isidore-charge.html', label: 'ISIDORE' },
+    { href: 'wasteland-crawler.html', label: 'WASTELAND' },
+    { href: 'utilitaria-escape.html', label: 'ESCAPE' },
+    { href: 'bridge-tactical.html', label: 'BRIDGE' },
+    { href: 'msd-dsphere.html', label: 'D-SPHERE' },
   ];
 
   const current = location.pathname.split('/').pop() || 'index.html';

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Isidore's Charge — CIC Simulation</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow: hidden; margin: 0; }
+.canvas-full { position: fixed; inset: 0; z-index: 1; }
+.canvas-full canvas { width: 100%; height: 100%; display: block; }
+.overlay {
+  position: fixed; inset: 0; z-index: 2; pointer-events: none;
+  display: flex; flex-direction: column; justify-content: space-between;
+  padding: 80px 24px 24px;
+}
+.top-hud { font-family: var(--mono); font-size: 10px; color: var(--text-dim); line-height: 2; }
+.top-hud .bright { color: var(--accent); }
+.top-hud .warn { color: #ff6b35; }
+.top-hud .crit { color: #ff0000; animation: blink 0.5s infinite; }
+.bottom-text {
+  text-align: center; font-family: var(--mono); font-size: 11px;
+  color: var(--text-mid); line-height: 1.8; max-width: 600px;
+  margin: 0 auto; transition: opacity 0.5s;
+}
+.bottom-text .quote { font-style: italic; color: var(--text-dim); font-size: 10px; }
+.controls {
+  position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+  z-index: 3; display: flex; gap: 12px;
+}
+.ctrl-btn {
+  background: var(--panel); border: 1px solid var(--border); border-radius: 4px;
+  color: var(--accent); font-family: var(--mono); font-size: 11px;
+  padding: 8px 16px; cursor: pointer; letter-spacing: 2px; transition: all 0.2s;
+  pointer-events: all;
+}
+.ctrl-btn:hover { background: rgba(0,229,255,0.1); }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+</style>
+</head>
+<body>
+<div class="canvas-full"><canvas id="cv"></canvas></div>
+<div class="overlay">
+  <div class="top-hud" id="hud"></div>
+  <div class="bottom-text" id="narration"></div>
+</div>
+<div class="controls">
+  <button class="ctrl-btn" onclick="restart()">RESTART</button>
+</div>
+<script>
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const hudEl = document.getElementById('hud');
+const narrEl = document.getElementById('narration');
+let W, H, frame = 0, time = 0;
+
+const NARRATIONS = [
+  { t: 0, text: 'CIC, USS Isidore. Interstice proximity alert. Unidentified vessel accelerating toward the threshold.<br><span class="quote">"Match thrust, fire a warning shot."</span>' },
+  { t: 0.12, text: 'The hijacked freighter Atbarah crosses the threshold. Energy readings spike beyond scale. Something is coming through.<br><span class="quote">"The interstice flared with light."</span>' },
+  { t: 0.25, text: 'Four Arco warships emerge. Incisor-class. Weapons hot. The fleet is outmatched a hundred to four &mdash; and losing.<br><span class="quote">"Eyelid-like structures opened and closed along the ship\'s flanks."</span>' },
+  { t: 0.4, text: 'Captain Ngoni gives her final order. All hands brace. Main drive to maximum output.<br><span class="quote">"\'This is it,\' Ngoni said simply."</span>' },
+  { t: 0.55, text: 'Thirty Gs. The crew is crushed into their couches. Bones break. Capillaries burst. Vital signs flatline one by one.<br><span class="quote">"What felt like a mountain fell on him as they accelerated towards the attacker at thirty Gs."</span>' },
+  { t: 0.72, text: 'Only Ensign Hansun remains conscious. Hull temperature critical. Structural integrity failing. The Incisor fills the viewscreen.<br><span class="quote">"Captain Ngoni, her face surrounded by drifting droplets of blood."</span>' },
+  { t: 0.88, text: 'Impact. The Isidore rams the Arco Incisor at terminal velocity. One survivor. Ensign Hansun, alone among the dead.<br><span class="quote">"The ship shuddered and screamed around him."</span>' },
+];
+
+function resize() {
+  const r = window.devicePixelRatio || 1;
+  W = window.innerWidth; H = window.innerHeight;
+  cv.width = W * r; cv.height = H * r;
+  ctx.setTransform(r, 0, 0, r, 0, 0);
+}
+resize();
+window.addEventListener('resize', resize);
+
+const stars = [];
+for (let i = 0; i < 200; i++) {
+  stars.push({ x: Math.random(), y: Math.random(), b: 0.2 + Math.random() * 0.5, s: 0.5 + Math.random() * 1.5 });
+}
+
+const crew = [
+  { name: 'NGONI', deathTime: 0.45 },
+  { name: 'OKAFOR', deathTime: 0.5 },
+  { name: 'CHEN', deathTime: 0.52 },
+  { name: 'IDRISS', deathTime: 0.55 },
+  { name: 'KOVACS', deathTime: 0.58 },
+  { name: 'PETROV', deathTime: 0.6 },
+  { name: 'AMARA', deathTime: 0.62 },
+  { name: 'TANAKA', deathTime: 0.64 },
+  { name: 'WELLS', deathTime: 0.66 },
+  { name: 'SINGH', deathTime: 0.68 },
+  { name: 'DUBOIS', deathTime: 0.7 },
+  { name: 'HANSUN', deathTime: 2 },
+];
+
+function drawStars() {
+  const shake = time > 0.4 ? Math.min(1, (time - 0.4) * 3) : 0;
+  stars.forEach(s => {
+    const sx = s.x * W + (Math.random() - 0.5) * shake * 6;
+    const sy = s.y * H + (Math.random() - 0.5) * shake * 6;
+    ctx.fillStyle = 'rgba(200,210,255,' + s.b + ')';
+    ctx.fillRect(sx, sy, s.s, s.s);
+  });
+}
+
+function drawTacticalGrid() {
+  var cx = W / 2, cy = H / 2;
+  var gridAlpha = time < 0.88 ? 0.06 : 0.02;
+  ctx.strokeStyle = 'rgba(0,229,255,' + gridAlpha + ')';
+  ctx.lineWidth = 0.5;
+  for (var r = 60; r < Math.max(W,H); r += 80) {
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+  for (var a = 0; a < Math.PI * 2; a += Math.PI / 6) {
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + Math.cos(a) * W, cy + Math.sin(a) * H);
+    ctx.stroke();
+  }
+}
+
+function drawArcoShips(progress) {
+  var cx = W / 2, cy = H / 2;
+  if (progress < 0.12) return;
+  var appear = Math.min(1, (progress - 0.12) / 0.1);
+  var positions = [
+    { x: cx + 20, y: cy - 10 },
+    { x: cx + 90, y: cy - 60 },
+    { x: cx - 40, y: cy + 50 },
+    { x: cx + 70, y: cy + 40 },
+  ];
+  positions.forEach(function(p, i) {
+    var alpha = appear * 0.9;
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    var eyePhase = Math.sin(frame * 0.03 + i * 1.5) * 0.5 + 0.5;
+    ctx.fillStyle = 'rgba(255,80,40,' + (alpha * 0.3 * eyePhase) + ')';
+    ctx.beginPath();
+    ctx.ellipse(-8, 0, 3, 8 * eyePhase, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(8, 0, 3, 8 * eyePhase, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = 'rgba(255,107,53,' + alpha + ')';
+    ctx.beginPath();
+    ctx.moveTo(0, -10);
+    ctx.lineTo(-6, 0);
+    ctx.lineTo(0, 10);
+    ctx.lineTo(6, 0);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+    if (i === 0 && progress < 0.88) {
+      ctx.font = '9px monospace';
+      ctx.fillStyle = 'rgba(255,107,53,' + (alpha * 0.7) + ')';
+      ctx.fillText('INCISOR-1 [TARGET]', p.x + 14, p.y - 5);
+    }
+  });
+  if (progress > 0.87 && progress < 0.95) {
+    var flashT = (progress - 0.87) / 0.08;
+    var flashR = 20 + flashT * 250;
+    var flashA = (1 - flashT) * 0.9;
+    var grd = ctx.createRadialGradient(positions[0].x, positions[0].y, 0, positions[0].x, positions[0].y, flashR);
+    grd.addColorStop(0, 'rgba(255,255,255,' + flashA + ')');
+    grd.addColorStop(0.3, 'rgba(255,200,100,' + (flashA * 0.6) + ')');
+    grd.addColorStop(1, 'rgba(255,100,0,0)');
+    ctx.fillStyle = grd;
+    ctx.beginPath();
+    ctx.arc(positions[0].x, positions[0].y, flashR, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+function drawIsidore(progress) {
+  var startX = W * 0.25, startY = H * 0.75;
+  var endX = W / 2 + 20, endY = H / 2 - 10;
+  var moveT = progress < 0.4 ? 0 : Math.min(1, ((progress - 0.4) / 0.48));
+  var ease = moveT * moveT;
+  var ix = startX + (endX - startX) * ease;
+  var iy = startY + (endY - startY) * ease;
+  ctx.save();
+  ctx.translate(ix, iy);
+  ctx.rotate(-Math.PI / 4);
+  if (progress > 0.4) {
+    var flareLen = 10 + moveT * 35;
+    var grd = ctx.createLinearGradient(0, 5, 0, 5 + flareLen);
+    grd.addColorStop(0, 'rgba(100,200,255,' + (0.8 * (1 - moveT * 0.3)) + ')');
+    grd.addColorStop(0.5, 'rgba(50,100,255,' + (0.4 * (1 - moveT * 0.3)) + ')');
+    grd.addColorStop(1, 'rgba(0,0,100,0)');
+    ctx.fillStyle = grd;
+    ctx.fillRect(-3, 5, 6, flareLen);
+  }
+  var hullColor = progress > 0.7 ? 'rgba(255,' + Math.round(150 - moveT * 150) + ',0,0.9)' : 'rgba(0,229,255,0.9)';
+  ctx.fillStyle = hullColor;
+  ctx.beginPath();
+  ctx.moveTo(0, -8);
+  ctx.lineTo(-5, 5);
+  ctx.lineTo(5, 5);
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+  if (progress < 0.88) {
+    ctx.font = '9px monospace';
+    ctx.fillStyle = progress > 0.55 ? 'rgba(255,100,100,0.8)' : 'rgba(0,229,255,0.7)';
+    ctx.fillText('USS ISIDORE', ix + 12, iy - 5);
+  }
+}
+
+function drawGForceBar(progress) {
+  var x = W - 100, y = 100, barH = H * 0.35;
+  ctx.strokeStyle = 'rgba(0,229,255,0.3)';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(x, y, 20, barH);
+  var gForce = 0;
+  if (progress > 0.4 && progress < 0.88) gForce = ((progress - 0.4) / 0.48) * 30;
+  var fillH = (gForce / 35) * barH;
+  var gColor = gForce > 20 ? '#ff0000' : gForce > 10 ? '#ff6b35' : '#00e5ff';
+  ctx.fillStyle = gColor;
+  ctx.fillRect(x + 1, y + barH - fillH, 18, fillH);
+  ctx.font = '9px monospace';
+  ctx.fillStyle = gColor;
+  ctx.textAlign = 'right';
+  ctx.fillText(gForce.toFixed(1) + 'G', x - 5, y + barH - fillH + 4);
+  ctx.fillStyle = 'rgba(0,229,255,0.4)';
+  ctx.fillText('35G', x - 5, y + 4);
+  ctx.fillText('0G', x - 5, y + barH + 4);
+  ctx.textAlign = 'left';
+  [9, 15, 25].forEach(function(g) {
+    var my = y + barH - (g / 35) * barH;
+    ctx.strokeStyle = 'rgba(255,100,100,0.3)';
+    ctx.beginPath(); ctx.moveTo(x, my); ctx.lineTo(x + 20, my); ctx.stroke();
+    ctx.font = '7px monospace';
+    ctx.fillStyle = 'rgba(255,100,100,0.5)';
+    ctx.fillText(g === 9 ? 'LOC' : g === 15 ? 'INJURY' : 'FATAL', x + 24, my + 3);
+  });
+}
+
+function drawCrewStatus(progress) {
+  var x = 20, y = H * 0.35;
+  ctx.font = '8px monospace';
+  ctx.fillStyle = 'rgba(0,229,255,0.5)';
+  ctx.fillText('CREW VITALS', x, y - 8);
+  crew.forEach(function(c, i) {
+    var cy2 = y + i * 16;
+    var alive = progress < 0.4 || progress < c.deathTime;
+    var dying = !alive && progress < c.deathTime + 0.05;
+    ctx.fillStyle = alive ? 'rgba(0,229,255,0.6)' : dying ? 'rgba(255,100,0,0.6)' : 'rgba(255,50,50,0.3)';
+    ctx.fillText(c.name, x, cy2);
+    var lx = x + 55;
+    ctx.beginPath();
+    if (alive) {
+      var rate = progress > 0.4 ? 2 + ((progress - 0.4) / 0.48) * 4 : 1;
+      for (var px = 0; px < 50; px++) {
+        var phase = frame * 0.1 * rate + px * 0.3 + i;
+        var pv = Math.sin(phase) * 3;
+        var spike = Math.abs((phase % (Math.PI * 2)) - Math.PI) < 0.3 ? 6 : 0;
+        if (px === 0) ctx.moveTo(lx + px, cy2 - 4 + pv + spike);
+        else ctx.lineTo(lx + px, cy2 - 4 + pv + spike);
+      }
+      ctx.strokeStyle = 'rgba(0,255,100,0.5)';
+    } else {
+      ctx.moveTo(lx, cy2 - 4);
+      ctx.lineTo(lx + 50, cy2 - 4);
+      ctx.strokeStyle = 'rgba(255,50,50,0.3)';
+    }
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    var status = alive ? (progress > 0.4 ? 'STRESSED' : 'NOMINAL') : 'FLATLINE';
+    ctx.fillStyle = alive ? (progress > 0.4 ? 'rgba(255,200,0,0.6)' : 'rgba(0,255,100,0.5)') : 'rgba(255,50,50,0.5)';
+    ctx.fillText(status, lx + 55, cy2);
+  });
+}
+
+function updateHud() {
+  var gForce = time > 0.4 && time < 0.88 ? (((time - 0.4) / 0.48) * 30) : 0;
+  var range = time < 0.4 ? (12.5 - time * 20).toFixed(1) : Math.max(0, 4.5 - ((time-0.4)/0.48) * 4.5).toFixed(1);
+  var hullInt = time < 0.55 ? 100 : Math.max(0, 100 - ((time - 0.55) / 0.33) * 100);
+  var aliveCount = crew.filter(function(c) { return time < 0.4 || time < c.deathTime; }).length;
+  var gClass = gForce > 25 ? 'crit' : gForce > 10 ? 'warn' : 'bright';
+  var hullClass = hullInt < 30 ? 'crit' : hullInt < 60 ? 'warn' : 'bright';
+  hudEl.innerHTML = '<span class="bright">USS ISIDORE — CIC</span><br>' +
+    'BEARING: ' + (217 + time * 15).toFixed(1) + '&deg; &middot; RANGE: ' + range + ' KM<br>' +
+    'ACCEL: <span class="' + gClass + '">' + gForce.toFixed(1) + ' G</span> &middot; ' +
+    'HULL: <span class="' + hullClass + '">' + hullInt.toFixed(0) + '%</span><br>' +
+    'CREW: ' + aliveCount + '/12 RESPONDING' +
+    (gForce > 15 ? '<br><span class="crit">&#9888; CREW CASUALTIES DETECTED</span>' : '') +
+    (time > 0.85 ? '<br><span class="crit">&#9888; COLLISION IMMINENT</span>' : '');
+  var currentNarr = NARRATIONS[0];
+  for (var i = 0; i < NARRATIONS.length; i++) {
+    if (time >= NARRATIONS[i].t) currentNarr = NARRATIONS[i];
+  }
+  narrEl.innerHTML = currentNarr.text;
+}
+
+function draw() {
+  frame++;
+  time = Math.min(1, time + 0.0003);
+  ctx.save();
+  ctx.fillStyle = '#020408';
+  ctx.fillRect(0, 0, W, H);
+  if (time > 0.4) {
+    var intensity = Math.min(1, (time - 0.4) * 2.5);
+    ctx.translate((Math.random() - 0.5) * intensity * 6, (Math.random() - 0.5) * intensity * 6);
+  }
+  drawStars();
+  drawTacticalGrid();
+  drawArcoShips(time);
+  drawIsidore(time);
+  drawGForceBar(time);
+  drawCrewStatus(time);
+  updateHud();
+  // Scanlines
+  if (time > 0.4) {
+    var si = Math.min(1, (time - 0.4) * 2);
+    for (var y = 0; y < H; y += 3) {
+      ctx.fillStyle = 'rgba(0,0,0,' + (si * 0.06 * (Math.sin(y + frame * 2) * 0.5 + 0.5)) + ')';
+      ctx.fillRect(0, y, W, 1);
+    }
+  }
+  // Red vignette during charge
+  if (time > 0.5) {
+    var vigA = Math.min(0.4, (time - 0.5) * 0.8);
+    var grd = ctx.createRadialGradient(W/2, H/2, W*0.3, W/2, H/2, W*0.7);
+    grd.addColorStop(0, 'rgba(0,0,0,0)');
+    grd.addColorStop(1, 'rgba(80,0,0,' + vigA + ')');
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, 0, W, H);
+  }
+  ctx.restore();
+  requestAnimationFrame(draw);
+}
+
+function restart() { time = 0; frame = 0; }
+draw();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

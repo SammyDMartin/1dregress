@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Ascensor — Orbital Tether Cross-Section</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<style>
+body { overflow-y: auto; }
+.sim-container {
+  max-width: 1100px; margin: 80px auto 40px; padding: 0 20px;
+  display: grid; grid-template-columns: 120px 1fr 320px; gap: 20px;
+  min-height: calc(100vh - 120px);
+}
+.altitude-track {
+  position: relative; height: 600px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+.altitude-slider {
+  writing-mode: vertical-lr; direction: rtl;
+  height: 500px; width: 6px; cursor: pointer;
+  -webkit-appearance: none; appearance: none;
+  background: linear-gradient(to top, #1a3a2a, #003344, #001a33, #0a0a2a, #1a0a2a);
+  border-radius: 3px; outline: none;
+}
+.altitude-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%;
+  background: var(--accent); border: 2px solid var(--bg);
+  box-shadow: 0 0 12px var(--accent); cursor: pointer;
+}
+.altitude-slider::-moz-range-thumb {
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--accent); border: 2px solid var(--bg);
+  box-shadow: 0 0 12px var(--accent); cursor: pointer;
+}
+.alt-label {
+  font-size: 10px; color: var(--text-dim); letter-spacing: 1px;
+  margin-top: 12px; text-align: center;
+}
+.alt-readout {
+  font-size: 14px; font-weight: 700; color: var(--accent);
+  margin-bottom: 8px; font-family: var(--mono);
+}
+.canvas-wrap {
+  position: relative; border: 1px solid var(--border); border-radius: 4px;
+  overflow: hidden; background: #010a0f; height: 600px;
+}
+.canvas-wrap canvas { width: 100%; height: 100%; display: block; }
+.info-panel {
+  border: 1px solid var(--border); border-radius: 4px;
+  padding: 20px; background: var(--panel); height: 600px;
+  overflow-y: auto; display: flex; flex-direction: column; gap: 16px;
+}
+.zone-name {
+  font-size: 14px; letter-spacing: 3px; color: var(--accent);
+  font-weight: 700; border-bottom: 1px solid var(--border); padding-bottom: 8px;
+}
+.zone-desc { font-size: 11px; line-height: 1.8; color: var(--text-dim); }
+.zone-desc .highlight { color: var(--text); }
+.stat-row {
+  display: flex; justify-content: space-between; font-size: 10px;
+  color: var(--text-dim); padding: 4px 0; border-bottom: 1px solid var(--text-faint);
+}
+.stat-row .val { color: var(--accent); font-family: var(--mono); }
+.section-title {
+  font-size: 9px; letter-spacing: 3px; color: var(--text-mid);
+  margin-top: 8px;
+}
+.page-title {
+  text-align: center; margin: 80px 20px 0;
+  font-size: 18px; letter-spacing: 6px; color: var(--accent);
+}
+.page-sub {
+  text-align: center; font-size: 10px; letter-spacing: 3px;
+  color: var(--text-dim); margin: 6px 0 0;
+}
+@media (max-width: 800px) {
+  .sim-container { grid-template-columns: 1fr; }
+  .altitude-track { flex-direction: row; height: auto; gap: 12px; }
+  .altitude-slider { writing-mode: horizontal-tb; direction: ltr; height: 6px; width: 100%; }
+  .canvas-wrap { height: 400px; }
+  .info-panel { height: auto; }
+}
+</style>
+</head>
+<body>
+<div class="page-title">THE ASCENSOR</div>
+<div class="page-sub">ORBITAL TETHER CROSS-SECTION &mdash; CONURBATION ONE, 2479 CE</div>
+<div class="sim-container">
+  <div class="altitude-track">
+    <div class="alt-readout" id="alt-readout">0 KM</div>
+    <input type="range" class="altitude-slider" id="alt-slider" min="0" max="1000" value="0">
+    <div class="alt-label">ALTITUDE</div>
+  </div>
+  <div class="canvas-wrap">
+    <canvas id="cv"></canvas>
+  </div>
+  <div class="info-panel" id="info-panel"></div>
+</div>
+<script>
+const ZONES = [
+  { name: 'OCEAN FLOOR', altRange: [0, 5], color: '#0a2a1a',
+    gradient: ['#040e0a', '#0a2a1a'],
+    desc: 'Beneath the continental shelf. <span class="highlight">Geothermal warseed hubs</span> lie dormant in the crushing darkness, tethered to volcanic vents. Tens of thousands of hyperdiamond optical fibres coiled in silence, waiting for the signal that will end 165 years of occupation.',
+    stats: { 'Pressure': '400+ atm', 'Temperature': '2–4°C', 'Visibility': '0 m', 'Warseed Status': 'DORMANT', 'Depth': '~4,000 m' }
+  },
+  { name: 'SURFACE — THE WASTELAND', altRange: [5, 20], color: '#1a3a1a',
+    gradient: ['#0a2a1a', '#1a4a2a'],
+    desc: 'Between the conurbations: a hostile alien jungle the Dyn call <span class="highlight">"false life."</span> Plant-animal hybrids with creeping tendrils and clicking fauna. The vegetation cannot tolerate salt air. Massive land-crawlers are the only safe transit — Enforcers patrol the routes.',
+    stats: { 'Atmosphere': 'Breathable (modified)', 'Hazard Level': 'EXTREME', 'Dyn Patrols': 'Frequent', 'Population': 'None (transit only)', 'Flora': 'Alien hybrid organisms' }
+  },
+  { name: 'CONURBATION ONE', altRange: [20, 60], color: '#1a2a3a',
+    gradient: ['#1a4a2a', '#1a2a4a'],
+    desc: '<span class="highlight">22 billion human beings</span> packed into terraced slums climbing the mountainsides. The Hollow Tower rises from a flooded valley. Grey internment blocks. Single-person farms. Memory machines in dim offices cataloguing what humanity once was.',
+    stats: { 'Population': '~22 billion', 'Structure': 'Terraced arcology', 'Dyn Governance': 'District Officers', 'Human Status': 'Occupied', 'Years Under Rule': '165' }
+  },
+  { name: 'TETHER BASE — ANCHOR STATION', altRange: [60, 120], color: '#0a1a3a',
+    gradient: ['#1a2a4a', '#0a1a4a'],
+    desc: 'The Ascensor\'s ground anchor. <span class="highlight">Carbyne chains</span> — the strongest material known — rise from massive foundation pylons driven into bedrock. Cargo platforms cycle endlessly upward, carrying tribute to the Dyn firmament above. The chains hum with tension.',
+    stats: { 'Structure': 'Carbyne chain bundle', 'Diameter': '~200 m', 'Tensile Load': '4.2 × 10⁹ N', 'Traffic': 'Continuous upward', 'Cargo': 'Resources / tribute' }
+  },
+  { name: 'TROPOSPHERE', altRange: [120, 250], color: '#0a1040',
+    gradient: ['#0a1a4a', '#0a1050'],
+    desc: 'The tether punches through cloud layers. At this altitude, the curvature of the Earth becomes visible. The carbyne chains are sheathed in aerodynamic fairings to reduce wind loading. <span class="highlight">Lightning strikes the tether constantly</span> — grounding systems channel terawatts harmlessly.',
+    stats: { 'Altitude': '12–25 km', 'Temperature': '-55°C', 'Wind Speed': '200+ km/h', 'Pressure': '0.05 atm', 'Lightning Strikes': '~400/day' }
+  },
+  { name: 'STRATOSPHERE', altRange: [250, 450], color: '#0a0a3a',
+    gradient: ['#0a1050', '#0a0a3a'],
+    desc: 'Above the weather. The sky deepens to indigo, then black. Stars become visible even in daytime. The tether narrows as atmospheric forces diminish. <span class="highlight">Surveillance platforms</span> dot the cable at intervals — Dyn monitoring stations watching for any sign of resistance below.',
+    stats: { 'Altitude': '25–50 km', 'Temperature': '-15°C (warming)', 'Pressure': '0.001 atm', 'Dyn Monitors': 'Every 5 km', 'Visibility': 'Horizon: 800+ km' }
+  },
+  { name: 'LOW ORBIT TRANSITION', altRange: [450, 650], color: '#050520',
+    gradient: ['#0a0a3a', '#050520'],
+    desc: 'The tether transitions from atmospheric cable to orbital structure. <span class="highlight">Counterweight systems</span> maintain tension as orbital mechanics take over from gravity. Docking ports allow transfer between ascending platforms and orbital shuttles. The Earth fills half the sky below.',
+    stats: { 'Altitude': '100–400 km', 'Orbital Velocity': '7.8 km/s', 'Gravity': '0.9 g (decreasing)', 'Atmosphere': 'Vacuum', 'Radiation': 'Moderate (Van Allen proximity)' }
+  },
+  { name: 'GEOSTATIONARY APPROACH', altRange: [650, 850], color: '#0a0520',
+    gradient: ['#050520', '#0a0520'],
+    desc: 'The long climb through the Van Allen belts. Radiation shielding thickens around the cargo platforms. The tether is a thread against the void. <span class="highlight">Transit time from surface: 7 days.</span> Passengers see the terminator line sweep across continents below.',
+    stats: { 'Altitude': '2,000–20,000 km', 'Transit Time': '~7 days', 'Radiation': 'HIGH (shielded)', 'Gravity': '0.5–0.1 g', 'Earth Angular Size': '40–15°' }
+  },
+  { name: 'DYN FIRMAMENT', altRange: [850, 950], color: '#1a0a2a',
+    gradient: ['#0a0520', '#1a0a2a'],
+    desc: 'Geostationary orbit. The <span class="highlight">Dyn firmament</span> — a permanent orbital infrastructure of warships, habitats, and command platforms. From here, the Dyn govern Earth as an afterthought. Thousands of vessels orbit in disciplined formations. The tether terminates at a massive counterweight station.',
+    stats: { 'Altitude': '35,786 km', 'Orbital Period': '24 hours (synchronous)', 'Dyn Vessels': '~2,000', 'Gravity': '0.02 g', 'Station Mass': '~10⁸ tonnes' }
+  },
+  { name: 'DEEP SPACE — BEYOND', altRange: [950, 1000], color: '#0a0010',
+    gradient: ['#1a0a2a', '#0a0010'],
+    desc: 'Beyond the firmament. The interstice — the wormhole that brought the Dyn here — hangs at the trailing Lagrange point of a distant gas giant. <span class="highlight">The Dyn empire extends through a network of wormholes</span> connecting dozens of star systems. Earth is one conquered world among many.',
+    stats: { 'Distance': '> 36,000 km', 'Nearest Interstice': '~5 AU', 'Dyn Systems': '30+', 'FTL Method': 'Interstice network', 'Human Knowledge': 'CLASSIFIED' }
+  }
+];
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const slider = document.getElementById('alt-slider');
+const readout = document.getElementById('alt-readout');
+const panel = document.getElementById('info-panel');
+let W, H, altitude = 0, targetAlt = 0, frame = 0;
+let particles = [];
+
+function resize() {
+  const r = window.devicePixelRatio || 1;
+  const rect = cv.parentElement.getBoundingClientRect();
+  W = rect.width; H = rect.height;
+  cv.width = W * r; cv.height = H * r;
+  ctx.setTransform(r, 0, 0, r, 0, 0);
+}
+resize();
+window.addEventListener('resize', resize);
+
+function getZone(a) {
+  for (let i = ZONES.length - 1; i >= 0; i--) {
+    if (a >= ZONES[i].altRange[0] / 1000) return ZONES[i];
+  }
+  return ZONES[0];
+}
+
+function altToKm(a) {
+  // Non-linear mapping: 0-1000 slider → 0-40000 km
+  const t = a / 1000;
+  if (t < 0.06) return t / 0.06 * 5;          // 0-5 km
+  if (t < 0.12) return 5 + (t - 0.06) / 0.06 * 45;  // 5-50 km
+  if (t < 0.45) return 50 + (t - 0.12) / 0.33 * 350; // 50-400 km
+  if (t < 0.85) return 400 + (t - 0.45) / 0.4 * 35386; // 400-35786 km
+  return 35786 + (t - 0.85) / 0.15 * 14214;   // beyond
+}
+
+function formatAlt(km) {
+  if (km < 1) return Math.round(km * 1000) + ' M';
+  if (km < 100) return km.toFixed(1) + ' KM';
+  if (km < 10000) return Math.round(km).toLocaleString() + ' KM';
+  return (km / 1000).toFixed(1) + ' × 10³ KM';
+}
+
+function updatePanel(zone) {
+  let html = `<div class="zone-name">${zone.name}</div>`;
+  html += `<div class="zone-desc">${zone.desc}</div>`;
+  html += `<div class="section-title">TELEMETRY</div>`;
+  for (const [k, v] of Object.entries(zone.stats)) {
+    html += `<div class="stat-row"><span>${k}</span><span class="val">${v}</span></div>`;
+  }
+  panel.innerHTML = html;
+}
+
+function lerp(a, b, t) { return a + (b - a) * t; }
+function lerpColor(c1, c2, t) {
+  const parse = c => [parseInt(c.slice(1,3),16), parseInt(c.slice(3,5),16), parseInt(c.slice(5,7),16)];
+  const [r1,g1,b1] = parse(c1);
+  const [r2,g2,b2] = parse(c2);
+  return `rgb(${Math.round(lerp(r1,r2,t))},${Math.round(lerp(g1,g2,t))},${Math.round(lerp(b1,b2,t))})`;
+}
+
+function spawnParticles() {
+  if (particles.length < 60 && Math.random() < 0.3) {
+    const km = altToKm(altitude * 1000);
+    const isSpace = km > 100;
+    particles.push({
+      x: Math.random() * W,
+      y: -10,
+      vx: (Math.random() - 0.5) * (isSpace ? 0.2 : 1),
+      vy: 0.5 + Math.random() * (isSpace ? 0.3 : 2),
+      life: 1,
+      size: isSpace ? 1 : 1 + Math.random() * 2,
+      type: isSpace ? 'star' : (km < 5 ? 'bubble' : (km < 50 ? 'spore' : 'ice'))
+    });
+  }
+}
+
+function drawTether(t) {
+  const cx = W / 2;
+  const tetherW = 4 + Math.sin(frame * 0.01) * 0.5;
+  // Tether cable
+  const grad = ctx.createLinearGradient(cx - tetherW, 0, cx + tetherW, 0);
+  grad.addColorStop(0, 'rgba(0,229,255,0.05)');
+  grad.addColorStop(0.3, 'rgba(0,229,255,0.15)');
+  grad.addColorStop(0.5, 'rgba(0,229,255,0.25)');
+  grad.addColorStop(0.7, 'rgba(0,229,255,0.15)');
+  grad.addColorStop(1, 'rgba(0,229,255,0.05)');
+  ctx.fillStyle = grad;
+  ctx.fillRect(cx - tetherW, 0, tetherW * 2, H);
+
+  // Cargo platforms moving upward
+  const platformCount = 5;
+  for (let i = 0; i < platformCount; i++) {
+    const py = ((frame * 0.5 + i * (H / platformCount)) % (H + 20)) - 10;
+    ctx.fillStyle = 'rgba(0,229,255,0.4)';
+    ctx.fillRect(cx - 8, py - 2, 16, 4);
+    ctx.fillStyle = 'rgba(0,229,255,0.15)';
+    ctx.fillRect(cx - 12, py - 1, 24, 2);
+  }
+
+  // Monitoring station markers
+  const km = altToKm(t * 1000);
+  if (km > 25 && km < 400) {
+    for (let i = 0; i < 3; i++) {
+      const sy = H * 0.2 + i * (H * 0.25);
+      ctx.strokeStyle = 'rgba(255,107,53,0.3)';
+      ctx.strokeRect(cx - 14, sy - 6, 28, 12);
+      ctx.fillStyle = 'rgba(255,107,53,0.6)';
+      ctx.fillRect(cx - 2, sy - 2, 4, 4);
+    }
+  }
+}
+
+function drawEnvironment(t) {
+  const km = altToKm(t * 1000);
+
+  if (km < 5) {
+    // Ocean: bubbles, darkness, bioluminescence
+    for (let i = 0; i < 8; i++) {
+      const bx = Math.random() * W;
+      const by = Math.random() * H;
+      const br = 1 + Math.random() * 3;
+      ctx.beginPath();
+      ctx.arc(bx, by, br, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(0,229,255,${0.02 + Math.random() * 0.05})`;
+      ctx.fill();
+    }
+    // Warseed glow at bottom
+    const glowY = H - 40;
+    const grd = ctx.createRadialGradient(W/2, glowY, 0, W/2, glowY, 80);
+    grd.addColorStop(0, 'rgba(0,229,255,0.08)');
+    grd.addColorStop(1, 'rgba(0,229,255,0)');
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, glowY - 80, W, 160);
+  }
+  else if (km < 50) {
+    // Wasteland / Conurbation: alien vegetation, buildings
+    ctx.fillStyle = 'rgba(0,80,40,0.1)';
+    for (let i = 0; i < 12; i++) {
+      const tx = (i * W / 12) + Math.sin(frame * 0.005 + i) * 5;
+      const th = 30 + Math.random() * 60;
+      ctx.fillRect(tx, H - th, 3, th);
+      // Tendrils
+      ctx.beginPath();
+      ctx.moveTo(tx, H - th);
+      ctx.quadraticCurveTo(tx + 15, H - th - 10, tx + 20, H - th + 5);
+      ctx.strokeStyle = 'rgba(0,120,60,0.15)';
+      ctx.stroke();
+    }
+    // Buildings silhouette
+    if (km > 10) {
+      ctx.fillStyle = 'rgba(0,229,255,0.03)';
+      for (let i = 0; i < 20; i++) {
+        const bx = i * (W / 20);
+        const bh = 40 + Math.random() * 100;
+        ctx.fillRect(bx, H - bh, W / 22, bh);
+        // Window lights
+        for (let wy = H - bh + 5; wy < H - 5; wy += 8) {
+          if (Math.random() > 0.6) {
+            ctx.fillStyle = 'rgba(255,170,0,0.1)';
+            ctx.fillRect(bx + 2, wy, 2, 2);
+            ctx.fillStyle = 'rgba(0,229,255,0.03)';
+          }
+        }
+      }
+    }
+  }
+  else if (km < 400) {
+    // Atmosphere: clouds, lightning, gradient sky
+    for (let i = 0; i < 5; i++) {
+      const cx = (frame * 0.2 + i * 200) % (W + 200) - 100;
+      const cy = H * 0.3 + i * 60 + Math.sin(frame * 0.003 + i) * 20;
+      ctx.fillStyle = 'rgba(100,120,140,0.04)';
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, 80, 15, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    // Lightning flash
+    if (Math.random() < 0.005) {
+      ctx.fillStyle = 'rgba(200,220,255,0.1)';
+      ctx.fillRect(0, 0, W, H);
+    }
+  }
+  else {
+    // Space: stars, Earth below
+    for (let i = 0; i < 40; i++) {
+      const sx = (i * 97 + frame * 0.02) % W;
+      const sy = (i * 137 + frame * 0.01) % H;
+      const sb = 0.2 + Math.sin(frame * 0.02 + i) * 0.15;
+      ctx.fillStyle = `rgba(255,255,255,${sb})`;
+      ctx.fillRect(sx, sy, 1, 1);
+    }
+    // Earth glow below
+    if (km < 36000) {
+      const earthSize = Math.max(20, 200 - (km - 400) * 0.005);
+      const grd = ctx.createRadialGradient(W/2, H + earthSize * 0.3, earthSize * 0.5, W/2, H + earthSize * 0.3, earthSize * 1.5);
+      grd.addColorStop(0, 'rgba(30,80,180,0.15)');
+      grd.addColorStop(0.5, 'rgba(20,60,120,0.08)');
+      grd.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = grd;
+      ctx.fillRect(0, H * 0.5, W, H * 0.5);
+    }
+    // Dyn ships at firmament
+    if (km > 30000) {
+      for (let i = 0; i < 8; i++) {
+        const dx = W * 0.1 + i * W * 0.1 + Math.sin(frame * 0.002 + i * 2) * 15;
+        const dy = 60 + i * 30 + Math.cos(frame * 0.003 + i) * 10;
+        ctx.fillStyle = 'rgba(255,107,53,0.3)';
+        ctx.beginPath();
+        ctx.moveTo(dx, dy);
+        ctx.lineTo(dx + 8, dy + 3);
+        ctx.lineTo(dx, dy + 6);
+        ctx.lineTo(dx - 8, dy + 3);
+        ctx.closePath();
+        ctx.fill();
+      }
+    }
+  }
+}
+
+function draw() {
+  frame++;
+  targetAlt = slider.value / 1000;
+  altitude += (targetAlt - altitude) * 0.08;
+
+  const zone = getZone(altitude);
+  const km = altToKm(altitude * 1000);
+  readout.textContent = formatAlt(km);
+
+  // Background gradient
+  const t = altitude;
+  const zIdx = ZONES.findIndex(z => z === zone);
+  const zStart = zone.altRange[0] / 1000;
+  const zEnd = zone.altRange[1] / 1000;
+  const localT = Math.min(1, Math.max(0, (t - zStart) / (zEnd - zStart)));
+  const bg = lerpColor(zone.gradient[0], zone.gradient[1], localT);
+
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+
+  drawEnvironment(altitude);
+  drawTether(altitude);
+
+  // Particles
+  spawnParticles();
+  particles.forEach(p => {
+    p.y += p.vy;
+    p.x += p.vx;
+    p.life -= 0.003;
+    if (p.type === 'bubble') {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(0,229,255,${p.life * 0.2})`;
+      ctx.stroke();
+    } else if (p.type === 'star') {
+      ctx.fillStyle = `rgba(255,255,255,${p.life * 0.5})`;
+      ctx.fillRect(p.x, p.y, 1, 1);
+    } else {
+      ctx.fillStyle = `rgba(0,229,255,${p.life * 0.15})`;
+      ctx.fillRect(p.x, p.y, p.size, p.size);
+    }
+  });
+  particles = particles.filter(p => p.life > 0 && p.y < H + 10);
+
+  requestAnimationFrame(draw);
+}
+
+let lastZone = null;
+slider.addEventListener('input', () => {
+  const zone = getZone(slider.value / 1000);
+  if (zone !== lastZone) { updatePanel(zone); lastZone = zone; }
+});
+
+updatePanel(ZONES[0]);
+lastZone = ZONES[0];
+draw();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>
