@@ -172,6 +172,9 @@ body { overflow: hidden; }
   <div id="morale-bar">
     FLEET MORALE <span id="morale-pct">100%</span>
     <div class="bar-bg"><div class="bar-fill" id="morale-fill" style="width:100%"></div></div>
+    <div style="margin-top:8px">EVACUATED <span id="evac-pct" style="color:var(--accent)">0%</span>
+      <span id="evac-abs" style="color:var(--text-dim)"></span></div>
+    <div class="bar-bg"><div class="bar-fill" id="evac-fill" style="width:0%;background:#8fd66f"></div></div>
   </div>
 
   <div id="fleet-strip"></div>
@@ -289,6 +292,12 @@ const G = 0.00981;
 const H = 0.5;
 const C = 299792;   // speed of light, km/s
 const Mm = 1000;    // 1 megametre = 1000 km; world coords in Mm
+const HEPPOLON_POP = 6e9;   // people behind the line
+/* Canon puts the engagement at ~45 minutes with the interstice holding
+   long enough for the full evacuation, so the throughput has to be able
+   to clear the planet in roughly that window — 6e9 / 2700 s. The old
+   800,000/s needed 5,000 s and made the objective unreachable. */
+const EVAC_RATE = HEPPOLON_POP / 2700;
 const WORLD = { w: 10000, h: 7000 };  // 10M x 7M km battlespace (~33 light-seconds wide)
 const INTERSTICE = { x: 5000, y: 3500 };   // the evacuation route is the heart of the map
 const PLANET = { x: 3600, y: 3500 };       // Heppolon, behind the interstice from the threat axis
@@ -315,12 +324,13 @@ const game = {
 };
 const stats = {
   asphereDestroyed: 0, dsphereDestroyed: 0,
-  slashersFired: 0, gammaFired: 0, conversionFired: 0,
+  slashersFired: 0, gammaFired: 0, conversionFired: 0, conversionDud: 0, ordnanceShredded: 0,
   overloads: 0, frameshifts: 0,
   apathyDamage: 0
 };
 
 const units = [], enemies = [], projectiles = [], beams = [], fx = [];
+const woawCmdr = { strikeT: 25, window: 0 };   // conversion-bomb strike coordination
 let selected = new Set();
 
 /* ── relativistic transit: at 33 light-seconds across, nothing here is
@@ -363,7 +373,7 @@ const CLS = {
     pdcRange: 80, pdcDmg: 2, pdcCycle: 2,
     graverRange: 400, graverDmg: 8, graverCycle: 15,
     slasherCount: 12, slasherSpeed: 200, slasherDmg: 15,
-    conversionCount: 2, conversionDmg: 80, conversionArm: 10,
+    conversionCount: 2, conversionDmg: 80, conversionArm: 4,
     overloadDmg: 120, overloadRadius: 60
   },
   dsphere: {
@@ -374,7 +384,7 @@ const CLS = {
     xrayCount: 220, xrayRange: 600, xrayDmg: 1, xrayCycle: 3,
     gammaCount: 8, gammaRange: 1200, gammaDmg: 12, gammaCycle: 12,
     slasherCount: 60, slasherSpeed: 150, slasherDmg: 20,
-    conversionCount: 30, conversionDmg: 120, conversionArm: 15,
+    conversionCount: 30, conversionDmg: 120, conversionArm: 5,
     masscannon: 35, massRange: 200, massDmg: 3, massCycle: 1,
     overloadDmg: 500, overloadRadius: 150
   },
@@ -382,11 +392,12 @@ const CLS = {
     label: 'APATHY AGGLOMERATION',
     acc: 40000*G,
     graverRange: 800, graverDmg: 30, graverCycle: 4,
+    pdCycle: 1.5, pdShots: 3,          // ordnance interceptions per cycle — the saturation threshold
     laserRange: 2000, laserDmg: 15, laserCycle: 2,
     waveRange: 400, waveDmg: 50,
     antimindRange: 3000, antimindCycle: 60,
     trapRange: 5000, trapCd: 180,
-    replicateRate: 0.001
+    replicateRate: 0.0006, replicateQuiet: 25   // only consolidates after 25 s without a hit
   }
 };
 
@@ -447,7 +458,7 @@ function makeApathy(x, y, hp){
     kind: 'apathy', cls: 'apathy', name: 'APATHY FRAGMENT',
     x, y, vx: 0, vy: 0, curAcc: 0, angle: Math.PI,
     hp, maxHp: hp, armor: 0,
-    graverCd: 0, laserCd: 0, waveCd: 0, antimindCd: 30, trapCd: 60,
+    graverCd: 0, laserCd: 0, waveCd: 0, pdCd: 0, antimindCd: 30, trapCd: 60,
     dead: false, flash: 0, replicateAcc: 0,
     target: null, state: 'approach'
   };
@@ -461,6 +472,8 @@ function initGame(){
   Object.keys(stats).forEach(k => stats[k] = 0);
   game.t = 0; game.morale = 100; game.trapActive = false; game.trapT = 0;
   game.evacPop = 0; game.evacRate = 0; game.over = false; game.endTimer = -1;
+  woawCmdr.strikeT = 25; woawCmdr.window = 0;
+  pendingHits.length = 0;
 
   // D-spheres screen the interstice on the threat axis
   for (let i = 0; i < 3; i++){
@@ -489,7 +502,7 @@ function initGame(){
   ap.approachAcc = 622.8 * (0.5 + scn.speed);        // km/s^2 — same order as 40,000 G
   enemies.push(ap);
 
-  game.evacRate = 800000; // people per second through the interstice
+  game.evacRate = EVAC_RATE; // people per second through the interstice
 }
 
 /* ── event log ───────────────────────────────────────────────────── */
@@ -529,6 +542,7 @@ function destroyUnit(u){
 function hitApathy(a, dmg){
   if (a.dead) return;
   a.hp -= dmg; a.flash = 0.25;
+  a.lastHitT = game.t;          // suppresses replication while under fire
   stats.apathyDamage += dmg;
   if (a.hp <= 0){
     a.dead = true;
@@ -553,11 +567,22 @@ function fireSlasher(u, target){
   u.flash = 0.1;
   fx.push({ type:'launch', x:u.x, y:u.y, tx:target.x, ty:target.y, t:0, dur:1.5, maxR:20, color:'rgba(0,229,255,0.6)', n:1 });
 }
+const CONV_SPEED = 150;  // Mm/s — frameshift-shunted, per canon — sets the minimum arming range for a bomb
+/* A conversion bomb needs to be under way for its full arm time before it
+   can initiate; one that reaches the target early is inert on impact. At
+   80 Mm/s that puts a hard minimum range on the weapon, and firing inside
+   it silently throws away the most powerful thing in the arsenal. */
+function convMinRange(u){ return CONV_SPEED * CLS[u.cls].conversionArm * 1.15; }
 function fireConversion(u, target){
   if (u.dead || u.conversions <= 0 || !target || target.dead) return;
+  if (dist(u, target) < convMinRange(u)){
+    log(u.name + ': too close to arm a conversion bomb — hold fire until ' +
+        fmt(convMinRange(u)*Mm) + ' km.', 'warn');
+    return;
+  }
   u.conversions--;
   stats.conversionFired++;
-  const spd = 80;
+  const spd = CONV_SPEED;
   const L = lead(u.x, u.y, target, spd*Mm, 40);
   const d = Math.hypot(L.x-u.x, L.y-u.y) || 1;
   projectiles.push({
@@ -736,6 +761,31 @@ function updateApathy(a, dt){
     }
   }
 
+  // Graver-spike point defence. Canon: it "unleashed a flurry of graver
+  // spikes. They hit the missiles... shredding them to less than atoms",
+  // "aimed with impossible accuracy". It engages only a handful of tracks
+  // per cycle, so a trickle of ordnance gets picked apart one bomb at a
+  // time while a massed simultaneous strike saturates it and gets through.
+  // That is the entire reason to coordinate a volley rather than dribble.
+  a.pdCd -= dt;
+  if (a.pdCd <= 0){
+    a.pdCd = CLS.apathy.pdCycle;
+    const inbound = projectiles.filter(p => !p.dead && dist(a, p) < CLS.apathy.graverRange);
+    /* heavy, slow conversion bombs are the priority track */
+    inbound.sort((x, y) => (y.type === 'conversion') - (x.type === 'conversion') || dist(a, x) - dist(a, y));
+    let shots = CLS.apathy.pdShots;
+    for (const p of inbound){
+      if (shots-- <= 0) break;
+      const pk = p.type === 'conversion' ? 0.6 : 0.3;
+      beams.push({ x1:a.x, y1:a.y, x2:p.x, y2:p.y, life:0.18, color:'rgba(255,90,60,0.7)', w:1.4 });
+      if (rnd() < pk){
+        p.dead = true;
+        stats.ordnanceShredded++;
+        fx.push({ type:'ring', x:p.x, y:p.y, t:0, dur:0.3, maxR:15, color:'rgba(255,60,60,0.6)' });
+      }
+    }
+  }
+
   // Stellar-grade lasers
   a.laserCd -= dt;
   if (a.laserCd <= 0 && nd < CLS.apathy.laserRange){
@@ -792,8 +842,11 @@ function updateApathy(a, dt){
     }
   }
 
-  // Self-replication (slow HP recovery)
-  if (a.hp < a.maxHp){
+  // Self-replication: it rebuilds itself by consuming mass, but that takes
+  // uninterrupted time. Under sustained fire it cannot consolidate — which
+  // is the whole reason keeping the pressure on matters. Left alone for
+  // long enough it heals faster than any fleet can hurt it.
+  if (a.hp < a.maxHp && (game.t - (a.lastHitT || -999)) > CLS.apathy.replicateQuiet){
     a.replicateAcc += dt;
     if (a.replicateAcc >= 10){
       a.replicateAcc = 0;
@@ -822,9 +875,11 @@ function updateProjectiles(dt){
     const hitD = dist(p, p.target);
     if (hitD < (p.type === 'conversion' ? 20 : 8)){
       if (p.type === 'conversion' && p.age < p.armTime){
-        // Not armed yet - dud
+        // Reached the target before the arming cycle completed — inert
         p.dead = true;
+        stats.conversionDud++;
         fx.push({ type:'ring', x:p.x, y:p.y, t:0, dur:0.5, maxR:20, color:'rgba(180,120,255,0.4)' });
+        log('Conversion bomb struck unarmed — inert. Launched from inside its arming run.', 'warn');
         continue;
       }
       p.dead = true;
@@ -842,11 +897,6 @@ function updateProjectiles(dt){
       }
     }
 
-    // Apathy graver spike intercepts projectiles
-    if (p.age > 2 && rnd() < 0.002 * dt){
-      p.dead = true;
-      fx.push({ type:'ring', x:p.x, y:p.y, t:0, dur:0.3, maxR:15, color:'rgba(255,60,60,0.5)' });
-    }
   }
 
   /* beams & fx decay in REAL time (in loop) so they stay visible at high compression */
@@ -869,8 +919,34 @@ function updateAutoplay(dt){
   const target = enemies.find(e => !e.dead);
   if (!target) return;
 
-  const engageRange = 450;   // effective slasher envelope for A-spheres
-  const engaged = units.filter(u => !u.dead && u.cls === 'asphere' && dist(u, target) < engageRange).length;
+  /* Standoff geometry is the whole game here. The Apathy's envelopes are
+     nested: shearing wave 400 (one-shot lethal to a 40-hull A-sphere),
+     graver spikes 800 (precise, tracks you), stellar lasers 2000 (long but
+     spread across three targets a cycle). Slashers are self-propelled and
+     cross the map, so there is no reason whatsoever to close inside the
+     graver envelope to use them — launch from outside 800 and fade. */
+  const AP = CLS.apathy;
+  const engageRange = AP.graverRange + 150;      // ~950: outside graver, inside laser
+  const engaged = units.filter(u => !u.dead && u.cls === 'asphere' && dist(u, target) < engageRange*1.3).length;
+
+  /* Conversion-bomb strike coordination. The Apathy's graver spikes engage
+     only a few tracks per cycle, so bombs launched piecemeal are simply
+     picked apart one at a time — which is exactly what the fleet was doing.
+     Canon has the Apathy killed by "coordinated conversion bomb strikes",
+     and coordination is the whole point: hold the bombs until enough
+     launchers are in position, then put them all in the air inside one
+     window so the flight saturates its defences. */
+  woawCmdr.strikeT -= dt;
+  if (woawCmdr.window > 0) woawCmdr.window -= dt;
+  const readyLaunchers = units.filter(u => !u.dead && u.transitT <= 0 && u.conversions > 0 &&
+    dist(u, target) >= convMinRange(u) &&
+    dist(u, target) <= (u.cls === 'dsphere' ? CLS.dsphere.gammaRange : engageRange*1.25)).length;
+  if (woawCmdr.window <= 0 && woawCmdr.strikeT <= 0 && readyLaunchers >= 3){
+    woawCmdr.window = 4;                       // everyone in position dumps within this window
+    woawCmdr.strikeT = 40 + rnd()*25;
+    log('CONVERSION STRIKE — ' + readyLaunchers + ' launchers releasing together. Saturate the spikes.', 'good');
+  }
+  const strikeOpen = woawCmdr.window > 0;
 
   for (const u of units){
     if (u.dead || u.transitT > 0) continue;   // mid-frameshift — no orders reach it until it collapses
@@ -879,59 +955,115 @@ function updateAutoplay(dt){
 
     if (u.cls === 'asphere'){
       const hurt = u.hp < c.hull * 0.3;
+      const spent = u.slashers <= 0 && u.conversions <= 0;
 
-      if (hurt && u.frameshiftCd <= 0 && d < 700){
+      /* out of ordnance: a dry A-sphere sitting inside a 2,000-unit laser
+         envelope is a free kill and contributes nothing — pull it out */
+      if (spent && d < AP.laserRange){
+        if (u.frameshiftCd <= 0){
+          const ang = Math.atan2(u.y-target.y, u.x-target.x) + (rnd()-0.5)*0.6;
+          doFrameshift(u, target.x + Math.cos(ang)*(AP.laserRange+400), target.y + Math.sin(ang)*(AP.laserRange+400));
+        }
+        u.attackTarget = null; u.dest = null;
+        continue;
+      }
+
+      if (hurt && u.frameshiftCd <= 0 && d < engageRange*1.6){
         /* wounded: break contact now rather than trade further */
         const ang = rnd()*Math.PI*2;
-        doFrameshift(u, target.x + Math.cos(ang)*900, target.y + Math.sin(ang)*900);
+        doFrameshift(u, target.x + Math.cos(ang)*1600, target.y + Math.sin(ang)*1600);
         u.attackTarget = null;
         continue;
       }
 
-      if (d >= engageRange){
-        /* close the gap — frameshift in if it's up, conventional thrust otherwise */
-        if (u.frameshiftCd <= 0 && d > 400){
-          const ang = Math.atan2(u.y-target.y, u.x-target.x) + (rnd()-0.5)*1.2;
-          doFrameshift(u, target.x + Math.cos(ang)*350, target.y + Math.sin(ang)*350);
+      /* too deep inside the graver envelope — get back out to the launch
+         ring rather than trading hull for nothing */
+      if (d < AP.graverRange){
+        if (u.frameshiftCd <= 0){
+          const ang = Math.atan2(u.y-target.y, u.x-target.x) + (rnd()-0.5)*0.8;
+          doFrameshift(u, target.x + Math.cos(ang)*engageRange, target.y + Math.sin(ang)*engageRange);
+          u.attackTarget = null;
+        } else {
+          const ang = Math.atan2(u.y-target.y, u.x-target.x);
+          u.attackTarget = null;
+          u.dest = { x: u.x + Math.cos(ang)*800, y: u.y + Math.sin(ang)*800 };
         }
-        u.attackTarget = target;
         continue;
       }
 
-      /* in range: fire immediately, then ALWAYS break off — this is the
-         crux of hit-and-fade. Lingering in the shearing-wave radius (400
-         units, one-shot lethal to a 40-hull A-sphere) while waiting out
-         a frameshift cooldown is exactly the static "joust" posture
-         doctrine rejects, so retreat under conventional thrust when the
-         frameshift isn't ready rather than sit still pursuing inward. */
+      if (d > engageRange*1.25){
+        /* waiting out in the safe zone. At 90 G an A-sphere covers about
+           28 km in the eight seconds of a frameshift cycle — nothing at
+           megametre scale — so the drive is the only thing that actually
+           moves it. Sit still until the shunt is charged, then jump in. */
+        u.attackTarget = null; u.dest = null;
+        if (u.frameshiftCd <= 0){
+          const ang = Math.atan2(u.y-target.y, u.x-target.x) + (rnd()-0.5)*1.2;
+          doFrameshift(u, target.x + Math.cos(ang)*engageRange, target.y + Math.sin(ang)*engageRange);
+        }
+        continue;
+      }
+
+      /* on the launch ring: empty the tubes. Slashers are self-propelled
+         and cross this distance in seconds, so the A-sphere never has to
+         enter the graver envelope to deliver them. */
+      u.attackTarget = null;
       if (u.slashers > 0) fireSlasher(u, target);
       /* conversion bomb: reserved for a real kill window — the target
          critically wounded, or enough A-spheres committed at once that
          its graver spikes are divided several ways */
-      if (u.conversions > 0 && (target.hp < target.maxHp*0.35 || engaged >= 4) && rnd() < 0.5){
+      if (u.conversions > 0 && d >= convMinRange(u) && strikeOpen){
         fireConversion(u, target);
       }
+      /* ...and then get out of the laser envelope entirely. The ring is
+         outside the graver spikes but still well inside the 2,000-unit
+         stellar lasers, and a contact that loiters there is ground down
+         for free. Canon doctrine is to keep ahead and keep harassing, so
+         the moment the shunt recharges the A-sphere leaves rather than
+         hanging around waiting to be hit. */
       if (u.frameshiftCd <= 0){
-        const ang = rnd()*Math.PI*2;
-        doFrameshift(u, target.x + Math.cos(ang)*750, target.y + Math.sin(ang)*750);
-        u.attackTarget = null;
-      } else {
-        const ang = Math.atan2(u.y-target.y, u.x-target.x);
-        u.attackTarget = null;
-        u.dest = { x: u.x + Math.cos(ang)*600, y: u.y + Math.sin(ang)*600 };
+        const ang = Math.atan2(u.y-target.y, u.x-target.x) + (rnd()-0.5)*0.7;
+        doFrameshift(u, target.x + Math.cos(ang)*(AP.laserRange+300), target.y + Math.sin(ang)*(AP.laserRange+300));
       }
-      if (u.hp < c.hull*0.12 && d < 100){
+      if (u.hp < c.hull*0.12 && d < 150){
         doOverload(u);
       }
     } else {
-      /* D-sphere: batteries fire automatically regardless of autoplay
-         (see updateUnit) — autoplay here only manages limited ordnance */
-      u.attackTarget = target;
-      if (u.slashers > 0 && rnd() < 0.2){
-        fireSlasher(u, target);
+      /* D-sphere. Canon is explicit that this hull "has limited
+         acceleration and relies almost entirely on Frameshift" — at 2 G
+         and 50 kps it can never walk into its own weapons envelope before
+         the battle is decided, so it jumps into one and jumps back out.
+         Its gamma cannons reach 1,200 while the Apathy's graver spikes
+         reach 800: that 400-unit band is the only place it can shoot
+         without being shot back at with anything precise. */
+      const band = (c.gammaRange + AP.graverRange) / 2;   // ~1000
+      u.attackTarget = null;
+
+      /* a D-sphere carries most of the fleet's conversion bombs; losing one
+         with its magazine still loaded costs far more than the ground it
+         gives up, so break contact and let the armour cool */
+      if (u.hp < c.hull*0.35 && u.conversions > 0 && d < AP.laserRange && u.frameshiftCd <= 0){
+        const ang = Math.atan2(u.y-target.y, u.x-target.x) + (rnd()-0.5)*0.5;
+        doFrameshift(u, target.x + Math.cos(ang)*(AP.laserRange+300), target.y + Math.sin(ang)*(AP.laserRange+300));
+        continue;
       }
-      if (u.conversions > 0 && d < 800 && (target.hp < target.maxHp*0.5 || rnd() < 0.08)){
-        fireConversion(u, target);
+
+      if (d < AP.graverRange && u.frameshiftCd <= 0){
+        /* the Apathy has closed inside the precise-fire envelope — displace */
+        const ang = Math.atan2(u.y-target.y, u.x-target.x) + (rnd()-0.5)*0.6;
+        doFrameshift(u, target.x + Math.cos(ang)*band, target.y + Math.sin(ang)*band);
+      } else if (d > c.gammaRange && u.frameshiftCd <= 0){
+        /* out of its own reach entirely — shunt into the firing band */
+        const ang = Math.atan2(u.y-target.y, u.x-target.x) + (rnd()-0.5)*0.5;
+        doFrameshift(u, target.x + Math.cos(ang)*band, target.y + Math.sin(ang)*band);
+      }
+
+      if (u.slashers > 0 && rnd() < 0.35) fireSlasher(u, target);
+      /* conversion bombs are frameshift-shunted in canon, not lobbed at
+         point-blank range — a D-sphere carries thirty and was letting all
+         of them rust because the old gate demanded it close to 800 */
+      if (u.conversions > 0 && d < c.gammaRange && d >= convMinRange(u) && strikeOpen){
+        for (let k = 0; k < 3 && u.conversions > 0; k++) fireConversion(u, target);
       }
     }
   }
@@ -965,19 +1097,28 @@ function endGame(){
   const evacuated = Math.floor(game.evacPop);
   const fleetLeft = units.filter(u => !u.dead).length;
 
+  /* The stated objective is buying time, so it has to be gradable: every
+     minute the line holds is a measurable share of Heppolon through the
+     interstice. Killing the fragment is the best outcome, not the only
+     one that counts. */
+  const frac = evacuated / HEPPOLON_POP;
+  const pct = Math.min(100, Math.round(frac*100));
   let title, sub, quote;
   if (apathyDestroyed && fleetLeft > 0){
     title = 'VICTORY'; sub = 'APATHY FRAGMENT DESTROYED';
     quote = 'The agglomeration is gone. Scattered into exotic particles. For the first time in the war, something died that was not us.';
   } else if (apathyDestroyed){
     title = 'MUTUAL DESTRUCTION'; sub = 'ALL FORCES LOST';
-    quote = 'The last ship detonated its reactor inside the Apathy mass. Both fleets are gone. But six billion live.';
-  } else if (evacuated > 4e9){
-    title = 'PYRRHIC SURVIVAL'; sub = 'PLANET LOST, POPULATION EVACUATED';
-    quote = 'Heppolon is consumed. But the interstice held long enough. ' + fmt(evacuated) + ' through the wormhole. That is what we fought for.';
+    quote = 'The last ship detonated its reactor inside the Apathy mass. Both fleets are gone. But Heppolon lives.';
+  } else if (frac >= 0.9){
+    title = 'THE LINE HELD'; sub = 'PLANET LOST — EVACUATION COMPLETE';
+    quote = 'Heppolon is consumed. But the constellation bought every minute the interstice needed: ' + pct + '% through before the end. That is what we were for.';
+  } else if (frac >= 0.5){
+    title = 'PYRRHIC SURVIVAL'; sub = 'PLANET LOST — PARTIAL EVACUATION';
+    quote = 'Heppolon is consumed. ' + fmt(evacuated) + ' through the wormhole — ' + pct + '% of the planet. The rest were still queuing when the sky opened.';
   } else {
     title = 'CATASTROPHE'; sub = 'PLANET LOST';
-    quote = 'Not enough time. Only ' + fmt(evacuated) + ' made it through. The Apathy consumes Heppolon and grows. The war continues.';
+    quote = 'Not enough time. Only ' + fmt(evacuated) + ' made it through — ' + pct + '% of Heppolon. The Apathy consumes the rest and grows. The war continues.';
   }
 
   document.getElementById('aftermath-title').textContent = title;
@@ -991,7 +1132,7 @@ function endGame(){
     '<div class="stat-row"><span>CONVERSION BOMBS</span><span>' + stats.conversionFired + '</span></div>' +
     '<div class="stat-row"><span>REACTOR OVERLOADS</span><span>' + stats.overloads + '</span></div>' +
     '<div class="stat-row"><span>APATHY DAMAGE</span><span>' + fmt(stats.apathyDamage) + '</span></div>' +
-    '<div class="stat-row"><span>POPULATION EVACUATED</span><span>' + fmt(evacuated) + '</span></div>';
+    '<div class="stat-row"><span>POPULATION EVACUATED</span><span>' + fmt(evacuated) + ' (' + pct + '%)</span></div>';
   document.getElementById('aftermath-quote').textContent = quote;
   document.getElementById('aftermath-canon').innerHTML =
     'HISTORICAL RECORD: Heppolon was defended by a Battle Constellation of 3 D-spheres, 800 A-spheres, and millions of expendable drones. ' +
@@ -1278,6 +1419,10 @@ setInterval(() => {
   document.getElementById('morale-pct').textContent = Math.round(game.morale) + '%';
   document.getElementById('morale-fill').style.width = game.morale + '%';
   document.getElementById('morale-fill').style.background = game.morale < 30 ? '#ff5040' : game.morale < 60 ? 'var(--accent2)' : 'var(--accent)';
+  const ev = Math.min(100, game.evacPop / HEPPOLON_POP * 100);
+  document.getElementById('evac-pct').textContent = ev.toFixed(1) + '%';
+  document.getElementById('evac-abs').textContent = '· ' + fmt(game.evacPop) + ' of ' + fmt(HEPPOLON_POP);
+  document.getElementById('evac-fill').style.width = ev + '%';
 }, 400);
 
 /* ── render ──────────────────────────────────────────────────────── */
@@ -1556,7 +1701,7 @@ document.getElementById('btn-start').addEventListener('click', () => {
   game.running = true;
   document.getElementById('btn-rings').classList.add('armed');
   log('Battle Constellation on station. Three Defence Spheres, twenty A-sphere wings. The Apathy approaches.');
-  log('Interstice evacuation rate: 800,000 per second. Every minute you hold is 48 million people through.');
+  log('Interstice evacuation rate: ' + fmt(EVAC_RATE) + ' per second. Every minute you hold is ' + fmt(EVAC_RATE*60) + ' people through — six billion behind you.');
 });
 document.getElementById('btn-restart').addEventListener('click', () => location.reload());
 

@@ -1258,6 +1258,15 @@ function updateAutoplay(dt){
     if (d < 6000 && g.torps > 0 && closing > -5 && (a.strikeRole || d < 4000)){
       fireVolley(g, a, Math.min(6, g.torps), false);
     }
+    /* emergency release. Arco doctrine is to bombard from a standoff the
+       destroyers cannot reach, so a battlegroup can be beaten to death with
+       every tube still loaded — which is how the fleet kept dying with full
+       magazines. A long shot at poor odds still beats taking thirty-six
+       torpedoes down with the ship. */
+    else if (g.torps > 0 && g.hp < g.maxHp*0.45 && d < 11000 && closing > -20){
+      fireVolley(g, a, Math.min(12, g.torps), false);
+      log(g.name + ' emptying tubes before she goes — long-range release on ' + a.name + '.', 'warn');
+    }
 
     /* mutual support: a badly damaged group falls back on the rest of the
        fleet rather than slugging it out alone at the edge of the cordon */
